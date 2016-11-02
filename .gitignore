@@ -2,7 +2,7 @@
 /Output
 /simplec/Debug
 /simplec/x64
-
+/.vs
 
 # 忽略上传的文件
 *.swp
