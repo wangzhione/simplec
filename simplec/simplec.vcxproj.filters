@@ -1,0 +1,291 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="module">
+      <UniqueIdentifier>{c1b1b41e-c0f0-4d91-86d1-0736e03c0094}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="main">
+      <UniqueIdentifier>{948a31f4-2226-44f0-963a-ff8da72412b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="module\pthread">
+      <UniqueIdentifier>{1a929f90-b5f6-4bf2-b173-2341e60141d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="module\pthread\include">
+      <UniqueIdentifier>{3fd967e6-c33e-4f82-b871-e82436706186}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="module\pthread\lib">
+      <UniqueIdentifier>{58553b4f-dcf0-45bb-9136-d114d1798c81}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="module\pthread\dll">
+      <UniqueIdentifier>{e4c40e38-d095-4705-a03e-b607f628d014}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="module\pthread\lib\x86">
+      <UniqueIdentifier>{a3741b8c-9fec-4436-bd49-4465b3ea61a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="module\pthread\lib\x64">
+      <UniqueIdentifier>{329098b0-fd9a-4da7-82f2-13b5b343d4b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="module\pthread\dll\x86">
+      <UniqueIdentifier>{6e61f134-6941-4796-b8bc-de064a4c3a6d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="module\pthread\dll\x64">
+      <UniqueIdentifier>{dad9ac84-3808-4eb5-8063-e3da95d6d6b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="module\schead">
+      <UniqueIdentifier>{33ae7044-0f3c-476c-a57b-be7ced640c47}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="module\schead\include">
+      <UniqueIdentifier>{9a09284b-de95-42c0-b92d-c8f150af68dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="readme">
+      <UniqueIdentifier>{057af551-5272-4222-85e4-edb5bdef1073}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="module\struct">
+      <UniqueIdentifier>{b2dced53-50ba-42f7-97d9-9c36eae0dbf7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="module\struct\include">
+      <UniqueIdentifier>{4e25cee8-b538-48f4-81ab-d88193897ca3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="module\service">
+      <UniqueIdentifier>{70af93cc-dd8e-40c5-9705-ef92a21272a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="module\service\include">
+      <UniqueIdentifier>{6dec71ab-4ff0-4c88-9a77-4c03f9464f8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="test">
+      <UniqueIdentifier>{a4d7c9bb-6864-455f-ac0b-de5ac8b669c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="main\body">
+      <UniqueIdentifier>{cc5d048e-628f-43f8-8341-29f91e7ad1df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="main\body\include">
+      <UniqueIdentifier>{438e9db4-0f47-4984-8dfd-538cea24f781}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="test\config">
+      <UniqueIdentifier>{6ff1be27-7c73-46e4-ad84-0a5e6d0fefee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="config">
+      <UniqueIdentifier>{71564f16-7341-4c46-a998-4c949d98a41c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="module\schead\sclog.c">
+      <Filter>module\schead</Filter>
+    </ClCompile>
+    <ClCompile Include="module\schead\schead.c">
+      <Filter>module\schead</Filter>
+    </ClCompile>
+    <ClCompile Include="module\struct\tree.c">
+      <Filter>module\struct</Filter>
+    </ClCompile>
+    <ClCompile Include="module\struct\list.c">
+      <Filter>module\struct</Filter>
+    </ClCompile>
+    <ClCompile Include="module\schead\scconf.c">
+      <Filter>module\schead</Filter>
+    </ClCompile>
+    <ClCompile Include="module\schead\sccsv.c">
+      <Filter>module\schead</Filter>
+    </ClCompile>
+    <ClCompile Include="module\service\sctimer.c">
+      <Filter>module\service</Filter>
+    </ClCompile>
+    <ClCompile Include="module\service\scpthread.c">
+      <Filter>module\service</Filter>
+    </ClCompile>
+    <ClCompile Include="test\test_atom_rwlock.c">
+      <Filter>test</Filter>
+    </ClCompile>
+    <ClCompile Include="test\test_cjson_write.c">
+      <Filter>test</Filter>
+    </ClCompile>
+    <ClCompile Include="test\test_csv.c">
+      <Filter>test</Filter>
+    </ClCompile>
+    <ClCompile Include="test\test_json_read.c">
+      <Filter>test</Filter>
+    </ClCompile>
+    <ClCompile Include="test\test_log.c">
+      <Filter>test</Filter>
+    </ClCompile>
+    <ClCompile Include="test\test_scconf.c">
+      <Filter>test</Filter>
+    </ClCompile>
+    <ClCompile Include="test\test_scpthread.c">
+      <Filter>test</Filter>
+    </ClCompile>
+    <ClCompile Include="test\test_sctimer.c">
+      <Filter>test</Filter>
+    </ClCompile>
+    <ClCompile Include="test\test_sctimeutil.c">
+      <Filter>test</Filter>
+    </ClCompile>
+    <ClCompile Include="test\test_tstring.c">
+      <Filter>test</Filter>
+    </ClCompile>
+    <ClCompile Include="test\test_xlsmtojson.c">
+      <Filter>test</Filter>
+    </ClCompile>
+    <ClCompile Include="main\main.c">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="module\schead\scalloc.c">
+      <Filter>module\schead</Filter>
+    </ClCompile>
+    <ClCompile Include="module\schead\scrwlock.c">
+      <Filter>module\schead</Filter>
+    </ClCompile>
+    <ClCompile Include="module\struct\tstr.c">
+      <Filter>module\struct</Filter>
+    </ClCompile>
+    <ClCompile Include="main\simplec.c">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="module\struct\array.c">
+      <Filter>module\struct</Filter>
+    </ClCompile>
+    <ClCompile Include="test\test_array.c">
+      <Filter>test</Filter>
+    </ClCompile>
+    <ClCompile Include="module\schead\scjson.c">
+      <Filter>module\schead</Filter>
+    </ClCompile>
+    <ClCompile Include="test\test_cjson.c">
+      <Filter>test</Filter>
+    </ClCompile>
+    <ClCompile Include="module\schead\sctime.c">
+      <Filter>module\schead</Filter>
+    </ClCompile>
+    <ClCompile Include="module\struct\rbtree.c">
+      <Filter>module\struct</Filter>
+    </ClCompile>
+    <ClCompile Include="module\service\scoroutine.c">
+      <Filter>module\service</Filter>
+    </ClCompile>
+    <ClCompile Include="test\test_scoroutine.c">
+      <Filter>test</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="module\pthread\include\pthread.h">
+      <Filter>module\pthread\include</Filter>
+    </ClInclude>
+    <ClInclude Include="module\pthread\include\sched.h">
+      <Filter>module\pthread\include</Filter>
+    </ClInclude>
+    <ClInclude Include="module\pthread\include\semaphore.h">
+      <Filter>module\pthread\include</Filter>
+    </ClInclude>
+    <ClInclude Include="module\schead\include\schead.h">
+      <Filter>module\schead\include</Filter>
+    </ClInclude>
+    <ClInclude Include="module\schead\include\scatom.h">
+      <Filter>module\schead\include</Filter>
+    </ClInclude>
+    <ClInclude Include="module\schead\include\sclog.h">
+      <Filter>module\schead\include</Filter>
+    </ClInclude>
+    <ClInclude Include="module\struct\include\tree.h">
+      <Filter>module\struct\include</Filter>
+    </ClInclude>
+    <ClInclude Include="module\struct\include\list.h">
+      <Filter>module\struct\include</Filter>
+    </ClInclude>
+    <ClInclude Include="module\schead\include\scconf.h">
+      <Filter>module\schead\include</Filter>
+    </ClInclude>
+    <ClInclude Include="module\schead\include\sccsv.h">
+      <Filter>module\schead\include</Filter>
+    </ClInclude>
+    <ClInclude Include="module\service\include\sctimer.h">
+      <Filter>module\service\include</Filter>
+    </ClInclude>
+    <ClInclude Include="module\service\include\scpthread.h">
+      <Filter>module\service\include</Filter>
+    </ClInclude>
+    <ClInclude Include="module\schead\include\scalloc.h">
+      <Filter>module\schead\include</Filter>
+    </ClInclude>
+    <ClInclude Include="module\schead\include\scrwlock.h">
+      <Filter>module\schead\include</Filter>
+    </ClInclude>
+    <ClInclude Include="module\struct\include\tstr.h">
+      <Filter>module\struct\include</Filter>
+    </ClInclude>
+    <ClInclude Include="module\struct\include\array.h">
+      <Filter>module\struct\include</Filter>
+    </ClInclude>
+    <ClInclude Include="module\schead\include\scjson.h">
+      <Filter>module\schead\include</Filter>
+    </ClInclude>
+    <ClInclude Include="module\schead\include\sctime.h">
+      <Filter>module\schead\include</Filter>
+    </ClInclude>
+    <ClInclude Include="module\struct\include\rbtree.h">
+      <Filter>module\struct\include</Filter>
+    </ClInclude>
+    <ClInclude Include="module\service\include\scoroutine$linux.h">
+      <Filter>module\service\include</Filter>
+    </ClInclude>
+    <ClInclude Include="module\service\include\scoroutine$winds.h">
+      <Filter>module\service\include</Filter>
+    </ClInclude>
+    <ClInclude Include="module\service\include\scoroutine.h">
+      <Filter>module\service\include</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="module\pthread\dll\x64\pthreadGC2.dll">
+      <Filter>module\pthread\dll\x64</Filter>
+    </None>
+    <None Include="module\pthread\dll\x64\pthreadVC2.dll">
+      <Filter>module\pthread\dll\x64</Filter>
+    </None>
+    <None Include="module\pthread\dll\x86\pthreadGC2.dll">
+      <Filter>module\pthread\dll\x86</Filter>
+    </None>
+    <None Include="module\pthread\dll\x86\pthreadGCE2.dll">
+      <Filter>module\pthread\dll\x86</Filter>
+    </None>
+    <None Include="module\pthread\dll\x86\pthreadVC2.dll">
+      <Filter>module\pthread\dll\x86</Filter>
+    </None>
+    <None Include="module\pthread\dll\x86\pthreadVCE2.dll">
+      <Filter>module\pthread\dll\x86</Filter>
+    </None>
+    <None Include="module\pthread\dll\x86\pthreadVSE2.dll">
+      <Filter>module\pthread\dll\x86</Filter>
+    </None>
+    <None Include="test\config\destiny.csv">
+      <Filter>test\config</Filter>
+    </None>
+    <None Include="test\config\firefighting_rule.json">
+      <Filter>test\config</Filter>
+    </None>
+    <None Include="test\config\onetime.csv">
+      <Filter>test\config</Filter>
+    </None>
+    <None Include="config\config.ini">
+      <Filter>config</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="module\pthread\lib\x64\pthreadVC2.lib">
+      <Filter>module\pthread\lib\x64</Filter>
+    </Library>
+    <Library Include="module\pthread\lib\x86\pthreadVC2.lib">
+      <Filter>module\pthread\lib\x86</Filter>
+    </Library>
+    <Library Include="module\pthread\lib\x86\pthreadVCE2.lib">
+      <Filter>module\pthread\lib\x86</Filter>
+    </Library>
+    <Library Include="module\pthread\lib\x86\pthreadVSE2.lib">
+      <Filter>module\pthread\lib\x86</Filter>
+    </Library>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="readme\helper.txt">
+      <Filter>readme</Filter>
+    </Text>
+  </ItemGroup>
+</Project>

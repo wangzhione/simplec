@@ -1,0 +1,24 @@
+{     
+"firefighting_rule":     
+ {    
+  "key1":   
+   {  
+    "id":1,
+    "dungeon_id":40008,
+    "level_contain":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15],
+    "active_time":[[1,"110000"],[4,"110000"],[5,"210000"]],
+    "boss_ui_head":"UI_icon/IMG_ShiJieBoss_TouXiang.png",
+    "activity_tag_icon":"IMG_GaiBan_HuoDong_ShiJieBoss_TuBiao.png",
+    "activity_tag_word":"IMG_GaiBan_ZhuCheng_ShiJieBoss_TuBiao_MingZi.png",
+    "activity_pic_json":"UI_HuoDong_ShiJieBoss.json",
+    "jinbi_buff_icon":"UI_icon/IMG_WorldBoss_JinbiBuff_Atk.png",
+    "jinbi_buff_damage":[[8,1000],[9,1000],[11,1000],[12,1000]],
+    "jinbi_buff_price":10,
+    "jinbi_buff_limit":999,
+    "free_change":1,
+    "refresh_price":20,
+    "change_price":20,
+    "show_hero_num":20 
+   }  
+ }    
+}

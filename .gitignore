@@ -1,0 +1,18 @@
+# 忽略上传的文件夹
+/Output
+/simplec/Debug
+/simplec/x64
+
+
+# 忽略上传的文件
+*.swp
+*.opendb
+*.db
+*.exe
+*.out
+*~
+*.iobj
+*.ipdb
+*.pdb
+*.pch
+*.ilk

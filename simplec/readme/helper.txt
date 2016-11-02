@@ -1,0 +1,51 @@
+﻿/*
+	这里是关于这个系统使用的方面, 一些注意事项, 主要是对于VS的具体编译配置说明,.
+对于GCC还需要单搞,这些代码都具备跨平台的能力,但是需要你熟悉和配置使用!
+尝试了解下面操作的原因,熟悉它,C/C++开发都是这样繁琐,需要从头来! 
+											--	by cwz
+
+1.设置 VS的 项目右键属性 -> VC++ 目录
+1.1. 添加 包含目录
+	$(ProjectDir)main								--	框架入口文件夹
+	$(ProjectDir)main/body							--	框架入口外部业务处理文件夹
+	$(ProjectDir)main/body/include					--	框架入口外部业务处理头文件文件夹
+	$(ProjectDir)test								--	框架单元测试文件夹
+	$(ProjectDir)module								--  框架所有模块的文件夹
+	$(ProjectDir)module/pthread						--  框架内置的线程库文件夹
+	$(ProjectDir)module/pthread/include				--	框架内置的线程库头文件文件夹
+	$(ProjectDir)module/schead						--	框架帮助库文件夹
+	$(ProjectDir)module/schead/include				--	框架帮助库头文件文件夹
+	$(ProjectDir)module/struct						--	框架数据结构文件夹
+	$(ProjectDir)module/struct/include				--	框架数据结构头文件文件夹
+	$(ProjectDir)module/service						--	框架提供的辅助服务文件夹
+	$(ProjectDir)module/service/include				--	框架提供的辅助服务头文件文件夹
+	$(ProjectDir)module/logic						--	框架辅助业务模块文件夹
+	$(ProjectDir)module/logic/include				--	框架辅助业务模块头文件文件夹
+
+
+2. lib 库添加
+2.1 添加 pthread 模块lib 引用, 看 引用目录
+	$(ProjectDir)/pthread/lib/x86
+
+2.2 对于 x64 那就添加为
+	$(ProjectDir)/pthread/lib/x64
+
+
+3. dll 库的添加
+3.1 添加 dll 目前这个需要手工操作,目前不智能,VS 对C++支持的好缓慢, M$确实很坑
+	找到相应的 生成的exe目录下添加 对应的 dll, 
+
+	x86 => $(ProjectDir)/pthread/dll/x86
+	x64 => $(ProjectDir)/pthread/dll/x64
+
+4. 添加部分宏 C/C++ -> 预处理器 -> 预处理器定义
+	_CRT_SECURE_NO_WARNINGS 
+
+5. 文件保存(文件->文件高级保存选项)直接采用UTF-8(带签名)格式保存
+	window 采用 > notepad++ convert
+	linux  采用 > enca -L zh_CN -x UTF-8 *
+	config 采用 > 环境而定
+
+6. 编译额外选项 
+	C/C++ -> 高级 -> 编译为 -> 编译为C代码
+*/

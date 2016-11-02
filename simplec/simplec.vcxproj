@@ -1,0 +1,229 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main\main.c" />
+    <ClCompile Include="main\simplec.c" />
+    <ClCompile Include="module\schead\scjson.c" />
+    <ClCompile Include="module\schead\scalloc.c" />
+    <ClCompile Include="module\schead\scconf.c" />
+    <ClCompile Include="module\schead\sccsv.c" />
+    <ClCompile Include="module\schead\schead.c" />
+    <ClCompile Include="module\schead\sclog.c" />
+    <ClCompile Include="module\schead\scrwlock.c" />
+    <ClCompile Include="module\schead\sctime.c" />
+    <ClCompile Include="module\service\scoroutine.c" />
+    <ClCompile Include="module\service\scpthread.c" />
+    <ClCompile Include="module\service\sctimer.c" />
+    <ClCompile Include="module\struct\array.c" />
+    <ClCompile Include="module\struct\list.c" />
+    <ClCompile Include="module\struct\rbtree.c" />
+    <ClCompile Include="module\struct\tree.c" />
+    <ClCompile Include="module\struct\tstr.c" />
+    <ClCompile Include="test\test_array.c" />
+    <ClCompile Include="test\test_atom_rwlock.c" />
+    <ClCompile Include="test\test_cjson_write.c" />
+    <ClCompile Include="test\test_cjson.c" />
+    <ClCompile Include="test\test_csv.c" />
+    <ClCompile Include="test\test_json_read.c" />
+    <ClCompile Include="test\test_log.c" />
+    <ClCompile Include="test\test_scconf.c" />
+    <ClCompile Include="test\test_scoroutine.c" />
+    <ClCompile Include="test\test_scpthread.c" />
+    <ClCompile Include="test\test_sctimer.c" />
+    <ClCompile Include="test\test_sctimeutil.c" />
+    <ClCompile Include="test\test_tstring.c" />
+    <ClCompile Include="test\test_xlsmtojson.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="module\pthread\include\pthread.h" />
+    <ClInclude Include="module\pthread\include\sched.h" />
+    <ClInclude Include="module\pthread\include\semaphore.h" />
+    <ClInclude Include="module\schead\include\scjson.h" />
+    <ClInclude Include="module\schead\include\scalloc.h" />
+    <ClInclude Include="module\schead\include\scatom.h" />
+    <ClInclude Include="module\schead\include\scconf.h" />
+    <ClInclude Include="module\schead\include\sccsv.h" />
+    <ClInclude Include="module\schead\include\schead.h" />
+    <ClInclude Include="module\schead\include\sclog.h" />
+    <ClInclude Include="module\schead\include\scrwlock.h" />
+    <ClInclude Include="module\schead\include\sctime.h" />
+    <ClInclude Include="module\service\include\scoroutine$linux.h" />
+    <ClInclude Include="module\service\include\scoroutine$winds.h" />
+    <ClInclude Include="module\service\include\scoroutine.h" />
+    <ClInclude Include="module\service\include\scpthread.h" />
+    <ClInclude Include="module\service\include\sctimer.h" />
+    <ClInclude Include="module\struct\include\array.h" />
+    <ClInclude Include="module\struct\include\list.h" />
+    <ClInclude Include="module\struct\include\rbtree.h" />
+    <ClInclude Include="module\struct\include\tree.h" />
+    <ClInclude Include="module\struct\include\tstr.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="config\config.ini" />
+    <None Include="module\pthread\dll\x64\pthreadGC2.dll" />
+    <None Include="module\pthread\dll\x64\pthreadVC2.dll" />
+    <None Include="module\pthread\dll\x86\pthreadGC2.dll" />
+    <None Include="module\pthread\dll\x86\pthreadGCE2.dll" />
+    <None Include="module\pthread\dll\x86\pthreadVC2.dll" />
+    <None Include="module\pthread\dll\x86\pthreadVCE2.dll" />
+    <None Include="module\pthread\dll\x86\pthreadVSE2.dll" />
+    <None Include="test\config\destiny.csv" />
+    <None Include="test\config\firefighting_rule.json" />
+    <None Include="test\config\onetime.csv" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="module\pthread\lib\x64\pthreadVC2.lib" />
+    <Library Include="module\pthread\lib\x86\pthreadVC2.lib" />
+    <Library Include="module\pthread\lib\x86\pthreadVCE2.lib" />
+    <Library Include="module\pthread\lib\x86\pthreadVSE2.lib" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="readme\helper.txt" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{1F91FC48-7534-4CA9-9140-F2839158DA16}</ProjectGuid>
+    <RootNamespace>simplec</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>$(ProjectDir)main;$(ProjectDir)main/body;$(ProjectDir)main/body/include;$(ProjectDir)test;$(ProjectDir)module;$(ProjectDir)module/pthread;$(ProjectDir)module/pthread/include;$(ProjectDir)module/schead;$(ProjectDir)module/schead/include;$(ProjectDir)module/struct;$(ProjectDir)module/struct/include;$(ProjectDir)module/service;$(ProjectDir)module/service/include;$(ProjectDir)module/logic;$(ProjectDir)module/logic/include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)module\pthread\lib\x86;$(LibraryPath)</LibraryPath>
+    <LibraryWPath>$(LibraryWPath)</LibraryWPath>
+    <ReferencePath>$(ReferencePath)</ReferencePath>
+    <ExecutablePath>$(ExecutablePath)</ExecutablePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>$(ProjectDir)main;$(ProjectDir)main/body;$(ProjectDir)main/body/include;$(ProjectDir)test;$(ProjectDir)module;$(ProjectDir)module/pthread;$(ProjectDir)module/pthread/include;$(ProjectDir)module/schead;$(ProjectDir)module/schead/include;$(ProjectDir)module/struct;$(ProjectDir)module/struct/include;$(ProjectDir)module/service;$(ProjectDir)module/service/include;$(ProjectDir)module/logic;$(ProjectDir)module/logic/include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)module/pthread/lib/x64;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ReferencePath>$(ProjectDir)/pthread/lib/x64;$(ReferencePath)</ReferencePath>
+    <ExecutablePath>$(ExecutablePath)</ExecutablePath>
+    <IncludePath>$(ProjectDir)main;$(ProjectDir)main/body;$(ProjectDir)main/body/include;$(ProjectDir)test;$(ProjectDir)module;$(ProjectDir)module/pthread;$(ProjectDir)module/pthread/include;$(ProjectDir)module/schead;$(ProjectDir)module/schead/include;$(ProjectDir)module/struct;$(ProjectDir)module/struct/include;$(ProjectDir)module/service;$(ProjectDir)module/service/include;$(ProjectDir)module/logic;$(ProjectDir)module/logic/include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ReferencePath>$(ProjectDir)/pthread/lib/x86;$(ReferencePath)</ReferencePath>
+    <ExecutablePath>$(ExecutablePath)</ExecutablePath>
+    <IncludePath>$(ProjectDir)main;$(ProjectDir)main/body;$(ProjectDir)main/body/include;$(ProjectDir)test;$(ProjectDir)module;$(ProjectDir)module/pthread;$(ProjectDir)module/pthread/include;$(ProjectDir)module/schead;$(ProjectDir)module/schead/include;$(ProjectDir)module/struct;$(ProjectDir)module/struct/include;$(ProjectDir)module/service;$(ProjectDir)module/service/include;$(ProjectDir)module/logic;$(ProjectDir)module/logic/include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)module\pthread\dll\x86;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <CompileAs>CompileAsC</CompileAs>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <SubSystem>NotSet</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <CompileAs>CompileAsC</CompileAs>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <SubSystem>NotSet</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
