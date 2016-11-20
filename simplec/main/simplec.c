@@ -64,5 +64,5 @@ simplec_test(void) {
 	extern void test_sctimeutil(void);
 
 
-	test_sctimeutil();
+	test_csv();
 }

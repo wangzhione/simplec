@@ -73,6 +73,7 @@
     <ClInclude Include="module\struct\include\array.h" />
     <ClInclude Include="module\struct\include\list.h" />
     <ClInclude Include="module\struct\include\rbtree.h" />
+    <ClInclude Include="module\struct\include\struct.h" />
     <ClInclude Include="module\struct\include\tree.h" />
     <ClInclude Include="module\struct\include\tstr.h" />
   </ItemGroup>

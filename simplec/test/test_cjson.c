@@ -5,7 +5,7 @@ void test_cjson(void) {
 	// 第二个 测试 json 串的解析
 	puts("测试 cjson 是否可用");
 	char text1[] = "{\n\"name\": \"Jack (\\\"Bee\\\") Nimble\", \n\"format\": {\"type\":       \"rect\", \n\"width\":      1920, \n\"height\":     1080, \n\"interlace\":  false,\"frame rate\": 24\n}\n}";
-	TSTR_NEW(jstr1);
+	TSTR_CREATE(jstr1);
 	jstr1->str = text1;
 	cjson_t js = cjson_newtstr(jstr1);
 
@@ -24,7 +24,7 @@ void test_cjson(void) {
 
 	puts(" 测试 数组的读取");
 	char text2[] = "[\"Sunday\", \"Monday\", \"Tuesday\", \"Wednesday\", \"Thursday\", \"Friday\", \"Saturday\"]";
-	TSTR_NEW(jstr2);
+	TSTR_CREATE(jstr2);
 	jstr2->str = text2;
 	js = cjson_newtstr(jstr2);
 	int len = cjson_getlen(js);
@@ -38,7 +38,7 @@ void test_cjson(void) {
 
 	puts("第三组测试");
 	char text3[] = "[\n    [0, -1, 0],\n    [1, 0, 0],\n    [0, 0, 1]\n	]\n";
-	TSTR_NEW(jstr3);
+	TSTR_CREATE(jstr3);
 	jstr3->str = text3;
 	js = cjson_newtstr(jstr3);
 	len = cjson_getlen(js);

@@ -1,74 +1,73 @@
-﻿#include <schead.h>
-#include <sccsv.h>
+﻿#include <sccsv.h>
 #include <sclog.h>
 #include <tstr.h>
 
-//从文件中读取 csv文件内容
-char* _csv_get(FILE * txt, int * prl, int * pcl)
-{
-	int c, n;
+//从文件中读取 csv文件内容, 构建一个合法串
+static char * _csv_parse(tstr_t tstr, int * prl, int * pcl) {
+	int c = -1, n = -1;
 	int cl = 0, rl = 0;
-	TSTR_NEW(ts);
+	char * sur, * tar;
 
-	while((c=fgetc(txt))!=EOF) {
-		if('"' == c) {	//处理这里数据
-			while((c=fgetc(txt))!=EOF) {
-				if('"' == c) {
-					if((n=fgetc(txt)) == EOF) { //判断下一个字符
-						TSTR_DELETE(ts);
-						SL_WARNING("The CSV file is invalid one!");
-						return NULL;
-					}
-					if(n != '"'){ //有效字符再次压入栈
-						ungetc(n, txt);
+	sur = tar = tstr->str;
+	while(!!(c = *tar++)) {
+		// 小型状态机切换, 相对于csv文件内容解析
+		switch (c) {
+		case '"': // 双引号包裹的特殊字符处理
+			while (!!(c = *tar++)) {
+				if ('"' == c) {
+					if ((n = *tar) == '\0') // 判断下一个字符
+						goto __err_ext;
+					if (n != '"') // 有效字符再次压入栈, 顺带去掉多余 " 字符
 						break;
-					}
+					++tar;
 				}
 
 				// 添加得到的字符
-				tstr_append(ts, c);
+				*sur++ = c;
 			}
-			//继续判断,只有是c == '"' 才会下来,否则都是错的
-			if('"' != c){
-				TSTR_DELETE(ts);
-				SL_WARNING("The CSV file is invalid two!");
-				return NULL;
-			}
-		}
-		else if(',' == c){
-			tstr_append(ts, '\0');
+			// 继续判断,只有是c == '"' 才会下来,否则都是错的
+			if ('"' != c)
+				goto __err_ext;
+			break;
+		case ',':
+			*sur++ = '\0';
 			++cl;
-		}
-		else if('\r' == c)
-			continue;
-		else if('\n' == c){
-			tstr_append(ts, '\0');
+			break;
+		case '\r':
+			break;
+		case '\n':
+			*sur++ = '\0';
 			++cl;
 			++rl;
-		}
-		else { //其它所有情况只添加数据就可以了
-			tstr_append(ts, c);
+			break;
+		default: // 其它所有情况只添加数据就可以了
+			*sur++ = c;
 		}
 	}
 	
-	if(cl % rl){ //检测 , 号是个数是否正常
-		TSTR_DELETE(ts);
-		SL_WARNING("now csv file is illegal! need check!");
+	if(cl % rl){ // 检测 , 号是个数是否正常
+	__err_ext:
+		SL_WARNING("now csv file is illegal! c = %d, n = %d, cl = %d, rl = %d."
+			, c, n, cl, rl);
 		return NULL;
 	}
 	
 	// 返回最终内容
 	*prl = rl;
 	*pcl = cl;
-	return ts->str;
+	tstr->len = sur - tstr->str;
+	return tstr_dupstr(tstr);
 }
 
 // 将 _csv_get 得到的数据重新构建返回, 执行这个函数认为语法检测都正确了
-sccsv_t _csv_get_new(const char * cstr, int rl, int cl)
-{
+static sccsv_t _csv_create(const char * cstr, int rl, int cl) {
 	int i = 0;
-	sccsv_t csv = sm_malloc(sizeof(struct sccsv) + sizeof(char *) * cl);
-	
+	sccsv_t csv = malloc(sizeof(struct sccsv) + sizeof(char *) * cl);
+	if (NULL == csv) {
+		SL_FATAL("malloc is error cstr = %p, rl = %d, cl = %d.", cstr, rl ,cl);
+		return NULL;
+	}
+
 	// 这里开始构建内容了
 	csv->rlen = rl;
 	csv->clen = cl / rl;
@@ -81,58 +80,50 @@ sccsv_t _csv_get_new(const char * cstr, int rl, int cl)
 	return csv;
 }
 
-/*
- * 从文件中构建csv对象, 最后需要调用 sccsv_die 释放
- * path		: csv文件内容
- *			: 返回构建好的 sccsv_t 对象
- */
-sccsv_t 
-sccsv_new(const char * path)
-{
-	FILE * txt;
+//
+// 从文件中构建csv对象, 最后需要调用 sccsv_delete 释放
+// path		: csv文件内容
+// return	: 返回构建好的 sccsv_t 对象
+//
+sccsv_t
+sccsv_create(const char * path) {
 	char * cstr;
 	int rl, cl;
 	
-	DEBUG_CODE({
-		if(!path || !*path){
-			SL_WARNING("params is check !path || !*path .");
-			return NULL;
-		}
-	});
-
-	// 打开文件内容
-	if((txt = fopen(path, "r")) == NULL){
-		SL_WARNING("fopen %s r is error!", path);
+	tstr_t tstr = tstr_freadend(path);
+	if (NULL == tstr) {
+		SL_WARNING("tstr_freadend path = %s is error!", path);
 		return NULL;
 	}
+
 	// 如果解析 csv 文件内容失败直接返回
-	cstr = _csv_get(txt, &rl, &cl);
-	fclose(txt);
+	cstr = _csv_parse(tstr, &rl, &cl);
+	tstr_delete(tstr);
 
 	// 返回最终结果
-	return cstr ? _csv_get_new(cstr, rl, cl) : NULL;
+	return cstr ? _csv_create(cstr, rl, cl) : NULL;
 }
 
-/*
- * 释放由sccsv_new构建的对象
- * csv		: sccsv_new 返回对象
- */
-inline void 
+//
+// 释放由sccsv_create构建的对象
+// csv		: sccsv_new 返回对象
+//
+void 
 sccsv_delete(sccsv_t csv) {
-	sm_free(csv);
+	free(csv);
 }
 
-/*
- * 获取某个位置的对象内容
- * csv		: sccsv_t 对象, new返回的
- * ri		: 查找的行索引 [0, csv->rlen)
- * ci		: 查找的列索引 [0, csv->clen)
- *			: 返回这一项中内容,后面可以用 atoi, atof, str_dup 等处理了...
- */
-inline const char*
+//
+// 获取某个位置的对象内容
+// csv		: sccsv_t 对象, new返回的
+// ri		: 查找的行索引 [0, csv->rlen)
+// ci		: 查找的列索引 [0, csv->clen)
+// return	: 返回这一项中内容,后面可以用 atoi, atof, tstr_dup 等处理了...
+//
+inline const char * 
 sccsv_get(sccsv_t csv, int ri, int ci) {
 	DEBUG_CODE({
-		if(!csv || ri<0 || ri>=csv->rlen || ci<0 || ci >= csv->clen){
+		if (!csv || ri<0 || ri >= csv->rlen || ci<0 || ci >= csv->clen) {
 			SL_WARNING("params is csv:%p, ri:%d, ci:%d.", csv, ri, ci);
 			return NULL;
 		}

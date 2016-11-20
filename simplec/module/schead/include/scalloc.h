@@ -34,6 +34,7 @@ void * sm_realloc_(void * ptr, size_t sz, const char * file, int line, const cha
 #define sm_realloc(ptr, sz)	sm_realloc_(ptr, sz, __FILE__, __LINE__, __func__)
 
 // 定义全局内存使用宏, 替换原有的malloc系列函数
+#define _SIMPLEC_ALLOC_CLOSE
 #ifndef _SIMPLEC_ALLOC_CLOSE
 #	define free			sm_free
 #	define malloc		sm_malloc

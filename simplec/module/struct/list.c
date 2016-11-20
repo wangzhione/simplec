@@ -11,13 +11,13 @@ list_add(list_t* ph, void* node)
 {
 	if (ph == NULL || node == NULL){
 		CERR("list_add 检查到(pal == NULL || node == NULL)!");
-		return RT_ErrorParam;
+		return RT_Error_Param;
 	}
 
 	list_next(node) = *ph;
 	*ph = node;
 
-	return RT_SuccessBase;
+	return RT_Success_Base;
 }
 
 /*
@@ -174,19 +174,19 @@ list_addlast(list_t* ph, void* node)
 	struct __lnode* head;
 	if(!ph || !node){
 		CERR("check is {!ph || !node}! not nothing in it!");
-		return RT_ErrorParam;
+		return RT_Error_Param;
 	}
 	
 	list_next(node) = NULL;//将这个结点的置空
 	if(!(head=*ph)){ //插入的是头结点直接返回
 		*ph = node;
-		return RT_SuccessBase;
+		return RT_Success_Base;
 	}
 	
 	while(head->next)
 		head = head->next;
 	head->next = node;
-	return RT_SuccessBase;
+	return RT_Success_Base;
 }
 
 /*
@@ -202,13 +202,13 @@ list_addidx(list_t* ph, int idx, void* node)
 	struct __lnode* head;
 	if(!ph || idx<0 || !node){ //以后可能加入 idx < 0的尾巴插入细则
 		CERR("check is {!ph || idx<0 || !node}! Don't naughty again!");
-		return RT_ErrorParam;
+		return RT_Error_Param;
 	}
 	//插入做为头结点
 	if(!(head=*ph) || idx == 0){
 		list_next(node) = *ph;
 		*ph = node;
-		return RT_SuccessBase;
+		return RT_Success_Base;
 	}
 	
 	while(head->next && idx>1){
@@ -217,7 +217,7 @@ list_addidx(list_t* ph, int idx, void* node)
 	}
 	list_next(node) = head->next;
 	head->next = node;
-	return RT_SuccessBase;
+	return RT_Success_Base;
 }
 
 /*

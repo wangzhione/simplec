@@ -13,7 +13,7 @@ void test_cjson_write(void) {
 	printf("源码串 :\n %s\n", jstr);
 
 	// 先生成 json 对象
-	tstr_t str = tstr_new(jstr);
+	tstr_t str = tstr_create(jstr);
 	cjson_t root = cjson_newtstr(str);
 	if (root == NULL) {
 		puts("jstr 解析失败! 程序退出中....");

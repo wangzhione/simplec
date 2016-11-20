@@ -1,6 +1,7 @@
 ﻿#ifndef _H_SIMPLEC_SCJSON
 #define _H_SIMPLEC_SCJSON
 
+#include <schead.h>
 #include <tstr.h>
 
 // json 中几种数据类型定义 , 对于C而言 最难的是看不见源码,而不是api复杂, 更不是业务复杂

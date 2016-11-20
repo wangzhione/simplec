@@ -163,10 +163,10 @@ array_each(array_t a, each_f func, void * arg) {
 	e = s + a->alloc * a->len;
 	while (s < e) {
 		rt = func(s, arg);
-		if (RT_SuccessBase != rt)
+		if (RT_Success_Base != rt)
 			return rt;
 		s += a->alloc;
 	}
 
-	return RT_SuccessBase;
+	return RT_Success_Base;
 }

@@ -1,13 +1,9 @@
 ﻿#ifndef _H_SIMPLEC_SCHEAD
 #define _H_SIMPLEC_SCHEAD
 
-#include <stdio.h>
-#include <errno.h>
+#include <struct.h>
 #include <string.h>
 #include <ctype.h>
-#include <stdint.h>
-#include <stddef.h>
-#include <assert.h>
 #include <scalloc.h>
 #include <sctime.h>
 
@@ -68,39 +64,6 @@ extern int sh_getch(void);
 	#error "error : Currently only supports the Visual Studio and GCC!"
 #endif
 
-
- /*
-  * 错误定义枚举 用于判断返回值状态的状态码 RT_*表示返回标志
-  *	使用举例 :
-  
-    flag_e flag = scconf_get("pursue");
-	if(flag < RT_SuccessBase) {
-		sclog_error("get config %s error! flag = %d.", "pursue", flag);
-		exit(EXIT_FAILURE);
-	}
-  
-  * 这里是内部 使用的通用返回值 标志. >=0 表示成功, <0 表示失败的情况
-  */
-typedef enum {
-	RT_SuccessBase	= 00,				//结果正确的返回宏
-	RT_ErrorBase	= -1,				//错误基类型, 所有错误都可用它, 在不清楚的情况下
-	RT_ErrorParam	= -2,				//调用的参数错误
-	RT_ErrorMalloc	= -3,				//内存分配错误
-	RT_ErrorFopen	= -4,				//文件打开失败	
-	RT_ErrorClose	= -5,				//文件描述符读取关闭, 读取完毕也会返回这个
-} flag_e;
-
-/*
- * 定义一些通用的函数指针帮助,主要用于基库的封装中
- * 有构造函数, 释放函数, 比较函数等
- */
-typedef void *	(* new_f)();
-typedef void	(* die_f)(void * node);
-// cmp_f 最好 是 int cmp(const void * ln, const void * rn); 标准结构
-typedef int		(* cmp_f)();
-// 循环操作函数, arg 外部参数, node 内部节点
-typedef flag_e	(* each_f)(void * node, void * arg);
-
 /* 栈上辅助操作宏 */
 #if !defined(_H_ARRAY_HELP)
 
@@ -143,26 +106,6 @@ typedef flag_e	(* each_f)(void * node, void * arg);
 
 #define _H_EQUAL
 #endif 
-
-// 4.0 控制台错误输出控制
-#if !defined(_H_CERR)
-
-// 控制台打印错误信息, fmt必须是双引号括起来的宏
-#define CERR(fmt, ...) \
-    fprintf(stderr, "[%s:%s:%d][error %d:%s]" fmt "\n",\
-         __FILE__, __func__, __LINE__, errno, strerror(errno), ##__VA_ARGS__)
-
-// 控制台打印错误信息并退出, t同样fmt必须是 ""括起来的字符串常量
-#define CERR_EXIT(fmt,...) \
-	CERR(fmt, ##__VA_ARGS__), exit(EXIT_FAILURE)
-
-// 执行后检测,如果有错误直接退出
-#define IF_CHECK(code) \
-	if((code) < 0) \
-		CERR_EXIT(#code)
-
-#define _H_CERR
-#endif
 
 // scanf 健壮的多次输入宏
 #ifndef SAFETY_SCANF

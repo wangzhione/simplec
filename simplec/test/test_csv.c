@@ -13,7 +13,7 @@ void test_csv(void) {
 	sl_start();
 
 	// 这里得到 csv 对象
-	csv = sccsv_new(_STR_PATH);
+	csv = sccsv_create(_STR_PATH);
 	if (NULL == csv)
 		CERR_EXIT("open " _STR_PATH " is error!");
 

@@ -402,16 +402,16 @@ static tstr_t _cjson_newfile(const char * path) {
 	}
 
 	//这里创建文本串对象
-	tstr = tstr_new(NULL);
+	tstr = tstr_create(NULL);
 
 	while ((c = fgetc(txt)) != EOF) {
 		// step 1 : 处理字符串
 		if (c == '"') {
-			tstr_append(tstr, c);
+			tstr_appendc(tstr, c);
 			for (n = c; ((c = fgetc(txt)) != EOF) && (c != '"' || n == '\\'); n = c)
-				tstr_append(tstr, c);
+				tstr_appendc(tstr, c);
 			if (EOF != c)
-				tstr_append(tstr, c);
+				tstr_appendc(tstr, c);
 			continue;
 		}
 
@@ -444,7 +444,7 @@ static tstr_t _cjson_newfile(const char * path) {
 		}
 
 		// step 5 : 合法数据直接保存
-		tstr_append(tstr, c);
+		tstr_appendc(tstr, c);
 	}
 
 	fclose(txt);//很重要创建了就要释放,否则会出现隐藏的句柄bug
@@ -553,15 +553,15 @@ static char* _ensure(tstr_t p, int need) {
 		return NULL;
 	}
 	need += p->len;
-	if (need <= p->size) //内存够用直接返回结果
+	if ((size_t)need <= p->cap) //内存够用直接返回结果
 		return p->str + p->len;
 	nsize = _pow2gt(need);
 	// 一定会成功, 否则一切都回归奇点
 	nbuf = sm_malloc(nsize * sizeof(char));
 	//这里复制内容
-	memcpy(nbuf, p->str, p->size);
+	memcpy(nbuf, p->str, p->cap);
 	sm_free(p->str);
-	p->size = nsize;
+	p->cap = nsize;
 	p->str = nbuf;
 	return nbuf + p->len;
 }
@@ -801,7 +801,7 @@ cjson_print(cjson_t item) {
 	}
 	// 构建内存
 	p.str = sm_malloc(sizeof(char) * _INT_CJONSTR);
-	p.size = _INT_CJONSTR;
+	p.cap = _INT_CJONSTR;
 	p.len = 0;
 
 	out = _print_value(item, &p); //从值处理开始, 返回最终结果

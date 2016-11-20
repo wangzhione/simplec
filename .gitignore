@@ -3,6 +3,7 @@
 /simplec/Debug
 /simplec/x64
 /.vs
+/simplec/logs
 
 # 忽略上传的文件
 *.swp
@@ -16,3 +17,7 @@
 *.pdb
 *.pch
 *.ilk
+*.log
+-p
+*.err
+*.out

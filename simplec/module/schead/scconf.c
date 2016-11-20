@@ -50,7 +50,7 @@ sconf_delete(sconf_t conf) {
 // 开始解析串
 static void _analysis_start(FILE * txt, tree_t * proot) {
 	char c, n;
-	TSTR_NEW(tstr);
+	TSTR_CREATE(tstr);
 
 	//这里处理读取问题
 	while ((c = fgetc(txt)) != EOF) {
@@ -76,7 +76,7 @@ static void _analysis_start(FILE * txt, tree_t * proot) {
 		//3.0 找到第一个等号 
 		while (c != EOF && c != '=') {
 			if(!sh_isspace(c))
-				tstr_append(tstr, c);
+				tstr_appendc(tstr, c);
 			c = fgetc(txt);
 		}
 		if (c != '=') //无效的解析直接结束
@@ -86,7 +86,7 @@ static void _analysis_start(FILE * txt, tree_t * proot) {
 		//4.0 找到 第一个 "
 		while (c != EOF && c != '\"') {
 			if (!sh_isspace(c))
-				tstr_append(tstr, c);
+				tstr_appendc(tstr, c);
 			c = fgetc(txt);
 		}
 		if (c != '\"') //无效的解析直接结束
@@ -100,10 +100,11 @@ static void _analysis_start(FILE * txt, tree_t * proot) {
 				// 回退一个 '\\' 字符
 				--tstr->len;
 			}
-			tstr_append(tstr, c);
+			tstr_appendc(tstr, c);
 		}
 		if (c != '\"') //无效的解析直接结束
 			break;
+		tstr_cstr(tstr);
 
 		//这里就是合法字符了,开始检测 了, 
 		tree_add(proot, tstr);
