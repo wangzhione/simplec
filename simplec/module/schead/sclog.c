@@ -84,7 +84,7 @@ sl_getlogid(void) {
 /**
 *	获取日志信息体的请求ip串,返回NULL表示没有初始化
 **/
-const char*
+const char *
 sl_getreqip(void) {
 	struct slinfo * pl = pthread_getspecific(_slmain.key);
 	if (NULL == pl) //返回NULL表示没有找见
@@ -95,9 +95,8 @@ sl_getreqip(void) {
 /**
 *	获取日志信息体的名称,返回NULL表示没有初始化
 **/
-const char*
-sl_getmod(void)
-{
+const char *
+sl_getmod(void) {
 	struct slinfo * pl = pthread_getspecific(_slmain.key);
 	if (NULL == pl) //返回NULL表示没有找见
 		return NULL;
@@ -112,20 +111,19 @@ sl_getmod(void)
 /**
 *	日志关闭时候执行,这个接口,关闭打开的文件句柄
 **/
-static void _sl_end(void)
-{
-	FILE* lid;
-	void* pl;
+static void _sl_end(void) {
+	FILE * lid;
+	void * pl;
 
 	// 在简单地方多做安全操作值得,在核心地方用算法优化的才能稳固
 	if (NULL == _slmain.log)
 		return;
 
-	//重置当前系统打开文件结构体
+	// 重置当前系统打开文件结构体
 	fclose(_slmain.log);
 	fclose(_slmain.wf);
 
-	//写入文件
+	// 写入文件
 	lid = fopen(_STR_LOGID, "wb");
 	if (NULL != lid) {
 		fprintf(lid, "%u", _slmain.logid);
@@ -134,7 +132,7 @@ static void _sl_end(void)
 
 	BZERO(_slmain);
 
-	//主动释放私有变量,其实主进程 相当于一个线程是不合理的!还是不同的生存周期的
+	// 主动释放私有变量,其实主进程 相当于一个线程是不合理的!还是不同的生存周期的
 	pl = pthread_getspecific(_slmain.key);
 	_slinfo_destroy(pl);
 	pthread_setspecific(_slmain.key, NULL);
@@ -144,18 +142,17 @@ static void _sl_end(void)
 *	日志系统首次使用初始化,找对对映日志文件路径,创建指定路径
 **/
 void
-sl_start(void)
-{
-	FILE *lid;
+sl_start(void) {
+	FILE * lid;
 
-	//单例只执行一次
+	// 单例只执行一次
 	if (NULL == _slmain.log) {
-		//先多级创建目录,简易不借助宏实现跨平台,system返回值是很复杂,默认成功!
-		if (0 == system("mkdir -p \"" _STR_SCLOG_DIR "\" >" _STR_TOOUT " 2>" _STR_TOERR)) {
-			rmdir("-p");
-			remove(_STR_TOOUT);
-			remove(_STR_TOERR);
-		}
+		// 先多级创建目录,简易不借助宏实现跨平台,system返回值是很复杂,默认成功!
+		system("mkdir -p \"" _STR_SCLOG_DIR "\" >" _STR_TOOUT " 2>" _STR_TOERR);
+		// 清除额外不重要文件内容
+		rmdir("-p");
+		remove(_STR_TOOUT);
+		remove(_STR_TOERR);
 	}
 
 	if (NULL == _slmain.log) {
@@ -163,27 +160,27 @@ sl_start(void)
 		if (NULL == _slmain.log)
 			CERR_EXIT("__slmain.log fopen %s error!", _STR_SCLOG_LOG);
 	}
-	//继续打开 wf 文件
+	// 继续打开 wf 文件
 	if (NULL == _slmain.wf) {
 		_slmain.wf = fopen(_STR_SCLOG_DIR "/" _STR_SCLOG_WFLOG, "a+");
 		if (!_slmain.wf) {
-			fclose(_slmain.log); //其实这都没有必要,图个心安
+			fclose(_slmain.log); // 其实这都没有必要,图个心安
 			CERR_EXIT("__slmain.log fopen %s error!", _STR_SCLOG_WFLOG);
 		}
 	}
 
-	//读取文件内容,读取文件内容,持久化
+	// 读取文件内容,读取文件内容,持久化
 	if ((lid = fopen(_STR_LOGID, "rb")) != NULL) {
 		if (0 >= fscanf(lid, "%u", &_slmain.logid))
 			CERR_EXIT("__slmain.log fopen " _STR_LOGID " read is error!");
 	}
 
-	//简单判断是否有初始化的必要
+	// 简单判断是否有初始化的必要
 	if (_slmain.log && _slmain.wf) {
-		//这里可以单独开启一个线程或进程,处理日志整理但是 这个模块可以让运维做,按照规则搞
+		// 这里可以单独开启一个线程或进程,处理日志整理但是 这个模块可以让运维做,按照规则搞
 		sl_init("main thread", "0.0.0.0", 0);
 
-		//注册退出操作
+		// 注册退出操作
 		atexit(_sl_end);
 	}
 }
@@ -191,7 +188,7 @@ sl_start(void)
 /**
 *	获取日志信息体的时间串,返回NULL表示没有初始化
 **/
-static const char* _sl_gettimes(void) {
+static const char * _sl_gettimes(void) {
 	struct timeval et; //记录时间
 	unsigned td;
 
@@ -208,8 +205,7 @@ static const char* _sl_gettimes(void) {
 }
 
 int
-sl_printf(const char* format, ...)
-{
+sl_printf(const char * format, ...) {
 	int len;
 	va_list ap;
 	char logs[_INT_LOG]; //这个不是一个好的设计,最新c 中支持 int a[n];

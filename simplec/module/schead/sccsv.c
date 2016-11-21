@@ -3,7 +3,7 @@
 #include <tstr.h>
 
 //从文件中读取 csv文件内容, 构建一个合法串
-static char * _csv_parse(tstr_t tstr, int * prl, int * pcl) {
+static bool _csv_parse(tstr_t tstr, int * prl, int * pcl) {
 	int c = -1, n = -1;
 	int cl = 0, rl = 0;
 	char * sur, * tar;
@@ -49,31 +49,44 @@ static char * _csv_parse(tstr_t tstr, int * prl, int * pcl) {
 	__err_ext:
 		SL_WARNING("now csv file is illegal! c = %d, n = %d, cl = %d, rl = %d."
 			, c, n, cl, rl);
-		return NULL;
+		return false;
 	}
 	
 	// 返回最终内容
 	*prl = rl;
 	*pcl = cl;
-	tstr->len = sur - tstr->str;
-	return tstr_dupstr(tstr);
+	// 构建最终处理的串内容
+	tstr->len = sur - tstr->str + 1;
+	tstr->str[tstr->len - 1] = '\0';
+	return true;
 }
 
 // 将 _csv_get 得到的数据重新构建返回, 执行这个函数认为语法检测都正确了
-static sccsv_t _csv_create(const char * cstr, int rl, int cl) {
-	int i = 0;
-	sccsv_t csv = malloc(sizeof(struct sccsv) + sizeof(char *) * cl);
+static sccsv_t _csv_create(tstr_t tstr) {
+	sccsv_t csv;
+	size_t pdff;
+	char * cstr;
+	int rl, cl, i;
+	if (!_csv_parse(tstr, &rl, &cl))
+		return NULL;
+
+	// 分配最终内存
+	pdff = sizeof(struct sccsv) + sizeof(char *) * cl;
+	csv = malloc(pdff + sizeof(char) * tstr->len);
 	if (NULL == csv) {
-		SL_FATAL("malloc is error cstr = %p, rl = %d, cl = %d.", cstr, rl ,cl);
+		SL_FATAL("malloc is error cstr->len = %d, rl = %d, cl = %d.", tstr->len, rl ,cl);
 		return NULL;
 	}
 
-	// 这里开始构建内容了
+	// 这里开始拷贝内存, 构建内容了
+	cstr = (char *)csv + pdff;
+	memcpy(cstr, tstr->str, tstr->len);
 	csv->rlen = rl;
 	csv->clen = cl / rl;
+	i = 0;
 	do {
 		csv->data[i] = cstr;
-		while(*cstr++) //找到下一个位置处
+		while(*cstr++) // 找到下一个位置处
 			;
 	} while(++i<cl);
 	
@@ -87,9 +100,7 @@ static sccsv_t _csv_create(const char * cstr, int rl, int cl) {
 //
 sccsv_t
 sccsv_create(const char * path) {
-	char * cstr;
-	int rl, cl;
-	
+	sccsv_t csv;
 	tstr_t tstr = tstr_freadend(path);
 	if (NULL == tstr) {
 		SL_WARNING("tstr_freadend path = %s is error!", path);
@@ -97,11 +108,11 @@ sccsv_create(const char * path) {
 	}
 
 	// 如果解析 csv 文件内容失败直接返回
-	cstr = _csv_parse(tstr, &rl, &cl);
-	tstr_delete(tstr);
+	csv = _csv_create(tstr);
 
+	tstr_delete(tstr);
 	// 返回最终结果
-	return cstr ? _csv_create(cstr, rl, cl) : NULL;
+	return csv;
 }
 
 //
