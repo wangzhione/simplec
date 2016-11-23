@@ -2,24 +2,19 @@
 
 // 写完了,又能怎样,一个人
 void test_scconf(void) {
-	const char* value;
+	const char * value;
+	// 同系统声明周期
 	mconf_start();
 
-	//简单测试 配置读取内容
+	// 简单测试 配置读取内容
 	value = mconf_get("heoo");
-	puts(value);
+	printf("%s\n", value);
 
-	value = mconf_get("heoo2");
+	value = mconf_get("Description");
 	if (value)
 		puts(value);
 	else
-		puts("heoo2不存在");
-
-	value = mconf_get("yexu");
-	puts(value);
-
-	value = mconf_get("end");
-	puts(value);
+		puts("Description is empty!");
 
 #ifdef __GNUC__
 	exit(EXIT_FAILURE);

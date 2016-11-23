@@ -14,6 +14,7 @@
 #include <assert.h>
 #include <stdint.h>
 #include <stddef.h>
+#include <string.h>
 
 //
 // 定义的函数操作基本行为返回的枚举, 用于判断返回值状态的状态码

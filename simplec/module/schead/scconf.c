@@ -11,12 +11,12 @@ struct sconf {
 };
 
 // 函数创建函数, kv 是 [ abc\012345 ]这样的结构
-static void* _sconf_new(tstr_t tstr) {
-	char* ptr; //临时用的变量
-	struct sconf * node = sm_malloc(sizeof(struct sconf) + sizeof(char)*(tstr->len+1));
-	// 多读书, 剩下的就是伤感, 1% ,不是我,
-	node->key = ptr = (char*)node + sizeof(struct sconf);
-	memcpy(ptr, tstr->str, tstr->len + 1);
+static void * _sconf_new(tstr_t tstr) {
+	char * ptr; // 临时用的变量
+	struct sconf * node = malloc(sizeof(struct sconf) + sizeof(char)*tstr->len);
+	// 多读书, 剩下的就是伤感, 1% ,不是我. 
+	node->key = ptr = (char *)node + sizeof(struct sconf);
+	memcpy(ptr, tstr->str, tstr->len);
 	// 找到第一个分隔点
 	while (*ptr++)
 		;
@@ -35,8 +35,8 @@ static inline int _sconf_gdcmp(const char * lstr, struct sconf * rnode) {
 	return strcmp(lstr, rnode->key);
 }
 
-static inline void _sconf_del(void * arg) {
-	sm_free(arg);
+static inline void _sconf_die(void * arg) {
+	free(arg);
 }
 
 /*
@@ -44,11 +44,11 @@ static inline void _sconf_del(void * arg) {
  */
 inline void 
 sconf_delete(sconf_t conf) {
-	tree_destroy((tree_t *)&conf);
+	tree_delete(conf);
 }
 
 // 开始解析串
-static void _analysis_start(FILE * txt, tree_t * proot) {
+static void _sconf_create(FILE * txt, tree_t root) {
 	char c, n;
 	TSTR_CREATE(tstr);
 
@@ -70,6 +70,7 @@ static void _analysis_start(FILE * txt, tree_t * proot) {
 				c = fgetc(txt);
 			continue;
 		}
+
 		//开始记录了
 		tstr->len = 0;
 
@@ -104,10 +105,10 @@ static void _analysis_start(FILE * txt, tree_t * proot) {
 		}
 		if (c != '\"') //无效的解析直接结束
 			break;
-		tstr_cstr(tstr);
 
+		tstr_appendc(tstr, '\0');
 		//这里就是合法字符了,开始检测 了, 
-		tree_add(proot, tstr);
+		tree_insert(root, tstr);
 
 		//最后读取到行末尾
 		while (c != EOF && c != '\n')
@@ -119,13 +120,13 @@ static void _analysis_start(FILE * txt, tree_t * proot) {
 	TSTR_DELETE(tstr);
 }
 
-/*
-* 通过制定配置路径创建解析后对象, 失败返回NULL
-* path	: 配置所在路径
-*		: 返回解析后的配置对象
-*/
-extern 
-sconf_t sconf_new(const char * path) {
+//
+// 通过制定配置路径创建解析后对象, 失败返回NULL 
+// path		: 配置所在路径
+// return	: 返回解析后的配置对象 
+//
+sconf_t 
+sconf_create(const char * path) {
 	tree_t conf = NULL;
 	
 	FILE * txt = fopen(path, "rb");
@@ -135,46 +136,62 @@ sconf_t sconf_new(const char * path) {
 	}
 
 	// 创建具体配置二叉树对象
-	conf = tree_create(_sconf_new, _sconf_acmp, _sconf_gdcmp, _sconf_del);
+	conf = tree_create(_sconf_new, _sconf_acmp, _sconf_gdcmp, _sconf_die);
 	// 解析添加具体内容
-	_analysis_start(txt, &conf);
+	_sconf_create(txt, conf);
 
 	fclose(txt);
 	return conf;
 }
 
-/*
- * 得到配置中具体数据
- * conf	: sconf_new 返回的配置对象
- * key	: 具体键值
- *		: 成功得到具体配置的串, 失败或不存在返回NULL
- */
-extern const char * 
+//
+// 得到配置中具体数据
+// conf		: sconf_create 返回的配置对象
+// key		: 具体键值
+// return	: 成功得到具体配置的串, 失败或不存在返回NULL
+//
+inline const char * 
 sconf_get(sconf_t conf, const char * key) {
-	struct sconf * kv = NULL;
-	if ((!conf) || (!key) || (!*key) || !(kv = tree_get(conf, key, NULL))) {
-		SL_WARNING("conf, key, kv => %p, %p, %p.", conf, key, kv);
-		return NULL;
-	}
-	return kv->value;
+	struct sconf * kv;
+	DEBUG_CODE({
+		if (!conf || !key || !*key) {
+			SL_WARNING("conf, key => %p, %s", conf, key);
+			return NULL;
+		}
+	});
+	kv = tree_find(conf, key);
+	return kv ? kv->value : NULL;
 }
 
 // 主配置单例对象
 static tree_t _mconf;
-/*
- * 启动主配置系统, 只能在系统启动的时候执行一次
- *		: 返回创建好的主配置对象
- */
-inline sconf_t 
-mconf_start(void) {
-	return _mconf ? (_mconf) : (_mconf = sconf_new(_STR_MCCONF_PATH));
+
+// 最终销毁主程序对象数据
+static void _mconf_end(void) {
+	sconf_delete(_mconf);
 }
 
-/*
- * 得到主配置对象中配置的配置, 必须在程序启动时候先执行 mconf_new
- * key	: 主配置的key值
- *		: 得到主配置中配置的数据
- */
+//
+// 启动主配置系统, 只能在系统启动的时候执行一次
+// return	: 返回创建好的主配置对象
+//
+void 
+mconf_start(void) {
+	if (!_mconf) {
+		_mconf = sconf_create(_STR_MCCONF_PATH);
+		if (!_mconf) {
+			SL_FATAL("sconf_create is open error path = " _STR_MCCONF_PATH);
+			exit(EXIT_FAILURE);
+		}
+		atexit(_mconf_end);
+	}
+}
+
+//
+// 得到主配置对象中配置的配置, 必须在程序启动时候先执行 mconf_start
+// key		: 主配置的key值
+// return	: 得到主配置中配置的数据
+//
 inline const char * 
 mconf_get(const char * key) {
 	return sconf_get(_mconf, key);

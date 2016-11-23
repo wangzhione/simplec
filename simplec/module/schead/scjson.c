@@ -552,7 +552,7 @@ static char* _ensure(tstr_t p, int need) {
 		CERR("p:%p need:%d is error!", p, need);
 		return NULL;
 	}
-	need += p->len;
+	need += (int)p->len;
 	if ((size_t)need <= p->cap) //内存够用直接返回结果
 		return p->str + p->len;
 	nsize = _pow2gt(need);
@@ -568,7 +568,7 @@ static char* _ensure(tstr_t p, int need) {
 
 // 这里更新一下 当前字符串, 返回当前字符串的长度
 static inline int _update(tstr_t p) {
-	return (!p || !p->str) ? 0 : p->len + (int)strlen(p->str+p->len);
+	return (int)((!p || !p->str) ? 0 : p->len + strlen(p->str+p->len));
 }
 
 // 将item 中值转换成字符串 保存到p中
@@ -696,7 +696,9 @@ static char * _print_array(cjson_t item, tstr_t p)
 {
 	char * ptr;
 	cjson_t child = item->child;
-	int ncut, i;
+	int ncut;
+	size_t i;
+
 	// 得到孩子结点的深度
 	for (ncut = 0; (child); child = child->child)
 		++ncut;
@@ -735,7 +737,8 @@ static char * _print_array(cjson_t item, tstr_t p)
 static char * _print_object(cjson_t item, tstr_t p)
 {
 	char * ptr;
-	int i, ncut, len;
+	int ncut, len;
+	size_t i;
 	cjson_t child = item->child;
 
 	// 得到孩子结点的深度

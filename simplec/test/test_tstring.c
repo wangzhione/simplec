@@ -10,13 +10,13 @@ void test_tstring(void) {
 	//先在堆上 申请内存
 	tstr_t tstr = tstr_create("123");
 	tstr_cstr(tstr);
-	printf("str:%s, len:%d, size:%d.\n", tstr->str, tstr->len, tstr->cap);
+	printf("str:%s, len:%zu, size:%zu.\n", tstr->str, tstr->len, tstr->cap);
 
 	tstr_appendc(tstr, 'A');
 	tstr_cstr(tstr);
-	printf("str:%s, len:%d, size:%d.\n", tstr->str, tstr->len, tstr->cap);
+	printf("str:%s, len:%zu, size:%zu.\n", tstr->str, tstr->len, tstr->cap);
 	tstr_appends(tstr, "11111111111111111111111111111111111111111111111111111111111112你好你好你好\"你好");
-	printf("str:%s, len:%d, size:%d.\n", tstr->str, tstr->len, tstr->cap);
+	printf("str:%s, len:%zu, size:%zu.\n", tstr->str, tstr->len, tstr->cap);
 
 	tstr_delete(tstr);
 
@@ -24,9 +24,9 @@ void test_tstring(void) {
 	TSTR_CREATE(ts);
 	tstr_appendc(ts, 'w');
 	tstr_cstr(ts);
-	printf("str:%s, len:%d, size:%d.\n", ts->str, ts->len, ts->cap);
+	printf("str:%s, len:%zu, size:%zu.\n", ts->str, ts->len, ts->cap);
 	tstr_appends(ts, "AN,but WAI!");
-	printf("str:%s, len:%d, size:%d.\n", ts->str, ts->len, ts->cap);
+	printf("str:%s, len:%zu, size:%zu.\n", ts->str, ts->len, ts->cap);
 	TSTR_DELETE(ts);
 
 #ifdef __GNUC__

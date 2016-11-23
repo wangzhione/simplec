@@ -13,7 +13,7 @@ tstr_hash(const char * str) {
 	if (!str || !*str) 
 		return 1;
 
-	h = strlen(str);
+	h = (unsigned)strlen(str);
 	sp = (h >> 5) + 1;
 	for (i = h; i >= sp; i -= sp)
 		h ^= (h << 5) + (h >> 2) + (unsigned char)str[i - 1];
@@ -62,7 +62,7 @@ tstr_dup(const char * str) {
 	// 这里采用 日志 + exit, 这种未定义行为. 方便收集错误日志和监测大内存申请失败情况.
 	//
 	if (NULL == nstr)
-		CERR_EXIT("malloc len = %d is empty!", len);
+		CERR_EXIT("malloc len = %zu is empty!", len);
 
 	return memcpy(nstr, str, len);
 }
@@ -99,7 +99,7 @@ tstr_freadend(const char * path) {
 	// 最终错误检查
 	if (rn < 0) {
 		tstr_delete(tstr);
-		CERR("fread is error! path = %s. rn = %d.", path, rn);
+		CERR("fread is error! path = %s. rn = %zu.", path, rn);
 		return NULL;
 	}
 
@@ -191,7 +191,7 @@ static void _tstr_realloc(tstr_t tstr, size_t len) {
 		;
 	if ((nstr = realloc(tstr->str, cap)) == NULL) {
 		tstr_delete(tstr);
-		CERR_EXIT("realloc cap = %d empty!!!", cap);
+		CERR_EXIT("realloc cap = %zu empty!!!", cap);
 	}
 
 	// 重新内联内存
@@ -248,7 +248,7 @@ tstr_dupstr(tstr_t tstr) {
 	len = tstr->len + !!tstr->str[tstr->len - 1];
 	str = malloc(len * sizeof(char));
 	if (NULL == str)
-		CERR_EXIT("malloc len = %d is error!", len);
+		CERR_EXIT("malloc len = %zu is error!", len);
 	
 	memcpy(str, tstr->str, len - 1);
 	str[len - 1] = '\0';

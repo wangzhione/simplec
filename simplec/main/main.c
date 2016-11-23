@@ -14,7 +14,6 @@ extern void simplec_main(void);
  * simple c 开发框架的启动函数总入口
  */
 int main(int argc, char * argv[]) {
-	sconf_t conf;
 	FILE * errlog;
 
 	// 开启_DEBUG模式下结束等待
@@ -30,15 +29,13 @@ int main(int argc, char * argv[]) {
 		exit(EXIT_FAILURE);
 	}
 	// 启动基础配置系统, 并得到配置的单例对象
-	conf = mconf_start();
+	mconf_start();
 
 	/*
 	 * simple c -> 具体业务跑起来 , -> ︿(￣︶￣)︿
 	 */
 	/* 8-> */ simplec_main(); /* <-8 */
 
-	// 销毁申请的资源 or 句柄
-	sconf_delete(conf);
 	fclose(errlog);
 
 	return 0;

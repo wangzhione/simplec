@@ -62,7 +62,8 @@ simplec_test(void) {
 	extern void test_xlstojson(void);
 	// 单元测试 - 时间业务测试
 	extern void test_sctimeutil(void);
+	// 单元测试 - 配置文件读写
+	extern void test_scconf(void);
 
-
-	test_csv();
+	test_scconf();
 }

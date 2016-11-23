@@ -1,68 +1,65 @@
-﻿#ifndef _H_TREE
-#define _H_TREE
+﻿#ifndef _H_SIMPLEC_TREE
+#define _H_SIMPLEC_TREE
 
-#include <schead.h>
+#include <struct.h>
 
-/*
-*  这里是简单二叉查找树封装的基库,封装库的库
-*  需要用的的一些辅助结构,主要是通用结构和申请释放的函数指针
-*/
+//
+// 定义二叉查找树基础结构
+// tree_t		: 二叉查找树类型
+// tnode		: 定义查找树规则的结构
+// _HEAD_TREE	: 这个结构需要放在希望使用二叉排序树规则的结构体第一行
+//
 typedef struct tree * tree_t;
 
-
-// __开头一般意思是不希望你使用,私有的,系统使用
-struct __tnode {
-	struct __tnode * lc;
-	struct __tnode * rc;
+struct tnode {
+	struct tnode * right;
+	struct tnode * left;
 };
-/*
-*   这个宏必须放在使用的结构体开头,如下
-*  struct persion {
-		_TREE_HEAD;
-		char* name;
-		int age;
-		...
-*  }
-*
-*/
-#define _TREE_HEAD \
-	struct __tnode __tn
 
+//
+// 这个宏必须放在使用的结构体第一行
+//
+#define _TREE_HEAD	struct tnode $node
 
-/*
-* new   : 结点申请内存用的函数指针, 对映参数中是 特定结构体指针
-* acmp  : 用于添加比较 
-* gdcmp : 两个结点比较函数,用户查找和删除
-* del   : 结点回收函数,第一个参数就是 二叉树中保存的结点地址
-* ret   : 返回创建好的二叉树结构, 这里是 tree_t 结构
-*/
-extern tree_t tree_create(new_f new, cmp_f acmp, cmp_f gdcmp, die_f del);
+//
+// 二叉查找树构建函数, 需要注册构建结点规则, 插入, 删除和比较规则, 销毁结点规则
+// new		: 结点申请内存用的函数指针, 对映参数中是 特定结构体指针
+// acmp		: 用于添加比较
+// gdcmp	: 两个结点比较函数,用户查找和删除
+// die		: 结点回收函数,第一个参数就是 二叉树中保存的结点地址
+// return   : 返回创建好的二叉树结构, 这里是 
+//
+extern tree_t tree_create(new_f new, cmp_f acmp, cmp_f gdcmp, die_f die);
 
-/*
-* proot  : 指向tree_t 根结点的指针,
-* node	 : 待处理的结点对象, 会调用new(node) 创建新结点
-* ret    : proot 即是输入参数也是返回参数,返回根结点返回状况
-*/
-extern void tree_add(tree_t* proot, void* node);
+// 
+// 删除这个二叉查找树,会调用 del(foreach) 去删除所有结点.
+// root		: 二叉查找树数对象
+//
+extern void tree_delete(tree_t root);
 
-/*
-* proot  : 输入和输出参数,指向根结点的指针
-* node   : 删除结点,这里会调用 cmp(node 左参数, foreach) 找见,通过del(find) 删除
-*/
-extern void tree_del(tree_t* proot, void* node);
+//
+// 二叉树的插入和删除
+// root		: 指向tree_t 根结点的指针,
+// node		: 待处理的结点对象, 通过cmp(node, foreach) -> new or die
+//
+extern void tree_insert(tree_t root, void * node);
+extern void tree_remove(tree_t root, void * node);
 
-/*
-* root   : 根结点,查找的总对象
-* node   : 查找条件,会通过cmp(node, foreach)去查找
-* parent : 返回查找到的父亲结点
-* ret	 : 返回查找到的结点对象
-*/
-extern void* tree_get(tree_t root, const void* node, void** parent);
+//
+// 通过结点数据查找想要的结点返回 
+// root		: 二叉树查找树对象
+// node		: 待查找结点, 会通过cmp(node, foreach)进行查找
+// return	: 返回查找到的结点, 返回NULL表示没有查到
+//
+extern void * tree_find(tree_t root, const void * node);
 
-/*
-* proot  : 指向二叉树数结点指针
-* 会调用 del(foreach) 去删除所有结点,并将所有还原到NULL
-*/
-extern void tree_destroy(tree_t* proot);
+//
+// 通过结点数据查找想要的结点返回, 也会返回父亲结点数据
+// root		: 根结点,查找的总对象
+// node		: 查找条件,会通过cmp(node, foreach)去查找
+// pparent	: 返回查找到的父亲结点
+// return	: 返回查找到的结点对象
+//
+extern void* tree_get(tree_t root, const void * node, void ** pparent);
 
-#endif // !_H_TREE
+#endif // !_H_SIMPLEC_TREE

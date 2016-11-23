@@ -2,7 +2,6 @@
 #define _H_SIMPLEC_SCHEAD
 
 #include <struct.h>
-#include <string.h>
 #include <ctype.h>
 #include <scalloc.h>
 #include <sctime.h>
