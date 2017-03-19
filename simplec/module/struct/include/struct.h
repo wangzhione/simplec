@@ -71,4 +71,21 @@ typedef flag_e	(* each_f)(void * node, void * arg);
 
 #endif
 
+/*
+ * 这里是一个 在 DEBUG 模式下的测试宏
+ *
+ * 用法 :
+ * DEBUG_CODE({
+ *		puts("debug start...");
+ * });
+ */
+#ifndef DEBUG_CODE
+# ifdef _DEBUG
+#	define DEBUG_CODE(code) \
+		do code while(0)
+# else
+#	define DEBUG_CODE(code) 
+# endif	//	! _DEBUG
+#endif	//	! DEBUG_CODE
+
 #endif // !_H_SIMPLEC_STRUCT

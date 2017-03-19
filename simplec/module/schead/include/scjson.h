@@ -1,7 +1,6 @@
 ﻿#ifndef _H_SIMPLEC_SCJSON
 #define _H_SIMPLEC_SCJSON
 
-#include <schead.h>
 #include <tstr.h>
 
 // json中几种数据结构和方式定义, 对于程序开发而言最难的还是理解思路(思想 or 业务)

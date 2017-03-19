@@ -131,23 +131,6 @@ extern int sh_getch(void);
 	} while(0)
 #endif // !TIME_PRINT
 
-/*
- * 这里是一个 在 DEBUG 模式下的测试宏
- *
- * 用法 :
- * DEBUG_CODE({
- *		puts("debug start...");
- * });
- */
-#ifndef DEBUG_CODE
-# ifdef _DEBUG
-#	define DEBUG_CODE(code) \
-		do code while(0)
-# else
-#	define DEBUG_CODE(code) 
-# endif	//	! _DEBUG
-#endif	//	! DEBUG_CODE
-
 // 等待的宏 是个单线程没有加锁 | "请按任意键继续. . ."
 #define _STR_PAUSEMSG "Press any key to continue . . ."
 extern void sh_pause(void);
