@@ -5,19 +5,18 @@
 
 // 删除cjson
 static void _cjson_delete(cjson_t c) {
-	cjson_t next;
 	while (c) {
-		next = c->next;
+		cjson_t next = c->next;
 		//递归删除儿子
 		if (!(c->type & _CJSON_ISREF)) {
-			if (c->child) //如果不是尾递归,那就先递归
+			if (c->child) //递归删除子节点
 				_cjson_delete(c->child);
-			if (c->vs)
-				sm_free(c->vs);
+			if (c->type & _CJSON_STRING)
+				free(c->vs);
 		}
 		else if (!(c->type & _CJSON_ISCONST) && c->key)
-			sm_free(c->key);
-		sm_free(c);
+			free(c->key);
+		free(c);
 		c = next;
 	}
 }
@@ -35,44 +34,39 @@ cjson_delete(cjson_t c) {
 
 //构造一个空 cjson 对象
 static inline cjson_t _cjson_new(void) {
-	return sm_malloc(sizeof(struct cjson));
+	cjson_t node = malloc(sizeof(struct cjson));
+	if (!node)
+		CERR_EXIT("malloc struct cjson is null!");
+	return memset(node, 0, sizeof(struct cjson));;
 }
 
-// 简化的代码段,用宏来简化代码书写 , 16进制处理
-#define __parse_hex4_code(c, h) \
-	if (c >= '0' && c <= '9') \
-		h += c - '0'; \
-	else if (c >= 'A' && c <= 'F') \
-		h += 10 + c - 'A'; \
-	else if (c >= 'a' && c <= 'z') \
-		h += 10 + c - 'F'; \
-	else \
-		return 0
-
-// 等到unicode char代码
+// parse 4 digit hexadecimal number
 static unsigned _parse_hex4(const char * str) {
 	unsigned h = 0;
-	char c = *str;
-	//第一轮
-	__parse_hex4_code(c, h);
-	h <<= 4;
-	c = *++str;
-	//第二轮
-	__parse_hex4_code(c, h);
-	h <<= 4;
-	c = *++str;
-	//第三轮
-	__parse_hex4_code(c, h);
-	h <<= 4;
-	c = *++str;
-	//第四轮
-	__parse_hex4_code(c, h);
+	size_t i = 0;
+	// 开始转换16进制
+	for(;;) {
+		unsigned char c = *str;
+		if (c >= '0' && c <= '9')
+			h += c - '0';
+		else if (c >= 'A' && c <= 'F')
+			h += 10 + c - 'A';
+		else if (c >= 'a' && c <= 'z')
+			h += 10 + c - 'a';
+		else
+			return 0;
+		// shift left to make place for the next nibble
+		if (4 == ++i)
+			break;
+		h <<= 4;
+		c = *++str;
+	}
 
 	return h;
 }
 
 // 分析字符串的子函数,
-static const char* _parse_string(cjson_t item, const char * str) {
+static const char * _parse_string(cjson_t item, const char * str) {
 	static unsigned char _marks[] = { 0x00, 0x00, 0xC0, 0xE0, 0xF0, 0xF8, 0xFC };
 	const char * ptr;
 	char * nptr, * out;
@@ -88,7 +82,8 @@ static const char* _parse_string(cjson_t item, const char * str) {
 	for (ptr = str + 1, len = 0; (c = *ptr++) != '\"' && c; ++len)
 		if (c == '\\') //跳过转义字符
 			++ptr;
-	out = sm_malloc(len + 1);
+	if (!(out = calloc(len + 1, sizeof(len + 1))))
+		CERR_EXIT("calloc size = %d is error!", len + 1);
 	// 这里复制拷贝内容
 	for (ptr = str + 1, nptr = out; (c = *ptr) != '\"' && c; ++ptr) {
 		if (c != '\\') {
@@ -105,11 +100,12 @@ static const char* _parse_string(cjson_t item, const char * str) {
 		case 'u': // 将utf16 => utf8, 专门的utf处理代码
 			uc = _parse_hex4(ptr + 1);
 			ptr += 4;//跳过后面四个字符, unicode
-			if ((uc >= 0xDC00 && uc <= 0xDFFF) || uc == 0)	break;	/* check for invalid.	*/
+			if (0 == uc || (uc >= 0xDC00 && uc <= 0xDFFF))
+				break;	/* check for invalid. */
 
-			if (uc >= 0xD800 && uc <= 0xDBFF) { /* UTF16 surrogate pairs.	*/
+			if (uc >= 0xD800 && uc <= 0xDBFF) { /* UTF16 surrogate pairs. */
 				if (ptr[1] != '\\' || ptr[2] != 'u')	
-					break;	/* missing second-half of surrogate.	*/
+					break;	/* missing second-half of surrogate. */
 				nuc = _parse_hex4(ptr + 3);
 				ptr += 6;
 				if (nuc < 0xDC00 || nuc>0xDFFF)		
@@ -211,7 +207,6 @@ static const char * _parse_array(cjson_t item, const char * str) {
 			return str + 1;
 
 		child->next = nitem = _cjson_new();
-		nitem->prev = child;
 		child = nitem;
 		str = _parse_value(child, str + 1);
 		if (NULL == str) {// 写代码是一件很爽的事
@@ -264,7 +259,6 @@ static const char * _parse_object(cjson_t item, const char * str) {
 
 		nitem = _cjson_new();
 		child->next = nitem;
-		nitem->prev = child;
 		child = nitem;
 		str = _parse_string(child, str + 1);
 		if (!str || *str != ':'){
@@ -391,66 +385,6 @@ cjson_newtstr(tstr_t str) {
 	return _cjson_parse(str->str);
 }
 
-// 从json文件中解析出最简json数据
-static tstr_t _cjson_newfile(const char * path) {
-	char c, n;
-	tstr_t tstr;
-	FILE * txt = fopen(path, "r");
-	if (NULL == txt) {
-		CERR("fopen r %s is error!", path);
-		return NULL;
-	}
-
-	//这里创建文本串对象
-	tstr = tstr_create(NULL);
-
-	while ((c = fgetc(txt)) != EOF) {
-		// step 1 : 处理字符串
-		if (c == '"') {
-			tstr_appendc(tstr, c);
-			for (n = c; ((c = fgetc(txt)) != EOF) && (c != '"' || n == '\\'); n = c)
-				tstr_appendc(tstr, c);
-			if (EOF != c)
-				tstr_appendc(tstr, c);
-			continue;
-		}
-
-		// step 2 : 处理不可见特殊字符
-		if (c < '!')
-			continue;
-
-		if (c == '/') {
-			// step 3 : 处理 // 解析到行末尾
-			n = fgetc(txt);
-			if (n == '/') {
-				while ((c = fgetc(txt)) != EOF && c != '\n')
-					;
-				continue;
-			}
-
-			// step 4 : 处理 /*
-			if (n == '*') {
-				while ((c = fgetc(txt)) != EOF) {
-					if (c == '*') {
-						n = fgetc(txt);
-						if (n == '/')
-							break;
-						ungetc(n, txt);
-					}
-				}
-				continue;
-			}
-			ungetc(n, txt);
-		}
-
-		// step 5 : 合法数据直接保存
-		tstr_appendc(tstr, c);
-	}
-
-	fclose(txt);//很重要创建了就要释放,否则会出现隐藏的句柄bug
-	return tstr;
-}
-
 /*
  *	将json文件解析成json内容返回. 需要自己调用 cjson_delete
  * path		: json串路径
@@ -458,15 +392,12 @@ static tstr_t _cjson_newfile(const char * path) {
  */
 cjson_t
 cjson_newfile(const char * path) {
-	cjson_t root;
-	tstr_t tstr = _cjson_newfile(path);
+	tstr_t tstr = tstr_freadend(path); 
 	if (!tstr) {
-		CERR("_cjson_dofile_tstr path:%s is error!", path);
+		CERR("tstr_freadend path:%s is error!", path);
 		return NULL;
 	}
-	root = _cjson_parse(tstr->str);
-	tstr_delete(tstr);
-	return root;
+	return cjson_newtstr(tstr);
 }
 
 /*
@@ -530,7 +461,7 @@ cjson_getobject(cjson_t object, const char* key) {
 
 // --------------------------------- 下面是 cjson 输出部分的处理代码 -----------------------------------------
 
-// 2^n>=x , n是最小的整数
+// 2^n >= x , n是最小的整数
 static int _pow2gt(int x) {
 	--x;
 	x |= x >> 1;
@@ -545,7 +476,7 @@ static int _pow2gt(int x) {
  *	 这里使用 tstr_t 结构 size 这里表示 字符串总大小,没有变化
  * len 表示当前字符串的字符串起始偏移量 即 tstr_t->str + tstr_t->len 起始的
  */
-static char* _ensure(tstr_t p, int need) {
+static char * _ensure(tstr_t p, int need) {
 	char * nbuf;
 	int nsize;
 	if (!p || !p->str) {
@@ -557,10 +488,11 @@ static char* _ensure(tstr_t p, int need) {
 		return p->str + p->len;
 	nsize = _pow2gt(need);
 	// 一定会成功, 否则一切都回归奇点
-	nbuf = sm_malloc(nsize * sizeof(char));
+	nbuf = calloc(nsize, sizeof(char));
+	assert(NULL != nbuf);
 	//这里复制内容
 	memcpy(nbuf, p->str, p->cap);
-	sm_free(p->str);
+	free(p->str);
 	p->cap = nsize;
 	p->str = nbuf;
 	return nbuf + p->len;
@@ -692,8 +624,7 @@ static char * _print_value(cjson_t item, tstr_t p) {
 }
 
 // 同样 假定 item 和 p都是存在且不为NULL
-static char * _print_array(cjson_t item, tstr_t p)
-{
+static char * _print_array(cjson_t item, tstr_t p) {
 	char * ptr;
 	cjson_t child = item->child;
 	int ncut;
@@ -734,8 +665,7 @@ static char * _print_array(cjson_t item, tstr_t p)
 }
 
 // 同样 假定 item 和 p都是存在且不为NULL, 相信这些代码是安全的
-static char * _print_object(cjson_t item, tstr_t p)
-{
+static char * _print_object(cjson_t item, tstr_t p) {
 	char * ptr;
 	int ncut, len;
 	size_t i;
@@ -745,7 +675,7 @@ static char * _print_object(cjson_t item, tstr_t p)
 	for (ncut = 0; child; child = child->child)
 		++ncut;
 	if (!ncut) {
-		char* out = NULL;
+		char * out = NULL;
 		if (!(out = _ensure(p, 3)))
 			strcpy(out, "{}");
 		return out;
@@ -797,23 +727,31 @@ static char * _print_object(cjson_t item, tstr_t p)
 char * 
 cjson_print(cjson_t item) {
 	struct tstr p;
-	char * out;
+	char * out, * nout;
 	if (NULL == item) {
 		CERR("item is error = %p!", item);
 		return NULL;
 	}
 	// 构建内存
-	p.str = sm_malloc(sizeof(char) * _INT_CJONSTR);
+	p.str = calloc(_INT_CJONSTR, sizeof(char));
+	assert(NULL != p.str);
 	p.cap = _INT_CJONSTR;
 	p.len = 0;
 
 	out = _print_value(item, &p); //从值处理开始, 返回最终结果
 	if (out == NULL) {
-		sm_free(p.str);
+		free(p.str);
 		CERR("_print_value item:%p, p:%p is error!", item, &p);
 		return NULL;
 	}
-	return sm_realloc(out, strlen(out) + 1); // 体积变小 realloc返回一定成功
+
+	p.len = strlen(out) + 1;
+	nout = realloc(out, p.len); // 体积变小 realloc返回一定成功
+	if (NULL == nout) {
+		free(out);
+		CERR("realloc len = %zu is error!\n", p.len);
+	}
+	return memcpy(nout, out, p.len);
 }
 
 // --------------------------------- 下面是 cjson 输出部分的辅助代码 -----------------------------------------
@@ -838,8 +776,7 @@ cjson_newbool(int b) {
 }
 
 inline cjson_t
-cjson_newnumber(double vd)
-{
+cjson_newnumber(double vd) {
 	cjson_t item = _cjson_new();
 	item->type = _CJSON_NUMBER;
 	item->vd = vd;
@@ -847,8 +784,7 @@ cjson_newnumber(double vd)
 }
 
 inline cjson_t
-cjson_newstring(const char* vs)
-{
+cjson_newstring(const char* vs) {
 	cjson_t item = _cjson_new();
 	item->type = _CJSON_STRING;
 	item->vs = tstr_dup(vs);
@@ -856,16 +792,14 @@ cjson_newstring(const char* vs)
 }
 
 inline cjson_t
-cjson_newarray(void)
-{
+cjson_newarray(void) {
 	cjson_t item = _cjson_new();
 	item->type = _CJSON_ARRAY;
 	return item;
 }
 
 inline cjson_t
-cjson_newobject(void)
-{
+cjson_newobject(void) {
 	cjson_t item = _cjson_new();
 	item->type = _CJSON_OBJECT;
 	return item;
@@ -902,10 +836,8 @@ cjson_newtypearray(int type, const void * array, int len) {
 		case _CJSON_NUMBER: n = cjson_newnumber(((double*)array)[i]); break;
 		case _CJSON_STRING: n = cjson_newstring(((char**)array)[i]);break;
 		}
-		if(i){ //有你更好
+		if(i) //有你更好
 			p->next = n;
-			n->prev = p;
-		}
 		else
 			a->child = n;
 		p = n;
@@ -931,18 +863,13 @@ cjson_detacharray(cjson_t array, int idx) {
 	
 	for(c=array->child; idx>0 && c; c = c->next)
 		--idx;
-	if(c>0){
+	if( c > 0){
 		CERR("check param is too dig idx:sub %d.", idx);
 		return NULL;
 	}
-	//这里开始拼接了
-	if(c->prev)
-		c->prev->next = c->next;
-	if(c->next)
-		c->next->prev = c->prev;
 	if(c == array->child)
 		array->child = c->next;
-	c->prev = c->next = NULL;
+	c->next = NULL;
 	return c;
 }
 
@@ -968,12 +895,8 @@ cjson_detachobject(cjson_t object, const char * key) {
 		CERR("check param key:%s => vlaue is empty.", key);
 		return NULL;
 	}
-	if(c->prev)
-		c->prev->next = c->next;
-	if(c->next)
-		c->next->prev = c->prev;
 	if(c == object->child)
 		object->child = c->next;
-	c->prev = c->next = NULL;
+	c->next = NULL;
 	return c;
 }

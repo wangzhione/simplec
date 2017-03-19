@@ -13,7 +13,7 @@
     "activity_pic_json":"UI_HuoDong_ShiJieBoss.json",
     "jinbi_buff_icon":"UI_icon/IMG_WorldBoss_JinbiBuff_Atk.png",
     "jinbi_buff_damage":[[8,1000],[9,1000],[11,1000],[12,1000]],
-    "jinbi_buff_price":10,
+    "jinbi_buff_price":10.98,
     "jinbi_buff_limit":999,
     "free_change":1,
     "refresh_price":20,

@@ -45,9 +45,9 @@ simplec_go(void) {
 }
 
 /*
-* simple c 单元测试主函数
-* return	: void
-*/
+ * simple c 单元测试主函数
+ * return	: void
+ */
 void 
 simplec_test(void) {
 	// 单元测试 - 协程库
@@ -65,5 +65,5 @@ simplec_test(void) {
 	// 单元测试 - 配置文件读写
 	extern void test_scconf(void);
 
-	test_scconf();
+	test_json_read();
 }

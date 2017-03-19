@@ -19,9 +19,11 @@ void test_json_read(void) {
 	cjson_t firefighting_rule = cjson_detachobject(rule, "firefighting_rule");
 	// 得到真正的内容
 	cjson_t key1 = cjson_detachobject(firefighting_rule, "key1");
+	cjson_t jinbi_buff_price = cjson_getobject(key1, "jinbi_buff_price");
+	printf("jinbi_buff_price = %lf\n", jinbi_buff_price->vd);
 
 	//这里得到 key1 输出内容
-	char* nkey = cjson_print(key1);
+	char * nkey = cjson_print(key1);
 	if (NULL == nkey)
 		CERR_EXIT("cjson_print key1 is error!");
 	

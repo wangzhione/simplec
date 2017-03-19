@@ -107,7 +107,7 @@ tree_insert(tree_t root, void * node) {
 
 void
 tree_remove(tree_t root, void * node) {
-	struct tnode * next, *parent, *tnode, *tparent;
+	struct tnode * next, * parent, * tnode, * tparent;
 	// 简单检查一下这个结点, 开始处理
 	if (!root || !node || !root->root) {
 		CERR("check is !root || !node || !root->root.");
@@ -115,7 +115,7 @@ tree_remove(tree_t root, void * node) {
 	}
 
 	// 没有这个结点直接返回结果
-	if (!(next = tree_get(root, node, &parent))) {
+	if (!(next = tree_get(root, node, (void **)&parent))) {
 		CERR("tree_get node = %p is not find.", node);
 		return;
 	}
@@ -165,7 +165,7 @@ void *
 tree_find(tree_t root, const void * node) {
 	int tmp;
 	cmp_f cmp;
-	struct tnode * next, *parent;
+	struct tnode * next;
 
 	// 简单检查一下这个结点, 开始处理
 	if ((!root) || (!node) || !(next = root->root)) {
@@ -176,9 +176,8 @@ tree_find(tree_t root, const void * node) {
 	// 查找数据查找到了直接返回结果
 	cmp = root->gdcmp;
 	do {
-		if (tmp = cmp(node, next) == 0)
+		if ((tmp = cmp(node, next)) == 0)
 			break;
-		parent = next;
 		next = tmp < 0 ? next->left : next->right;
 	} while (next);
 	return next;
@@ -211,7 +210,7 @@ tree_get(tree_t root, const void * node, void ** pparent) {
 	parent = NULL;
 
 	do {
-		if (tmp = cmp(node, next) == 0) {
+		if ((tmp = cmp(node, next)) == 0) {
 			if (pparent)
 				*pparent = parent;
 			break;
