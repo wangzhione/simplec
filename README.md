@@ -1,4 +1,4 @@
-# simplec
+Visual# simplec
 简易C跨平台开发框架
 
 能够通过这个框架, 可以使用C更方便的开发跨平台的小工具.
@@ -8,12 +8,16 @@
 本系统最适合那些, 想找个简单Demo深入了解C开发世界爱好者 or 基础可以在校生. <(￣3￣)> :-D!
 
 # window 环境搭建
-目前是使用 Visual Studio 2015 维护 x86 and x64 版本. 
+目前是使用 Visual Studio 2015 / 2017 维护 x86 and x64 版本. 
+
+推荐用Visual Studio 2017 x64 开发,以后x86平台会退出历史的舞台.
 
 详细的环境搭建可以查看 /simplec/readme/helper.txt 文档搭建VS开发环境配置. 
 
 # linux 环境搭建
-目前是GCC (Ubuntu 5.4.0-6ubuntu1~16.04.2) 5.4.0 搭建开发的. 
+上一个版本是GCC (Ubuntu 5.4.0-6ubuntu1~16.04.2) 5.4.0 搭建开发的. 
+
+目前是Ubuntu 16.10 + GCC 6.2.0 搭建开发的. 
 
 详细编译流程, 可以查看 Makefile 文件. 
 
