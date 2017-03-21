@@ -1,16 +1,16 @@
 ﻿#ifndef _H_RBTREE
 #define _H_RBTREE
 
-#include <schead.h>
+#include <struct.h>
 
-struct rbnode {
+struct $rbnode {
 	uintptr_t parent_color;
-	struct rbnode * right;
-	struct rbnode * left;
+	struct $rbnode * right;
+	struct $rbnode * left;
 };
 
 typedef struct {
-	struct rbnode * root;
+	struct $rbnode * root;
 	new_f new;
 	cmp_f cmp;
 	die_f die;
@@ -24,7 +24,7 @@ typedef struct {
 		... // 自定义信息
 	};
  */
-#define _HEAD_RBTREE	struct rbnode __node
+#define _HEAD_RBTREE	struct $rbnode $node
 
 /*
  * 创建一颗红黑树头结点 
@@ -33,7 +33,7 @@ typedef struct {
  * die		: 注册程序销毁函数
  *			: 返回创建好的红黑树结点
  */
-extern rbtree_t rb_new(new_f new, cmp_f cmp, die_f die);
+extern rbtree_t rb_create(new_f new, cmp_f cmp, die_f die);
 
 /*
  * 插入一个结点, 会插入 new(pack)
@@ -60,6 +60,6 @@ extern void * rb_get(rbtree_t tree, void * pack);
  * 销毁这颗二叉树
  * root		: 当前红黑树结点
  */
-extern void rb_die(rbtree_t tree);
+extern void rb_delete(rbtree_t tree);
 
 #endif /* _H_RBTREE */

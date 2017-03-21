@@ -44,7 +44,7 @@ all : main.out\
 	$(foreach v, $(wildcard $(SRC_PATH)/$(TEST_DIR)/*.c), $(notdir $(basename $(v))).out)
 
 # 主运行程序main
-main.out:main.o simplec.o libschead.a libstruct.a test_json_read.o scjson.o
+main.out:main.o simplec.o libschead.a libstruct.a test_array.o array.o
 	$(CC) $(CFLAGS) $(DIR) -o $(TAR_PATH)/$(TEST_DIR)/$@ $(foreach v, $^, $(TAR_PATH)/$(BUILD_DIR)/$(v)) $(LIB)
 
 # !!!!! - 生成具体的单元测试程序 - 依赖个人维护 - !!!!!

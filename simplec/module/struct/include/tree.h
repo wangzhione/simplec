@@ -9,17 +9,26 @@
 // tnode		: 定义查找树规则的结构
 // _HEAD_TREE	: 这个结构需要放在希望使用二叉排序树规则的结构体第一行
 //
-typedef struct tree * tree_t;
-
-struct tnode {
-	struct tnode * right;
-	struct tnode * left;
+struct $tnode {
+	struct $tnode * right;
+	struct $tnode * left;
 };
 
 //
 // 这个宏必须放在使用的结构体第一行
 //
-#define _TREE_HEAD	struct tnode $node
+#define _TREE_HEAD	struct $tnode $node
+
+// 二叉查找树结构, 管理器也许更合适些
+typedef struct {
+	struct $tnode * root;
+
+	// 构建, 插入, 查找, 释放操作
+	new_f new;
+	cmp_f acmp;
+	cmp_f gdcmp;
+	die_f die;
+} * tree_t;
 
 //
 // 二叉查找树构建函数, 需要注册构建结点规则, 插入, 删除和比较规则, 销毁结点规则

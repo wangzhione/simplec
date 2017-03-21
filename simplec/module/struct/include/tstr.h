@@ -2,7 +2,6 @@
 #define _H_SIMPLEC_TSTR
 
 #include <struct.h>
-#include <string.h>
 
 #ifndef _STRUCT_TSTR
 #define _STRUCT_TSTR

@@ -1,4 +1,5 @@
-﻿#include <array.h>
+﻿#include <schead.h>
+#include <array.h>
 
 //简单结构
 struct dict {

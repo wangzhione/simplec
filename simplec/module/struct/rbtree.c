@@ -6,18 +6,18 @@
  * p	: 父结点新值
  * c	: 当前颜色
  */
-#define rb_parent(r)		((struct rbnode *)((r)->parent_color & ~3))
+#define rb_parent(r)		((struct $rbnode *)((r)->parent_color & ~3))
 #define rb_color(r)			((r)->parent_color & 1)
 #define rb_is_red(r)		(!rb_color(r))
 #define rb_is_black(r)		rb_color(r)
 #define rb_set_black(r)		(r)->parent_color |= 1
 #define rb_set_red(r)		(r)->parent_color &= ~1
 
-static inline void rb_set_parent(struct rbnode * r, struct rbnode * p) {
+static inline void rb_set_parent(struct $rbnode * r, struct $rbnode * p) {
      r->parent_color = (r->parent_color & 3) | (uintptr_t)p;
 }
 
-static inline void rb_set_color(struct rbnode * r, int color) {
+static inline void rb_set_color(struct $rbnode * r, int color) {
      r->parent_color = (r->parent_color & ~1) | (1 & color);
 }
 
@@ -33,7 +33,7 @@ static inline int _rb_cmp(const void * ln, const void * rn) {
   *			: 返回创建好的红黑树结点
   */
 rbtree_t 
-rb_new(new_f new, cmp_f cmp, die_f die) {
+rb_create(new_f new, cmp_f cmp, die_f die) {
 	rbtree_t tree = malloc(sizeof(*tree));
 	if(NULL == tree) {
 		CERR("rb_new malloc is error!");
@@ -48,9 +48,9 @@ rb_new(new_f new, cmp_f cmp, die_f die) {
 	return tree;
 }
 
-static inline struct rbnode * _rb_new(rbtree_t tree, void * pack) {
-	struct rbnode * node = tree->new ? tree->new(pack) : pack;
-	memset(node, 0, sizeof(struct rbnode));
+static inline struct $rbnode * _rb_new(rbtree_t tree, void * pack) {
+	struct $rbnode * node = tree->new ? tree->new(pack) : pack;
+	memset(node, 0, sizeof(struct $rbnode));
 	return node;
 }
 
@@ -67,10 +67,10 @@ static inline struct rbnode * _rb_new(rbtree_t tree, void * pack) {
  *    ly   ry                     lx  ly  
  *
  */
-static void _rbtree_left_rotate(rbtree_t tree, struct rbnode * x) {
+static void _rbtree_left_rotate(rbtree_t tree, struct $rbnode * x) {
     // 设置x的右孩子为y
-    struct rbnode * y = x->right;
-	struct rbnode * xparent = rb_parent(x);
+    struct $rbnode * y = x->right;
+	struct $rbnode * xparent = rb_parent(x);
 
     // 将 “y的左孩子” 设为 “x的右孩子”；
     x->right = y->left;
@@ -109,10 +109,10 @@ static void _rbtree_left_rotate(rbtree_t tree, struct rbnode * x) {
  *      lx  rx                                rx  ry
  * 
  */
-static void _rbtree_right_rotate(rbtree_t tree, struct rbnode * y) {
+static void _rbtree_right_rotate(rbtree_t tree, struct $rbnode * y) {
     // 设置x是当前节点的左孩子。
-    struct rbnode * x = y->left;
-	struct rbnode * yparent = rb_parent(y);
+    struct $rbnode * x = y->left;
+	struct $rbnode * yparent = rb_parent(y);
 
     // 将 “x的右孩子” 设为 “y的左孩子”；
 	y->left = x->right;
@@ -147,8 +147,8 @@ static void _rbtree_right_rotate(rbtree_t tree, struct rbnode * y) {
  *     tree 红黑树的根
  *     node 插入的结点        // 对应《算法导论》中的z
  */
-static void _rbtree_insert_fixup(rbtree_t tree, struct rbnode * node) {
-    struct rbnode * parent, * gparent, * uncle;
+static void _rbtree_insert_fixup(rbtree_t tree, struct $rbnode * node) {
+    struct $rbnode * parent, * gparent, * uncle;
 
     // 若“父节点存在，并且父节点的颜色是红色”
     while ((parent = rb_parent(node)) && rb_is_red(parent)) {
@@ -217,7 +217,7 @@ static void _rbtree_insert_fixup(rbtree_t tree, struct rbnode * node) {
 void 
 rb_insert(rbtree_t tree, void * pack) {
 	cmp_f cmp;
-	struct rbnode * node, * x, * y;
+	struct $rbnode * node, * x, * y;
 	if((!tree) || (!pack) || !(node = _rb_new(tree, pack))) {
 		CERR("rb_insert param is empty! tree = %p, pack = %p.\n", tree, pack);
 		return;	
@@ -264,8 +264,8 @@ rb_insert(rbtree_t tree, void * pack) {
  *     tree 红黑树的根
  *     node 待修正的节点
  */
-static void _rbtree_delete_fixup(rbtree_t tree, struct rbnode * node, struct rbnode * parent) {
-    struct rbnode * other;
+static void _rbtree_delete_fixup(rbtree_t tree, struct $rbnode * node, struct $rbnode * parent) {
+    struct $rbnode * other;
 
     while ((!node || rb_is_black(node)) && node != tree->root) {
         if (parent->left == node) {
@@ -346,10 +346,10 @@ static void _rbtree_delete_fixup(rbtree_t tree, struct rbnode * node, struct rbn
  */
 void 
 rb_remove(rbtree_t tree, void * pack) {
-	struct rbnode * child, * parent, * node = NULL;
+	struct $rbnode * child, * parent, * node = NULL;
 	int color;
 	
-	if ((!tree) || !(node = (struct rbnode *)pack)) {
+	if ((!tree) || !(node = (struct $rbnode *)pack)) {
 		CERR("rb_remove check is error, tree = %p, node = %p.", tree, node);
 		return;
 	}
@@ -358,7 +358,7 @@ rb_remove(rbtree_t tree, void * pack) {
 	if (NULL != node->left && node->right != NULL) {
 		// 被删节点的后继节点。(称为"取代节点")
 		// 用它来取代"被删节点"的位置，然后再将"被删节点"去掉。
-		struct rbnode * replace = node;
+		struct $rbnode * replace = node;
 
 		// 获取后继节点
 		replace = replace->right;
@@ -445,7 +445,7 @@ rb_remove(rbtree_t tree, void * pack) {
 void * 
 rb_get(rbtree_t tree, void * pack) {
 	cmp_f cmp;
-	struct rbnode * node;
+	struct $rbnode * node;
 	if((!tree) || !pack) {
 		CERR("rb_get param is empty! tree = %p, pack = %p.\n", tree, pack);
 		return NULL;	
@@ -464,11 +464,11 @@ rb_get(rbtree_t tree, void * pack) {
 }
 
 // 后序遍历删除操作
-static void _rb_die(struct rbnode * root, die_f die) {
+static void _rb_delete(struct $rbnode * root, die_f die) {
 	if(NULL == root)
 		return;
-	_rb_die(root->left, die);
-	_rb_die(root->right, die);
+	_rb_delete(root->left, die);
+	_rb_delete(root->right, die);
 	die(root);
 }
 
@@ -477,12 +477,12 @@ static void _rb_die(struct rbnode * root, die_f die) {
  * root		: 当前红黑树结点
  */
 void
-rb_die(rbtree_t tree) {
+rb_delete(rbtree_t tree) {
 	if(!tree || !tree->root || !tree->die)
 		return;
 
 	// 后续递归删除
-	_rb_die(tree->root, tree->die);
+	_rb_delete(tree->root, tree->die);
 
 	// 销毁树本身内存
 	tree->root = NULL;

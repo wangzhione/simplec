@@ -1,7 +1,7 @@
 ﻿#ifndef _H_SIMPLEC_ARRAY
 #define _H_SIMPLEC_ARRAY
 
-#include <schead.h>
+#include <struct.h>
 
 struct array {
 	void *		as;		/* 存储数组具体内容首地址 */
@@ -23,7 +23,7 @@ typedef struct array * array_t;
 	struct array $__##var = { NULL, 0, 0, alloc }, * var = &$__##var;\
 	array_newinit(var, size)
 #define ARRAY_DIE(var) \
-	sm_free(var->as)
+	free(var->as)
 
 /*
  * 返回创建数组对象

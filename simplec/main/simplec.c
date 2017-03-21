@@ -64,6 +64,8 @@ simplec_test(void) {
 	extern void test_sctimeutil(void);
 	// 单元测试 - 配置文件读写
 	extern void test_scconf(void);
+	// 单元测试 - 测试可变数组操作
+	extern void test_array(void);
 
-	test_json_read();
+	test_array();
 }

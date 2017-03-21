@@ -10,11 +10,13 @@
  */
 array_t 
 array_new(unsigned size, size_t alloc) {
-	struct array * a = sm_malloc(sizeof(struct array));
+	struct array * a = malloc(sizeof(struct array));
+	assert(NULL != a);
 	// 指定默认size大小
 	size = size ? size : _INT_ARRAY_SIZE;
-	a->as = sm_malloc(size * alloc);
-
+	a->as = malloc(size * alloc);
+	assert(NULL != a->as);
+	a->len = 0;
 	a->size = size;
 	a->alloc = alloc;
 
@@ -28,8 +30,8 @@ array_new(unsigned size, size_t alloc) {
 inline 
 void array_die(array_t a) {
 	if (a) {
-		sm_free(a->as);
-		sm_free(a);
+		free(a->as);
+		free(a);
 	}
 }
 
@@ -41,7 +43,8 @@ void array_die(array_t a) {
 inline void
 array_newinit(array_t a, unsigned size) {
 	assert(NULL != a);
-	a->as = sm_realloc(a->as, size * a->alloc);
+	a->as = realloc(a->as, size * a->alloc);
+	assert(NULL != a->as);
 	if (a->len > size)
 		a->len = size;
 	a->size = size;
@@ -81,7 +84,8 @@ array_push(array_t a) {
 	if (a->len == a->size) {
 		/* the array is full; allocate new array */
 		a->size <<= 1;
-		a->as = sm_realloc(a->as, a->size * a->alloc);
+		a->as = realloc(a->as, a->size * a->alloc);
+		assert(NULL != a->as);
 	}
 
 	return (unsigned char *)a->as + a->alloc * a->len++;
@@ -135,10 +139,10 @@ void array_swap(array_t a, array_t b) {
 }
 
 /*
-* 数组进行排序
-* a		: 数组对象
-* compare	: 比对规则
-*/
+ * 数组进行排序
+ * a		: 数组对象
+ * compare	: 比对规则
+ */
 inline void 
 array_sort(array_t a, cmp_f compare) {
 	assert(NULL != a && 0 != a->len && NULL != compare);

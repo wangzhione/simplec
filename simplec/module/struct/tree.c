@@ -1,16 +1,5 @@
 ﻿#include <tree.h>
 
-// 二叉查找树结构, 管理器也许更合适些
-struct tree {
-	struct tnode * root;
-
-	// 构建, 插入, 查找, 释放操作
-	new_f new;
-	cmp_f acmp;
-	cmp_f gdcmp;
-	die_f die;
-};
-
 //
 // 二叉查找树构建函数, 需要注册构建结点规则, 插入, 删除和比较规则, 销毁结点规则
 // new		: 结点申请内存用的函数指针, 对映参数中是 特定结构体指针
@@ -21,7 +10,7 @@ struct tree {
 //
 inline tree_t
 tree_create(new_f new, cmp_f acmp, cmp_f gdcmp, die_f die) {
-	tree_t root = malloc(sizeof(struct tree));
+	tree_t root = malloc(sizeof(*root));
 	if (NULL == root)
 		CERR_EXIT("malloc struct tree error!");
 
@@ -36,7 +25,7 @@ tree_create(new_f new, cmp_f acmp, cmp_f gdcmp, die_f die) {
 }
 
 // 具体的核心删除操作
-static void _tree_delete(struct tnode * root, die_f die) {
+static void _tree_delete(struct $tnode * root, die_f die) {
 	if (root) {
 		_tree_delete(root->left, die);
 		_tree_delete(root->right, die);
@@ -68,7 +57,7 @@ void
 tree_insert(tree_t root, void * node) {
 	int tmp;
 	cmp_f cmp;
-	struct tnode * tnode, *next, *parent;
+	struct $tnode * tnode, *next, *parent;
 
 	if (!root || !node) {
 		CERR("check is root || node!");
@@ -107,7 +96,7 @@ tree_insert(tree_t root, void * node) {
 
 void
 tree_remove(tree_t root, void * node) {
-	struct tnode * next, * parent, * tnode, * tparent;
+	struct $tnode * next, * parent, * tnode, * tparent;
 	// 简单检查一下这个结点, 开始处理
 	if (!root || !node || !root->root) {
 		CERR("check is !root || !node || !root->root.");
@@ -165,7 +154,7 @@ void *
 tree_find(tree_t root, const void * node) {
 	int tmp;
 	cmp_f cmp;
-	struct tnode * next;
+	struct $tnode * next;
 
 	// 简单检查一下这个结点, 开始处理
 	if ((!root) || (!node) || !(next = root->root)) {
@@ -194,7 +183,7 @@ void *
 tree_get(tree_t root, const void * node, void ** pparent) {
 	int tmp;
 	cmp_f cmp;
-	struct tnode * next, *parent;
+	struct $tnode * next, *parent;
 
 	if (pparent)
 		*pparent = NULL;
