@@ -25,6 +25,6 @@ void test_sctimer(void) {
 	st_add(100, 0, 5000, _timer, (void*)5, false);
 	
 #ifdef __GNUC__
-	exit(EXIT_FAILURE);
+	exit(EXIT_SUCCESS);
 #endif
 }

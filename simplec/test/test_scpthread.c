@@ -33,6 +33,6 @@ void test_scpthread(void) {
 	sp_del(&pool);
 	
 #ifdef __GNUC__
-	exit(EXIT_FAILURE);
+	exit(EXIT_SUCCESS);
 #endif
 }

@@ -165,6 +165,9 @@
     <ClCompile Include="test\test_scoroutine.c">
       <Filter>test</Filter>
     </ClCompile>
+    <ClCompile Include="test\test_pthread_sem.c">
+      <Filter>test</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="module\pthread\include\pthread.h">

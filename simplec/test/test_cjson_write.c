@@ -43,6 +43,6 @@ void test_cjson_write(void) {
 	printf("d = %d\n", (int)strlen("{\"name\":\"Jack (\\\"Bee\\\") Nimble\",\"format\":{\"type\":[1,3,4,5.660000],\"height\":1080,\"interlace\":false}}"));
 
 #ifdef __GNUC__
-	exit(EXIT_FAILURE);
+	exit(EXIT_SUCCESS);
 #endif
 }

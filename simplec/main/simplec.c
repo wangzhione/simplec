@@ -66,6 +66,8 @@ simplec_test(void) {
 	extern void test_scconf(void);
 	// 单元测试 - 测试可变数组操作
 	extern void test_array(void);
+	// 单元测试 - 测试线程信号量
+	extern void test_pthread_sem(void);
 
-	test_array();
+	test_pthread_sem();
 }

@@ -24,6 +24,6 @@ void test_sctimeutil(void) {
 	printf("Now e n d time is : %s\n", stu_getntstr(tstr));
 
 #ifdef __GNUC__
-	exit(EXIT_FAILURE);
+	exit(EXIT_SUCCESS);
 #endif
 }

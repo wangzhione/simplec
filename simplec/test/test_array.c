@@ -63,7 +63,7 @@ void test_array(void) {
 	array_die(a);
 
 #ifdef __GNUC__
-	exit(EXIT_FAILURE);
+	exit(EXIT_SUCCESS);
 #endif
 }
 

@@ -58,6 +58,6 @@ void test_scoroutine(void) {
 	sco_close(sco);
 
 #ifdef __GNUC__
-	exit(EXIT_FAILURE);
+	exit(EXIT_SUCCESS);
 #endif
 }

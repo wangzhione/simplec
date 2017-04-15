@@ -17,6 +17,6 @@ void test_scconf(void) {
 		puts("Description is empty!");
 
 #ifdef __GNUC__
-	exit(EXIT_FAILURE);
+	exit(EXIT_SUCCESS);
 #endif
 }

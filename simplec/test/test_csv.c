@@ -30,6 +30,6 @@ void test_csv(void) {
 	sccsv_delete(csv);
 
 #ifdef __GNUC__
-	exit(EXIT_FAILURE);
+	exit(EXIT_SUCCESS);
 #endif
 }

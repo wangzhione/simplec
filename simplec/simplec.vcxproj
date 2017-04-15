@@ -44,6 +44,7 @@
     <ClCompile Include="test\test_csv.c" />
     <ClCompile Include="test\test_json_read.c" />
     <ClCompile Include="test\test_log.c" />
+    <ClCompile Include="test\test_pthread_sem.c" />
     <ClCompile Include="test\test_scconf.c" />
     <ClCompile Include="test\test_scoroutine.c" />
     <ClCompile Include="test\test_scpthread.c" />

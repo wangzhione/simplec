@@ -52,6 +52,6 @@ void test_log(void) {
 	SL_NOTICE("main log test end!");
 
 #ifdef __GNUC__
-	exit(EXIT_FAILURE);
+	exit(EXIT_SUCCESS);
 #endif
 }

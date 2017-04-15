@@ -4,14 +4,14 @@
 // 线程任务链表
 struct threadjob {
 	die_f run;					//当前任务中要执行函数体,注册的事件
-	void* arg;					//任务中待执行事件的参数	
-	struct threadjob* next;		//指向下一个线程任务链表
+	void * arg;					//任务中待执行事件的参数	
+	struct threadjob * next;	//指向下一个线程任务链表
 };
 
 // struct threadjob 结构对象创建
 static inline struct threadjob* _new_threadjob(die_f run, void* arg)
 {
-	struct threadjob* job = malloc(sizeof(struct threadjob));
+	struct threadjob * job = malloc(sizeof(struct threadjob));
 	if(!job)
 		CERR_EXIT("malloc struct threadjob is NULL!");
 	job->run = run;

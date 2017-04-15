@@ -21,7 +21,7 @@ void test_xlsmtojson(void) {
 		printf("%s 转换失败, rt = %d\n", _STR_CSVPATH, rt);
 	
 #ifdef __GNUC__
-	exit(EXIT_FAILURE);
+	exit(EXIT_SUCCESS);
 #endif
 }
 

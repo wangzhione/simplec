@@ -36,7 +36,7 @@ void test_atom_rwlock(void) {
 		pthread_create((pthread_t *)&arg, NULL, (void * (*)(void *))twrite, &arg);
 
 #ifdef __GNUC__
-	exit(EXIT_FAILURE);
+	exit(EXIT_SUCCESS);
 #endif
 }
 

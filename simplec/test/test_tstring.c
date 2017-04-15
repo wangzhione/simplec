@@ -30,6 +30,6 @@ void test_tstring(void) {
 	TSTR_DELETE(ts);
 
 #ifdef __GNUC__
-	exit(EXIT_FAILURE);
+	exit(EXIT_SUCCESS);
 #endif
 }
