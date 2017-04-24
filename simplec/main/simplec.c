@@ -50,24 +50,8 @@ simplec_go(void) {
  */
 void 
 simplec_test(void) {
-	// 单元测试 - 协程库
-	extern void test_scoroutine(void);
-	// 单元测试 - 支持循环的定时器
-	extern void test_sctimer(void);
-	// 单元测试 - 测试csv读写
-	extern void test_csv(void);
-	// 单元测试 - scjson 测试读取
-	extern void test_json_read(void);
-	// 单元测试 - 'xlsm' to json 简单测试
-	extern void test_xlstojson(void);
-	// 单元测试 - 时间业务测试
-	extern void test_sctimeutil(void);
-	// 单元测试 - 配置文件读写
-	extern void test_scconf(void);
-	// 单元测试 - 测试可变数组操作
-	extern void test_array(void);
-	// 单元测试 - 测试线程信号量
-	extern void test_pthread_sem(void);
+	// 单元测试 - 测试编码转换库
+	extern void test_sciconv(void);
 
-	test_pthread_sem();
+	test_sciconv();
 }

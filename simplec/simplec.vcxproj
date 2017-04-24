@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="main\main.c" />
     <ClCompile Include="main\simplec.c" />
+    <ClCompile Include="module\iconv\sciconv.c" />
     <ClCompile Include="module\schead\scjson.c" />
     <ClCompile Include="module\schead\scalloc.c" />
     <ClCompile Include="module\schead\scconf.c" />
@@ -35,6 +36,7 @@
     <ClCompile Include="module\struct\array.c" />
     <ClCompile Include="module\struct\list.c" />
     <ClCompile Include="module\struct\rbtree.c" />
+    <ClCompile Include="module\struct\mq.c" />
     <ClCompile Include="module\struct\tree.c" />
     <ClCompile Include="module\struct\tstr.c" />
     <ClCompile Include="test\test_array.c" />
@@ -46,6 +48,7 @@
     <ClCompile Include="test\test_log.c" />
     <ClCompile Include="test\test_pthread_sem.c" />
     <ClCompile Include="test\test_scconf.c" />
+    <ClCompile Include="test\test_sciconv.c" />
     <ClCompile Include="test\test_scoroutine.c" />
     <ClCompile Include="test\test_scpthread.c" />
     <ClCompile Include="test\test_sctimer.c" />
@@ -54,6 +57,8 @@
     <ClCompile Include="test\test_xlsmtojson.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="module\iconv\include\iconv.h" />
+    <ClInclude Include="module\iconv\include\sciconv.h" />
     <ClInclude Include="module\pthread\include\pthread.h" />
     <ClInclude Include="module\pthread\include\sched.h" />
     <ClInclude Include="module\pthread\include\semaphore.h" />
@@ -70,10 +75,12 @@
     <ClInclude Include="module\service\include\scoroutine$winds.h" />
     <ClInclude Include="module\service\include\scoroutine.h" />
     <ClInclude Include="module\service\include\scpthread.h" />
+    <ClInclude Include="module\service\include\scrunloop.h" />
     <ClInclude Include="module\service\include\sctimer.h" />
     <ClInclude Include="module\struct\include\array.h" />
     <ClInclude Include="module\struct\include\list.h" />
     <ClInclude Include="module\struct\include\rbtree.h" />
+    <ClInclude Include="module\struct\include\mq.h" />
     <ClInclude Include="module\struct\include\struct.h" />
     <ClInclude Include="module\struct\include\tree.h" />
     <ClInclude Include="module\struct\include\tstr.h" />
@@ -92,6 +99,7 @@
     <None Include="test\config\onetime.csv" />
   </ItemGroup>
   <ItemGroup>
+    <Library Include="module\iconv\lib\libiconv.lib" />
     <Library Include="module\pthread\lib\x64\pthreadVC2.lib" />
     <Library Include="module\pthread\lib\x86\pthreadVC2.lib" />
     <Library Include="module\pthread\lib\x86\pthreadVCE2.lib" />
@@ -109,7 +117,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -151,8 +159,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(ProjectDir)main;$(ProjectDir)main/body;$(ProjectDir)main/body/include;$(ProjectDir)test;$(ProjectDir)module;$(ProjectDir)module/pthread;$(ProjectDir)module/pthread/include;$(ProjectDir)module/schead;$(ProjectDir)module/schead/include;$(ProjectDir)module/struct;$(ProjectDir)module/struct/include;$(ProjectDir)module/service;$(ProjectDir)module/service/include;$(ProjectDir)module/logic;$(ProjectDir)module/logic/include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)module\pthread\lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)main;$(ProjectDir)main/body;$(ProjectDir)main/body/include;$(ProjectDir)test;$(ProjectDir)module;$(ProjectDir)module/pthread;$(ProjectDir)module/pthread/include;$(ProjectDir)module/schead;$(ProjectDir)module/schead/include;$(ProjectDir)module/struct;$(ProjectDir)module/struct/include;$(ProjectDir)module/service;$(ProjectDir)module/service/include;$(ProjectDir)module/logic;$(ProjectDir)module/logic/include;$(ProjectDir)module/iconv;$(ProjectDir)module/iconv/include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)module\pthread\lib\x86;$(ProjectDir)module\iconv\lib;$(LibraryPath)</LibraryPath>
     <LibraryWPath>$(LibraryWPath)</LibraryWPath>
     <ReferencePath>$(ReferencePath)</ReferencePath>
     <ExecutablePath>$(ExecutablePath)</ExecutablePath>
@@ -182,7 +190,7 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
-      <SubSystem>NotSet</SubSystem>
+      <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

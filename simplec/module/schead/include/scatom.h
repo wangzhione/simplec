@@ -8,6 +8,7 @@
  *		 推荐用 posix 线程库
  */
 
+#define _INT_USLEEP_LOCK (1)
 
 // 如果 是 VS 编译器
 #if defined(_MSC_VER)
@@ -37,7 +38,7 @@
 
 #define ATOM_LOCK(v) \
 	while(ATOM_SET(v, 1)) \
-		Sleep(0)
+		Sleep(_INT_USLEEP_LOCK)
 
 #define ATOM_UNLOCK(v) ATOM_SET(v, 0)
 
@@ -88,7 +89,6 @@
  *  ATOM_UNLOCK(lock);
  *
  */
-#define _INT_USLEEP_LOCK (2)
 #define ATOM_LOCK(v) \
 	while(ATOM_SET(v, 1)) \
 		usleep(_INT_USLEEP_LOCK)
@@ -105,8 +105,8 @@
  * 试图加锁, 使用例子
  
 	 if(ATOM_TRYLOCK(v)) {
-	 // 已经有人加锁了, 处理返回事件
-	 ...
+		 // 已经有人加锁了, 处理返回事件
+		...
 	 }
  
 	 // 得到锁资源, 开始处理

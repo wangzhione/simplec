@@ -113,7 +113,9 @@
  * 这里开始在VS中引用 静态库,减少依赖VS手动添加
  * wz,对这个pthread.h 进行了部分修改
  */
+#if defined(_MSC_VER)
 #pragma comment(lib, "pthreadVC2.lib")
+#endif
 
 /*
  * -------------------------------------------------------------
