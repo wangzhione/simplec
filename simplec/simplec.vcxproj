@@ -32,6 +32,7 @@
     <ClCompile Include="module\schead\sctime.c" />
     <ClCompile Include="module\service\scoroutine.c" />
     <ClCompile Include="module\service\scpthread.c" />
+    <ClCompile Include="module\service\scrunloop.c" />
     <ClCompile Include="module\service\sctimer.c" />
     <ClCompile Include="module\struct\array.c" />
     <ClCompile Include="module\struct\list.c" />
@@ -51,6 +52,7 @@
     <ClCompile Include="test\test_sciconv.c" />
     <ClCompile Include="test\test_scoroutine.c" />
     <ClCompile Include="test\test_scpthread.c" />
+    <ClCompile Include="test\test_scrunloop.c" />
     <ClCompile Include="test\test_sctimer.c" />
     <ClCompile Include="test\test_sctimeutil.c" />
     <ClCompile Include="test\test_tstring.c" />

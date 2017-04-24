@@ -186,6 +186,12 @@
     <ClCompile Include="test\test_sciconv.c">
       <Filter>test</Filter>
     </ClCompile>
+    <ClCompile Include="module\service\scrunloop.c">
+      <Filter>module\service</Filter>
+    </ClCompile>
+    <ClCompile Include="test\test_scrunloop.c">
+      <Filter>test</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="module\pthread\include\pthread.h">

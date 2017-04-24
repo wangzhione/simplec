@@ -52,6 +52,8 @@ void
 simplec_test(void) {
 	// 单元测试 - 测试编码转换库
 	extern void test_sciconv(void);
+	// 单元测试 - 测试轮序器
+	extern void test_scrunloop(void);
 
-	test_sciconv();
+	test_scrunloop();
 }

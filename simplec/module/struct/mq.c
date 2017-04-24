@@ -22,8 +22,13 @@ struct mq {
 //
 inline mq_t 
 mq_create(void) {
-	struct mq * q = calloc(1, sizeof(struct mq));
+	struct mq * q = malloc(sizeof(struct mq));
+	assert(q);
+	q->lock = 0;
+	q->cap = _INT_MQ;
+	q->head = 0;
 	q->tail = -1;
+	q->queue = malloc(sizeof(void *) * _INT_MQ);
 	return q;
 }
 
@@ -43,7 +48,7 @@ mq_delete(mq_t mq) {
 // add two cap memory, return 0 is error
 static int
 _expand_queue(struct mq * mq) {
-	int i, j, cap = mq->cap ? mq->cap << 1 : _INT_MQ;
+	int i, j, cap = mq->cap << 1;
 	void ** nqueue = realloc(mq->queue, sizeof(void *) * cap);
 	if (!nqueue) return -1;
 	
@@ -70,13 +75,17 @@ _expand_queue(struct mq * mq) {
 // 
 void 
 mq_push(mq_t mq, void * msg) {
+	int tail;
 	assert(mq && msg);
 	ATOM_LOCK(mq->lock);
 
-	mq->tail = (mq->tail + 1) & (mq->cap - 1);
+	tail = (mq->tail + 1) & (mq->cap - 1);
 	// 队列为full的时候申请内存
-	if (mq->tail == mq->head)
+	if (mq->tail >= 0 && tail == mq->head) {
 		if (_expand_queue(mq)) return;
+	}
+	else
+		mq->tail = tail;
 
 	mq->queue[mq->tail] = msg;
 
