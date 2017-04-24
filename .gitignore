@@ -22,3 +22,6 @@
 *.err
 *.out
 ~*
+*.tlog
+*.obj
+*.idb

@@ -130,12 +130,12 @@ static void _sl_end(void) {
 		fclose(lid);
 	}
 
-	BZERO(_slmain);
-
 	// 主动释放私有变量,其实主进程 相当于一个线程是不合理的!还是不同的生存周期的
 	pl = pthread_getspecific(_slmain.key);
 	_slinfo_destroy(pl);
 	pthread_setspecific(_slmain.key, NULL);
+
+	BZERO(_slmain);
 }
 
 /**
@@ -153,13 +153,13 @@ sl_start(void) {
 		rmdir("-p");
 		remove(_STR_TOOUT);
 		remove(_STR_TOERR);
-	}
 
-	if (NULL == _slmain.log) {
+		// 构建目录
 		_slmain.log = fopen(_STR_SCLOG_DIR "/" _STR_SCLOG_LOG, "a+");
 		if (NULL == _slmain.log)
 			CERR_EXIT("__slmain.log fopen %s error!", _STR_SCLOG_LOG);
 	}
+
 	// 继续打开 wf 文件
 	if (NULL == _slmain.wf) {
 		_slmain.wf = fopen(_STR_SCLOG_DIR "/" _STR_SCLOG_WFLOG, "a+");
