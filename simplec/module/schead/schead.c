@@ -5,7 +5,7 @@ inline void
 sh_pause(void) {
 	rewind(stdin);
 	printf(_STR_PAUSEMSG);
-	sh_getch();
+	getch();
 }
 
 //12.0 判断是大端序还是小端序,大端序返回true
@@ -14,8 +14,8 @@ sh_isbig(void) {
 	static union {
 		unsigned short _s;
 		unsigned char _c;
-	} __u = { 1 };
-	return __u._c == 0;
+	} _u = { 1 };
+	return _u._c == 0;
 }
 
 /*
@@ -35,12 +35,12 @@ sh_free(void ** pobj) {
 // 为linux扩展一些功能
 #if defined(__GNUC__)
 
-/*
- * 得到用户输入的一个字符
- *		: 返回得到字符
- */
+//
+// getch - 立即得到用户输入的一个字符, linux实现
+// return	: 返回得到字符
+//
 int 
-sh_getch(void) {
+getch(void) {
 	int cr;
 	struct termios nts, ots;
 

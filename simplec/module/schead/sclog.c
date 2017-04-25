@@ -7,10 +7,7 @@
 // 第二部分 对日志信息体操作的get和set,这里隐藏了信息体的实现
 //-------------------------------------------------------------------------------------------|
 
-//错误重定向宏 具体应用 于 "mkdir -p \"" _STR_SCLOG_PATH "\" >" _STR_TOOUT " 2>" _STR_TOERR
-#define _STR_TOOUT ".out"
-#define _STR_TOERR ".err"
-#define _STR_LOGID _STR_SCLOG_DIR "/.logid" // 保存logid,持久化
+#define _STR_LOGID _STR_LOGDIR "/.logid" // 保存logid,持久化
 
 static struct {
 	pthread_key_t	key;	//全局线程私有变量
@@ -145,24 +142,16 @@ void
 sl_start(void) {
 	FILE * lid;
 
-	// 单例只执行一次
+	// 单例只执行一次, 打开普通log文件
 	if (NULL == _slmain.log) {
-		// 先多级创建目录,简易不借助宏实现跨平台,system返回值是很复杂,默认成功!
-		system("mkdir -p \"" _STR_SCLOG_DIR "\" >" _STR_TOOUT " 2>" _STR_TOERR);
-		// 清除额外不重要文件内容
-		rmdir("-p");
-		remove(_STR_TOOUT);
-		remove(_STR_TOERR);
-
-		// 构建目录
-		_slmain.log = fopen(_STR_SCLOG_DIR "/" _STR_SCLOG_LOG, "a+");
+		_slmain.log = fopen(_STR_LOGDIR "/" _STR_SCLOG_LOG, "a+");
 		if (NULL == _slmain.log)
 			CERR_EXIT("__slmain.log fopen %s error!", _STR_SCLOG_LOG);
 	}
 
 	// 继续打开 wf 文件
 	if (NULL == _slmain.wf) {
-		_slmain.wf = fopen(_STR_SCLOG_DIR "/" _STR_SCLOG_WFLOG, "a+");
+		_slmain.wf = fopen(_STR_LOGDIR "/" _STR_SCLOG_WFLOG, "a+");
 		if (!_slmain.wf) {
 			fclose(_slmain.log); // 其实这都没有必要,图个心安
 			CERR_EXIT("__slmain.log fopen %s error!", _STR_SCLOG_WFLOG);
@@ -173,6 +162,7 @@ sl_start(void) {
 	if ((lid = fopen(_STR_LOGID, "rb")) != NULL) {
 		if (0 >= fscanf(lid, "%u", &_slmain.logid))
 			CERR_EXIT("__slmain.log fopen " _STR_LOGID " read is error!");
+		fclose(lid);
 	}
 
 	// 简单判断是否有初始化的必要
@@ -210,11 +200,14 @@ sl_printf(const char * format, ...) {
 	va_list ap;
 	char logs[_INT_LOG]; //这个不是一个好的设计,最新c 中支持 int a[n];
 	stime_t tstr;
-
-	if (NULL == _slmain.log) {
-		CERR("%s fopen %s | %s error!", _STR_SCLOG_DIR, _STR_SCLOG_LOG, _STR_SCLOG_WFLOG);
-		return RT_Error_Fopen;
-	}
+	
+	// 从性能方面优化试试
+	DEBUG_CODE({
+		if (NULL == _slmain.log) {
+			CERR("%s fopen %s | %s error!", _STR_LOGDIR, _STR_SCLOG_LOG, _STR_SCLOG_WFLOG);
+			return RT_Error_Fopen;
+		}
+	});
 
 	//初始化时间参数
 	stu_getntstr(tstr);

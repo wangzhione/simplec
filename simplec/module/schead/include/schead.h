@@ -32,26 +32,17 @@
 #define sh_cls() \
 		printf("\ec")
 
-/*
- * 立即得到用户输入的一个字符
- *		: 返回得到字符
- */
-extern int sh_getch(void);
+//
+// getch - 立即得到用户输入的一个字符, linux实现
+// return	: 返回得到字符
+//
+extern int getch(void);
 
 #elif _MSC_VER // 下面是依赖Visual Studio编译器实现
 
 #include <Windows.h>
 #include <direct.h> 
 #include <conio.h>
-
-// window 删除目录宏
-#define rmdir		_rmdir
-
-/*
- * 立即得到用户输入的一个字符, window上用_getch代替getch
- *		: 返回得到字符
- */
-#define sh_getch	_getch
 
 #define sh_cls() \
 		system("cls")
@@ -63,13 +54,25 @@ extern int sh_getch(void);
 	#error "error : Currently only supports the Visual Studio and GCC!"
 #endif
 
+#if !defined(_H_STR_HELLP)
+
+// 所有日志相对路径目录, 如果不需要需要配置成""
+#define _STR_LOGDIR		"logs"
+
+// 添加双引号的宏 
+#define CSTR(a)	_STR(a)
+#define _STR(a) #a
+
+#define _H_STR_HELLP
+#endif
+
 /* 栈上辅助操作宏 */
 #if !defined(_H_ARRAY_HELP)
 
 // 获取数组长度,只能是数组类型或""字符串常量,后者包含'\0'
 #define LEN(arr) (sizeof(arr) / sizeof(*(arr)))
 
- // 置空操作, v必须是个变量
+// 置空操作, v必须是个变量
 #define BZERO(v) \
 	memset(&(v), 0, sizeof(v))
 
