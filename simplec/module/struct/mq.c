@@ -5,8 +5,8 @@
 #define _INT_MQ				(64)
 
 //
-// 栈empty	<=> tail == -1 ( head = 0 )
-// 栈full	<=> head == cap
+// 队列empty	<=> tail == -1 ( head = 0 )
+// 队列full	<=> head == cap
 //
 struct mq {
 	int lock;			// 消息队列锁
@@ -45,12 +45,12 @@ mq_delete(mq_t mq) {
 	}
 }
 
-// add two cap memory, return 0 is error
-static int
+// add two cap memory, memory is do not have assert
+static void
 _expand_queue(struct mq * mq) {
 	int i, j, cap = mq->cap << 1;
 	void ** nqueue = realloc(mq->queue, sizeof(void *) * cap);
-	if (!nqueue) return -1;
+	assert(nqueue);
 	
 	// 开始移动内存位置
 	for (i = 0; i < mq->head; ++i) {
@@ -64,7 +64,6 @@ _expand_queue(struct mq * mq) {
 	mq->tail = mq->cap;
 	mq->cap  = cap;
 	mq->queue = nqueue;
-	return 0;
 }
 
 //
@@ -81,9 +80,8 @@ mq_push(mq_t mq, void * msg) {
 
 	tail = (mq->tail + 1) & (mq->cap - 1);
 	// 队列为full的时候申请内存
-	if (mq->tail >= 0 && tail == mq->head) {
-		if (_expand_queue(mq)) return;
-	}
+	if (tail == mq->head && mq->tail >= 0)
+		_expand_queue(mq);
 	else
 		mq->tail = tail;
 

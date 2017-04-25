@@ -17,7 +17,7 @@ void simplec_test(void);
  */
 void simplec_main(void) {
 
-#ifdef _MSC_VER
+#if defined(_MSC_VER) && defined(_DEBUG)
 	// 开始简单的测试
 	simplec_test();
 #endif
