@@ -135,7 +135,6 @@ extern int getch(void);
 #endif // !TIME_PRINT
 
 // 等待的宏 是个单线程没有加锁 | "请按任意键继续. . ."
-#define _STR_PAUSEMSG "Press any key to continue . . ."
 extern void sh_pause(void);
 #ifndef INIT_PAUSE
 
@@ -156,11 +155,11 @@ extern void sh_pause(void);
 //12.0 判断是大端序还是小端序,大端序返回true
 extern bool sh_isbig(void);
 
-/*
- *	简单的释放内存函数. 对free封装了一层. 释放后会置空, 可以简易的避免野指针.
- * pobj		: 指向待释放内存的指针(void*)
- * return	: void
- */
+//
+// sh_free - 简单粗暴的野指针销毁函数,并置空
+// pobj		: 指向待释放内存的指针(void*)
+// return	: void
+//
 extern void sh_free(void ** pobj);
 
 #endif// ! _H_SIMPLEC_SCHEAD

@@ -3,9 +3,11 @@
 #include <scconf.h>
 
 // stderr 信息重定位到文件中
-#define _STR_TOOUT ".out"
-#define _STR_TOERR ".err"
-#define _STR_STDERRLOG	_STR_LOGDIR "/stderr.log"
+#define _STR_P				"-p"
+#define _STR_TOOUT			".out"
+#define _STR_TOERR			".err"
+#define _STR_SYSDIRLOG		"mkdir " _STR_P " \"" _STR_LOGDIR "\" >" _STR_TOOUT " 2>" _STR_TOERR
+#define _STR_STDERRLOG		_STR_LOGDIR "/stderr.log"
 
 /*
  * simple c 框架业务启动入口的代码
@@ -22,8 +24,8 @@ int main(int argc, char * argv[]) {
 	INIT_PAUSE();
 
 	// 简单创建 _STR_LOGDIR 多级日志目录, 并清除额外不重要文件内容
-	system("mkdir -p \"" _STR_LOGDIR "\" >" _STR_TOOUT " 2>" _STR_TOERR);
-	rmdir("-p");
+	system(_STR_SYSDIRLOG);
+	rmdir(_STR_P);
 	remove(_STR_TOOUT);
 	remove(_STR_TOERR);
 

@@ -1,5 +1,7 @@
 ﻿#include <schead.h>
 
+#define _STR_PAUSEMSG "Press any key to continue . . ."
+
 //简单通用的等待函数
 inline void
 sh_pause(void) {
@@ -18,15 +20,14 @@ sh_isbig(void) {
 	return _u._c == 0;
 }
 
-/*
- *	简单的释放内存函数. 对free封装了一层.
- *释放后会置空, 可以简易的避免野指针.
- * pobj		: 指向待释放内存的指针(void*)
- * return		: void
- */
+//
+// sh_free - 简单粗暴的野指针销毁函数,并置空
+// pobj		: 指向待释放内存的指针(void*)
+// return	: void
+//
 inline void
 sh_free(void ** pobj) {
-	if (pobj == NULL || *pobj == NULL)
+	if (!pobj || !*pobj) 
 		return;
 	free(*pobj);
 	*pobj = NULL;

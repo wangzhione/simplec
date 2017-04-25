@@ -161,25 +161,29 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(ProjectDir)main;$(ProjectDir)main/body;$(ProjectDir)main/body/include;$(ProjectDir)test;$(ProjectDir)module;$(ProjectDir)module/pthread;$(ProjectDir)module/pthread/include;$(ProjectDir)module/schead;$(ProjectDir)module/schead/include;$(ProjectDir)module/struct;$(ProjectDir)module/struct/include;$(ProjectDir)module/service;$(ProjectDir)module/service/include;$(ProjectDir)module/logic;$(ProjectDir)module/logic/include;$(ProjectDir)module/iconv;$(ProjectDir)module/iconv/include;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)main/body/include;$(ProjectDir)module/pthread/include;$(ProjectDir)module/schead/include;$(ProjectDir)module/struct/include;$(ProjectDir)module/service/include;$(ProjectDir)module/logic/include;$(ProjectDir)module/iconv/include;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)module/pthread/lib/x86;$(ProjectDir)module/iconv/lib;;$(LibraryPath)</LibraryPath>
     <LibraryWPath>$(LibraryWPath)</LibraryWPath>
     <ReferencePath>$(ReferencePath)</ReferencePath>
     <ExecutablePath>$(ExecutablePath)</ExecutablePath>
+    <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>$(ProjectDir)main;$(ProjectDir)main/body;$(ProjectDir)main/body/include;$(ProjectDir)test;$(ProjectDir)module;$(ProjectDir)module/pthread;$(ProjectDir)module/pthread/include;$(ProjectDir)module/schead;$(ProjectDir)module/schead/include;$(ProjectDir)module/struct;$(ProjectDir)module/struct/include;$(ProjectDir)module/service;$(ProjectDir)module/service/include;$(ProjectDir)module/logic;$(ProjectDir)module/logic/include;$(ProjectDir)module/iconv;$(ProjectDir)module/iconv/include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)module/pthread/lib/x64;$(ProjectDir)module/iconv/lib;;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(ProjectDir)module/pthread/lib/x64;$(ProjectDir)module/iconv/lib;$(LibraryPath)</LibraryPath>
+    <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <ReferencePath>$(ProjectDir)/pthread/lib/x64;$(ProjectDir)module/iconv/lib;;$(ReferencePath)</ReferencePath>
     <ExecutablePath>$(ExecutablePath)</ExecutablePath>
     <IncludePath>$(ProjectDir)main;$(ProjectDir)main/body;$(ProjectDir)main/body/include;$(ProjectDir)test;$(ProjectDir)module;$(ProjectDir)module/pthread;$(ProjectDir)module/pthread/include;$(ProjectDir)module/schead;$(ProjectDir)module/schead/include;$(ProjectDir)module/struct;$(ProjectDir)module/struct/include;$(ProjectDir)module/service;$(ProjectDir)module/service/include;$(ProjectDir)module/logic;$(ProjectDir)module/logic/include;$(ProjectDir)module/iconv;$(ProjectDir)module/iconv/include;$(IncludePath)</IncludePath>
+    <ReferencePath>$(ReferencePath)</ReferencePath>
+    <LibraryPath>$(ProjectDir)module/pthread/lib/x64;$(ProjectDir)module/iconv/lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <ReferencePath>$(ProjectDir)/pthread/lib/x86;$(ProjectDir)module/iconv/lib;$(ReferencePath)</ReferencePath>
+    <ReferencePath>$(ReferencePath)</ReferencePath>
     <ExecutablePath>$(ExecutablePath)</ExecutablePath>
-    <IncludePath>$(ProjectDir)main;$(ProjectDir)main/body;$(ProjectDir)main/body/include;$(ProjectDir)test;$(ProjectDir)module;$(ProjectDir)module/pthread;$(ProjectDir)module/pthread/include;$(ProjectDir)module/schead;$(ProjectDir)module/schead/include;$(ProjectDir)module/struct;$(ProjectDir)module/struct/include;$(ProjectDir)module/service;$(ProjectDir)module/service/include;$(ProjectDir)module/logic;$(ProjectDir)module/logic/include;$(ProjectDir)module/iconv;$(ProjectDir)module/iconv/include;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)main/body/include;$(ProjectDir)module/pthread/include;$(ProjectDir)module/schead/include;$(ProjectDir)module/struct/include;$(ProjectDir)module/service/include;$(ProjectDir)module/logic/include;$(ProjectDir)module/iconv/include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)module/pthread/lib/x86;$(ProjectDir)module/iconv/lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -189,6 +193,8 @@
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(ProjectDir)module/pthread/dll/x86;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <CompileAs>CompileAsC</CompileAs>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
@@ -201,6 +207,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -211,9 +218,10 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <WholeProgramOptimization>false</WholeProgramOptimization>
       <CompileAs>CompileAsC</CompileAs>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -229,6 +237,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
