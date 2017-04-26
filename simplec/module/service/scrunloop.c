@@ -45,6 +45,7 @@ srl_create(die_f run) {
 	s->run = run;
 	// 创建线程,并启动
 	if (pthread_create(&s->th, NULL, _srl_loop, s)) {
+		mq_delete(s->mq);
 		free(s);
 		CERR("pthread_create create error !!!");
 		return NULL;
@@ -63,7 +64,7 @@ srl_delete(srl_t srl) {
 		srl->loop = false;
 		// 等待线程结束, 然后退出
 		pthread_join(srl->th, NULL);
-		free(srl->mq);
+		mq_delete(srl->mq);
 		free(srl);
 	}
 }
