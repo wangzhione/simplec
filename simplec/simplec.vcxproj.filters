@@ -76,11 +76,14 @@
     <Filter Include="module\iconv\lib">
       <UniqueIdentifier>{7f8e5bcc-3d1f-453e-9e1c-311b6ee7b5fc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="module\log">
+      <UniqueIdentifier>{6feaf2bd-05ad-4bdf-b7d3-53e35cb313bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="module\log\include">
+      <UniqueIdentifier>{57f37278-f396-4a2d-8dc1-a5955ae40220}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="module\schead\sclog.c">
-      <Filter>module\schead</Filter>
-    </ClCompile>
     <ClCompile Include="module\schead\schead.c">
       <Filter>module\schead</Filter>
     </ClCompile>
@@ -192,6 +195,12 @@
     <ClCompile Include="test\test_scrunloop.c">
       <Filter>test</Filter>
     </ClCompile>
+    <ClCompile Include="module\log\sclog.c">
+      <Filter>module\log</Filter>
+    </ClCompile>
+    <ClCompile Include="module\log\clog.c">
+      <Filter>module\log</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="module\pthread\include\pthread.h">
@@ -207,9 +216,6 @@
       <Filter>module\schead\include</Filter>
     </ClInclude>
     <ClInclude Include="module\schead\include\scatom.h">
-      <Filter>module\schead\include</Filter>
-    </ClInclude>
-    <ClInclude Include="module\schead\include\sclog.h">
       <Filter>module\schead\include</Filter>
     </ClInclude>
     <ClInclude Include="module\struct\include\tree.h">
@@ -274,6 +280,12 @@
     </ClInclude>
     <ClInclude Include="module\iconv\include\sciconv.h">
       <Filter>module\iconv\include</Filter>
+    </ClInclude>
+    <ClInclude Include="module\log\include\sclog.h">
+      <Filter>module\log\include</Filter>
+    </ClInclude>
+    <ClInclude Include="module\log\include\clog.h">
+      <Filter>module\log\include</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

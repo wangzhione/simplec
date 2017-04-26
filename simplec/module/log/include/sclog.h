@@ -107,7 +107,7 @@ extern void sl_start(void);
 **				[WARNING:%s]前端错误, [NOTICE:%s]系统使用, [INFO:%s]普通信息,
 **				[DEBUG:%s] 开发测试用
 **
-** return	: 返回输出内容长度
+** return	: 返回操作结果
 **/
 int sl_printf(const char* format, ...);
 
