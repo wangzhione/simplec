@@ -14,6 +14,8 @@
 #ifdef __GNUC__  // 下面是依赖GCC编译器实现
 
 #include <unistd.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 #include <sys/time.h>
 #include <termio.h>
 
@@ -38,6 +40,14 @@
 //
 extern int getch(void);
 
+//
+// sh_mkdir - 通用的单层目录创建宏 等同于 shell> mkdir path
+// path		: 目录路径加名称
+// return	: 0表示成功, -1表示失败, 失败原因都在 errno
+// 
+#define sh_mkdir(path) \
+	mkdir(path, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH)
+
 #elif _MSC_VER // 下面是依赖Visual Studio编译器实现
 
 #include <Windows.h>
@@ -49,6 +59,9 @@ extern int getch(void);
 
 #define sh_sleep(m) \
 		Sleep(m)	
+
+#define sh_mkdir(path) \
+	mkdir(path)
 
 #else
 	#error "error : Currently only supports the Visual Studio and GCC!"
@@ -113,12 +126,13 @@ extern int getch(void);
 #ifndef SAFETY_SCANF
 #define _STR_SAFETY_SCANF "Input error, please according to the prompt!"
 #define SAFETY_SCANF(scanf_code, ...) \
-	while(printf(__VA_ARGS__), scanf_code){\
-		while('\n' != getchar())\
-			;\
-		puts(_STR_SAFETY_SCANF);\
-	}\
-	while('\n' != getchar())
+	do {\
+		while(printf(__VA_ARGS__), scanf_code){\
+			rewind(stdin);\
+			puts(_STR_SAFETY_SCANF);\
+		}\
+		rewind(stdin);\
+	} while(0)
 #endif /*!SAFETY_SCANF*/
 
 // 简单的time帮助宏

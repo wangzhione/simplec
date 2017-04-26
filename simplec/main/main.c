@@ -3,10 +3,6 @@
 #include <scconf.h>
 
 // stderr 信息重定位到文件中
-#define _STR_P				"-p"
-#define _STR_TOOUT			".out"
-#define _STR_TOERR			".err"
-#define _STR_SYSDIRLOG		"mkdir " _STR_P " \"" _STR_LOGDIR "\" >" _STR_TOOUT " 2>" _STR_TOERR
 #define _STR_STDERRLOG		_STR_LOGDIR "/stderr.log"
 
 /*
@@ -23,11 +19,8 @@ int main(int argc, char * argv[]) {
 	// 开启_DEBUG模式下结束等待
 	INIT_PAUSE();
 
-	// 简单创建 _STR_LOGDIR 多级日志目录, 并清除额外不重要文件内容
-	system(_STR_SYSDIRLOG);
-	rmdir(_STR_P);
-	remove(_STR_TOOUT);
-	remove(_STR_TOERR);
+	// 简单创建 _STR_LOGDIR 日志目录
+	sh_mkdir(_STR_LOGDIR);
 
 	// 启动日志系统
 	sl_start();
