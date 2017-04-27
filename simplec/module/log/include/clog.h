@@ -1,13 +1,15 @@
 ﻿#ifndef _H_SIMPLEC_CLOG
 #define _H_SIMPLEC_CLOG
 
+#include <schead.h>
+
 //
 // error info debug printf log  
 //
-#define CL_ERROR(fmt,	...)	CLOG_PRINTF("[ERROR]",	fmt, ##__VA_ARGS__)
-#define CL_INFO( fmt,	...)	CLOG_PRINTF( "[INFO]",	fmt, ##__VA_ARGS__)
+#define CL_ERROR(fmt,	...)	CL_PRINTF("[ERROR]",	fmt, ##__VA_ARGS__)
+#define CL_INFO( fmt,	...)	CL_PRINTF( "[INFO]",	fmt, ##__VA_ARGS__)
 #if defined(_DEBUG)
-#define CL_DEBUG(fmt,	...)	CLOG_PRINTF("[DEBUG]",	fmt, ##__VA_ARGS__)
+#define CL_DEBUG(fmt,	...)	CL_PRINTF("[DEBUG]",	fmt, ##__VA_ARGS__)
 #else
 #define CL_DEBUG(fmt,	...)	/*  (^_−)☆ */
 #endif
@@ -27,13 +29,13 @@
 // ...		: 对映fmt参数
 // return	: void
 //
-void cl_printf(fmt, ...);
+void cl_printf(const char * fmt, ...);
 
 //
 // cl_start - 开启单机日志库
 // return	: void
 //
-#define _STR_CLOG_NAME	"simplec.log"
+#define _STR_CLOG_NAME	_STR_LOGDIR "/simplec.log"
 extern void cl_start(void);
 
 #endif // !_H_SIMPLEC_CLOG

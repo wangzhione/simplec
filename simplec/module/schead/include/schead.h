@@ -3,7 +3,6 @@
 
 #include <struct.h>
 #include <ctype.h>
-#include <scalloc.h>
 #include <sctime.h>
 
 /*
@@ -123,17 +122,17 @@ extern int getch(void);
 #endif 
 
 // scanf 健壮的多次输入宏
-#ifndef SAFETY_SCANF
-#define _STR_SAFETY_SCANF "Input error, please according to the prompt!"
-#define SAFETY_SCANF(scanf_code, ...) \
+#ifndef SAFE_SCANF
+#define _STR_SAFE_SCANF "Input error, please according to the prompt!"
+#define SAFE_SCANF(scanf_code, ...) \
 	do {\
 		while(printf(__VA_ARGS__), scanf_code){\
 			rewind(stdin);\
-			puts(_STR_SAFETY_SCANF);\
+			puts(_STR_SAFE_SCANF);\
 		}\
 		rewind(stdin);\
 	} while(0)
-#endif /*!SAFETY_SCANF*/
+#endif // !SAFE_SCANF
 
 // 简单的time帮助宏
 #ifndef TIME_PRINT

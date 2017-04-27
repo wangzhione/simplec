@@ -45,6 +45,7 @@
     <ClCompile Include="test\test_atom_rwlock.c" />
     <ClCompile Include="test\test_cjson_write.c" />
     <ClCompile Include="test\test_cjson.c" />
+    <ClCompile Include="test\test_clog.c" />
     <ClCompile Include="test\test_csv.c" />
     <ClCompile Include="test\test_json_read.c" />
     <ClCompile Include="test\test_log.c" />

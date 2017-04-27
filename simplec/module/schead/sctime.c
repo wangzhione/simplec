@@ -1,4 +1,5 @@
 ﻿#include <sctime.h>
+#include <stdio.h>
 
 // 为Visual Studio导入一些和linux上优质思路
 #if defined(_MSC_VER)
@@ -196,4 +197,24 @@ stu_sisweek(stime_t ls, stime_t rs) {
 		return false;
 
 	return stu_tisweek(lt, rt);
+}
+
+//
+// stu_getmstr - 得到更加详细的时间串
+// tstr		: 保存最终结果的串
+// return	: 返回当前串长度
+//
+size_t 
+stu_getmstr(stime_t tstr) {
+	time_t t;
+	struct tm st;
+	size_t len, tlen;
+	struct timeval tv;
+
+	gettimeofday(&tv, NULL);
+	t = tv.tv_sec;
+	localtime_r(&t, &st);
+	len = strftime(tstr, sizeof(stime_t), "%F %X", &st);
+	tlen = snprintf(tstr + len, sizeof(stime_t) - len, " %ld", tv.tv_usec / 1000);
+	return len + tlen;
 }

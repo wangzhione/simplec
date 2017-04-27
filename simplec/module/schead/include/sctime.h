@@ -100,4 +100,11 @@ extern bool stu_sisday(stime_t ls, stime_t rs);
  */
 extern bool stu_sisweek(stime_t ls, stime_t rs);
 
+//
+// stu_getmstr - 得到更加详细的时间串
+// tstr		: 保存最终结果的串
+// return	: 返回当前串长度
+//
+extern size_t stu_getmstr(stime_t tstr);
+
 #endif // !_H_SIMPLEC_SCTIMEUTIL

@@ -54,6 +54,8 @@ simplec_test(void) {
 	extern void test_sciconv(void);
 	// 单元测试 - 测试轮序器
 	extern void test_scrunloop(void);
+	// 单元测试 - 测试clog日志库
+	extern void test_clog(void);
 
-	test_scrunloop();
+	test_clog();
 }
