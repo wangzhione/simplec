@@ -38,4 +38,4 @@ extern void * mq_pop(mq_t mq);
 // 
 extern int mq_len(mq_t mq);
 
-#endif // !_H_SIMPLEC_SCMQ
+#endif // !_H_SIMPLEC_MQ

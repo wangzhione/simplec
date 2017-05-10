@@ -2,7 +2,8 @@
 #include <scatom.h>
 #include <mq.h>
 
-#define _INT_MQ				(64)
+// 2 的 幂
+#define _INT_MQ				(1 << 6)
 
 //
 // 队列empty	<=> tail == -1 ( head = 0 )
