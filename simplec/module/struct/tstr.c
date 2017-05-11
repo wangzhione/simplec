@@ -113,25 +113,25 @@ static flag_e _tstr_fwrite(const char * path, const char * str, const char * mod
 	FILE * txt;
 	if (!path || !*path || !str) {
 		CERR("check !path || !*path || !str'!!!");
-		return RT_Error_Param;
+		return Error_Param;
 	}
 
 	// 打开文件, 写入消息, 关闭文件
 	if ((txt = fopen(path, mode)) == NULL) {
 		CERR("fopen mode = '%s', path = '%s' error!", mode, path);
-		return RT_Error_Fopen;
+		return Error_Fd;
 	}
 	fputs(str, txt);
 	fclose(txt);
 
-	return RT_Success_Base;
+	return Success_Base;
 }
 
 //
 // 将c串str覆盖写入到path路径的文件中
 // path		: 文件路径
 // str		: c的串内容
-// return	: RT_Success_Base | RT_Error_Param | RT_Error_Fopen
+// return	: Success_Base | Error_Param | Error_Fd
 //
 inline flag_e 
 tstr_fwrites(const char * path, const char * str) {
@@ -142,7 +142,7 @@ tstr_fwrites(const char * path, const char * str) {
 // 将c串str写入到path路径的文件中末尾
 // path		: 文件路径
 // str		: c的串内容
-// return	: RT_Success_Base | RT_Error_Param | RT_Error_Fopen
+// return	: Success_Base | Error_Param | Error_Fd
 //
 inline flag_e 
 tstr_fappends(const char * path, const char * str) {

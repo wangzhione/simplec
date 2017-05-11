@@ -2,7 +2,7 @@
 
 /*
  *  采用头查法插入结点, 第一使用需要 list_t head = NULL;
- * 返回 RT_Success_Base 表示成功!
+ * 返回 Success_Base 表示成功!
  * ph		: 指向头结点的指针
  * node		: 待插入的结点对象
  */
@@ -10,13 +10,13 @@ int
 list_add(list_t* ph, void* node) {
 	if (ph == NULL || node == NULL){
 		CERR("list_add 检查到(pal == NULL || node == NULL)!");
-		return RT_Error_Param;
+		return Error_Param;
 	}
 
 	list_next(node) = *ph;
 	*ph = node;
 
-	return RT_Success_Base;
+	return Success_Base;
 }
 
 /*
@@ -166,24 +166,24 @@ list_addlast(list_t * ph, void * node) {
 	struct $lnode * head;
 	if(!ph || !node){
 		CERR("check is {!ph || !node}! not nothing in it!");
-		return RT_Error_Param;
+		return Error_Param;
 	}
 	
 	list_next(node) = NULL;//将这个结点的置空
 	if(!(head=*ph)){ //插入的是头结点直接返回
 		*ph = node;
-		return RT_Success_Base;
+		return Success_Base;
 	}
 	
 	while(head->next)
 		head = head->next;
 	head->next = node;
-	return RT_Success_Base;
+	return Success_Base;
 }
 
 /*
  *  在链表的第idx索引处插入结点,也必须需要 list_t head = NULL; 在idx过大的时候
- * 插入尾巴处,如果<0直接返回 RT_Error_Param. 成功了返回 RT_Success_Base
+ * 插入尾巴处,如果<0直接返回 Error_Param. 成功了返回 Success_Base
  * ph		: 指向头结点的指针
  * idx		: 结点的索引处
  * node		: 待插入的结点
@@ -193,13 +193,13 @@ list_addidx(list_t * ph, int idx, void * node) {
 	struct $lnode * head;
 	if(!ph || idx<0 || !node){ //以后可能加入 idx < 0的尾巴插入细则
 		CERR("check is {!ph || idx<0 || !node}! Don't naughty again!");
-		return RT_Error_Param;
+		return Error_Param;
 	}
 	//插入做为头结点
 	if(!(head=*ph) || idx == 0){
 		list_next(node) = *ph;
 		*ph = node;
-		return RT_Success_Base;
+		return Success_Base;
 	}
 	
 	while(head->next && idx>1){
@@ -208,7 +208,7 @@ list_addidx(list_t * ph, int idx, void * node) {
 	}
 	list_next(node) = head->next;
 	head->next = node;
-	return RT_Success_Base;
+	return Success_Base;
 }
 
 /*

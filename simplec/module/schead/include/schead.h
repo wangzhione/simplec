@@ -1,8 +1,8 @@
 ﻿#ifndef _H_SIMPLEC_SCHEAD
 #define _H_SIMPLEC_SCHEAD
 
+#include <clog.h>
 #include <struct.h>
-#include <ctype.h>
 #include <sctime.h>
 
 /*
@@ -68,10 +68,10 @@ extern int getch(void);
 
 #if !defined(_H_STR_HELLP)
 
-// 所有日志相对路径目录, 如果不需要需要配置成""
+ // 所有日志相对路径目录, 如果不需要需要配置成""
 #define _STR_LOGDIR		"logs"
 
-// 添加双引号的宏 
+ // 添加双引号的宏 
 #define CSTR(a)	_STR(a)
 #define _STR(a) #a
 

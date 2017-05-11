@@ -22,7 +22,7 @@ typedef void * list_t;
 
 /*
  *  采用头查法插入结点, 第一使用需要 list_t head = NULL;
- * 返回 RT_Success_Base 表示成功!
+ * 返回 Success_Base 表示成功!
  * ph		: 指向头结点的指针
  * node		: 待插入的结点对象
 **/
@@ -95,7 +95,7 @@ int list_addlast(list_t * ph, void * node);
 
 /*
  *  在链表的第idx索引处插入结点,也必须需要 list_t head = NULL; 在idx过大的时候
- * 插入尾巴处,如果<0直接返回 RT_Error_Param. 成功了返回 RT_Success_Base
+ * 插入尾巴处,如果<0直接返回 Error_Param. 成功了返回 Success_Base
  * ph		: 指向头结点的指针
  * idx		: 结点的索引处
  * node		: 待插入的结点

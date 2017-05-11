@@ -11,7 +11,7 @@ struct dict {
 static flag_e _dict_echo(struct dict * node, void * arg)
 {
 	printf("[%s]	=> [%s]\n", node->key, node->value);
-	return RT_Success_Base;
+	return Success_Base;
 }
 
 // 比较函数

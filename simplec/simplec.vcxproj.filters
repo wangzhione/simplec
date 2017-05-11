@@ -76,10 +76,10 @@
     <Filter Include="module\iconv\lib">
       <UniqueIdentifier>{7f8e5bcc-3d1f-453e-9e1c-311b6ee7b5fc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="module\log">
+    <Filter Include="module\colog">
       <UniqueIdentifier>{6feaf2bd-05ad-4bdf-b7d3-53e35cb313bb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="module\log\include">
+    <Filter Include="module\colog\include">
       <UniqueIdentifier>{57f37278-f396-4a2d-8dc1-a5955ae40220}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -92,9 +92,6 @@
     </ClCompile>
     <ClCompile Include="module\struct\list.c">
       <Filter>module\struct</Filter>
-    </ClCompile>
-    <ClCompile Include="module\schead\scconf.c">
-      <Filter>module\schead</Filter>
     </ClCompile>
     <ClCompile Include="module\schead\sccsv.c">
       <Filter>module\schead</Filter>
@@ -115,9 +112,6 @@
       <Filter>test</Filter>
     </ClCompile>
     <ClCompile Include="test\test_json_read.c">
-      <Filter>test</Filter>
-    </ClCompile>
-    <ClCompile Include="test\test_log.c">
       <Filter>test</Filter>
     </ClCompile>
     <ClCompile Include="test\test_scconf.c">
@@ -195,13 +189,19 @@
     <ClCompile Include="test\test_scrunloop.c">
       <Filter>test</Filter>
     </ClCompile>
-    <ClCompile Include="module\log\sclog.c">
-      <Filter>module\log</Filter>
-    </ClCompile>
-    <ClCompile Include="module\log\clog.c">
-      <Filter>module\log</Filter>
-    </ClCompile>
     <ClCompile Include="test\test_clog.c">
+      <Filter>test</Filter>
+    </ClCompile>
+    <ClCompile Include="module\colog\scconf.c">
+      <Filter>module\colog</Filter>
+    </ClCompile>
+    <ClCompile Include="module\colog\clog.c">
+      <Filter>module\colog</Filter>
+    </ClCompile>
+    <ClCompile Include="module\colog\sclog.c">
+      <Filter>module\colog</Filter>
+    </ClCompile>
+    <ClCompile Include="test\test_sclog.c">
       <Filter>test</Filter>
     </ClCompile>
   </ItemGroup>
@@ -226,9 +226,6 @@
     </ClInclude>
     <ClInclude Include="module\struct\include\list.h">
       <Filter>module\struct\include</Filter>
-    </ClInclude>
-    <ClInclude Include="module\schead\include\scconf.h">
-      <Filter>module\schead\include</Filter>
     </ClInclude>
     <ClInclude Include="module\schead\include\sccsv.h">
       <Filter>module\schead\include</Filter>
@@ -284,11 +281,14 @@
     <ClInclude Include="module\iconv\include\sciconv.h">
       <Filter>module\iconv\include</Filter>
     </ClInclude>
-    <ClInclude Include="module\log\include\sclog.h">
-      <Filter>module\log\include</Filter>
+    <ClInclude Include="module\colog\include\scconf.h">
+      <Filter>module\colog\include</Filter>
     </ClInclude>
-    <ClInclude Include="module\log\include\clog.h">
-      <Filter>module\log\include</Filter>
+    <ClInclude Include="module\colog\include\clog.h">
+      <Filter>module\colog\include</Filter>
+    </ClInclude>
+    <ClInclude Include="module\colog\include\sclog.h">
+      <Filter>module\colog\include</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

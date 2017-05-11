@@ -58,7 +58,7 @@ extern tstr_t tstr_freadend(const char * path);
 // 将c串str覆盖写入到path路径的文件中
 // path		: 文件路径
 // str		: c的串内容
-// return	: RT_Success_Base | RT_Error_Param | RT_Error_Fopen
+// return	: Success_Base | Error_Param | Error_Fd
 //
 extern flag_e tstr_fwrites(const char * path, const char * str);
 
@@ -66,7 +66,7 @@ extern flag_e tstr_fwrites(const char * path, const char * str);
 // 将c串str写入到path路径的文件中末尾
 // path		: 文件路径
 // str		: c的串内容
-// return	: RT_Success_Base | RT_Error_Param | RT_Error_Fopen
+// return	: Success_Base | Error_Param | Error_Fd
 //
 extern flag_e tstr_fappends(const char * path, const char * str);
 

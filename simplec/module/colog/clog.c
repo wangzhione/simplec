@@ -1,5 +1,4 @@
 ﻿#include <clog.h>
-#include <stdarg.h>
 
 #define _INT_CLOG	(2048)
 

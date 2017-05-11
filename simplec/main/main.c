@@ -1,5 +1,4 @@
 ﻿#include <schead.h>
-#include <sclog.h>
 #include <scconf.h>
 
 // stderr 信息重定位到文件中
@@ -22,8 +21,8 @@ int main(int argc, char * argv[]) {
 	// 简单创建 _STR_LOGDIR 日志目录
 	sh_mkdir(_STR_LOGDIR);
 
-	// 启动日志系统
-	sl_start();
+	// 目前系统是默认启动 clog 日志
+	cl_start();
 
 	// stderr 错误信息重定位, 需要在日志系统启动之后
 	errlog = freopen(_STR_STDERRLOG, "wb", stderr);

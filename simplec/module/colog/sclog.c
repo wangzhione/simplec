@@ -52,7 +52,7 @@ sl_init(const char mod[_INT_LITTLE], const char reqip[_INT_LITTLE], unsigned log
 	if ((pl = pthread_getspecific(_slmain.key)) == NULL) {
 		//重新构建
 		if ((pl = malloc(sizeof(struct slinfo))) == NULL)
-			return RT_Error_Malloc;
+			return Error_Alloc;
 	}
 
 	gettimeofday(&pl->timev, NULL);
@@ -64,7 +64,7 @@ sl_init(const char mod[_INT_LITTLE], const char reqip[_INT_LITTLE], unsigned log
 	//设置私有变量
 	pthread_setspecific(_slmain.key, pl);
 
-	return RT_Success_Base;
+	return Success_Base;
 }
 
 /**
@@ -205,7 +205,7 @@ sl_printf(const char * format, ...) {
 	DEBUG_CODE({
 		if (NULL == _slmain.log) {
 			CERR("%s fopen %s | %s error!", _STR_LOGDIR, _STR_SCLOG_LOG, _STR_SCLOG_WFLOG);
-			return RT_Error_Fopen;
+			return Error_Fd;
 		}
 	});
 
@@ -223,5 +223,5 @@ sl_printf(const char * format, ...) {
 	if (format[1] == 'F' || format[1] == 'W') //当为FATAL或WARNING需要些写入到警告文件中
 		fputs(logs, _slmain.wf);
 
-	return RT_Success_Base;
+	return Success_Base;
 }

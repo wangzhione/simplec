@@ -8,6 +8,7 @@
 // author : wz
 //
 
+#include <ctype.h>
 #include <stdio.h>
 #include <errno.h>
 #include <stdlib.h>
@@ -18,25 +19,18 @@
 #include <stdbool.h>
 
 //
-// 定义的函数操作基本行为返回的枚举, 用于判断返回值状态的状态码
-// 使用举例:
-// 
-//	flag_e flag = xxx("heoo");
-//	if(flag < RT_Success_Base) {
-//		fprintf(stderr, "error msg xxx!\n");
-//		exit(EXIT_FAILURE);
-//	}
-//
-//	>=0 标识 Success状态, <0 标识 Error状态
+// flag_e - 全局操作基本行为返回的枚举, 用于判断返回值状态的状态码
+// >= 0 标识 Success状态, < 0 标识 Error状态
 //
 typedef enum {
-	RT_Success_Close	= +1,			//文件描述符读取关闭, 读取完毕也会返回这个
-	RT_Success_Base		= +0,			//结果正确的返回宏
+	Success_Exist	= +2,			//希望存在,设置之前已经存在了.
+	Success_Close	= +1,			//文件描述符读取关闭, 读取完毕也会返回这个
+	Success_Base	= +0,			//结果正确的返回宏
 
-	RT_Error_Base		= -1,			//错误基类型, 所有错误都可用它, 在不清楚的情况下
-	RT_Error_Param		= -2,			//调用的参数错误
-	RT_Error_Malloc		= -3,			//内存分配错误
-	RT_Error_Fopen		= -4,			//文件打开失败	
+	Error_Base		= -1,			//错误基类型, 所有错误都可用它, 在不清楚的情况下
+	Error_Param		= -2,			//调用的参数错误
+	Error_Alloc		= -3,			//内存分配错误
+	Error_Fd		= -4,			//文件打开失败
 } flag_e;
 
 //
