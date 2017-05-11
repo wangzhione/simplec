@@ -31,6 +31,7 @@
     <ClCompile Include="module\schead\schead.c" />
     <ClCompile Include="module\schead\scrwlock.c" />
     <ClCompile Include="module\schead\sctime.c" />
+    <ClCompile Include="module\schead\scurl.c" />
     <ClCompile Include="module\service\scoroutine.c" />
     <ClCompile Include="module\service\scpthread.c" />
     <ClCompile Include="module\service\scrunloop.c" />
@@ -57,6 +58,7 @@
     <ClCompile Include="test\test_scrunloop.c" />
     <ClCompile Include="test\test_sctimer.c" />
     <ClCompile Include="test\test_sctimeutil.c" />
+    <ClCompile Include="test\test_scurl.c" />
     <ClCompile Include="test\test_tstring.c" />
     <ClCompile Include="test\test_xlsmtojson.c" />
   </ItemGroup>
@@ -76,6 +78,7 @@
     <ClInclude Include="module\schead\include\schead.h" />
     <ClInclude Include="module\schead\include\scrwlock.h" />
     <ClInclude Include="module\schead\include\sctime.h" />
+    <ClInclude Include="module\schead\include\scurl.h" />
     <ClInclude Include="module\service\include\scoroutine$linux.h" />
     <ClInclude Include="module\service\include\scoroutine$winds.h" />
     <ClInclude Include="module\service\include\scoroutine.h" />

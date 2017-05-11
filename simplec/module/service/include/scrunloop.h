@@ -26,18 +26,4 @@ extern void srl_delete(srl_t srl);
 // 
 extern void srl_push(srl_t srl, void * msg);
 
-//
-// srl_start - 启动当前轮序器
-// srl		: 轮询器对象
-// return	: void
-//
-extern void srl_start(srl_t srl);
-
-//
-// srl_stop - 暂停轮序器
-// srl		: 轮询器对象
-// return	: void
-//
-extern void srl_stop(srl_t srl);
-
 #endif // !_H_SIMPLEC_SCRUNLOOP

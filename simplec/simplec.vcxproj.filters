@@ -204,6 +204,12 @@
     <ClCompile Include="test\test_sclog.c">
       <Filter>test</Filter>
     </ClCompile>
+    <ClCompile Include="module\schead\scurl.c">
+      <Filter>module\schead</Filter>
+    </ClCompile>
+    <ClCompile Include="test\test_scurl.c">
+      <Filter>test</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="module\pthread\include\pthread.h">
@@ -289,6 +295,9 @@
     </ClInclude>
     <ClInclude Include="module\colog\include\sclog.h">
       <Filter>module\colog\include</Filter>
+    </ClInclude>
+    <ClInclude Include="module\schead\include\scurl.h">
+      <Filter>module\schead\include</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

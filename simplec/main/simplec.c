@@ -50,12 +50,8 @@ simplec_go(void) {
  */
 void 
 simplec_test(void) {
-	// 单元测试 - 测试编码转换库
-	extern void test_sciconv(void);
-	// 单元测试 - 测试轮序器
-	extern void test_scrunloop(void);
-	// 单元测试 - 测试clog日志库
-	extern void test_clog(void);
+	// 单元测试 - 测试url 编码转换
+	extern void test_scurl(void);
 
-	test_clog();
+	test_scurl();
 }
