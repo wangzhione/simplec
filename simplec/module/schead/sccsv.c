@@ -1,6 +1,6 @@
 ﻿#include <sccsv.h>
-#include <sclog.h>
 #include <tstr.h>
+#include <clog.h>
 
 //从文件中读取 csv文件内容, 构建一个合法串
 static bool _csv_parse(tstr_t tstr, int * prl, int * pcl) {
@@ -47,7 +47,7 @@ static bool _csv_parse(tstr_t tstr, int * prl, int * pcl) {
 	
 	if(cl % rl){ // 检测 , 号是个数是否正常
 	__err_ext:
-		SL_WARNING("now csv file is illegal! c = %d, n = %d, cl = %d, rl = %d."
+		CL_ERROR("now csv file is illegal! c = %d, n = %d, cl = %d, rl = %d."
 			, c, n, cl, rl);
 		return false;
 	}
@@ -74,7 +74,7 @@ static sccsv_t _csv_create(tstr_t tstr) {
 	pdff = sizeof(struct sccsv) + sizeof(char *) * cl;
 	csv = malloc(pdff + sizeof(char) * tstr->len);
 	if (NULL == csv) {
-		SL_FATAL("malloc is error cstr->len = %d, rl = %d, cl = %d.", tstr->len, rl ,cl);
+		CL_ERROR("malloc is error cstr->len = %d, rl = %d, cl = %d.", tstr->len, rl ,cl);
 		return NULL;
 	}
 
@@ -103,7 +103,7 @@ sccsv_create(const char * path) {
 	sccsv_t csv;
 	tstr_t tstr = tstr_freadend(path);
 	if (NULL == tstr) {
-		SL_WARNING("tstr_freadend path = %s is error!", path);
+		CL_ERROR("tstr_freadend path = %s is error!", path);
 		return NULL;
 	}
 
@@ -135,7 +135,7 @@ inline const char *
 sccsv_get(sccsv_t csv, int ri, int ci) {
 	DEBUG_CODE({
 		if (!csv || ri<0 || ri >= csv->rlen || ci<0 || ci >= csv->clen) {
-			SL_WARNING("params is csv:%p, ri:%d, ci:%d.", csv, ri, ci);
+			CL_ERROR("params is csv:%p, ri:%d, ci:%d.", csv, ri, ci);
 			return NULL;
 		}
 	});
