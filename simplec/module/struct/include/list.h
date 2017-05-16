@@ -1,5 +1,5 @@
-﻿#ifndef _H_LIST
-#define _H_LIST
+﻿#ifndef _H_SIMPLEC_LIST
+#define _H_SIMPLEC_LIST
 
 #include <struct.h>
 
@@ -84,7 +84,7 @@ void * list_front(list_t h, void * node);
  * n		: 当前结点
  */
 #define list_next(n) \
-	(((struct $lnode *)n)->next)
+	(((struct $lnode *)(n))->next)
 
 /*
  *  和 list_add 功能相似,但是插入位置在尾巴那
@@ -100,7 +100,7 @@ int list_addlast(list_t * ph, void * node);
  * idx		: 结点的索引处
  * node		: 待插入的结点
  */
-int list_addidx(list_t * ph, int idx, void* node);
+int list_addidx(list_t * ph, int idx, void * node);
 
 /*
  *  这里的销毁函数,只有这些数据都是堆上的才推荐这么做,会自动让其指向NULL
@@ -108,4 +108,4 @@ int list_addidx(list_t * ph, int idx, void* node);
  */
 void list_destroy(list_t * ph);
 
-#endif // !_H_LIST
+#endif // !_H_SIMPLEC_LIST

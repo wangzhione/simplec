@@ -6,10 +6,10 @@
  * ph		: 指向头结点的指针
  * node		: 待插入的结点对象
  */
-int 
-list_add(list_t* ph, void* node) {
+inline int 
+list_add(list_t * ph, void * node) {
 	if (ph == NULL || node == NULL){
-		CERR("list_add 检查到(pal == NULL || node == NULL)!");
+		CERR("list_add check (pal == NULL || node == NULL)!");
 		return Error_Param;
 	}
 
@@ -31,7 +31,7 @@ void *
 list_find(list_t h, cmp_f cmp, const void * left) {
 	struct $lnode * head;
 	if(cmp == NULL || left == NULL){
-		CERR("list_find 检查到(cmp == NULL || left == NULL)!");
+		CERR("list_find check (cmp == NULL || left == NULL)!");
 		return NULL;
 	}
 	//找到结果直接结束
