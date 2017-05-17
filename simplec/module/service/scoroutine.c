@@ -3,5 +3,5 @@
 #	error "error : Currently only supports the Visual Studio and GCC!"
 #endif
 
-#include "scoroutine$winds.h"
-#include "scoroutine$linux.h"
+#include "scoroutine$winds.c"
+#include "scoroutine$linux.c"

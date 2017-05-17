@@ -52,6 +52,8 @@ void
 simplec_test(void) {
 	// 单元测试 - 测试url 编码转换
 	extern void test_scurl(void);
+	// 单元测试 - 测试对象池用法
+	extern void test_objs(void);
 
-	test_scurl();
+	test_objs();
 }

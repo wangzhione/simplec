@@ -210,6 +210,12 @@
     <ClCompile Include="test\test_scurl.c">
       <Filter>test</Filter>
     </ClCompile>
+    <ClCompile Include="module\struct\objs.c">
+      <Filter>module\struct</Filter>
+    </ClCompile>
+    <ClCompile Include="test\test_objs.c">
+      <Filter>test</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="module\pthread\include\pthread.h">
@@ -263,12 +269,6 @@
     <ClInclude Include="module\struct\include\rbtree.h">
       <Filter>module\struct\include</Filter>
     </ClInclude>
-    <ClInclude Include="module\service\include\scoroutine$linux.h">
-      <Filter>module\service\include</Filter>
-    </ClInclude>
-    <ClInclude Include="module\service\include\scoroutine$winds.h">
-      <Filter>module\service\include</Filter>
-    </ClInclude>
     <ClInclude Include="module\service\include\scoroutine.h">
       <Filter>module\service\include</Filter>
     </ClInclude>
@@ -298,6 +298,15 @@
     </ClInclude>
     <ClInclude Include="module\schead\include\scurl.h">
       <Filter>module\schead\include</Filter>
+    </ClInclude>
+    <ClInclude Include="module\service\scoroutine%24linux.c">
+      <Filter>module\service</Filter>
+    </ClInclude>
+    <ClInclude Include="module\service\scoroutine%24winds.c">
+      <Filter>module\service</Filter>
+    </ClInclude>
+    <ClInclude Include="module\struct\include\objs.h">
+      <Filter>module\struct\include</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
