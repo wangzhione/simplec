@@ -41,7 +41,7 @@ struct scomng {
  * 开启协程系统函数, 并返回创建的协程管理器
  *			: 返回创建的协程对象
  */
-inline void *
+inline scomng_t
 sco_open(void) {
 	struct scomng * comng = malloc(sizeof(struct scomng));
 	assert(NULL != comng);
@@ -65,20 +65,19 @@ static inline void _sco_delete(struct sco * co) {
  *	sco		: sco_oepn 返回的当前协程中协程管理器
  */
 void
-sco_close(void * sco) {
+sco_close(scomng_t sco) {
 	int i = -1;
-	struct scomng * comng = sco;
-	while (++i < comng->cap) {
-		struct sco * co = comng->cos[i];
+	while (++i < sco->cap) {
+		struct sco * co = sco->cos[i];
 		if (co) {
 			_sco_delete(co);
-			comng->cos[i] = NULL;
+			sco->cos[i] = NULL;
 		}
 	}
 
-	free(comng->cos);
-	comng->cos = NULL;
-	free(comng);
+	free(sco->cos);
+	sco->cos = NULL;
+	free(sco);
 }
 
 // 构建 struct sco 协程对象
@@ -104,26 +103,25 @@ static inline struct sco * _sco_new(sco_f func, void * arg) {
  *			: 返回创建好的协程id
  */
 int
-sco_create(void * sco, sco_f func, void * arg) {
+sco_create(scomng_t sco, sco_f func, void * arg) {
 	struct sco * co = _sco_new(func, arg);
-	struct scomng * comng = sco;
-	struct sco ** cos = comng->cos;
-	int cap = comng->cap;
+	struct sco ** cos = sco->cos;
+	int cap = sco->cap;
 	// 下面开始寻找, 如果数据足够的话
-	if (comng->cnt < comng->cap) {
+	if (sco->cnt < sco->cap) {
 		// 当循环队列去查找
-		int idx = comng->idx;
+		int idx = sco->idx;
 		do {
 			if (NULL == cos[idx]) {
 				cos[idx] = co;
-				++comng->cnt;
-				++comng->idx;
+				++sco->cnt;
+				++sco->idx;
 				return idx;
 			}
 			idx = (idx + 1) % cap;
-		} while (idx != comng->idx);
+		} while (idx != sco->idx);
 
-		assert(idx == comng->idx);
+		assert(idx == sco->idx);
 		return -1;
 	}
 
@@ -131,11 +129,11 @@ sco_create(void * sco, sco_f func, void * arg) {
 	cos = realloc(cos, sizeof(struct sco *) * cap * 2);
 	assert(NULL != cos);
 	memset(cos + cap, 0, sizeof(struct sco *) * cap);
-	comng->cos = cos;
-	comng->cap = cap << 1;
-	++comng->cnt;
-	cos[comng->idx] = co;
-	return comng->idx++;
+	sco->cos = cos;
+	sco->cap = cap << 1;
+	++sco->cnt;
+	cos[sco->idx] = co;
+	return sco->idx++;
 }
 
 // 协程运行的主体
@@ -160,38 +158,37 @@ static inline void _sco_main(uint32_t low32, uint32_t hig32) {
  *	id		: 具体协程id, sco_create 返回的协程id
  */
 void
-sco_resume(void * sco, int id) {
+sco_resume(scomng_t sco, int id) {
 	uintptr_t ptr;
 	struct sco * co;
-	struct scomng * comng = sco;
 	int status;
-	int running = comng->running;
-	assert(running == -1 && id >= 0 && id < comng->cap);
+	int running = sco->running;
+	assert(running == -1 && id >= 0 && id < sco->cap);
 
 	// 下面是协程 _SCO_READY 和 _SCO_SUSPEND 处理
-	co = comng->cos[id];
+	co = sco->cos[id];
 	if ((!co) || (status = co->status) == _SCO_DEAD)
 		return;
 
-	comng->running = id;
+	sco->running = id;
 	co->status = _SCO_RUNNING;
 	switch (status) {
 	case _SCO_READY:
 		// 兼容x64指针通过makecontext传入
-		ptr = (uintptr_t)comng;
+		ptr = (uintptr_t)sco;
 		// 构建栈和运行链
 		getcontext(&co->ctx);
-		co->ctx.uc_stack.ss_sp = comng->stack;
+		co->ctx.uc_stack.ss_sp = sco->stack;
 		co->ctx.uc_stack.ss_size = _INT_STACK;
-		co->ctx.uc_link = &comng->main;
+		co->ctx.uc_link = &sco->main;
 		makecontext(&co->ctx, (void(*)())_sco_main, 2, (uint32_t)ptr, (uint32_t)(ptr >> 32));
-		// 保存当前运行状态到comng->main, 然后跳转到 co->ctx运行环境中
-		swapcontext(&comng->main, &co->ctx);
+		// 保存当前运行状态到sco->main, 然后跳转到 co->ctx运行环境中
+		swapcontext(&sco->main, &co->ctx);
 		break;
 	case _SCO_SUSPEND:
 		// stack add is high -> low
-		memcpy(comng->stack + _INT_STACK - co->cnt, co->stack, co->cnt);
-		swapcontext(&comng->main, &co->ctx);
+		memcpy(sco->stack + _INT_STACK - co->cnt, co->stack, co->cnt);
+		swapcontext(&sco->main, &co->ctx);
 		break;
 	default:
 		assert(co->status && 0);
@@ -217,17 +214,16 @@ static void _sco_savestack(struct sco * co, char * top) {
  *	sco		: 协程系统管理器
  */
 void
-sco_yield(void * sco) {
+sco_yield(scomng_t sco) {
 	struct sco * co;
-	struct scomng * comng = sco;
-	int id = comng->running;
-	if ((id < 0 || id >= comng->cap) || !(co = comng->cos[id]))
+	int id = sco->running;
+	if ((id < 0 || id >= sco->cap) || !(co = sco->cos[id]))
 		return;
-	assert((char *)&co > comng->stack);
-	_sco_savestack(co, comng->stack + _INT_STACK);
+	assert((char *)&co > sco->stack);
+	_sco_savestack(co, sco->stack + _INT_STACK);
 	co->status = _SCO_SUSPEND;
-	comng->running = -1;
-	swapcontext(&co->ctx, &comng->main);
+	sco->running = -1;
+	swapcontext(&co->ctx, &sco->main);
 }
 
 /*
@@ -237,10 +233,9 @@ sco_yield(void * sco) {
 *			: 返回 _SCO_* 相关的协程状态信息
 */
 inline int
-sco_status(void * sco, int id) {
-	struct scomng * comng = sco;
-	assert(comng && id >= 0 && id < comng->cap);
-	return comng->cos[id] ? comng->cos[id]->status : _SCO_DEAD;
+sco_status(scomng_t sco, int id) {
+	assert(sco && id >= 0 && id < sco->cap);
+	return sco->cos[id] ? sco->cos[id]->status : _SCO_DEAD;
 }
 
 /*
@@ -249,8 +244,8 @@ sco_status(void * sco, int id) {
 *			: 返回 < 0 表示没有协程在运行
 */
 inline int
-sco_running(void * sco) {
-	return ((struct scomng *)sco)->running;
+sco_running(scomng_t sco) {
+	return sco->running;
 }
 
 #endif // !_H_SIMPLEC_SCOROUTINE$LINUX

@@ -54,6 +54,8 @@ simplec_test(void) {
 	extern void test_scurl(void);
 	// 单元测试 - 测试对象池用法
 	extern void test_objs(void);
+	// 单元测试 - 测试协程库
+	extern void test_scoroutine(void);
 
-	test_objs();
+	test_scoroutine();
 }
