@@ -81,12 +81,12 @@
     <ClInclude Include="module\schead\include\scrwlock.h" />
     <ClInclude Include="module\schead\include\sctime.h" />
     <ClInclude Include="module\schead\include\scurl.h" />
+    <ClInclude Include="module\service\include\scoroutine$linux.h" />
+    <ClInclude Include="module\service\include\scoroutine$winds.h" />
     <ClInclude Include="module\service\include\scoroutine.h" />
     <ClInclude Include="module\service\include\scpthread.h" />
     <ClInclude Include="module\service\include\scrunloop.h" />
     <ClInclude Include="module\service\include\sctimer.h" />
-    <ClInclude Include="module\service\scoroutine%24linux.c" />
-    <ClInclude Include="module\service\scoroutine%24winds.c" />
     <ClInclude Include="module\struct\include\array.h" />
     <ClInclude Include="module\struct\include\list.h" />
     <ClInclude Include="module\struct\include\objs.h" />

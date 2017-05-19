@@ -227,11 +227,11 @@ sco_yield(scomng_t sco) {
 }
 
 /*
-* 得到当前协程状态
-*	sco		: 协程系统管理器
-*	id		: 协程id
-*			: 返回 _SCO_* 相关的协程状态信息
-*/
+ * 得到当前协程状态
+ *	sco		: 协程系统管理器
+ *	id		: 协程id
+ *			: 返回 _SCO_* 相关的协程状态信息
+ */
 inline int
 sco_status(scomng_t sco, int id) {
 	assert(sco && id >= 0 && id < sco->cap);
@@ -239,10 +239,10 @@ sco_status(scomng_t sco, int id) {
 }
 
 /*
-* 当前协程系统中运行的协程id
-*	sco		: 协程系统管理器
-*			: 返回 < 0 表示没有协程在运行
-*/
+ * 当前协程系统中运行的协程id
+ *	sco		: 协程系统管理器
+ *			: 返回 < 0 表示没有协程在运行
+ */
 inline int
 sco_running(scomng_t sco) {
 	return sco->running;

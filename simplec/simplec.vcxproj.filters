@@ -299,14 +299,14 @@
     <ClInclude Include="module\schead\include\scurl.h">
       <Filter>module\schead\include</Filter>
     </ClInclude>
-    <ClInclude Include="module\service\scoroutine%24linux.c">
-      <Filter>module\service</Filter>
-    </ClInclude>
-    <ClInclude Include="module\service\scoroutine%24winds.c">
-      <Filter>module\service</Filter>
-    </ClInclude>
     <ClInclude Include="module\struct\include\objs.h">
       <Filter>module\struct\include</Filter>
+    </ClInclude>
+    <ClInclude Include="module\service\include\scoroutine$linux.h">
+      <Filter>module\service\include</Filter>
+    </ClInclude>
+    <ClInclude Include="module\service\include\scoroutine$winds.h">
+      <Filter>module\service\include</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
