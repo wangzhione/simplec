@@ -1,4 +1,4 @@
-/* This is an implementation of the threads API of POSIX 1003.1-2001.
+ï»¿/* This is an implementation of the threads API of POSIX 1003.1-2001.
  *
  * --------------------------------------------------------------------------
  *
@@ -109,12 +109,14 @@
 /* Include everything */
 #endif
 
-/*
- * ÕâÀï¿ªÊ¼ÔÚVSÖĞÒıÓÃ ¾²Ì¬¿â,¼õÉÙÒÀÀµVSÊÖ¶¯Ìí¼Ó
- * wz,¶ÔÕâ¸öpthread.h ½øĞĞÁË²¿·ÖĞŞ¸Ä
- */
+//
+//  è¿™é‡Œå¼€å§‹åœ¨VSä¸­å¼•ç”¨ é™æ€åº“,å‡å°‘ä¾èµ–VSæ‰‹åŠ¨æ·»åŠ 
+//  wz, å¯¹è¿™ä¸ªpthread.h è¿›è¡Œäº†éƒ¨åˆ†ä¿®æ”¹
+//
 #if defined(_MSC_VER)
-#pragma comment(lib, "pthreadVC2.lib")
+#pragma comment(lib,  "pthreadVC2.lib")
+#pragma comment(lib, "pthreadVCE2.lib")
+#pragma comment(lib, "pthreadVSE2.lib")
 #endif
 
 /*

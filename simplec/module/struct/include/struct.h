@@ -55,10 +55,10 @@ typedef flag_e	(* each_f)(void * node, void * arg);
 
 #define CERR(fmt, ...) \
 	fprintf(stderr, "[%s:%s:%d][errno %d:%s]" fmt "\n",\
-		__FILE__, __func__, __LINE__, errno, strerror(errno), __VA_ARGS__)
+		__FILE__, __func__, __LINE__, errno, strerror(errno), ##__VA_ARGS__)
 
 #define CERR_EXIT(fmt,...) \
-	CERR(fmt, __VA_ARGS__), exit(EXIT_FAILURE)
+	CERR(fmt, ##__VA_ARGS__), exit(EXIT_FAILURE)
 
 #define CERR_IF(code) \
 	if((code) < 0) \
@@ -74,7 +74,7 @@ typedef flag_e	(* each_f)(void * node, void * arg);
 #define NIL
 #define RETURN(val, fmt, ...) \
 	do {\
-		CERR(fmt, __VA_ARGS__);\
+		CERR(fmt, ##__VA_ARGS__);\
 		return val;\
 	} while(0)
 
