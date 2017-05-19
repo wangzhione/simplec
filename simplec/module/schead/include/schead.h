@@ -126,7 +126,7 @@ extern int getch(void);
 #define _STR_SAFE_SCANF "Input error, please according to the prompt!"
 #define SAFE_SCANF(scanf_code, ...) \
 	do {\
-		while(printf(__VA_ARGS__), scanf_code){\
+		while(printf(##__VA_ARGS__), scanf_code){\
 			rewind(stdin);\
 			puts(_STR_SAFE_SCANF);\
 		}\
@@ -134,16 +134,16 @@ extern int getch(void);
 	} while(0)
 #endif // !SAFE_SCANF
 
-// 简单的time帮助宏
+// 简单的time时间记录宏
 #ifndef TIME_PRINT
 #define _STR_TIME_PRINT "The current code block running time:%lf seconds\n"
 #define TIME_PRINT(code) \
 	do {\
-		clock_t __st, __et;\
-		__st=clock();\
+		clock_t $st, $et;\
+		$st = clock();\
 		code\
-		__et=clock();\
-		printf(_STR_TIME_PRINT, (0.0 + __et - __st) / CLOCKS_PER_SEC);\
+		$et = clock();\
+		printf(_STR_TIME_PRINT, (0.0 + $et - $st) / CLOCKS_PER_SEC);\
 	} while(0)
 #endif // !TIME_PRINT
 
