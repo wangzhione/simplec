@@ -1,27 +1,28 @@
-# 忽略上传的文件夹
-/Output
-/simplec/Debug
-/simplec/x64
+# Ignore the uploaded folders
 /.vs
+/Output
+/simplec/x64
+/simplec/Debug
 /simplec/logs
 
-# 忽略上传的文件
-*.swp
-*.opendb
+# Ignore the uploaded files
+-p
+~*
+*~
 *.db
+*.suo
+*.swp
 *.exe
 *.out
-*~
-*.iobj
-*.ipdb
 *.pdb
 *.pch
 *.ilk
 *.log
--p
 *.err
 *.out
-~*
-*.tlog
 *.obj
 *.idb
+*.iobj
+*.ipdb
+*.tlog
+*.opendb
