@@ -1,13 +1,16 @@
 ﻿#ifndef _H_SIMPLEC_MQ
 #define _H_SIMPLEC_MQ
 
+#include <struct.h>
+
 typedef struct mq * mq_t;
 
 //
 // mq_create - 创建一个消息队列类型
+// die		: 删除push进来的结点
 // return	: 返回创建好的消息队列对象, NULL表示失败
 //
-extern mq_t mq_create(void);
+extern mq_t mq_create(die_f die);
 
 //
 // mq_delete - 删除创建消息队列, 并回收资源

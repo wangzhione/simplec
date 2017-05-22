@@ -35,7 +35,6 @@ void pl_printf(const char * fmt, ...);
 // sl_start - 开启单机日志库
 // return	: void
 //
-#define _STR_PLOG_NAME	_STR_LOGDIR "/simplec_%s.log"
 extern void pl_start(void);
 
 #endif // !_H_SIMPLEC_PLOG

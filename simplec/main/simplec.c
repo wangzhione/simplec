@@ -56,6 +56,8 @@ simplec_test(void) {
 	extern void test_objs(void);
 	// 单元测试 - 测试协程库
 	extern void test_scoroutine(void);
+	// 单元测试 - 测试轮询器
+	extern void test_scrunloop(void);
 
-	test_scoroutine();
+	test_scrunloop();
 }

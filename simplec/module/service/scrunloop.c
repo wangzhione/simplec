@@ -14,7 +14,7 @@ struct srl {
 // 线程阻塞的毫秒数
 #define _INT_SCRUNLOOP		(1)
 
-void * _srl_loop(void * arg) {
+static void * _srl_loop(void * arg) {
 	struct srl * s = arg;
 	
 	while (s->loop) {
@@ -34,21 +34,21 @@ void * _srl_loop(void * arg) {
 //
 // srl_create - 创建轮询服务对象
 // run		: 轮序处理每条消息体, 弹出消息体的时候执行
+// die		: srl_push msg 的销毁函数
 // return	: void 
 //
 srl_t
-srl_create(die_f run) {
+srl_create(die_f run, die_f die) {
 	struct srl * s = malloc(sizeof(struct srl));
 	assert(s && run);
-	s->mq = mq_create();
+	s->mq = mq_create(die);
 	s->loop = true;
 	s->run = run;
 	// 创建线程,并启动
 	if (pthread_create(&s->th, NULL, _srl_loop, s)) {
 		mq_delete(s->mq);
 		free(s);
-		CERR("pthread_create create error !!!");
-		return NULL;
+		RETURN(NULL, "pthread_create create error !!!");
 	}
 	return s;
 }

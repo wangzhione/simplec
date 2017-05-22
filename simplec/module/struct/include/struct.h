@@ -31,6 +31,7 @@ typedef enum {
 	Error_Param		= -2,			//调用的参数错误
 	Error_Alloc		= -3,			//内存分配错误
 	Error_Fd		= -4,			//文件打开失败
+	Error_TOUT		= -5,			//超时错误
 } flag_e;
 
 //

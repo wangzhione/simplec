@@ -8,7 +8,7 @@
 static FILE * _log;
 
 // 在当前日志库退出的时候所做的事情
-static void _cl_end(void) {
+static inline void _cl_end(void) {
 	if (_log) {
 		fclose(_log);
 		_log = NULL;

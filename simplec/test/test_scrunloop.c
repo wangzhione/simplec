@@ -47,7 +47,7 @@ static void * _write(void * arg) {
 //
 void test_scrunloop(void) {
 	pthread_t th;
-	srl_t s = srl_create(_run);
+	srl_t s = srl_create(_run, free);
 
 	// 开启线程, 跑起来测试
 	if (pthread_create(&th, NULL, _write, s) < 0) {

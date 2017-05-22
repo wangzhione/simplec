@@ -200,7 +200,7 @@ stu_sisweek(stime_t ls, stime_t rs) {
 }
 
 //
-// stu_getmstr - 得到更加详细的时间串
+// stu_getmstr - 得到加毫秒的串 [2016-7-10 22:38:34 500]
 // tstr		: 保存最终结果的串
 // return	: 返回当前串长度
 //

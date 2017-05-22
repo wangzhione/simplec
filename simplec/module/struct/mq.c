@@ -1,6 +1,5 @@
-﻿#include <assert.h>
+﻿#include <mq.h>
 #include <scatom.h>
-#include <mq.h>
 
 // 2 的 幂
 #define _INT_MQ				(1 << 6)
@@ -15,14 +14,18 @@ struct mq {
 	int head;			// 消息队列头索引
 	int tail;			// 消息队列尾索引
 	void ** queue;		// 具体的使用消息
+
+	die_f die;			// 具体的销毁函数
+	volatile bool fee;	// true表示销毁退出
 };
 
 //
 // mq_create - 创建一个消息队列类型
+// die		: 删除push进来的结点
 // return	: 返回创建好的消息队列对象, NULL表示失败
 //
 inline mq_t 
-mq_create(void) {
+mq_create(die_f die) {
 	struct mq * q = malloc(sizeof(struct mq));
 	assert(q);
 	q->lock = 0;
@@ -30,6 +33,9 @@ mq_create(void) {
 	q->head = 0;
 	q->tail = -1;
 	q->queue = malloc(sizeof(void *) * _INT_MQ);
+	assert(q->queue);
+	q->die = die;
+	q->fee = false;
 	return q;
 }
 
@@ -38,12 +44,29 @@ mq_create(void) {
 // mq		: 消息队列对象
 // return	: void
 //
-inline void 
+void 
 mq_delete(mq_t mq) {
-	if (mq) {
-		free(mq->queue);
-		free(mq);
+	if (!mq || mq->fee) return;
+	ATOM_LOCK(mq->lock);
+	mq->fee = true;
+	if (mq->die) {
+		// 销毁所有对象
+		while (mq->tail >= 0) {
+			void * msg = mq->queue[mq->head];
+			mq->die(msg);
+			if (mq->tail != mq->head)
+				mq->head = (mq->head + 1) & (mq->cap - 1);
+			else {
+				// 这是empty,情况, 重置
+				mq->tail = -1;
+				mq->head = 0;
+				break;
+			}
+		}
 	}
+	free(mq->queue);
+	ATOM_UNLOCK(mq->lock);
+	free(mq);
 }
 
 // add two cap memory, memory is do not have assert
@@ -76,7 +99,7 @@ _expand_queue(struct mq * mq) {
 void 
 mq_push(mq_t mq, void * msg) {
 	int tail;
-	assert(mq && msg);
+	if (!mq || mq->fee || !msg) return;
 	ATOM_LOCK(mq->lock);
 
 	tail = (mq->tail + 1) & (mq->cap - 1);
@@ -98,7 +121,7 @@ mq_push(mq_t mq, void * msg) {
 //
 void * mq_pop(mq_t mq) {
 	void * msg = NULL;
-	assert(mq);
+	if (!mq || mq->fee) return NULL;
 
 	ATOM_LOCK(mq->lock);
 
@@ -126,7 +149,7 @@ void * mq_pop(mq_t mq) {
 int 
 mq_len(mq_t mq) {
 	int head, tail, cap;
-	assert(mq);
+	if (!mq || mq->fee) return 0;
 
 	ATOM_LOCK(mq->lock);
 

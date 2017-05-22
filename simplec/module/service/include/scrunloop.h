@@ -8,9 +8,10 @@ typedef struct srl * srl_t;
 //
 // srl_create - 创建轮询服务对象
 // run		: 轮序处理每条消息体, 弹出消息体的时候执行
+// die		: srl_push msg 的销毁函数
 // return	: void 
 //
-extern srl_t srl_create(die_f run);
+extern srl_t srl_create(die_f run, die_f die);
 
 //
 // srl_delete - 销毁轮询对象,回收资源
