@@ -10,7 +10,6 @@
 //
 //关于日志切分,需要用第三方插件例如crontab , 或者下次我自己写一个监测程序.
 #define _INT_LITTLE				(64)		//保存时间或IP长度
-#define _INT_LOG				(1024<<3)	//最多8k日志
 
 #define _STR_SCLOG_LOG			"sc.log"	//普通log日志 DEBUG,INFO,NOTICE,WARNING,FATAL都会输出
 #define _STR_SCLOG_WFLOG		"sc_wf.log"	//级别比较高的日志输出 FATAL和WARNING

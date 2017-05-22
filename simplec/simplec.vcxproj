@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="main\main.c" />
     <ClCompile Include="main\simplec.c" />
+    <ClCompile Include="module\colog\plog.c" />
     <ClCompile Include="module\iconv\sciconv.c" />
     <ClCompile Include="module\colog\scconf.c" />
     <ClCompile Include="module\colog\clog.c" />
@@ -65,6 +66,7 @@
     <ClCompile Include="test\test_xlsmtojson.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="module\colog\include\plog.h" />
     <ClInclude Include="module\iconv\include\iconv.h" />
     <ClInclude Include="module\iconv\include\sciconv.h" />
     <ClInclude Include="module\colog\include\scconf.h" />

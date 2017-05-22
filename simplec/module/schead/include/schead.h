@@ -5,11 +5,11 @@
 #include <struct.h>
 #include <sctime.h>
 
-/*
- * 跨平台的丑陋从这里开始, 封装一些共用实现
- *  __GNUC		=> linux 平台特殊操作
- *  __MSC_VER	=> window 平台特殊操作
- */
+//
+//  跨平台的丑陋从这里开始, 封装一些共用实现
+//  __GNUC__	= > linux 平台特殊操作
+//  __MSC_VER	= > winds 平台特殊操作
+//
 #ifdef __GNUC__  // 下面是依赖GCC编译器实现
 
 #include <unistd.h>
@@ -66,16 +66,23 @@ extern int getch(void);
 	#error "error : Currently only supports the Visual Studio and GCC!"
 #endif
 
-#if !defined(_H_STR_HELLP)
+#if !defined(_H_CSTR_HELLP)
 
- // 所有日志相对路径目录, 如果不需要需要配置成""
+//
+// 所有日志相对路径目录, 如果不需要需要配置成""
+// _STR_LOGDIR	- 存放所有日志的目录
+// _INT_LOG		- 每条日志的大小
+// _INT_PATH	- 日志路径大小
+//
 #define _STR_LOGDIR		"logs"
+#define _INT_LOG		(2048)
+#define _INT_PATH		(256)
 
  // 添加双引号的宏 
 #define CSTR(a)	_STR(a)
 #define _STR(a) #a
 
-#define _H_STR_HELLP
+#define _H_CSTR_HELLP
 #endif
 
 /* 栈上辅助操作宏 */
@@ -125,7 +132,6 @@ extern int getch(void);
 #ifndef SAFE_SCANF
 #define _STR_SAFE_SCANF "Input error, please according to the prompt!"
 #define SAFE_SCANF(scanf_code, ...) \
-	do {\
 		while(printf(##__VA_ARGS__), scanf_code){\
 			rewind(stdin);\
 			puts(_STR_SAFE_SCANF);\

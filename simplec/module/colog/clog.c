@@ -1,7 +1,5 @@
 ﻿#include <clog.h>
 
-#define _INT_CLOG	(2048)
-
 //
 // 一个非常简单, 非常快速单例c多线程单机日志库 clog.h
 //					by simplec wz 2017年4月26日
@@ -39,10 +37,10 @@ void cl_start(void) {
 void cl_printf(const char * fmt, ...) {
 	va_list ap;
 	size_t len;
-	char logs[_INT_CLOG];
+	char logs[_INT_LOG];
 
 	DEBUG_CODE({
-		if (!_log || !fmt || _INT_CLOG <= _INT_STULEN * 2) {
+		if (!_log || !fmt || _INT_LOG <= _INT_STULEN * 2) {
 			CERR("params log fmt is empty %p | %p.", _log, fmt);
 			return;
 		}
