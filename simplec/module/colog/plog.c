@@ -17,7 +17,7 @@ struct log {
 };
 
 struct plog {
-	FILE * volatile log;	// 写的文件句柄
+	FILE * log;				// 写的文件句柄
 	uint32_t size;			// 当前文件大小
 	char path[_UINT_PATH];	// 文件详细路径名称
 
@@ -40,8 +40,7 @@ static void _pl_end(void) {
 }
 
 // 打开新的文件系统写入
-static FILE * _pl_openfile(void) {
-	FILE * l;
+static void _pl_openfile(void) {
 	time_t t;
 	struct tm st;
 	struct timeval tv;
@@ -55,33 +54,29 @@ static FILE * _pl_openfile(void) {
 		st.tm_hour, st.tm_min, st.tm_sec, 
 		tv.tv_usec / 1000);
 
-	l = fopen(_plog.path, "ab");
-	if (NULL == l)
+	_plog.log = fopen(_plog.path, "ab");
+	if (NULL == _plog.log)
 		CERR_EXIT("fopen path ab error = %s.", _plog.path);
-	return l;
 }
 
 // 消息队列中消息对象销毁
 static inline void _die(struct log * log) {
 	fputs(log->str, _plog.log);
-	free(log); // objs_free(_plog.pool, log);
+	objs_free(_plog.pool, log);
 }
 
 // 轮询器的主体
 static void _run(struct log * log) {
 
-	/*
 	// 重新构建文件信息
 	if (_plog.size >= _UINT_PLOG) {
-		FILE * log = _plog.log;
 		_plog.size = 0;
-		_plog.log = _pl_openfile();
-		fclose(log);
+		fclose(_plog.log);
+		_pl_openfile();
 	}
 
 	// 这里打印信息
 	_plog.size += log->len;
-	*/
 
 	// 回收消息体
 	_die(log);
@@ -95,7 +90,7 @@ void
 pl_start(void) {
 	if (_plog.log) return;
 	// 构建串, 处理消息写入
-	_plog.log = _pl_openfile();
+	_pl_openfile();
 
 	// 构建对象池
 	_plog.pool = objs_create(sizeof(struct log), 0u);
@@ -127,7 +122,7 @@ pl_printf(const char * fmt, ...) {
 	va_list ap;
 
 	// 从对象池中拉内存, 填充数据
-	struct log * log = calloc(1, sizeof(struct log)); // objs_malloc(_plog.pool);
+	struct log * log = objs_malloc(_plog.pool);
 	if (NULL == log) {
 		RETURN(NIL, "objs_malloc error _plog.pool = %p.", _plog.pool);
 	}

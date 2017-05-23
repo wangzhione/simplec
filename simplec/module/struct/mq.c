@@ -76,9 +76,8 @@ _expand_queue(struct mq * mq) {
 	void ** nqueue = malloc(sizeof(void *) * cap);
 	assert(nqueue);
 	
-	if (mq->head > 0)
-		for (i = 0; i < mq->cap; ++i)
-			mq->queue[i] = mq->queue[(mq->head + i) & (mq->cap - 1)];
+	for (i = 0; i < mq->cap; ++i)
+		nqueue[i] = mq->queue[(mq->head + i) & (mq->cap - 1)];
 	
 	mq->head = 0;
 	mq->tail = mq->cap;
