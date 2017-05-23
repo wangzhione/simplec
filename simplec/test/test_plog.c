@@ -27,7 +27,7 @@ static void * _write(void * arg) {
 // 但愿跑起来带感
 //
 void test_plog(void) {
-	pthread_t th;
+	// pthread_t th;
 	// 启动 plog 日志系统
 	pl_start();
 

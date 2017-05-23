@@ -54,7 +54,6 @@ static void _pl_openfile(void) {
 		st.tm_hour, st.tm_min, st.tm_sec, 
 		tv.tv_usec / 1000);
 
-
 	_plog.log = fopen(_plog.path, "ab");
 	if (NULL == _plog.log)
 		CERR_EXIT("fopen path ab error = %s.", _plog.path);
