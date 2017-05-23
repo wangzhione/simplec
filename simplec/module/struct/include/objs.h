@@ -4,6 +4,7 @@
 #include <struct.h>
 
 typedef struct objs {
+	int			lock;	// 多线程安全
 	size_t		alloc;	// 每个对象的字节大小
 	size_t		size;   // 对象池容量
 	size_t		len;	// 当前可用对象数

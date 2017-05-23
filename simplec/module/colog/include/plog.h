@@ -4,7 +4,10 @@
 #include <schead.h>
 
 //
-// error info debug printf log  
+// plog 日志库, 相当于传统端游日志. 用到了很多套路, 但......
+//	a) 日志分级 b) 消息队列 c) 并发安全 d) 规则构建 e) 线程轮询 f) 对象缓存
+// 
+// Simple is best, but this is complicated.
 //
 #define PL_ERROR(fmt,	...)	PL_PRINTF("[ERROR]",	fmt, ##__VA_ARGS__)
 #define PL_INFO( fmt,	...)	PL_PRINTF( "[INFO]",	fmt, ##__VA_ARGS__)

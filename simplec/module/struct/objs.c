@@ -1,4 +1,5 @@
 ﻿#include <objs.h>
+#include <scatom.h>
 
 // 默认对象池大小
 #define _UINT_SIZE		(128u)
@@ -18,7 +19,7 @@ objs_create(size_t alloc, size_t size) {
 	p = malloc(sizeof(struct objs) + sizeof(void *) * size);
 	if (NULL == p)
 		RETURN(NULL, "malloc struct objsvoid * error size = %zd.", size);
-
+	p->lock = 0;
 	p->size = size;
 	p->alloc = alloc;
 	p->len = 0u;
@@ -34,11 +35,9 @@ objs_create(size_t alloc, size_t size) {
 void 
 objs_delete(objs_t pool) {
 	if (pool) {
-		if (pool->as) {
-			size_t i = 0;
-			while (i < pool->len)
-				free(pool->as[i++]);
-		}
+		size_t i = 0;
+		while (i < pool->len)
+			free(pool->as[i++]);
 		free(pool);
 	}
 }
@@ -48,11 +47,18 @@ objs_delete(objs_t pool) {
 // pool		: 对象池对象
 // return	: void
 //
-inline void * 
+void * 
 objs_malloc(objs_t pool) {
+	void * node;
+
+	ATOM_LOCK(pool->lock);
 	if (pool->len <= 0)
-		return calloc(1, pool->alloc);
-	return pool->as[--pool->len];
+		node = calloc(1, pool->alloc);
+	else 
+		node = pool->as[--pool->len];
+	ATOM_UNLOCK(pool->lock);
+
+	return node;
 }
 
 //
@@ -62,10 +68,13 @@ objs_malloc(objs_t pool) {
 //
 void 
 objs_free(objs_t pool, void * obj) {
+
+	ATOM_LOCK(pool->lock);
 	if (pool->len >= pool->size)
 		free(obj);
 	else {
 		pool->as[pool->len++] = obj;
 		memset(obj, 0, pool->alloc);
 	}
+	ATOM_UNLOCK(pool->lock);
 }

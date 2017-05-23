@@ -4,30 +4,25 @@
     <Filter Include="config">
       <UniqueIdentifier>{71564f16-7341-4c46-a998-4c949d98a41c}</UniqueIdentifier>
     </Filter>
-	
     <Filter Include="main">
       <UniqueIdentifier>{948a31f4-2226-44f0-963a-ff8da72412b1}</UniqueIdentifier>
     </Filter>
-	
     <Filter Include="main\body">
       <UniqueIdentifier>{cc5d048e-628f-43f8-8341-29f91e7ad1df}</UniqueIdentifier>
     </Filter>
     <Filter Include="main\body\include">
       <UniqueIdentifier>{438e9db4-0f47-4984-8dfd-538cea24f781}</UniqueIdentifier>
     </Filter>
-	
     <Filter Include="module">
       <UniqueIdentifier>{c1b1b41e-c0f0-4d91-86d1-0736e03c0094}</UniqueIdentifier>
     </Filter>
-	
     <Filter Include="module\colog">
       <UniqueIdentifier>{6feaf2bd-05ad-4bdf-b7d3-53e35cb313bb}</UniqueIdentifier>
     </Filter>
     <Filter Include="module\colog\include">
       <UniqueIdentifier>{57f37278-f396-4a2d-8dc1-a5955ae40220}</UniqueIdentifier>
-    </Filter>	
-	
-	<Filter Include="module\iconv">
+    </Filter>
+    <Filter Include="module\iconv">
       <UniqueIdentifier>{2a5a17b0-0bec-486a-8e99-0475c6831479}</UniqueIdentifier>
     </Filter>
     <Filter Include="module\iconv\include">
@@ -36,7 +31,6 @@
     <Filter Include="module\iconv\lib">
       <UniqueIdentifier>{7f8e5bcc-3d1f-453e-9e1c-311b6ee7b5fc}</UniqueIdentifier>
     </Filter>
-	
     <Filter Include="module\pthread">
       <UniqueIdentifier>{1a929f90-b5f6-4bf2-b173-2341e60141d4}</UniqueIdentifier>
     </Filter>
@@ -49,7 +43,7 @@
     <Filter Include="module\pthread\dll">
       <UniqueIdentifier>{e4c40e38-d095-4705-a03e-b607f628d014}</UniqueIdentifier>
     </Filter>
-	<Filter Include="module\pthread\lib\x64">
+    <Filter Include="module\pthread\lib\x64">
       <UniqueIdentifier>{329098b0-fd9a-4da7-82f2-13b5b343d4b1}</UniqueIdentifier>
     </Filter>
     <Filter Include="module\pthread\lib\x86">
@@ -61,36 +55,30 @@
     <Filter Include="module\pthread\dll\x64">
       <UniqueIdentifier>{dad9ac84-3808-4eb5-8063-e3da95d6d6b4}</UniqueIdentifier>
     </Filter>
-	
     <Filter Include="module\schead">
       <UniqueIdentifier>{33ae7044-0f3c-476c-a57b-be7ced640c47}</UniqueIdentifier>
     </Filter>
     <Filter Include="module\schead\include">
       <UniqueIdentifier>{9a09284b-de95-42c0-b92d-c8f150af68dd}</UniqueIdentifier>
     </Filter>
-	
-	<Filter Include="module\service">
+    <Filter Include="module\service">
       <UniqueIdentifier>{70af93cc-dd8e-40c5-9705-ef92a21272a7}</UniqueIdentifier>
     </Filter>
     <Filter Include="module\service\include">
       <UniqueIdentifier>{6dec71ab-4ff0-4c88-9a77-4c03f9464f8a}</UniqueIdentifier>
     </Filter>
-	
     <Filter Include="module\struct">
       <UniqueIdentifier>{b2dced53-50ba-42f7-97d9-9c36eae0dbf7}</UniqueIdentifier>
     </Filter>
     <Filter Include="module\struct\include">
       <UniqueIdentifier>{4e25cee8-b538-48f4-81ab-d88193897ca3}</UniqueIdentifier>
     </Filter>
-
-	<Filter Include="readme">
+    <Filter Include="readme">
       <UniqueIdentifier>{057af551-5272-4222-85e4-edb5bdef1073}</UniqueIdentifier>
     </Filter>
-	
     <Filter Include="test">
       <UniqueIdentifier>{a4d7c9bb-6864-455f-ac0b-de5ac8b669c0}</UniqueIdentifier>
     </Filter>
-	
     <Filter Include="test\config">
       <UniqueIdentifier>{6ff1be27-7c73-46e4-ad84-0a5e6d0fefee}</UniqueIdentifier>
     </Filter>
@@ -230,6 +218,9 @@
     </ClCompile>
     <ClCompile Include="module\colog\plog.c">
       <Filter>module\colog</Filter>
+    </ClCompile>
+    <ClCompile Include="test\test_plog.c">
+      <Filter>test</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

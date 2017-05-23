@@ -66,7 +66,7 @@ extern int getch(void);
 	#error "error : Currently only supports the Visual Studio and GCC!"
 #endif
 
-#if !defined(_H_CSTR_HELLP)
+#if !defined(_H_LOG_HELP)
 
 //
 // 所有日志相对路径目录, 如果不需要需要配置成""
@@ -75,14 +75,14 @@ extern int getch(void);
 // _INT_PATH	- 日志路径大小
 //
 #define _STR_LOGDIR		"logs"
-#define _INT_LOG		(2048)
-#define _INT_PATH		(256)
+#define _UINT_LOG		(2048u)
+#define _UINT_PATH		(256u)
 
  // 添加双引号的宏 
 #define CSTR(a)	_STR(a)
 #define _STR(a) #a
 
-#define _H_CSTR_HELLP
+#define _H_LOG_HELP
 #endif
 
 /* 栈上辅助操作宏 */

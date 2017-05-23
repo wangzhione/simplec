@@ -198,7 +198,7 @@ int
 sl_printf(const char * format, ...) {
 	int len;
 	va_list ap;
-	char logs[_INT_LOG]; //这个不是一个好的设计,最新c 中支持 int a[n];
+	char logs[_UINT_LOG]; //这个不是一个好的设计,最新c 中支持 int a[n];
 	stime_t tstr;
 	
 	// 从性能方面优化试试
