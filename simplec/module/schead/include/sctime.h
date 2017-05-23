@@ -41,7 +41,7 @@ extern int gettimeofday(struct timeval * tv, void * tz);
 #define _INT_MONOFFSET		(1)
 
 // 定义时间串类型
-#define _INT_STULEN			(32)
+#define _INT_STULEN			(64)
 typedef char stime_t[_INT_STULEN];
 
 /*

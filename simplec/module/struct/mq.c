@@ -72,21 +72,18 @@ mq_delete(mq_t mq) {
 // add two cap memory, memory is do not have assert
 static void
 _expand_queue(struct mq * mq) {
-	int i, j, cap = mq->cap << 1;
-	void ** nqueue = realloc(mq->queue, sizeof(void *) * cap);
+	int i, cap = mq->cap << 1;
+	void ** nqueue = malloc(sizeof(void *) * cap);
 	assert(nqueue);
 	
-	// 开始移动内存位置
-	for (i = 0; i < mq->head; ++i) {
-		void * tmp = mq->queue[i];
-		for (j = i; j < mq->cap; j += mq->head) 
-			mq->queue[j] = mq->queue[(mq->head + j) & (mq->cap - 1)];
-		mq->queue[j & (mq->cap - 1)] = tmp;
-	}
+	if (mq->head > 0)
+		for (i = 0; i < mq->cap; ++i)
+			mq->queue[i] = mq->queue[(mq->head + i) & (mq->cap - 1)];
 	
 	mq->head = 0;
 	mq->tail = mq->cap;
 	mq->cap  = cap;
+	free(mq->queue);
 	mq->queue = nqueue;
 }
 

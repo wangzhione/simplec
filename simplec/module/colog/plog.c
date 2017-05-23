@@ -7,10 +7,10 @@
 // _UINT_PLOG		初始化16MB, 就重新构建日志文件
 // _STR_PLOG_NAME	logs/simplec_[2016-7-10 22:38:34 500].log
 //
-#define _UINT_PLOG			(1u << 5)
+#define _UINT_PLOG			(1u << 24)
 #define _STR_PLOG_NAME		_STR_LOGDIR "/simplec-%04d%02d%02d-%02d%02d%02d-%03d.log"
 
-// 写的日志内容
+// 写的日志内容, 写小日志
 struct log {
 	size_t len;
 	char str[_UINT_LOG];
@@ -40,7 +40,8 @@ static void _pl_end(void) {
 }
 
 // 打开新的文件系统写入
-static void _pl_openfile(void) {
+static FILE * _pl_openfile(void) {
+	FILE * l;
 	time_t t;
 	struct tm st;
 	struct timeval tv;
@@ -54,29 +55,33 @@ static void _pl_openfile(void) {
 		st.tm_hour, st.tm_min, st.tm_sec, 
 		tv.tv_usec / 1000);
 
-	_plog.log = fopen(_plog.path, "ab");
-	if (NULL == _plog.log)
+	l = fopen(_plog.path, "ab");
+	if (NULL == l)
 		CERR_EXIT("fopen path ab error = %s.", _plog.path);
+	return l;
 }
 
 // 消息队列中消息对象销毁
 static inline void _die(struct log * log) {
 	fputs(log->str, _plog.log);
-	objs_free(_plog.pool, log);
+	free(log); // objs_free(_plog.pool, log);
 }
 
 // 轮询器的主体
 static void _run(struct log * log) {
 
+	/*
 	// 重新构建文件信息
 	if (_plog.size >= _UINT_PLOG) {
+		FILE * log = _plog.log;
 		_plog.size = 0;
-		fclose(_plog.log);
-		_pl_openfile();
+		_plog.log = _pl_openfile();
+		fclose(log);
 	}
 
 	// 这里打印信息
 	_plog.size += log->len;
+	*/
 
 	// 回收消息体
 	_die(log);
@@ -90,10 +95,10 @@ void
 pl_start(void) {
 	if (_plog.log) return;
 	// 构建串, 处理消息写入
-	_pl_openfile();
+	_plog.log = _pl_openfile();
 
 	// 构建对象池
-	_plog.pool = objs_create(sizeof(struct log), 0);
+	_plog.pool = objs_create(sizeof(struct log), 0u);
 	if (NULL == _plog.pool) {
 		fclose(_plog.log);
 		CERR_EXIT("objs_create _plog.pool is error = 4 + %u.", _UINT_LOG);
@@ -122,7 +127,7 @@ pl_printf(const char * fmt, ...) {
 	va_list ap;
 
 	// 从对象池中拉内存, 填充数据
-	struct log * log = objs_malloc(_plog.pool);
+	struct log * log = calloc(1, sizeof(struct log)); // objs_malloc(_plog.pool);
 	if (NULL == log) {
 		RETURN(NIL, "objs_malloc error _plog.pool = %p.", _plog.pool);
 	}
