@@ -99,9 +99,6 @@
     <ClCompile Include="module\service\sctimer.c">
       <Filter>module\service</Filter>
     </ClCompile>
-    <ClCompile Include="module\service\scpthread.c">
-      <Filter>module\service</Filter>
-    </ClCompile>
     <ClCompile Include="test\test_atom_rwlock.c">
       <Filter>test</Filter>
     </ClCompile>
@@ -115,9 +112,6 @@
       <Filter>test</Filter>
     </ClCompile>
     <ClCompile Include="test\test_scconf.c">
-      <Filter>test</Filter>
-    </ClCompile>
-    <ClCompile Include="test\test_scpthread.c">
       <Filter>test</Filter>
     </ClCompile>
     <ClCompile Include="test\test_sctimer.c">
@@ -222,6 +216,12 @@
     <ClCompile Include="test\test_plog.c">
       <Filter>test</Filter>
     </ClCompile>
+    <ClCompile Include="module\service\scthreads.c">
+      <Filter>module\service</Filter>
+    </ClCompile>
+    <ClCompile Include="test\test_scthreads.c">
+      <Filter>test</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="module\pthread\include\pthread.h">
@@ -249,9 +249,6 @@
       <Filter>module\schead\include</Filter>
     </ClInclude>
     <ClInclude Include="module\service\include\sctimer.h">
-      <Filter>module\service\include</Filter>
-    </ClInclude>
-    <ClInclude Include="module\service\include\scpthread.h">
       <Filter>module\service\include</Filter>
     </ClInclude>
     <ClInclude Include="module\schead\include\scalloc.h">
@@ -316,6 +313,9 @@
     </ClInclude>
     <ClInclude Include="module\colog\include\plog.h">
       <Filter>module\colog\include</Filter>
+    </ClInclude>
+    <ClInclude Include="module\service\include\scthreads.h">
+      <Filter>module\service\include</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

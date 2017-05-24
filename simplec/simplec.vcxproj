@@ -34,8 +34,8 @@
     <ClCompile Include="module\schead\sctime.c" />
     <ClCompile Include="module\schead\scurl.c" />
     <ClCompile Include="module\service\scoroutine.c" />
-    <ClCompile Include="module\service\scpthread.c" />
     <ClCompile Include="module\service\scrunloop.c" />
+    <ClCompile Include="module\service\scthreads.c" />
     <ClCompile Include="module\service\sctimer.c" />
     <ClCompile Include="module\struct\array.c" />
     <ClCompile Include="module\struct\list.c" />
@@ -58,8 +58,8 @@
     <ClCompile Include="test\test_scconf.c" />
     <ClCompile Include="test\test_sciconv.c" />
     <ClCompile Include="test\test_scoroutine.c" />
-    <ClCompile Include="test\test_scpthread.c" />
     <ClCompile Include="test\test_scrunloop.c" />
+    <ClCompile Include="test\test_scthreads.c" />
     <ClCompile Include="test\test_sctimer.c" />
     <ClCompile Include="test\test_sctimeutil.c" />
     <ClCompile Include="test\test_scurl.c" />
@@ -87,8 +87,8 @@
     <ClInclude Include="module\service\include\scoroutine$linux.h" />
     <ClInclude Include="module\service\include\scoroutine$winds.h" />
     <ClInclude Include="module\service\include\scoroutine.h" />
-    <ClInclude Include="module\service\include\scpthread.h" />
     <ClInclude Include="module\service\include\scrunloop.h" />
+    <ClInclude Include="module\service\include\scthreads.h" />
     <ClInclude Include="module\service\include\sctimer.h" />
     <ClInclude Include="module\struct\include\array.h" />
     <ClInclude Include="module\struct\include\list.h" />
@@ -138,7 +138,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
     <UseOfMfc>false</UseOfMfc>
