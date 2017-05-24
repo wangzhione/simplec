@@ -153,7 +153,9 @@ inline char *
 stu_gettstr(time_t nt, stime_t tstr) {
 	struct tm st;
 	localtime_r(&nt, &st);
-	strftime(tstr, sizeof(stime_t), "%F %X", &st);
+	snprintf(tstr, sizeof(stime_t), _STR_TIME,
+			st.tm_year + _INT_YEAROFFSET, st.tm_mon + _INT_MONOFFSET, st.tm_mday,
+			st.tm_hour, st.tm_min, st.tm_sec);
 	return tstr;
 }
 
@@ -208,13 +210,35 @@ size_t
 stu_getmstr(stime_t tstr) {
 	time_t t;
 	struct tm st;
-	size_t len, tlen;
 	struct timeval tv;
 
 	gettimeofday(&tv, NULL);
 	t = tv.tv_sec;
 	localtime_r(&t, &st);
-	len = strftime(tstr, sizeof(stime_t), "%F %X", &st);
-	tlen = snprintf(tstr + len, sizeof(stime_t) - len, " %ld", tv.tv_usec / 1000);
-	return len + tlen;
+	return snprintf(tstr, sizeof(stime_t), _STR_MTIME,
+					st.tm_year + _INT_YEAROFFSET, st.tm_mon + _INT_MONOFFSET, st.tm_mday,
+					st.tm_hour, st.tm_min, st.tm_sec,
+					tv.tv_usec / 1000);
+}
+
+//
+// stu_getmstrn - 得到毫秒的串, 每个中间分隔符都是fmt[idx]
+// buf		: 保存最终结果的串
+// len		: 当前buf串长度
+// fmt		: 输出格式串例如 -> "simplec-%04d%02d%02d-%02d%02d%02d-%03ld.log"
+// return	: 返回当前串长度
+//
+size_t 
+stu_getmstrn(char buf[], size_t len, const char * const fmt) {
+	time_t t;
+	struct tm st;
+	struct timeval tv;
+
+	gettimeofday(&tv, NULL);
+	t = tv.tv_sec;
+	localtime_r(&t, &st);
+	return snprintf(buf, len, fmt,
+					st.tm_year + _INT_YEAROFFSET, st.tm_mon + _INT_MONOFFSET, st.tm_mday,
+					st.tm_hour, st.tm_min, st.tm_sec,
+					tv.tv_usec / 1000);
 }

@@ -77,6 +77,7 @@ extern int getch(void);
 #define _STR_LOGDIR		"logs"
 #define _UINT_LOG		(2048u)
 #define _UINT_PATH		(256u)
+#define _STR_LOGTIME	"[" _STR_MTIME "]"
 
  // 添加双引号的宏 
 #define CSTR(a)	_STR(a)

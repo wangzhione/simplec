@@ -179,17 +179,17 @@ sl_start(void) {
 *	获取日志信息体的时间串,返回NULL表示没有初始化
 **/
 static const char * _sl_gettimes(void) {
-	struct timeval et; //记录时间
 	unsigned td;
+	struct timeval et; //记录时间
 
-	struct slinfo* pl = pthread_getspecific(_slmain.key);
+	struct slinfo * pl = pthread_getspecific(_slmain.key);
 	if (NULL == pl) //返回NULL表示没有找见
 		return NULL;
 
 	gettimeofday(&et, NULL);
 	//同一用微秒记
 	td = 1000000 * (et.tv_sec - pl->timev.tv_sec) + et.tv_usec - pl->timev.tv_usec;
-	snprintf(pl->times, LEN(pl->times), "%u", td);
+	snprintf(pl->times, sizeof(pl->times), "%u", td);
 
 	return pl->times;
 }
@@ -197,8 +197,8 @@ static const char * _sl_gettimes(void) {
 int
 sl_printf(const char * format, ...) {
 	int len;
+	char str[_UINT_LOG]; //这个不是一个好的设计,最新c 中支持 int a[n];
 	va_list ap;
-	char logs[_UINT_LOG]; //这个不是一个好的设计,最新c 中支持 int a[n];
 	stime_t tstr;
 	
 	// 从性能方面优化试试
@@ -211,17 +211,18 @@ sl_printf(const char * format, ...) {
 
 	//初始化时间参数
 	stu_getntstr(tstr);
-	len = snprintf(logs, LEN(logs), "[%s %s]", tstr, _sl_gettimes());
+	len = snprintf(str, sizeof(str), "[%s %s]", tstr, _sl_gettimes());
+
 	va_start(ap, format);
-	vsnprintf(logs + len, LEN(logs) - len, format, ap);
+	vsnprintf(str + len, sizeof(str) - len, format, ap);
 	va_end(ap);
 
 	// 写普通文件 log
-	fputs(logs, _slmain.log); //把锁机制去掉了,fputs就是线程安全的
+	fputs(str, _slmain.log); //把锁机制去掉了,fputs就是线程安全的
 
 							  // 写警告文件 wf
 	if (format[1] == 'F' || format[1] == 'W') //当为FATAL或WARNING需要些写入到警告文件中
-		fputs(logs, _slmain.wf);
+		fputs(str, _slmain.wf);
 
 	return Success_Base;
 }

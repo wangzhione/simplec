@@ -37,19 +37,16 @@ void cl_start(void) {
 void cl_printf(const char * fmt, ...) {
 	va_list ap;
 	size_t len;
-	char logs[_UINT_LOG];
+	char str[_UINT_LOG];
 
-	// 得到时间串并返回长度 [2016-7-10 22:38:34 1000]
-	logs[0] = '[';
-	len = stu_getmstr(logs + 1);
-	logs[len + 1] = ']';
-	len += 2;
+	// 串:得到时间串并返回长度 [2016-07-10 22:38:34 999]
+	len = stu_getmstrn(str, sizeof(str), _STR_LOGTIME);
 
 	// 开始数据填充
 	va_start(ap, fmt);
-	vsnprintf(logs + len, LEN(logs) - len, fmt, ap);
+	vsnprintf(str + len, sizeof(str) - len, fmt, ap);
 	va_end(ap);
 	
 	// 下数据到文本中
-	fputs(logs, _log);
+	fputs(str, _log);
 }

@@ -44,6 +44,10 @@ extern int gettimeofday(struct timeval * tv, void * tz);
 #define _INT_STULEN			(64)
 typedef char stime_t[_INT_STULEN];
 
+// 定义时间串格式
+#define _STR_TIME			"%04d-%02d-%02d %02d:%02d:%02d"
+#define _STR_MTIME			"%04d-%02d-%02d %02d:%02d:%02d %03ld"
+
 /*
  * 将 [2016-7-10 21:22:34] 格式字符串转成时间戳
  * tstr	: 时间串分隔符只能是单字节的.
@@ -106,5 +110,14 @@ extern bool stu_sisweek(stime_t ls, stime_t rs);
 // return	: 返回当前串长度
 //
 extern size_t stu_getmstr(stime_t tstr);
+
+//
+// stu_getmstrn - 得到毫秒的串, 每个中间分隔符都是fmt[idx]
+// buf		: 保存最终结果的串
+// len		: 当前buf串长度
+// fmt		: 输出格式串例如 -> "simplec-%04d%02d%02d-%02d%02d%02d-%03ld.log"
+// return	: 返回当前串长度
+//
+extern size_t stu_getmstrn(char buf[], size_t len, const char * const fmt);
 
 #endif // !_H_SIMPLEC_SCTIMEUTIL

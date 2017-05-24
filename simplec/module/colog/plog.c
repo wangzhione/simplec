@@ -40,23 +40,18 @@ static void _pl_end(void) {
 }
 
 // 打开新的文件系统写入
-static void _pl_openfile(void) {
-	time_t t;
-	struct tm st;
-	struct timeval tv;
+static void _openfile(void) {
+	FILE * log;
 
-	// 构建时间串
-	gettimeofday(&tv, NULL);
-	t = tv.tv_sec;
-	localtime_r(&t, &st);
-	snprintf(_plog.path, _UINT_PATH, _STR_PLOG_NAME,
-		st.tm_year + _INT_YEAROFFSET, st.tm_mon + _INT_MONOFFSET, st.tm_mday,
-		st.tm_hour, st.tm_min, st.tm_sec, 
-		tv.tv_usec / 1000);
-
-	_plog.log = fopen(_plog.path, "ab");
-	if (NULL == _plog.log)
-		CERR_EXIT("fopen path ab error = %s.", _plog.path);
+	stu_getmstrn(_plog.path, sizeof(_plog.path), _STR_PLOG_NAME);
+	log = fopen(_plog.path, "ab");
+	
+	if (NULL == log) {
+		if(NULL == _plog.log)
+			CERR_EXIT("fopen path ab error = %s.", _plog.path);
+		fclose(_plog.log);
+	}
+	_plog.log = log;
 }
 
 // 消息队列中消息对象销毁
@@ -71,8 +66,7 @@ static void _run(struct log * log) {
 	// 重新构建文件信息
 	if (_plog.size >= _UINT_PLOG) {
 		_plog.size = 0;
-		fclose(_plog.log);
-		_pl_openfile();
+		_openfile();
 	}
 
 	// 这里打印信息
@@ -89,8 +83,7 @@ static void _run(struct log * log) {
 void
 pl_start(void) {
 	if (_plog.log) return;
-	// 构建串, 处理消息写入
-	_pl_openfile();
+	_openfile();
 
 	// 构建对象池
 	_plog.pool = objs_create(sizeof(struct log), 0u);
@@ -127,15 +120,12 @@ pl_printf(const char * fmt, ...) {
 		RETURN(NIL, "objs_malloc error _plog.pool = %p.", _plog.pool);
 	}
 
-	// 串:得到时间串并返回长度 [2016-7-10 22:38:34 1000]
-	log->str[0] = '[';
-	log->len = stu_getmstr(log->str + 1);
-	log->str[log->len + 1] = ']';
-	log->len += 2;
+	// 串:得到时间串并返回长度 [2016-07-10 22:38:34 999]
+	log->len = stu_getmstrn(log->str, sizeof(log->str), _STR_LOGTIME);
 
 	// 串:开始数据填充
 	va_start(ap, fmt);
-	log->len += vsnprintf(log->str + log->len, LEN(log->str) - log->len, fmt, ap);
+	log->len += vsnprintf(log->str + log->len, sizeof(log->str) - log->len, fmt, ap);
 	va_end(ap);
 
 	// 串:压入

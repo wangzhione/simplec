@@ -25,9 +25,9 @@ int main(int argc, char * argv[]) {
 	cl_start();
 
 	// stderr 错误信息重定位, 需要在日志系统启动之后
-	errlog = freopen(_STR_STDERRLOG, "wb", stderr);
+	errlog = freopen(_STR_STDERRLOG, "ab", stderr);
 	if (NULL == errlog) {
-		CERR("freopen wb " _STR_STDERRLOG " is error!");
+		CERR("freopen ab " _STR_STDERRLOG " is error!");
 		exit(EXIT_FAILURE);
 	}
 	// 启动基础配置系统, 并得到配置的单例对象
