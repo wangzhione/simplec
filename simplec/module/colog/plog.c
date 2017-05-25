@@ -5,10 +5,8 @@
 
 //
 // _UINT_PLOG		初始化16MB, 就重新构建日志文件
-// _STR_PLOG_NAME	logs/simplec_[2016-7-10 22:38:34 500].log
 //
 #define _UINT_PLOG			(1u << 24)
-#define _STR_PLOG_NAME		_STR_LOGDIR "/simplec-%04d%02d%02d-%02d%02d%02d-%03d.log"
 
 // 写的日志内容, 写小日志
 struct log {

@@ -3,6 +3,10 @@
 
 #include <schead.h>
 
+#ifndef _STR_PLOG_NAME
+#define _STR_PLOG_NAME		_STR_LOGDIR "/simplec-%04d%02d%02d-%02d%02d%02d-%03d.log"
+#endif // !_STR_PLOG_NAME
+
 //
 // plog 日志库, 相当于传统端游日志. 用到了很多套路, 但......
 //	a) 日志分级 b) 消息队列 c) 并发安全 d) 规则构建 e) 线程轮询 f) 对象缓存

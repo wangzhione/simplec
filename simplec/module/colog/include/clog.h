@@ -3,6 +3,10 @@
 
 #include <schead.h>
 
+#ifndef _STR_CLOG_NAME
+#define _STR_CLOG_NAME	_STR_LOGDIR "/simplec.log"
+#endif // !_STR_CLOG_NAME
+
 //
 // error info debug printf log  
 //
@@ -35,7 +39,6 @@ void cl_printf(const char * fmt, ...);
 // cl_start - 开启单机日志库
 // return	: void
 //
-#define _STR_CLOG_NAME	_STR_LOGDIR "/simplec.log"
 extern void cl_start(void);
 
 #endif // !_H_SIMPLEC_CLOG
