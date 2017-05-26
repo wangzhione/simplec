@@ -115,8 +115,10 @@
 //
 #if defined(_MSC_VER)
 #pragma comment(lib,  "pthreadVC2.lib")
+#if !defined(_WIN62)
 #pragma comment(lib, "pthreadVCE2.lib")
 #pragma comment(lib, "pthreadVSE2.lib")
+#endif
 #endif
 
 /*

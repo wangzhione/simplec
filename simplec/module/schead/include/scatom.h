@@ -15,6 +15,7 @@
 
 #include <Windows.h>
 
+#pragma warning(push)
 //忽略 warning C4047: “==”:“void *”与“LONG”的间接级别不同
 #pragma warning(disable:4047) 
 
@@ -35,6 +36,8 @@
  * long tmp = v ; v == c ? v = a : ; return tmp;
  */
 #define ATOM_FETCH_CMP(v, c, a) InterlockedCompareExchange((LONG volatile *)&(v), (LONG)(a), (LONG)(c))
+
+#pragma warning(pop)
 
 #define ATOM_LOCK(v) \
 	while(ATOM_SET(v, 1)) \
