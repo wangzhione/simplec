@@ -26,7 +26,7 @@ void test_scthreads(void) {
 	//创建线程池
 	threads_t pool = threads_create();
 
-	thread_run(_run, test_scthreads);
+	async_run(_run, test_scthreads);
 
 	//添加任务到线程池中
 	for (i = 0; i<_INT_THS; ++i) {

@@ -8,21 +8,21 @@ struct func {
 };
 
 // thread_run 中 pthread 执行的实体
-static void * _thread_run(void * arg) {
+static void * _run(void * arg) {
 	struct func * func = arg;
 	func->run(func->arg);
-	free(func);
+	free(arg);
 	return NULL;
 }
 
 //
-// thread_run - 开启一个自销毁的线程 运行 run
+// async_run - 开启一个自销毁的线程 运行 run
 // run		: 运行的主体
 // arg		: run的参数
 // return	: >= Success_Base 表示成功
 //
 int 
-thread_run(die_f run, void * arg) {
+async_run(die_f run, void * arg) {
 	pthread_t tid;
 	pthread_attr_t attr;
 	struct func * func = malloc(sizeof(struct func));
@@ -36,7 +36,7 @@ thread_run(die_f run, void * arg) {
 	pthread_attr_init(&attr);
 	pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
 	
-	if (pthread_create(&tid, &attr, _thread_run, func) < 0) {
+	if (pthread_create(&tid, &attr, _run, func) < 0) {
 		free(func);
 		pthread_attr_destroy(&attr);
 		RETURN(Error_Base, "pthread_create error run, arg = %p | %p.", run, arg);
