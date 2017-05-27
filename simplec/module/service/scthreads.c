@@ -247,8 +247,8 @@ static void * _consumer(void * arg) {
 		}
 
 		// job 已经为empty , 开启线程等待
-		++pool->idle;
 		thrd->wait = true;
+		++pool->idle;
 
 		// 开启等待, 直到线程被激活
 		status = pthread_cond_wait(cond, mutx);
@@ -256,8 +256,8 @@ static void * _consumer(void * arg) {
 			CERR("pthread_cond_wait error status = %d.", status);
 			break;
 		}
-		--pool->idle;
 		thrd->wait = false;
+		--pool->idle;
 	}
 
 	// 到这里程序出现异常, 线程退出中, 先减少当前线程
@@ -298,9 +298,8 @@ threads_add(threads_t pool, die_f run, void * arg) {
 		pthread_cond_t * cond = _threads_getcont(pool);
 		// 先释放锁后发送信号激活线程, 速度快, 缺点丧失线程执行优先级
 		pthread_mutex_unlock(mutx);
-		// 发送给空闲的线程
-		if(cond)
-			pthread_cond_signal(cond);
+		// 发送给空闲的线程, 这个信号量一定存在
+		pthread_cond_signal(cond);
 		return;
 	}
 
