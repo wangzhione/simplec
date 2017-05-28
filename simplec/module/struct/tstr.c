@@ -79,8 +79,7 @@ tstr_freadend(const char * path) {
 	size_t rn;
 	FILE * txt = fopen(path, "rb");
 	if (NULL == txt) {
-		CERR("fopen r %s is error!", path);
-		return NULL;
+		RETURN(NULL, "fopen r %s is error!", path);
 	}
 
 	// 分配内存
@@ -99,8 +98,7 @@ tstr_freadend(const char * path) {
 	// 最终错误检查
 	if (rn < 0) {
 		tstr_delete(tstr);
-		CERR("fread is error! path = %s. rn = %zu.", path, rn);
-		return NULL;
+		RETURN(NULL, "fread is error! path = %s. rn = %zu.", path, rn);
 	}
 
 	// 继续构建数据, 最后一行补充一个\0
@@ -112,14 +110,12 @@ tstr_freadend(const char * path) {
 static flag_e _tstr_fwrite(const char * path, const char * str, const char * mode) {
 	FILE * txt;
 	if (!path || !*path || !str) {
-		CERR("check !path || !*path || !str'!!!");
-		return Error_Param;
+		RETURN(Error_Param, "check !path || !*path || !str'!!!");
 	}
 
 	// 打开文件, 写入消息, 关闭文件
 	if ((txt = fopen(path, mode)) == NULL) {
-		CERR("fopen mode = '%s', path = '%s' error!", mode, path);
-		return Error_Fd;
+		RETURN(Error_Fd, "fopen mode = '%s', path = '%s' error!", mode, path);
 	}
 	fputs(str, txt);
 	fclose(txt);
@@ -208,7 +204,7 @@ static void _tstr_realloc(tstr_t tstr, size_t len) {
 inline void 
 tstr_appendc(tstr_t tstr, int c) {
 	// 这类函数不做安全检查, 为了性能
-	_tstr_realloc(tstr, ++tstr->len);
+	tstr_expand(tstr, 1);
 	tstr->str[tstr->len - 1] = c;
 }
 
@@ -216,8 +212,7 @@ void
 tstr_appends(tstr_t tstr, const char * str) {
 	size_t len;
 	if (!tstr || !str) {
-		CERR("check '!tstr || !str' param is error!");
-		return;
+		RETURN(NIL, "check '!tstr || !str' param is error!");
 	}
 
 	len = strlen(str);
@@ -228,8 +223,36 @@ tstr_appends(tstr_t tstr, const char * str) {
 
 inline void 
 tstr_appendn(tstr_t tstr, const char * str, size_t sz) {
-	_tstr_realloc(tstr, tstr->len += sz);
+	tstr_expand(tstr, sz);
 	memcpy(tstr->str + tstr->len - sz, str, sz);
+}
+
+//
+// tstr_popup - 从字符串头弹出len长度字符
+// tstr		: 可变字符串
+// len		: 弹出的长度
+// return	: void
+//
+inline void 
+tstr_popup(tstr_t tstr, size_t len) {
+	if (len > tstr->len)
+		tstr->len = 0;
+	else {
+		tstr->len -= len;
+		memmove(tstr->str, tstr->str + len, tstr->len);
+	}
+}
+
+//
+// tstr_expand - 为当前字符串扩容, 属于低级api
+// tstr		: 可变字符串
+// len		: 扩容的长度
+// return	: void
+//
+inline void
+tstr_expand(tstr_t tstr, size_t len) {
+	tstr->len += len;
+	_tstr_realloc(tstr, tstr->len);
 }
 
 //

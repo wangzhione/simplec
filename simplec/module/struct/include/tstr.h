@@ -96,6 +96,22 @@ extern void tstr_appends(tstr_t tstr, const char * str);
 extern void tstr_appendn(tstr_t tstr, const char * str, size_t sz);
 
 //
+// tstr_popup - 从字符串头弹出len长度字符
+// tstr		: 可变字符串
+// len		: 弹出的长度
+// return	: void
+//
+extern void tstr_popup(tstr_t tstr, size_t len);
+
+//
+// tstr_expand - 为当前字符串扩容, 属于低级api
+// tstr		: 可变字符串
+// len		: 扩容的长度
+// return	: void
+//
+extern void tstr_expand(tstr_t tstr, size_t len);
+
+//
 // 得到一个精简的c的串, 需要自己事后free
 // tstr		: tstr_t 串
 // return	: 返回创建好的c串
