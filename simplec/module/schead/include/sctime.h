@@ -7,7 +7,7 @@
 // 为Visual Studio导入一些和linux上优质思路
 #if defined(_MSC_VER)
 
-#include <Windows.h>
+#include <WinSock2.h>
 
 /*
  * 返回当前得到的时间结构体, 高仿linux上调用

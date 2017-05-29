@@ -13,7 +13,7 @@
 	$(ProjectDir)module/service/include				--	框架提供的辅助服务头文件文件夹
 	$(ProjectDir)module/logic/include				--	框架辅助业务模块头文件文件夹
 	$(ProjectDir)module/colog/include				--	框架辅助日志业务头文件文件夹
-
+	$(ProjectDir)module/iop/include					--	框架网络IO文件文件夹
 
 2. lib 库添加
 2.1 添加 pthread 模块lib 引用, 看 引用目录
@@ -32,8 +32,12 @@
 	x64 => $(ProjectDir)/pthread/dll/x64
 
 4. 添加部分宏 C/C++ -> 预处理器 -> 预处理器定义
+	_DEBUG
+	_HAVE_SELECT
+	WIN32_LEAN_AND_MEAN
 	_CRT_SECURE_NO_WARNINGS
 	_CRT_NONSTDC_NO_DEPRECATE
+	_WINSOCK_DEPRECATED_NO_WARNINGS
 
 5. 文件保存(文件->文件高级保存选项)直接采用UTF-8(带签名)格式保存
 	window 采用 > notepad++ convert | 安装自动转换插件
@@ -42,6 +46,10 @@
 
 6. 编译额外选项 
 	C/C++ -> 高级 -> 编译为 -> 编译为C代码
+	C/C++ -> 代码生成 -> 运行库 -> 多线程/MT
+
+	链接器 -> 系统 -> 子系统 -> 控制台
+	链接器 -> 输入 -> 附加依赖项 -> ws2_32.lib
 
 7. test 单元测试, 规则
 	文件名 test_xxxx.c -> 构建 void test_xxxx(void) 函数

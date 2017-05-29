@@ -175,8 +175,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(ProjectDir)main/body/include;$(ProjectDir)module/pthread/include;$(ProjectDir)module/schead/include;$(ProjectDir)module/struct/include;$(ProjectDir)module/service/include;$(ProjectDir)module/logic/include;$(ProjectDir)module/iconv/include;$(ProjectDir)module/colog/include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)module/pthread/lib/x86;$(ProjectDir)module/iconv/lib;;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)main/body/include;$(ProjectDir)module/pthread/include;$(ProjectDir)module/schead/include;$(ProjectDir)module/struct/include;$(ProjectDir)module/service/include;$(ProjectDir)module/logic/include;$(ProjectDir)module/iconv/include;$(ProjectDir)module/colog/include;$(ProjectDir)module/iop/include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)module/pthread/lib/x86;$(ProjectDir)module/iconv/lib;$(LibraryPath)</LibraryPath>
     <LibraryWPath>$(LibraryWPath)</LibraryWPath>
     <ReferencePath>$(ReferencePath)</ReferencePath>
     <ExecutablePath>$(ExecutablePath)</ExecutablePath>
@@ -204,7 +204,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_HAVE_SELECT;WIN32_LEAN_AND_MEAN;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;_WINSOCK_DEPRECATED_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(ProjectDir)module/pthread/dll/x86;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <CompileAs>CompileAsC</CompileAs>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -214,7 +214,7 @@
       <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
       <AdditionalOptions>/LTCG /ignore:4099 %(AdditionalOptions)</AdditionalOptions>
       <GenerateDebugInformation>DebugFastLink</GenerateDebugInformation>
@@ -237,7 +237,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_HAVE_SELECT;WIN32_LEAN_AND_MEAN;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;_WINSOCK_DEPRECATED_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <WholeProgramOptimization>true</WholeProgramOptimization>
       <CompileAs>CompileAsC</CompileAs>
@@ -251,6 +251,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <SubSystem>Console</SubSystem>
       <AdditionalOptions>/ignore:4099 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalDependencies>ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

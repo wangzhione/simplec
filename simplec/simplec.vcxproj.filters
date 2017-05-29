@@ -82,6 +82,12 @@
     <Filter Include="test\config">
       <UniqueIdentifier>{6ff1be27-7c73-46e4-ad84-0a5e6d0fefee}</UniqueIdentifier>
     </Filter>
+    <Filter Include="module\iop">
+      <UniqueIdentifier>{29c00ff9-ac39-46fa-bc2e-a7b117cfe7f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="module\iop\include">
+      <UniqueIdentifier>{a61b7112-02b8-40a1-884a-a97666f35e8c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="module\schead\schead.c">
