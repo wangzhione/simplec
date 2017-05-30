@@ -86,15 +86,17 @@ static int _iop_add_connect(iopbase_t base, uint32_t id, uint32_t events, void *
 	iop_t iop;
 	socket_t s;
 	ioptcp_t sarg = arg;
-	if (events & EV_DELETE) {
-		RETURN(Success_Base, "tcp server destroy[%s:%u].", sarg->host, sarg->port);
-	}
 
 	if (events & EV_READ) {
 		iop = base->iops + id;
 		s = socket_accept(iop->s, NULL, NULL);
 		if (INVALID_SOCKET == s) {
-			RETURN(Error_Fd, "socket_accept is error s = %"PRIu64".", (uint64_t)iop->s);
+#ifdef _MSC_VER
+			if (socket_errno == WSANOTINITIALISED)
+				return Error_Fd;
+#endif
+			RETURN(Error_Fd, "socket_accept is error s = %"PRIu64" id = %u, socket_errno = %d.",
+				(uint64_t)iop->s, id, socket_errno);
 		}
 
 		r = iop_add(base, s, EV_READ, sarg->timeout, _iop_tcp_fdispatch, NULL);
@@ -107,6 +109,7 @@ static int _iop_add_connect(iopbase_t base, uint32_t id, uint32_t events, void *
 		iop->sarg = arg;
 		sarg->fconnect(base, r, NULL);
 	}
+
 	return Success_Base;
 }
 

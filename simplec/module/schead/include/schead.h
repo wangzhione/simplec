@@ -13,10 +13,10 @@
 #ifdef __GNUC__  // 下面是依赖GCC编译器实现
 
 #include <unistd.h>
+#include <termio.h>
+#include <sys/time.h>
 #include <sys/stat.h>
 #include <sys/types.h>
-#include <sys/time.h>
-#include <termio.h>
 
 /*
  * 睡眠函数, 时间颗粒度是毫秒.

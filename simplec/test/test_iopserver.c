@@ -121,8 +121,8 @@ static void _test_echo_client(void) {
 void test_iopserver(void) {
 	int i = 1;
 
-	// 装载socket 库
-	SOCK_STARTUP();
+	// 启动 * 装载 socket 库
+	socket_start();
 
 	// 测试基础的服务器启动
 	_test_echo_server();
@@ -136,9 +136,6 @@ void test_iopserver(void) {
 
 	// 客户端和服务器雌雄同体
 	_test_echo_client();
-
-	// 卸载socket 库
-	SOCK_CLEANUP();
 
 #ifdef __GNUC__
 	exit(EXIT_SUCCESS);

@@ -18,6 +18,50 @@ typedef WSABUF iovec_t;
 #endif
 
 //
+// socket_init - 启动socket库的初始化方法
+// socket_addr - 通过ip, port 得到 ipv4 地址信息
+// 
+static inline _socket_start(void) {
+	WSACleanup();
+}
+
+inline void 
+socket_start(void) {
+#ifdef _MSC_VER
+	static bool _init;
+
+	if (!_init) {
+		WSADATA wsad;
+		WSAStartup(WINSOCK_VERSION, &wsad);
+
+		_init = true;
+		atexit(_socket_start);
+	}
+#endif
+}
+
+#define _USHORT_PORT	(1024)
+
+int 
+socket_addr(const char * ip, uint16_t port, sockaddr_t * addr) {
+	if (!ip || !*ip || port <= _USHORT_PORT || !addr)
+		RETURN(Error_Param, "check empty ip = %s, port = %hu, addr = %p.", ip, port, addr);
+
+	addr->sin_family = AF_INET;
+	addr->sin_port = htons(port);
+	addr->sin_addr.s_addr = inet_addr(ip);
+	if (addr->sin_addr.s_addr == INADDR_NONE) {
+		struct hostent * host = gethostbyname(ip);
+		if (NULL == host)
+			RETURN(Error_Param, "check ip is error = %s.", ip);
+		memcpy(&addr->sin_addr, host->h_addr_list[0], host->h_length);
+	}
+	memset(addr->sin_zero, 0, sizeof addr->sin_zero);
+
+	return Success_Base;
+}
+
+//
 // socket_stream	- 创建TCP socket
 // socket_dgram		- 创建UDP socket
 // socket_bind		- socket绑定操作
@@ -345,7 +389,9 @@ socket_connect(socket_t s, const sockaddr_t * addr) {
 inline int
 socket_connects(socket_t s, const char * ip, uint16_t port) {
 	sockaddr_t addr;
-	SOCKADDR_IN(addr, ip, port);
+	int r = socket_addr(ip, port, &addr);
+	if (r < Success_Base)
+		return r;
 	return socket_connect(s, &addr);
 }
 
@@ -408,7 +454,7 @@ socket_connecto(socket_t s, const sockaddr_t * addr, int ms) {
 __return:
 	socket_set_block(s);
 	return r;
-	}
+}
 
 socket_t
 socket_connectos(const char * host, uint16_t port, int ms) {
@@ -420,7 +466,9 @@ socket_connectos(const char * host, uint16_t port, int ms) {
 	}
 
 	// 构建ip地址
-	SOCKADDR_IN(addr, host, port);
+	r = socket_addr(host, port, &addr);
+	if (r < Success_Base)
+		return r;
 
 	r = socket_connecto(s, &addr, ms);
 	if (r < Success_Base) {
