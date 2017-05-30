@@ -4,7 +4,6 @@
 #include <struct.h>
 
 #ifndef _STRUCT_TSTR
-#define _STRUCT_TSTR
 
 struct tstr {
 	char * str;			// 字符串实际保存的内容
@@ -15,13 +14,14 @@ struct tstr {
 // 定义的字符串类型
 typedef struct tstr * tstr_t;
 
-#endif  // !_STRUCT_TSTR
+#define _STRUCT_TSTR
+#endif
 
 //文本串栈上创建内容,不想用那些技巧了,就这样吧
 #define TSTR_CREATE(var) \
-	struct tstr $__##var = { NULL }, * var = &$__##var;
+	struct tstr var[1] = { NULL }
 #define TSTR_DELETE(var) \
-	free(var->str)
+	free((var)->str)
 
 //-----------------------------------字符串相关的协助API -------------------------------
 
@@ -75,15 +75,25 @@ extern flag_e tstr_fappends(const char * path, const char * str);
 //
 // tstr_t 创建函数, 会根据c的tstr串创建一个 tstr_t结构的字符串
 // str		: 待创建的字符串
-// return	:  返回创建好的字符串,内存不足会打印日志退出程序
+// len		: 创建串的长度
+// return	: 返回创建好的字符串,内存不足会打印日志退出程序
 //
-extern tstr_t tstr_create(const char * str);
+extern tstr_t tstr_create(const char * str, size_t len);
+extern tstr_t tstr_creates(const char * str);
 
 //
 // tstr_t 释放函数
 // tstr		: 待释放的串结构
 //
 extern void tstr_delete(tstr_t tstr);
+
+//
+// tstr_expand - 为当前字符串扩容, 属于低级api
+// tstr		: 可变字符串
+// len		: 扩容的长度
+// return	: void
+//
+void tstr_expand(tstr_t tstr, size_t len);
 
 //
 // 向tstr_t串结构中添加字符等, 内存分配失败内部会自己处理
@@ -102,14 +112,6 @@ extern void tstr_appendn(tstr_t tstr, const char * str, size_t sz);
 // return	: void
 //
 extern void tstr_popup(tstr_t tstr, size_t len);
-
-//
-// tstr_expand - 为当前字符串扩容, 属于低级api
-// tstr		: 可变字符串
-// len		: 扩容的长度
-// return	: void
-//
-extern void tstr_expand(tstr_t tstr, size_t len);
 
 //
 // 得到一个精简的c的串, 需要自己事后free

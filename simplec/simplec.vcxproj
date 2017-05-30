@@ -26,6 +26,10 @@
     <ClCompile Include="module\colog\scconf.c" />
     <ClCompile Include="module\colog\clog.c" />
     <ClCompile Include="module\colog\sclog.c" />
+    <ClCompile Include="module\iop\iop.c" />
+    <ClCompile Include="module\iop\iop_poll.c" />
+    <ClCompile Include="module\iop\iop_server.c" />
+    <ClCompile Include="module\iop\iop_util.c" />
     <ClCompile Include="module\schead\scjson.c" />
     <ClCompile Include="module\schead\scalloc.c" />
     <ClCompile Include="module\schead\sccsv.c" />
@@ -50,6 +54,7 @@
     <ClCompile Include="test\test_cjson.c" />
     <ClCompile Include="test\test_clog.c" />
     <ClCompile Include="test\test_csv.c" />
+    <ClCompile Include="test\test_iopserver.c" />
     <ClCompile Include="test\test_json_read.c" />
     <ClCompile Include="test\test_objs.c" />
     <ClCompile Include="test\test_plog.c" />
@@ -73,6 +78,13 @@
     <ClInclude Include="module\colog\include\scconf.h" />
     <ClInclude Include="module\colog\include\clog.h" />
     <ClInclude Include="module\colog\include\sclog.h" />
+    <ClInclude Include="module\iop\include\iop.h" />
+    <ClInclude Include="module\iop\include\iop_def.h" />
+    <ClInclude Include="module\iop\include\iop_poll$epoll.h" />
+    <ClInclude Include="module\iop\include\iop_poll$select.h" />
+    <ClInclude Include="module\iop\include\iop_poll.h" />
+    <ClInclude Include="module\iop\include\iop_server.h" />
+    <ClInclude Include="module\iop\include\iop_util.h" />
     <ClInclude Include="module\pthread\include\pthread.h" />
     <ClInclude Include="module\pthread\include\sched.h" />
     <ClInclude Include="module\pthread\include\semaphore.h" />
@@ -196,7 +208,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ReferencePath>$(ReferencePath)</ReferencePath>
     <ExecutablePath>$(ExecutablePath)</ExecutablePath>
-    <IncludePath>$(ProjectDir)main/body/include;$(ProjectDir)module/pthread/include;$(ProjectDir)module/schead/include;$(ProjectDir)module/struct/include;$(ProjectDir)module/service/include;$(ProjectDir)module/logic/include;$(ProjectDir)module/iconv/include;$(ProjectDir)module/colog/include;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)main/body/include;$(ProjectDir)module/pthread/include;$(ProjectDir)module/schead/include;$(ProjectDir)module/struct/include;$(ProjectDir)module/service/include;$(ProjectDir)module/logic/include;$(ProjectDir)module/iconv/include;$(ProjectDir)module/colog/include;$(ProjectDir)module/iop/include;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)module/pthread/lib/x86;$(ProjectDir)module/iconv/lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

@@ -83,7 +83,7 @@ tstr_freadend(const char * path) {
 	}
 
 	// 分配内存
-	tstr = tstr_create(NULL);
+	tstr = tstr_creates(NULL);
 
 	// 读取文件内容
 	do {
@@ -150,10 +150,21 @@ tstr_fappends(const char * path, const char * str) {
 //
 // tstr_t 创建函数, 会根据c的tstr串创建一个 tstr_t结构的字符串
 // str		: 待创建的字符串
+// len		: 创建串的长度
 // return	: 返回创建好的字符串,内存不足会打印日志退出程序
 //
 tstr_t 
-tstr_create(const char * str) {
+tstr_create(const char * str, size_t len) {
+	tstr_t tstr = calloc(1, sizeof(struct tstr));
+	if (NULL == tstr)
+		CERR_EXIT("malloc sizeof struct tstr is error!");
+	if (str && len > 0)
+		tstr_appendn(tstr, str, len);
+	return tstr;
+}
+
+tstr_t
+tstr_creates(const char * str) {
 	tstr_t tstr = calloc(1, sizeof(struct tstr));
 	if (NULL == tstr)
 		CERR_EXIT("malloc sizeof struct tstr is error!");
@@ -175,11 +186,17 @@ tstr_delete(tstr_t tstr) {
 // 文本字符串创建的初始化大小
 #define _INT_TSTRING	(32)
 
-// 串内存检查, 不够就重新构建内存
-static void _tstr_realloc(tstr_t tstr, size_t len) {
+//
+// tstr_expand - 为当前字符串扩容, 属于低级api
+// tstr		: 可变字符串
+// len		: 扩容的长度
+// return	: void
+//
+void
+tstr_expand(tstr_t tstr, size_t len) {
 	char * nstr;
 	size_t cap = tstr->cap;
-	if (len < cap)
+	if ((len += tstr->len) < cap)
 		return;
 
 	// 开始分配内存
@@ -205,7 +222,7 @@ inline void
 tstr_appendc(tstr_t tstr, int c) {
 	// 这类函数不做安全检查, 为了性能
 	tstr_expand(tstr, 1);
-	tstr->str[tstr->len - 1] = c;
+	tstr->str[tstr->len++] = c;
 }
 
 void 
@@ -224,7 +241,8 @@ tstr_appends(tstr_t tstr, const char * str) {
 inline void 
 tstr_appendn(tstr_t tstr, const char * str, size_t sz) {
 	tstr_expand(tstr, sz);
-	memcpy(tstr->str + tstr->len - sz, str, sz);
+	memcpy(tstr->str + tstr->len, str, sz);
+	tstr->len += sz;
 }
 
 //
@@ -241,18 +259,6 @@ tstr_popup(tstr_t tstr, size_t len) {
 		tstr->len -= len;
 		memmove(tstr->str, tstr->str + len, tstr->len);
 	}
-}
-
-//
-// tstr_expand - 为当前字符串扩容, 属于低级api
-// tstr		: 可变字符串
-// len		: 扩容的长度
-// return	: void
-//
-inline void
-tstr_expand(tstr_t tstr, size_t len) {
-	tstr->len += len;
-	_tstr_realloc(tstr, tstr->len);
 }
 
 //
@@ -288,7 +294,7 @@ char *
 tstr_cstr(tstr_t tstr) {
 	// 本质是检查最后一个字符是否为 '\0'
 	if (tstr->len < 1 || tstr->str[tstr->len - 1]) {
-		_tstr_realloc(tstr, tstr->len + 1);
+		tstr_expand(tstr, 1);
 		tstr->str[tstr->len] = '\0';
 	}
 

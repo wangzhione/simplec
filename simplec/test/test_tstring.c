@@ -8,7 +8,7 @@
  */
 void test_tstring(void) {
 	//先在堆上 申请内存
-	tstr_t tstr = tstr_create("123");
+	tstr_t tstr = tstr_creates("123");
 	tstr_cstr(tstr);
 	printf("str:%s, len:%zu, size:%zu.\n", tstr->str, tstr->len, tstr->cap);
 

@@ -54,6 +54,8 @@ simplec_test(void) {
 	extern void test_plog(void);
 	// 单元测试 - 测试 scthreads 线程池
 	extern void test_scthreads(void);
+	// 单元测试 - 测试 iop 网络io
+	extern void test_iopserver(void);
 
-	test_scthreads();
+	test_iopserver();
 }

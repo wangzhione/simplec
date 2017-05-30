@@ -228,6 +228,21 @@
     <ClCompile Include="test\test_scthreads.c">
       <Filter>test</Filter>
     </ClCompile>
+    <ClCompile Include="module\iop\iop.c">
+      <Filter>module\iop</Filter>
+    </ClCompile>
+    <ClCompile Include="module\iop\iop_poll.c">
+      <Filter>module\iop</Filter>
+    </ClCompile>
+    <ClCompile Include="module\iop\iop_server.c">
+      <Filter>module\iop</Filter>
+    </ClCompile>
+    <ClCompile Include="module\iop\iop_util.c">
+      <Filter>module\iop</Filter>
+    </ClCompile>
+    <ClCompile Include="test\test_iopserver.c">
+      <Filter>test</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="module\pthread\include\pthread.h">
@@ -322,6 +337,27 @@
     </ClInclude>
     <ClInclude Include="module\service\include\scthreads.h">
       <Filter>module\service\include</Filter>
+    </ClInclude>
+    <ClInclude Include="module\iop\include\iop.h">
+      <Filter>module\iop\include</Filter>
+    </ClInclude>
+    <ClInclude Include="module\iop\include\iop_def.h">
+      <Filter>module\iop\include</Filter>
+    </ClInclude>
+    <ClInclude Include="module\iop\include\iop_poll$epoll.h">
+      <Filter>module\iop\include</Filter>
+    </ClInclude>
+    <ClInclude Include="module\iop\include\iop_poll$select.h">
+      <Filter>module\iop\include</Filter>
+    </ClInclude>
+    <ClInclude Include="module\iop\include\iop_poll.h">
+      <Filter>module\iop\include</Filter>
+    </ClInclude>
+    <ClInclude Include="module\iop\include\iop_server.h">
+      <Filter>module\iop\include</Filter>
+    </ClInclude>
+    <ClInclude Include="module\iop\include\iop_util.h">
+      <Filter>module\iop\include</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

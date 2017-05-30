@@ -1,7 +1,6 @@
 ﻿#include <scconf.h>
 #include <tree.h>
 #include <tstr.h>
-#include <sclog.h>
 
 //简单二叉树结构
 struct sconf {
@@ -131,7 +130,7 @@ sconf_create(const char * path) {
 	
 	FILE * txt = fopen(path, "rb");
 	if (NULL == txt) {
-		SL_WARNING("fopen  r is error! path = %s.", path);
+		CL_ERROR("fopen  r is error! path = %s.", path);
 		return NULL;
 	}
 
@@ -155,7 +154,7 @@ sconf_get(sconf_t conf, const char * key) {
 	struct sconf * kv;
 	DEBUG_CODE({
 		if (!conf || !key || !*key) {
-			SL_WARNING("conf, key => %p, %s", conf, key);
+			CL_ERROR("conf, key => %p, %s", conf, key);
 			return NULL;
 		}
 	});
@@ -180,7 +179,7 @@ mconf_start(void) {
 	if (!_mconf) {
 		_mconf = sconf_create(_STR_MCCONF_PATH);
 		if (!_mconf) {
-			SL_FATAL("sconf_create is open error path = " _STR_MCCONF_PATH);
+			CL_ERROR("sconf_create is open error path = " _STR_MCCONF_PATH);
 			exit(EXIT_FAILURE);
 		}
 		atexit(_mconf_end);
