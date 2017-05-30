@@ -91,10 +91,6 @@ static int _iop_add_connect(iopbase_t base, uint32_t id, uint32_t events, void *
 		iop = base->iops + id;
 		s = socket_accept(iop->s, NULL, NULL);
 		if (INVALID_SOCKET == s) {
-#ifdef _MSC_VER
-			if (socket_errno == WSANOTINITIALISED)
-				return Error_Fd;
-#endif
 			RETURN(Error_Fd, "socket_accept is error s = %"PRIu64" id = %u, socket_errno = %d.",
 				(uint64_t)iop->s, id, socket_errno);
 		}

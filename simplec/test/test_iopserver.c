@@ -61,7 +61,7 @@ static int _echo_error(iopbase_t base, uint32_t id, uint32_t err, void * arg) {
 //
 // 测试回显服务器
 //
-static void _test_echo_server(void) {
+static iopbase_t _test_echo_server(pthread_t * tid) {
 	int r;
 	iopbase_t base = iop_create();
 	printf("create a new iopbase_t = %p.\n", base);
@@ -73,7 +73,13 @@ static void _test_echo_server(void) {
 	printf("create a new tcp server on ip %s, port %d.", _STR_IP, _SHORT_PORT);
 	puts("start iop run loop.");
 
-	iop_run_pthread(base);
+	r = iop_run_pthread(base, tid);
+	if (r < Success_Base) {
+		iop_delete(base);
+		CERR_EXIT("iop_run_pthread base r = %p, %d.", base, r);
+	}
+
+	return base;
 }
 
 #define _INT_LOOP	(10)
@@ -120,12 +126,14 @@ static void _test_echo_client(void) {
 //
 void test_iopserver(void) {
 	int i = 1;
+	pthread_t tid;
+	iopbase_t base;
 
 	// 启动 * 装载 socket 库
 	socket_start();
 
 	// 测试基础的服务器启动
-	_test_echo_server();
+	base = _test_echo_server(&tid);
 
 	// 等待 5s
 	while (i <= _INT_SLEEP) {
@@ -136,6 +144,9 @@ void test_iopserver(void) {
 
 	// 客户端和服务器雌雄同体
 	_test_echo_client();
+
+	// 等待开启的iop线程结束
+	iop_end_pthread(base, &tid);
 
 #ifdef __GNUC__
 	exit(EXIT_SUCCESS);

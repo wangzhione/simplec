@@ -71,6 +71,7 @@ iop_delete(iopbase_t base) {
 	uint32_t i;
 	if (!base) return;
 
+	base->flag = true;
 	if (base->iops) {
 		while (base->iohead != INVALID_SOCKET)
 			iop_del(base, base->iohead);
@@ -157,23 +158,42 @@ static inline void * _run_thread(void * arg) {
 
 //
 // iop_run_pthread - 开启一个线程来跑这个轮询事件
-// base		: io调度对象
-// return	: >=0 表示成功, <0 表示失败
+// base		: iop 操作类型
+// tid		: 返回的线程id指针
+// return	: >=Success_Base 表示成功, 否则失败
 //
 int 
-iop_run_pthread(iopbase_t base) {
+iop_run_pthread(iopbase_t base, pthread_t * tid) {
 	int r;
-	pthread_t tid;
 	pthread_attr_t attr;
+
 	pthread_attr_init(&attr);
 	pthread_attr_setstacksize(&attr, _INT_STACK);
-	pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
 
 	// 线程启动起来
-	r = pthread_create(&tid, &attr, _run_thread, base);
+	r = pthread_create(tid, &attr, _run_thread, base);
+	if (r < Success_Base) {
+		iop_delete(base);
+		RETURN(r, "pthread_create _run_thread is error r = %d!", r);
+	}
 
 	pthread_attr_destroy(&attr);
 	return r;
+}
+
+//
+// iop_end_pthread - 结束一个线程的iop调度
+// base		: iop 操作类型
+// tid		: 线程操作的类型
+// return	: void
+//
+void 
+iop_end_pthread(iopbase_t base, pthread_t * tid) {
+	if (!base || !tid)
+		RETURN(NIL, "check param is erro base = %p, tid = %p.", base, tid);
+
+	base->flag = true;
+	pthread_join(*tid, NULL);
 }
 
 //
