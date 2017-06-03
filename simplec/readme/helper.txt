@@ -8,10 +8,12 @@
 1.1. 添加 包含目录
 	$(ProjectDir)main/body/include					--	框架入口外部业务处理头文件文件夹
 	$(ProjectDir)extern/pthread/include				--	框架内置的线程库头文件文件夹
-	$(ProjectDir)extern/schead/include				--	框架帮助库头文件文件夹
+	$(ProjectDir)extern/iconv/include				--	框架libiconv库头文件文件夹
+	$(ProjectDir)extern/curl/include				--	框架libcurl库头文件文件夹
+	$(ProjectDir)extern/openssl/include				--	框架libopenssl库头文件文件夹
+	$(ProjectDir)module/schead/include				--	框架帮助库头文件文件夹
 	$(ProjectDir)module/struct/include				--	框架数据结构头文件文件夹
 	$(ProjectDir)module/service/include				--	框架提供的辅助服务头文件文件夹
-	$(ProjectDir)module/logic/include				--	框架辅助业务模块头文件文件夹
 	$(ProjectDir)module/colog/include				--	框架辅助日志业务头文件文件夹
 	$(ProjectDir)module/iop/include					--	框架网络IO文件文件夹
 
@@ -34,6 +36,7 @@
 4. 添加部分宏 C/C++ -> 预处理器 -> 预处理器定义
 	_DEBUG
 	_HAVE_SELECT
+	CURL_STATICLIB
 	WIN32_LEAN_AND_MEAN
 	_CRT_SECURE_NO_WARNINGS
 	_CRT_NONSTDC_NO_DEPRECATE
