@@ -22,39 +22,6 @@
     <Filter Include="module\colog\include">
       <UniqueIdentifier>{57f37278-f396-4a2d-8dc1-a5955ae40220}</UniqueIdentifier>
     </Filter>
-    <Filter Include="module\iconv">
-      <UniqueIdentifier>{2a5a17b0-0bec-486a-8e99-0475c6831479}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="module\iconv\include">
-      <UniqueIdentifier>{8bb33ffa-7fa5-4c8b-a609-1b74bbea6d18}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="module\iconv\lib">
-      <UniqueIdentifier>{7f8e5bcc-3d1f-453e-9e1c-311b6ee7b5fc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="module\pthread">
-      <UniqueIdentifier>{1a929f90-b5f6-4bf2-b173-2341e60141d4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="module\pthread\include">
-      <UniqueIdentifier>{3fd967e6-c33e-4f82-b871-e82436706186}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="module\pthread\lib">
-      <UniqueIdentifier>{58553b4f-dcf0-45bb-9136-d114d1798c81}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="module\pthread\dll">
-      <UniqueIdentifier>{e4c40e38-d095-4705-a03e-b607f628d014}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="module\pthread\lib\x64">
-      <UniqueIdentifier>{329098b0-fd9a-4da7-82f2-13b5b343d4b1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="module\pthread\lib\x86">
-      <UniqueIdentifier>{a3741b8c-9fec-4436-bd49-4465b3ea61a7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="module\pthread\dll\x86">
-      <UniqueIdentifier>{6e61f134-6941-4796-b8bc-de064a4c3a6d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="module\pthread\dll\x64">
-      <UniqueIdentifier>{dad9ac84-3808-4eb5-8063-e3da95d6d6b4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="module\schead">
       <UniqueIdentifier>{33ae7044-0f3c-476c-a57b-be7ced640c47}</UniqueIdentifier>
     </Filter>
@@ -87,6 +54,30 @@
     </Filter>
     <Filter Include="module\iop\include">
       <UniqueIdentifier>{a61b7112-02b8-40a1-884a-a97666f35e8c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="extern">
+      <UniqueIdentifier>{18dff8b3-0e26-4c18-b5dd-f44ac2cd5aad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="extern\pthread">
+      <UniqueIdentifier>{dd6f189c-2685-40f4-bebb-6aa2b687834d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="extern\pthread\include">
+      <UniqueIdentifier>{e8ee71f9-96bd-44d8-a9be-de81b3199888}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="extern\pthread\dll">
+      <UniqueIdentifier>{a1a23c0a-3f45-4462-a041-276f90e1382e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="extern\pthread\lib">
+      <UniqueIdentifier>{c2fe23d9-92e6-4d7d-99b5-a4834c179797}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="extern\iconv">
+      <UniqueIdentifier>{38958f01-8b25-49b3-8f26-a59e2dc1f5a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="extern\iconv\include">
+      <UniqueIdentifier>{1186f389-0306-42d4-a82c-4df122c32a88}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="extern\iconv\lib">
+      <UniqueIdentifier>{e95319e3-960e-4562-8416-6c0b7ab6fef3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -177,9 +168,6 @@
     <ClCompile Include="module\struct\mq.c">
       <Filter>module\struct</Filter>
     </ClCompile>
-    <ClCompile Include="module\iconv\sciconv.c">
-      <Filter>module\iconv</Filter>
-    </ClCompile>
     <ClCompile Include="test\test_sciconv.c">
       <Filter>test</Filter>
     </ClCompile>
@@ -243,17 +231,11 @@
     <ClCompile Include="test\test_iopserver.c">
       <Filter>test</Filter>
     </ClCompile>
+    <ClCompile Include="extern\iconv\sciconv.c">
+      <Filter>extern\iconv</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="module\pthread\include\pthread.h">
-      <Filter>module\pthread\include</Filter>
-    </ClInclude>
-    <ClInclude Include="module\pthread\include\sched.h">
-      <Filter>module\pthread\include</Filter>
-    </ClInclude>
-    <ClInclude Include="module\pthread\include\semaphore.h">
-      <Filter>module\pthread\include</Filter>
-    </ClInclude>
     <ClInclude Include="module\schead\include\schead.h">
       <Filter>module\schead\include</Filter>
     </ClInclude>
@@ -305,12 +287,6 @@
     <ClInclude Include="module\service\include\scrunloop.h">
       <Filter>module\service\include</Filter>
     </ClInclude>
-    <ClInclude Include="module\iconv\include\iconv.h">
-      <Filter>module\iconv\include</Filter>
-    </ClInclude>
-    <ClInclude Include="module\iconv\include\sciconv.h">
-      <Filter>module\iconv\include</Filter>
-    </ClInclude>
     <ClInclude Include="module\colog\include\scconf.h">
       <Filter>module\colog\include</Filter>
     </ClInclude>
@@ -359,29 +335,23 @@
     <ClInclude Include="module\iop\include\iop_util.h">
       <Filter>module\iop\include</Filter>
     </ClInclude>
+    <ClInclude Include="extern\iconv\include\iconv.h">
+      <Filter>extern\iconv\include</Filter>
+    </ClInclude>
+    <ClInclude Include="extern\iconv\include\sciconv.h">
+      <Filter>extern\iconv\include</Filter>
+    </ClInclude>
+    <ClInclude Include="extern\pthread\include\pthread.h">
+      <Filter>extern\pthread\include</Filter>
+    </ClInclude>
+    <ClInclude Include="extern\pthread\include\sched.h">
+      <Filter>extern\pthread\include</Filter>
+    </ClInclude>
+    <ClInclude Include="extern\pthread\include\semaphore.h">
+      <Filter>extern\pthread\include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="module\pthread\dll\x64\pthreadGC2.dll">
-      <Filter>module\pthread\dll\x64</Filter>
-    </None>
-    <None Include="module\pthread\dll\x64\pthreadVC2.dll">
-      <Filter>module\pthread\dll\x64</Filter>
-    </None>
-    <None Include="module\pthread\dll\x86\pthreadGC2.dll">
-      <Filter>module\pthread\dll\x86</Filter>
-    </None>
-    <None Include="module\pthread\dll\x86\pthreadGCE2.dll">
-      <Filter>module\pthread\dll\x86</Filter>
-    </None>
-    <None Include="module\pthread\dll\x86\pthreadVC2.dll">
-      <Filter>module\pthread\dll\x86</Filter>
-    </None>
-    <None Include="module\pthread\dll\x86\pthreadVCE2.dll">
-      <Filter>module\pthread\dll\x86</Filter>
-    </None>
-    <None Include="module\pthread\dll\x86\pthreadVSE2.dll">
-      <Filter>module\pthread\dll\x86</Filter>
-    </None>
     <None Include="test\config\destiny.csv">
       <Filter>test\config</Filter>
     </None>
@@ -394,27 +364,21 @@
     <None Include="config\config.ini">
       <Filter>config</Filter>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Library Include="module\pthread\lib\x64\pthreadVC2.lib">
-      <Filter>module\pthread\lib\x64</Filter>
-    </Library>
-    <Library Include="module\pthread\lib\x86\pthreadVC2.lib">
-      <Filter>module\pthread\lib\x86</Filter>
-    </Library>
-    <Library Include="module\pthread\lib\x86\pthreadVCE2.lib">
-      <Filter>module\pthread\lib\x86</Filter>
-    </Library>
-    <Library Include="module\pthread\lib\x86\pthreadVSE2.lib">
-      <Filter>module\pthread\lib\x86</Filter>
-    </Library>
-    <Library Include="module\iconv\lib\libiconv.lib">
-      <Filter>module\iconv\lib</Filter>
-    </Library>
+    <None Include="extern\pthread\dll\pthreadVC2.dll">
+      <Filter>extern\pthread\dll</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="readme\helper.txt">
       <Filter>readme</Filter>
     </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="extern\iconv\lib\libiconv.lib">
+      <Filter>extern\iconv\lib</Filter>
+    </Library>
+    <Library Include="extern\pthread\lib\pthreadVC2.lib">
+      <Filter>extern\pthread\lib</Filter>
+    </Library>
   </ItemGroup>
 </Project>

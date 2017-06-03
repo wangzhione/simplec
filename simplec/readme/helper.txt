@@ -7,8 +7,8 @@
 1.设置 VS的 项目右键属性 -> VC++ 目录
 1.1. 添加 包含目录
 	$(ProjectDir)main/body/include					--	框架入口外部业务处理头文件文件夹
-	$(ProjectDir)module/pthread/include				--	框架内置的线程库头文件文件夹
-	$(ProjectDir)module/schead/include				--	框架帮助库头文件文件夹
+	$(ProjectDir)extern/pthread/include				--	框架内置的线程库头文件文件夹
+	$(ProjectDir)extern/schead/include				--	框架帮助库头文件文件夹
 	$(ProjectDir)module/struct/include				--	框架数据结构头文件文件夹
 	$(ProjectDir)module/service/include				--	框架提供的辅助服务头文件文件夹
 	$(ProjectDir)module/logic/include				--	框架辅助业务模块头文件文件夹
@@ -17,19 +17,19 @@
 
 2. lib 库添加
 2.1 添加 pthread 模块lib 引用, 看 引用目录
-	$(ProjectDir)/pthread/lib/x86
+	$(ProjectDir)/pthread/lib
 	$(ProjectDir)/iconv/lib
 
-2.2 对于 x64 那就添加为
-	$(ProjectDir)/pthread/lib/x64
-
+2.2 对于 x64 附注
+	当前删掉了 x64 支持, 如果需要推荐自己弄弄, 或者联系我技术支持
+	wangzhione@163.com
+	以后默认都是 x86 的库
 
 3. dll 库的添加
 3.1 添加 dll 目前这个需要手工操作,目前不智能,VS 对C++支持的好缓慢, M$确实很坑
 	找到相应的 生成的exe目录下添加 对应的 dll, 
 
-	x86 => $(ProjectDir)/pthread/dll/x86
-	x64 => $(ProjectDir)/pthread/dll/x64
+	x86 => $(ProjectDir)/pthread/dll
 
 4. 添加部分宏 C/C++ -> 预处理器 -> 预处理器定义
 	_DEBUG

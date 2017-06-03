@@ -11,10 +11,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="extern\iconv\sciconv.c" />
     <ClCompile Include="main\main.c" />
     <ClCompile Include="main\simplec.c" />
     <ClCompile Include="module\colog\plog.c" />
-    <ClCompile Include="module\iconv\sciconv.c" />
     <ClCompile Include="module\colog\scconf.c" />
     <ClCompile Include="module\colog\clog.c" />
     <ClCompile Include="module\colog\sclog.c" />
@@ -64,9 +64,12 @@
     <ClCompile Include="test\test_xlsmtojson.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="extern\iconv\include\iconv.h" />
+    <ClInclude Include="extern\iconv\include\sciconv.h" />
+    <ClInclude Include="extern\pthread\include\pthread.h" />
+    <ClInclude Include="extern\pthread\include\sched.h" />
+    <ClInclude Include="extern\pthread\include\semaphore.h" />
     <ClInclude Include="module\colog\include\plog.h" />
-    <ClInclude Include="module\iconv\include\iconv.h" />
-    <ClInclude Include="module\iconv\include\sciconv.h" />
     <ClInclude Include="module\colog\include\scconf.h" />
     <ClInclude Include="module\colog\include\clog.h" />
     <ClInclude Include="module\colog\include\sclog.h" />
@@ -77,9 +80,6 @@
     <ClInclude Include="module\iop\include\iop_poll.h" />
     <ClInclude Include="module\iop\include\iop_server.h" />
     <ClInclude Include="module\iop\include\iop_util.h" />
-    <ClInclude Include="module\pthread\include\pthread.h" />
-    <ClInclude Include="module\pthread\include\sched.h" />
-    <ClInclude Include="module\pthread\include\semaphore.h" />
     <ClInclude Include="module\schead\include\scjson.h" />
     <ClInclude Include="module\schead\include\scalloc.h" />
     <ClInclude Include="module\schead\include\scatom.h" />
@@ -105,26 +105,17 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="config\config.ini" />
-    <None Include="module\pthread\dll\x64\pthreadGC2.dll" />
-    <None Include="module\pthread\dll\x64\pthreadVC2.dll" />
-    <None Include="module\pthread\dll\x86\pthreadGC2.dll" />
-    <None Include="module\pthread\dll\x86\pthreadGCE2.dll" />
-    <None Include="module\pthread\dll\x86\pthreadVC2.dll" />
-    <None Include="module\pthread\dll\x86\pthreadVCE2.dll" />
-    <None Include="module\pthread\dll\x86\pthreadVSE2.dll" />
+    <None Include="extern\pthread\dll\pthreadVC2.dll" />
     <None Include="test\config\destiny.csv" />
     <None Include="test\config\firefighting_rule.json" />
     <None Include="test\config\onetime.csv" />
   </ItemGroup>
   <ItemGroup>
-    <Library Include="module\iconv\lib\libiconv.lib" />
-    <Library Include="module\pthread\lib\x64\pthreadVC2.lib" />
-    <Library Include="module\pthread\lib\x86\pthreadVC2.lib" />
-    <Library Include="module\pthread\lib\x86\pthreadVCE2.lib" />
-    <Library Include="module\pthread\lib\x86\pthreadVSE2.lib" />
+    <Text Include="readme\helper.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="readme\helper.txt" />
+    <Library Include="extern\iconv\lib\libiconv.lib" />
+    <Library Include="extern\pthread\lib\pthreadVC2.lib" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{1F91FC48-7534-4CA9-9140-F2839158DA16}</ProjectGuid>
@@ -160,8 +151,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(ProjectDir)main/body/include;$(ProjectDir)module/pthread/include;$(ProjectDir)module/schead/include;$(ProjectDir)module/struct/include;$(ProjectDir)module/service/include;$(ProjectDir)module/logic/include;$(ProjectDir)module/iconv/include;$(ProjectDir)module/colog/include;$(ProjectDir)module/iop/include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)module/pthread/lib/x86;$(ProjectDir)module/iconv/lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)main/body/include;$(ProjectDir)extern/pthread/include;$(ProjectDir)extern/iconv/include;$(ProjectDir)module/schead/include;$(ProjectDir)module/struct/include;$(ProjectDir)module/service/include;$(ProjectDir)module/logic/include;$(ProjectDir)module/colog/include;$(ProjectDir)module/iop/include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)extern/pthread/lib;$(ProjectDir)extern/iconv/lib;$(LibraryPath)</LibraryPath>
     <LibraryWPath>$(LibraryWPath)</LibraryWPath>
     <ReferencePath>$(ReferencePath)</ReferencePath>
     <ExecutablePath>$(ExecutablePath)</ExecutablePath>
@@ -170,8 +161,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ReferencePath>$(ReferencePath)</ReferencePath>
     <ExecutablePath>$(ExecutablePath)</ExecutablePath>
-    <IncludePath>$(ProjectDir)main/body/include;$(ProjectDir)module/pthread/include;$(ProjectDir)module/schead/include;$(ProjectDir)module/struct/include;$(ProjectDir)module/service/include;$(ProjectDir)module/logic/include;$(ProjectDir)module/iconv/include;$(ProjectDir)module/colog/include;$(ProjectDir)module/iop/include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)module/pthread/lib/x86;$(ProjectDir)module/iconv/lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)main/body/include;$(ProjectDir)extern/pthread/include;$(ProjectDir)extern/iconv/include;$(ProjectDir)module/schead/include;$(ProjectDir)module/struct/include;$(ProjectDir)module/service/include;$(ProjectDir)module/logic/include;$(ProjectDir)module/colog/include;$(ProjectDir)module/iop/include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)module/pthread/lib;$(ProjectDir)module/iconv/lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
