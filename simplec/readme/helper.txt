@@ -1,14 +1,15 @@
 ﻿/*
-	这里是关于这个系统使用的方面, 一些注意事项, 主要是对于VS的具体编译配置说明.
-对于GCC还需要单搞,这些代码都具备跨平台的能力,但是需要你熟悉和配置使用!
-尝试了解下面操作的原因,熟悉它,C/C++开发都是这样繁琐,需要从头来! 
-												--	by simplec cwz
+  这里是simplec框架配置的注意事项, 主要是对VS的具体编译配置说明.
+对于GCC还需要单搞, 这些代码都具备跨平台的能力, 但是需要你熟悉和配置使用!
+尝试了解下面操作的原因, 熟悉它, C/C++开发都是这样繁琐,一切都是从头再来!
+						https://github.com/wangzhione/simplec 
+										             -- by wz
 
 1.设置 VS的 项目右键属性 -> VC++ 目录
 1.1. 添加 包含目录
 	$(ProjectDir)main/body/include					--	框架入口外部业务处理头文件文件夹
 	$(ProjectDir)extern/pthread/include				--	框架内置的线程库头文件文件夹
-	$(ProjectDir)extern/iconv/include				--	框架libiconv库头文件文件夹
+	$(ProjectDir)extern/iconv/include				--	libiconv linux 移植, https://github.com/wangzhione/libiconv-for-window
 	$(ProjectDir)extern/curl/include				--	框架libcurl库头文件文件夹
 	$(ProjectDir)extern/openssl/include				--	框架libopenssl库头文件文件夹
 	$(ProjectDir)module/schead/include				--	框架帮助库头文件文件夹
@@ -23,15 +24,14 @@
 	$(ProjectDir)/iconv/lib
 
 2.2 对于 x64 附注
-	当前删掉了 x64 支持, 如果需要推荐自己弄弄, 或者联系我技术支持
-	wangzhione@163.com
+	当前删掉了 x64 支持, 如果需要推荐自己弄弄, 或者联系我技术支持 csharpwz@outlook.com
 	以后默认都是 x86 的库
 
 3. dll 库的添加
 3.1 添加 dll 目前这个需要手工操作,目前不智能,VS 对C++支持的好缓慢, M$确实很坑
 	找到相应的 生成的exe目录下添加 对应的 dll, 
 
-	x86 => $(ProjectDir)/pthread/dll
+	$(ProjectDir)/pthread/dll	-- 参照 https://github.com/GerHobbelt/pthread-win32
 
 4. 添加部分宏 C/C++ -> 预处理器 -> 预处理器定义
 	_DEBUG
