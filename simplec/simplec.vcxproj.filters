@@ -655,14 +655,14 @@
     <None Include="config\config.ini">
       <Filter>config</Filter>
     </None>
-    <None Include="extern\pthread\dll\pthreadVC2.dll">
-      <Filter>extern\pthread\dll</Filter>
-    </None>
     <None Include="extern\openssl\dll\libcrypto-1_1.dll">
       <Filter>extern\openssl\dll</Filter>
     </None>
     <None Include="extern\openssl\dll\libssl-1_1.dll">
       <Filter>extern\openssl\dll</Filter>
+    </None>
+    <None Include="extern\pthread\dll\pthread_dll.dll">
+      <Filter>extern\pthread\dll</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -674,9 +674,6 @@
     <Library Include="extern\iconv\lib\libiconv.lib">
       <Filter>extern\iconv\lib</Filter>
     </Library>
-    <Library Include="extern\pthread\lib\pthreadVC2.lib">
-      <Filter>extern\pthread\lib</Filter>
-    </Library>
     <Library Include="extern\curl\lib\libcurl_a.lib">
       <Filter>extern\curl\lib</Filter>
     </Library>
@@ -685,6 +682,9 @@
     </Library>
     <Library Include="extern\openssl\lib\libssl32MT.lib">
       <Filter>extern\openssl\lib</Filter>
+    </Library>
+    <Library Include="extern\pthread\lib\pthread_dll.lib">
+      <Filter>extern\pthread\lib</Filter>
     </Library>
   </ItemGroup>
 </Project>

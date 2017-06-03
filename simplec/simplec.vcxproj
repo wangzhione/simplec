@@ -195,7 +195,7 @@
     <None Include="config\config.ini" />
     <None Include="extern\openssl\dll\libcrypto-1_1.dll" />
     <None Include="extern\openssl\dll\libssl-1_1.dll" />
-    <None Include="extern\pthread\dll\pthreadVC2.dll" />
+    <None Include="extern\pthread\dll\pthread_dll.dll" />
     <None Include="test\config\destiny.csv" />
     <None Include="test\config\firefighting_rule.json" />
     <None Include="test\config\onetime.csv" />
@@ -208,7 +208,7 @@
     <Library Include="extern\iconv\lib\libiconv.lib" />
     <Library Include="extern\openssl\lib\libcrypto32MT.lib" />
     <Library Include="extern\openssl\lib\libssl32MT.lib" />
-    <Library Include="extern\pthread\lib\pthreadVC2.lib" />
+    <Library Include="extern\pthread\lib\pthread_dll.lib" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{1F91FC48-7534-4CA9-9140-F2839158DA16}</ProjectGuid>
