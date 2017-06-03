@@ -79,15 +79,15 @@
 // >= 0 标识 Success状态, < 0 标识 Error状态
 //
 typedef enum {
-	Success_Exist = +2,			//希望存在,设置之前已经存在了.
-	Success_Close = +1,			//文件描述符读取关闭, 读取完毕也会返回这个
-	Success_Base = +0,			//结果正确的返回宏
+	Success_Exist	= +2,			//希望存在,设置之前已经存在了.
+	Success_Close	= +1,			//文件描述符读取关闭, 读取完毕也会返回这个
+	Success_Base	= +0,			//结果正确的返回宏
 
-	Error_Base = -1,			//错误基类型, 所有错误都可用它, 在不清楚的情况下
-	Error_Param = -2,			//调用的参数错误
-	Error_Alloc = -3,			//内存分配错误
-	Error_Fd = -4,				//文件打开失败
-	Error_TOUT = -5,			//超时错误
+	Error_Base		= -1,			//错误基类型, 所有错误都可用它, 在不清楚的情况下
+	Error_Param		= -2,			//调用的参数错误
+	Error_Alloc		= -3,			//内存分配错误
+	Error_Fd		= -4,			//文件打开失败
+	Error_TOUT		= -5,			//超时错误
 } flag_e;
 
 //
