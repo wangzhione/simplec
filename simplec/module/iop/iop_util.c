@@ -28,15 +28,9 @@ static inline _socket_start(void) {
 inline void 
 socket_start(void) {
 #ifdef _MSC_VER
-	static bool _init;
-
-	if (!_init) {
-		WSADATA wsad;
-		WSAStartup(WINSOCK_VERSION, &wsad);
-
-		_init = true;
-		atexit(_socket_start);
-	}
+	WSADATA wsad;
+	WSAStartup(WINSOCK_VERSION, &wsad);
+	atexit(_socket_start);
 #endif
 }
 

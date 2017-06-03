@@ -1,8 +1,6 @@
 ﻿#include <scurl.h>
 #include <struct.h>
 
-static uint8_t _hexc[] = "0123456789ABCDEF";
-
 //
 // url_encode - url 编码, 需要自己free
 // s		: url串
@@ -13,8 +11,8 @@ static uint8_t _hexc[] = "0123456789ABCDEF";
 char *
 url_encode(const char * s, int len, int * nlen) {
 	register uint8_t c;
-	uint8_t * to, *st;
-	const uint8_t * from, *end;
+	uint8_t * to, * st;
+	const uint8_t * from, * end;
 
 	DEBUG_CODE({
 		if (!s || !*s || len < 0)
@@ -38,8 +36,8 @@ url_encode(const char * s, int len, int * nlen) {
 			(c > 'Z' && c < 'a' && c != '_') ||
 			(c > 'z')) {
 			to[0] = '%';
-			to[1] = _hexc[c >> 4];
-			to[2] = _hexc[c & 15];
+			to[1] = _HEXA(c);
+			to[2] = _HEXB(c);
 			to += 3;
 			continue;
 		}
