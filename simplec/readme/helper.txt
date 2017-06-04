@@ -69,4 +69,15 @@
 
 	window上, 参照 simple.c 中 simplec_test 函数运行单元测试
 
+ 8. 生成事件 -> 后期生成事件 -> 命令行
+	echo update directory $(TargetDir)config begin 
+	if not exist  $(TargetDir)config mkdir $(TargetDir)config
+	xcopy /D /S /E /Y $(ProjectDir)config $(TargetDir)config
+	echo update directory $(TargetDir)config end
+
+	echo update dll begin
+	xcopy /D /S /E /Y $(ProjectDir)extern\pthread\dll $(TargetDir)
+	xcopy /D /S /E /Y $(ProjectDir)extern\openssl\dll $(TargetDir)
+	echo update dll end
+
 */

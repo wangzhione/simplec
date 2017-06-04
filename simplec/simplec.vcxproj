@@ -278,6 +278,18 @@
       <AdditionalOptions>/LTCG /ignore:4099 %(AdditionalOptions)</AdditionalOptions>
       <GenerateDebugInformation>DebugFastLink</GenerateDebugInformation>
     </Link>
+    <PostBuildEvent>
+      <Command>echo update directory $(TargetDir)config begin 
+if not exist  $(TargetDir)config mkdir $(TargetDir)config
+xcopy /D /S /E /Y $(ProjectDir)config $(TargetDir)config
+echo update directory $(TargetDir)config end
+
+echo update dll begin
+xcopy /D /S /E /Y $(ProjectDir)extern\pthread\dll $(TargetDir)
+xcopy /D /S /E /Y $(ProjectDir)extern\openssl\dll $(TargetDir)
+echo update dll end</Command>
+      <Message>复制必要的运行资源</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -302,6 +314,18 @@
       <AdditionalOptions>/ignore:4099 %(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>ws2_32.lib;libcurl_a.lib;libssl32MT.lib;libcrypto32MT.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>echo update directory $(TargetDir)config begin 
+if not exist  $(TargetDir)config mkdir $(TargetDir)config
+xcopy /D /S /E /Y $(ProjectDir)config $(TargetDir)config
+echo update directory $(TargetDir)config end
+
+echo update dll begin
+xcopy /D /S /E /Y $(ProjectDir)extern\pthread\dll $(TargetDir)
+xcopy /D /S /E /Y $(ProjectDir)extern\openssl\dll $(TargetDir)
+echo update dll end</Command>
+      <Message>复制必要的运行资源</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
