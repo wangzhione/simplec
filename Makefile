@@ -103,6 +103,7 @@ libsimplec.a : $(OBJO)
 $(TAR_PATH):
 	-mkdir -p $(OBJP)
 	-mkdir -p $@/$(TEST_DIR)/config
+	-cp -r $(SRC_PATH)/config $@
 	-cp -r $(SRC_PATH)/$(TEST_DIR)/config $@/$(TEST_DIR)
 	-cp $(SRC_PATH)/config/* $@/$(TEST_DIR)/config
 
