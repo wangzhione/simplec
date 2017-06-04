@@ -8,7 +8,7 @@ struct args {
 	int n;
 };
 
-static void _foo(void * sco, void * arg) {
+static void _foo(scomng_t sco, void * arg) {
 	struct args * as = arg;
 	int start = as->n;
 	int i = -1;

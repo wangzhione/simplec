@@ -21,9 +21,11 @@ typedef WSABUF iovec_t;
 // socket_init - 启动socket库的初始化方法
 // socket_addr - 通过ip, port 得到 ipv4 地址信息
 // 
-static inline _socket_start(void) {
+#ifdef _MSC_VER
+static inline void _socket_start(void) {
 	WSACleanup();
 }
+#endif
 
 inline void 
 socket_start(void) {

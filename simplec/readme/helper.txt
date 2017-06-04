@@ -70,6 +70,7 @@
 	window上, 参照 simple.c 中 simplec_test 函数运行单元测试
 
  8. 生成事件 -> 后期生成事件 -> 命令行
+
 	echo update directory $(TargetDir)config begin 
 	if not exist  $(TargetDir)config mkdir $(TargetDir)config
 	xcopy /D /S /E /Y $(ProjectDir)config $(TargetDir)config
@@ -81,3 +82,30 @@
 	echo update dll end
 
 */
+
+/*
+ 
+ 附注: linux 编译有关处理
+ 系统是 Best new Ubuntu + GCC (gcc (Ubuntu 6.3.0-12ubuntu2) 6.3.0 20170406)
+
+ 依赖 libiconv 解码库, libcurl http 处理库, libopenssl 安全加解密库
+
+ a) libiconv
+
+ wget https://ftp.gnu.org/pub/gnu/libiconv/libiconv-1.15.tar.gz
+ tar -zxvf libiconv-1.15.tar.gz
+ cd libiconv-1.15
+ ./configure --prefix=/usr/local
+ make
+ sudo make install
+
+ b) libcurl
+
+ sudo apt-get install libcurl4-openssl-dev
+
+ c) libopenssl
+
+ sudo apt-get install openssl
+ sudo apt-get install libssl-dev
+
+ */

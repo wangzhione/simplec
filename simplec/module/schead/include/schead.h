@@ -14,7 +14,6 @@
 
 #include <unistd.h>
 #include <termio.h>
-#include <sys/time.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 

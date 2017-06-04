@@ -1,100 +1,114 @@
-﻿###################################################################################################
-#				0.前期编译辅助参数支持					
-###################################################################################################
+﻿#
+# 前期编译一些目录结构使用宏
+#
 SRC_PATH 		?= ./simplec
+
 MAIN_DIR		?= main
+BODY_DIR		?= main/body
+
+CURL_DIR		?= extern/curl
+ICONV_DIR		?= extern/iconv
+OPENSSL_DIR		?= extern/openssl
+PTHREAD_DIR		?= extern/pthread
+
+IOP_DIR			?= module/iop
+COLOG_DIR		?= module/colog
 SCHEAD_DIR 		?= module/schead
-SERVICE_DIR		?= module/service
 STRUCT_DIR		?= module/struct
+SERVICE_DIR		?= module/service
+
 TEST_DIR		?= test
+
 TAR_PATH		?= ./Output
-BUILD_DIR		?= obj
+OBJ_DIR			?= obj
 
-# 指定一些目录
-DIR 	=	-I$(SRC_PATH)/$(SCHEAD_DIR)/include -I$(SRC_PATH)/$(SERVICE_DIR)/include \
-			-I$(SRC_PATH)/$(STRUCT_DIR)/include
+#
+# DIRS		: 所有可变编译文件目录
+# IINC		: -I 需要导入的include 目录
+# SRCC		: 所有 .c 文件
+#
+DIRS	=	$(CURL_DIR) $(ICONV_DIR) $(OPENSSL_DIR) \
+			$(IOP_DIR) $(COLOG_DIR) $(SCHEAD_DIR) \
+			$(STRUCT_DIR) $(SERVICE_DIR)
 
-# 全局替换变量
-CC	= gcc 
-LIB 	= -lpthread -lm
+IINC	=	$(foreach v, $(DIRS), -I$(SRC_PATH)/$(v)/include)
+SRCC	=	$(wildcard $(foreach v, $(MAIN_DIR) $(DIRS) $(TEST_DIR), $(SRC_PATH)/$(v)/*.c))
+
+OBJC	=	$(wildcard $(foreach v, $(DIRS), $(SRC_PATH)/$(v)/*.c))
+OBJO	=	$(foreach v, $(OBJC), $(notdir $(basename $(v))).o)
+OBJP	=	$(TAR_PATH)/$(OBJ_DIR)/
+
+TESTC	=	$(wildcard $(SRC_PATH)/$(TEST_DIR)/*.c)
+TESTE	=	$(foreach v, $(TESTC), $(notdir $(basename $(v))).exe)
+
+#
+# 全局编译的设置
+#
+CC		= gcc 
+LIB 	= -lpthread -lm -liconv -lssl -lcurl
 CFLAGS 	= -g -Wall -Wno-unused-result -O2 -std=gnu11
 
-# 运行指令信息
-define NOW_RUNO
-$(notdir $(basename $(1))).o : $(1) | $$(TAR_PATH)
-	$$(CC) $$(CFLAGS) $$(DIR) -c -o $$(TAR_PATH)/$$(BUILD_DIR)/$$@ $$<
-endef
+DEF		= -D_HAVE_EPOLL
+
+RHAD	= $(CC) $(CFLAGS) $(IINC) $(DEF)
+RUNO	= $(RHAD) -c -o $(OBJP)$@ $<
+RUN		= $(RHAD) -o $(TAR_PATH)/$@ $(foreach v, $^, $(OBJP)$(v)) $(LIB)
 
 # 单元测试使用, 生成指定主函数的运行程序
-RUN_TEST = $(CC) $(CFLAGS) $(DIR) --entry=$(basename $@) -nostartfiles -o \
-	$(TAR_PATH)/$(TEST_DIR)/$@ $(foreach v, $^, $(TAR_PATH)/$(BUILD_DIR)/$(v))
+RUNT	= $(CC) $(CFLAGS) $(DIR) --entry=$(basename $@) -nostartfiles \
+		  -o $(TAR_PATH)/$(TEST_DIR)/$@ $(foreach v, $^, $(OBJP)$(v))
 
-# 产生具体的单元测试程序
-define TEST_RUN
-$(1) : $$(notdir $$(basename $(1))).o libschead.a $(2) | $$(TAR_PATH)
-	$$(RUN_TEST) $(LIB)
-endef
-	
-###################################################################################################
-#			1.具体的产品生产								
-###################################################################################################
+#
+# 具体的产品生产								
+#
 .PHONY:all clean cleanall
 
-all : main.out\
-	$(foreach v, $(wildcard $(SRC_PATH)/$(TEST_DIR)/*.c), $(notdir $(basename $(v))).out)
+all : main.exe $(TESTE)
 
+#
 # 主运行程序main
-main.out:main.o simplec.o libschead.a libstruct.a test_array.o array.o
-	$(CC) $(CFLAGS) $(DIR) -o $(TAR_PATH)/$(TEST_DIR)/$@ $(foreach v, $^, $(TAR_PATH)/$(BUILD_DIR)/$(v)) $(LIB)
+#
+main.exe:main.o simplec.o libsimplec.a
+	$(RUN)
 
-# !!!!! - 生成具体的单元测试程序 - 依赖个人维护 - !!!!!
-$(eval $(call TEST_RUN, test_array.out, array.o))
-$(eval $(call TEST_RUN, test_atom_rwlock.out))
-$(eval $(call TEST_RUN, test_cjson.out, tstr.o))
-$(eval $(call TEST_RUN, test_cjson_write.out, tstr.o))
-$(eval $(call TEST_RUN, test_csv.out, tstr.o))
-$(eval $(call TEST_RUN, test_json_read.out, tstr.o))
-$(eval $(call TEST_RUN, test_log.out))
-$(eval $(call TEST_RUN, test_scconf.out, tstr.o tree.o))
-$(eval $(call TEST_RUN, test_scoroutine.out, scoroutine.o))
-$(eval $(call TEST_RUN, test_scpthread.out, scpthread.o scalloc.o))
-$(eval $(call TEST_RUN, test_sctimer.out, sctimer.o scalloc.o))
-$(eval $(call TEST_RUN, test_sctimeutil.out))
-$(eval $(call TEST_RUN, test_tstring.out, tstr.o))
-$(eval $(call TEST_RUN, test_xlsmtojson.out, tstr.o))
+#
+# -> 单元测试程序生成
+#
+define CALL_TEST
+$(1) : $$(notdir $$(basename $(1))).o libsimplec.a | $$(TAR_PATH)
+	$$(RUNT) $(LIB)
+endef
 
-###################################################################################################
-#			2.先产生所需要的所有机器码文件										 
-###################################################################################################
+$(foreach v, $(TESTE), $(eval $(call CALL_TEST, $(v))))
 
-# 循环产生 - 所有 - 链接文件 *.o
-SRC_CS = $(wildcard\
-	$(SRC_PATH)/$(MAIN_DIR)/*.c\
-	$(SRC_PATH)/$(TEST_DIR)/*.c\
-	$(SRC_PATH)/$(SCHEAD_DIR)/*.c\
-	$(SRC_PATH)/$(SERVICE_DIR)/*.c\
-	$(SRC_PATH)/$(STRUCT_DIR)/*.c\
-)
-$(foreach v, $(SRC_CS), $(eval $(call NOW_RUNO, $(v))))
+#
+# 循环产生 -> 所有 - 链接文件 *.o
+#
+define CALL_RUNO
+$(notdir $(basename $(1))).o : $(1) | $$(TAR_PATH)
+	$$(RUNO)
+endef
 
-# 生产 -相关- 静态库
-libschead.a : $(foreach v, $(wildcard $(SRC_PATH)/$(SCHEAD_DIR)/*.c), $(notdir $(basename $(v))).o)
-	ar cr $(TAR_PATH)/$(BUILD_DIR)/$@ $(foreach v, $^, $(TAR_PATH)/$(BUILD_DIR)/$(v))
-libstruct.a : $(foreach v, $(wildcard $(SRC_PATH)/$(STRUCT_DIR)/*.c), $(notdir $(basename $(v))).o)
-	ar cr $(TAR_PATH)/$(BUILD_DIR)/$@ $(foreach v, $^, $(TAR_PATH)/$(BUILD_DIR)/$(v))
+$(foreach v, $(SRCC), $(eval $(call CALL_RUNO, $(v))))
 
-###################################################################################################
-#			3.程序的收尾工作,清除,目录构建						
-###################################################################################################
+#
+# 生成 libsimplec.a 静态库, 方便处理所有问题
+#
+libsimplec.a : $(OBJO)
+	ar cr $(OBJP)$@ $(foreach v, $^, $(OBJP)$(v))
+
+#
+# 程序的收尾工作,清除,目录构建						
+#
 $(TAR_PATH):
-	-mkdir -p $@/$(BUILD_DIR)
+	-mkdir -p $(OBJP)
 	-mkdir -p $@/$(TEST_DIR)/config
 	-cp -r $(SRC_PATH)/$(TEST_DIR)/config $@/$(TEST_DIR)
 	-cp $(SRC_PATH)/config/* $@/$(TEST_DIR)/config
 
 # 清除操作
 clean :
-	-rm -rf $(TAR_PATH)/$(BUILD_DIR)/*
+	-rm -rf $(OBJP)*
 
 cleanall :
 	-rm -rf $(TAR_PATH)

@@ -77,7 +77,7 @@ inline static char _htoi(uint8_t * s) {
 //
 int
 url_decode(char s[], int len) {
-	char * dest, *data, c;
+	char * dest, * data, c;
 
 	DEBUG_CODE({
 		if (!s || !*s || len <= 0)
@@ -91,7 +91,7 @@ url_decode(char s[], int len) {
 		if (c == '+')
 			*dest = ' ';
 		else if (c == '%' && len >= 2 && isxdigit(data[0]) && isxdigit(data[1])) {
-			*dest = _htoi(data);
+			*dest = _htoi((uint8_t *)data);
 			data += 2;
 			len -= 2;
 		}

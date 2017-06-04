@@ -1,7 +1,7 @@
 ﻿#include <objs.h>
 
 static void _return_void(void) {
-	static _cnt = 198;
+	static int _cnt = 198;
 	RETURN(NIL, "美丽的泡沫, 全都是泡沫 = %d.", _cnt);
 }
 

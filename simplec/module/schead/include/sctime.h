@@ -27,6 +27,13 @@ extern int gettimeofday(struct timeval * tv, void * tz);
 
 #endif
 
+// gcc 上导入 gettimeofday 函数引用
+#if defined(__GNUC__)
+
+#include <sys/time.h>
+
+#endif
+
 
 // 定义每天是开始为 0时0分0秒
 #define _INT_MINSECOND		(60)

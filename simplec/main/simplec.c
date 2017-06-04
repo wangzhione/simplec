@@ -44,6 +44,8 @@ simplec_go(void) {
 	puts(image);
 }
 
+#if defined(_MSC_VER) && defined(_DEBUG)
+
 /*
  * simple c 单元测试主函数
  * return	: void
@@ -61,3 +63,5 @@ simplec_test(void) {
 
 	test_httputil();
 }
+
+#endif

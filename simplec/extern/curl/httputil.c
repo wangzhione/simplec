@@ -32,7 +32,8 @@ http_start(void) {
 }
 
 // 具体看 curl_write_callback , 这里使用libcurl 内部强转
-static inline size_t _http_write(char * buf, size_t s, size_t n, tstr_t str) {
+static inline size_t _http_write(char * buf, size_t s, size_t n, void * arg) {
+	tstr_t str = arg;
 	size_t sn = s * n;
 	
 	tstr_appendn(str, buf, sn);

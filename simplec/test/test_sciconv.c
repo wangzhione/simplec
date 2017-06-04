@@ -1,5 +1,6 @@
 ﻿#include <sciconv.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #define _INT_STR	(35)
 

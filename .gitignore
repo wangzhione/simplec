@@ -14,6 +14,7 @@
 *.db
 *.suo
 *.swp
+*.swo
 *.exe
 *.out
 *.pdb
@@ -24,6 +25,7 @@
 *.out
 *.obj
 *.idb
+.*.swo
 *.iobj
 *.ipdb
 *.tlog

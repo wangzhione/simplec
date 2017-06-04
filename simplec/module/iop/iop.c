@@ -353,7 +353,7 @@ iop_send(iopbase_t base, uint32_t id, const void * data, uint32_t len) {
 
 	// 剩余的发送部分, 下次再发
 	if (buf->cap > _INT_MAXBUF) {
-		RETURN(Error_Alloc, "iop->sbuf->capacity error too length = %u.", buf->cap);
+		RETURN(Error_Alloc, "iop->sbuf->capacity error too length = %zd.", buf->cap);
 	}
 
 	// 开始填充内存
@@ -373,7 +373,7 @@ iop_recv(iopbase_t base, uint32_t id) {
 	tstr_t buf = iop->rbuf;
 
 	if (buf->cap > _INT_MAXBUF) {
-		RETURN(Error_Alloc, "iop->rbuf->capacity error too length = %u.", buf->cap);
+		RETURN(Error_Alloc, "iop->rbuf->capacity error too length = %zd.", buf->cap);
 	}
 	tstr_expand(buf, _INT_RECV);
 

@@ -15,7 +15,7 @@ void test_clog(void) {
 	printf("sec = %ld, usec = %ld.\n", tv.tv_sec, tv.tv_usec);
 
 	time_t t = time(NULL);
-	printf("sec = %lld.\n", t);
+	printf("sec = %"PRId64".\n", t);
 
 	CL_ERROR("test_clog %d.", 1);
 	CL_ERROR("test_clog %d.", 2);

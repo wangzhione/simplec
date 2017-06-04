@@ -11,12 +11,13 @@ static void _run(void * arg) {
 }
 
 //简单的线程打印函数
-static void _ppt(const char * str) {
+static void _ppt(void * arg) {
+	const char * str = arg;
 	printf("%d => %s\n", ++_old, str);
 }
 
 //另一个线程测试函数
-static  void _doc(void* arg) {
+static  void _doc(void * arg) {
 	printf("p = %d, 技术不决定项目的成败!我老大哭了\n", ++_old);
 }
 
