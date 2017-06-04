@@ -56,6 +56,8 @@ simplec_test(void) {
 	extern void test_scthreads(void);
 	// 单元测试 - 测试 iop 网络io
 	extern void test_iopserver(void);
+	// 单元测试 - 测试 libcurl http 库
+	extern void test_httputil(void);
 
-	test_iopserver();
+	test_httputil();
 }

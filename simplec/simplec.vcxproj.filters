@@ -267,6 +267,9 @@
     <ClCompile Include="extern\openssl\md5util.c">
       <Filter>extern\openssl</Filter>
     </ClCompile>
+    <ClCompile Include="test\test_httputil.c">
+      <Filter>test</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="module\schead\include\schead.h">

@@ -48,6 +48,7 @@
     <ClCompile Include="test\test_cjson.c" />
     <ClCompile Include="test\test_clog.c" />
     <ClCompile Include="test\test_csv.c" />
+    <ClCompile Include="test\test_httputil.c" />
     <ClCompile Include="test\test_iopserver.c" />
     <ClCompile Include="test\test_json_read.c" />
     <ClCompile Include="test\test_objs.c" />
@@ -220,13 +221,13 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <UseOfMfc>false</UseOfMfc>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
     <UseOfMfc>false</UseOfMfc>

@@ -1,23 +1,23 @@
-#include <sciconv.h>
+ï»¿#include <sciconv.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 
 //
-// si_isutf8 - ÅĞ¶Ïµ±Ç°×Ö·û´®ÊÇ·ñÊÇutf-8±àÂë
-// in		: ´ı¼ì²âµÄ×Ö·û´®
-// return	: true±íÊ¾È·Êµutf8±àÂë, false²»ÊÇ
+// si_isutf8 - åˆ¤æ–­å½“å‰å­—ç¬¦ä¸²æ˜¯å¦æ˜¯utf-8ç¼–ç 
+// in		: å¾…æ£€æµ‹çš„å­—ç¬¦ä¸²
+// return	: trueè¡¨ç¤ºç¡®å®utf8ç¼–ç , falseä¸æ˜¯
 //
 bool 
 si_isutf8(const char * in) {
-	uint8_t bytes = 0, c;		// bytes ±íÊ¾±àÂë×Ö½ÚÊı, utf-8 [1, 6] ×Ö½Ú±àÂë
+	uint8_t bytes = 0, c;		// bytes è¡¨ç¤ºç¼–ç å­—èŠ‚æ•°, utf-8 [1, 6] å­—èŠ‚ç¼–ç 
 	bool isascii = true;
 
 	while ((c = *in++)) {
-		if ((c & 0x80)) // ascii Âë×î¸ßÎ»Îª0, 0xxx xxxx
+		if ((c & 0x80)) // ascii ç æœ€é«˜ä½ä¸º0, 0xxx xxxx
 			isascii = false;
 
-		// ÏÂÃæ¼ÆËã×Ö½ÚÊı, ¼ÆËã×Ö½ÚÊ×²¿
+		// ä¸‹é¢è®¡ç®—å­—èŠ‚æ•°, è®¡ç®—å­—èŠ‚é¦–éƒ¨
 		if (bytes == 0) { 
 			if (c >= 0x80) {
 				if (c >= 0xFC && c <= 0xFD)
@@ -30,29 +30,29 @@ si_isutf8(const char * in) {
 					bytes = 3;
 				else if (c >= 0xC0)
 					bytes = 2;
-				else	// Òì³£±àÂëÖ±½Ó·µ»Ø
+				else	// å¼‚å¸¸ç¼–ç ç›´æ¥è¿”å›
 					return false;
 				--bytes;
 			}
 		}
-		else { // ¶à×Ö½ÚµÄ·ÇÊ××Ö½Ú, Ó¦Îª 10xx xxxx
+		else { // å¤šå­—èŠ‚çš„éé¦–å­—èŠ‚, åº”ä¸º 10xx xxxx
 			if ((c & 0xC0) != 0x80)
 				return false;
 			--bytes;
 		}
 	}
-	// bytes > 0 Î¥·´utf-8¹æÔò, isacii == true ±íÊ¾ÊÇascii±àÂë
+	// bytes > 0 è¿åutf-8è§„åˆ™, isacii == true è¡¨ç¤ºæ˜¯asciiç¼–ç 
 	return bytes == 0 && !isascii;
 }
 
 //
-// si_iconv - ½«×Ö·û´® in ×ªÂë, from Âë -> to Âë
-// in		: ´ı×ªÂëµÄ×Ö·û´® 
-// len		: ×Ö·ûÊı×é³¤¶È
-// from		: ³õÊ¼±àÂë×Ö·û´®
-// to		: ×ª³ÉµÄ±àÂë×Ö·û´® 
-// rlen		: ·µ»Ø×ª»»ºó×Ö·û´®³¤¶È, ´«ÈëNULL±íÊ¾²»ĞèÒª
-// return	: ·µ»Ø×ªÂëºóµÄ´®, ĞèÒª×Ô¼ºÏú»Ù 
+// si_iconv - å°†å­—ç¬¦ä¸² in è½¬ç , from ç  -> to ç 
+// in		: å¾…è½¬ç çš„å­—ç¬¦ä¸² 
+// len		: å­—ç¬¦æ•°ç»„é•¿åº¦
+// from		: åˆå§‹ç¼–ç å­—ç¬¦ä¸²
+// to		: è½¬æˆçš„ç¼–ç å­—ç¬¦ä¸² 
+// rlen		: è¿”å›è½¬æ¢åå­—ç¬¦ä¸²é•¿åº¦, ä¼ å…¥NULLè¡¨ç¤ºä¸éœ€è¦
+// return	: è¿”å›è½¬ç åçš„ä¸², éœ€è¦è‡ªå·±é”€æ¯ 
 //
 char * 
 si_iconv(const char * in, const char * from, const char * to, size_t * rlen) {
@@ -60,11 +60,11 @@ si_iconv(const char * in, const char * from, const char * to, size_t * rlen) {
 	size_t lenin, lenout, len;
 	iconv_t ct;
 
-	// ´ò¿ªiconv ×ª»»¶ÔÏó
+	// æ‰“å¼€iconv è½¬æ¢å¯¹è±¡
 	if ((ct = iconv_open(to, from)) == (iconv_t)-1)
 		return NULL;
 	
-	// ¹¹½¨²ÎÊı, buff±£´æ×îÖÕÊı¾İ
+	// æ„å»ºå‚æ•°, buffä¿å­˜æœ€ç»ˆæ•°æ®
 	len = strlen(in) + 1;
 	lenout = len << 1;
 	if ((buff = malloc(lenout)) == NULL) {
@@ -75,29 +75,29 @@ si_iconv(const char * in, const char * from, const char * to, size_t * rlen) {
 	sin = (char *)in;
 	lenin = len + 1;
 
-	// ¿ªÊ¼×ª»»
+	// å¼€å§‹è½¬æ¢
 	if (iconv(ct, &sin, &lenin, &sout, &lenout) == -1) {
-		free(sout);
+		free(buff);
 		iconv_close(ct);
 		return NULL;
 	}
 	iconv_close(ct);
 
-	// ¿ªÊ¼ÖØĞÂ¹¹½¨ÄÚ´æ·µ»ØÊı¾İ
+	// å¼€å§‹é‡æ–°æ„å»ºå†…å­˜è¿”å›æ•°æ®
 	lenout = strlen(buff);
-	// ·µ»ØÊı¾İ×îÖÕ½á¹ûÊı¾İ
+	// è¿”å›æ•°æ®æœ€ç»ˆç»“æœæ•°æ®
 	if (rlen)
 		*rlen = lenout;
 
-	// ÄÚ´æËõĞ¡Ò»¶¨³É¹¦
+	// å†…å­˜ç¼©å°ä¸€å®šæˆåŠŸ
 	return realloc(buff, lenout + 1);;
 }
 
 //
-// si_iconv - ½«×Ö·û´®Êı×éin ×ªÂë, ×îºó»¹ÊÇ·ÅÔÚinÊı×éÖĞ. 
-// in		: ×Ö·ûÊı×é
-// from		: ³õÊ¼±àÂë×Ö·û´®
-// to		: ×ª³ÉµÄ±àÂë×Ö·û´® 
+// si_iconv - å°†å­—ç¬¦ä¸²æ•°ç»„in è½¬ç , æœ€åè¿˜æ˜¯æ”¾åœ¨inæ•°ç»„ä¸­. 
+// in		: å­—ç¬¦æ•°ç»„
+// from		: åˆå§‹ç¼–ç å­—ç¬¦ä¸²
+// to		: è½¬æˆçš„ç¼–ç å­—ç¬¦ä¸² 
 // return	: void
 // 
 void 
@@ -111,14 +111,14 @@ si_aconv(char in[], const char * from, const char * to) {
 	if (NULL == out)
 		return;
 
-	// ¿ªÊ¼´¦ÀíÊı¾İ¹¹½¨
+	// å¼€å§‹å¤„ç†æ•°æ®æ„å»º
 	memcpy(in, out, len);
 	free(out);
 }
 
 //
-// si_gbktoutf8 - ½«×Ö·û´®Êı×éin, ×ª³Éutf8±àÂë
-// in		: ×Ö·ûÊı×é
+// si_gbktoutf8 - å°†å­—ç¬¦ä¸²æ•°ç»„in, è½¬æˆutf8ç¼–ç 
+// in		: å­—ç¬¦æ•°ç»„
 // return	: void
 //
 inline void si_gbktoutf8(char in[]) {
@@ -126,10 +126,10 @@ inline void si_gbktoutf8(char in[]) {
 }
 
 //
-// si_utf8togbk - ½«×Ö·û´®Êı×éin, ×ª³Égbk±àÂë
-// in		: ×Ö·ûÊı×é
+// si_utf8togbk - å°†å­—ç¬¦ä¸²æ•°ç»„in, è½¬æˆgbkç¼–ç 
+// in		: å­—ç¬¦æ•°ç»„
 // return	: void
 //
 inline void si_utf8togbk(char in[]) {
-	si_aconv(in, "utf-8", "gbk");
+	si_aconv(in, "utf-8", "gbk//IGNORE");
 }
