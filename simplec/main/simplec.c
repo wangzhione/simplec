@@ -60,8 +60,10 @@ simplec_test(void) {
 	extern void test_iopserver(void);
 	// 单元测试 - 测试 libcurl http 库
 	extern void test_httputil(void);
+	// 单元测试 - 测试 玩具 ddos攻击
+	extern void test_ddos(void);
 
-	test_httputil();
+	test_ddos();
 }
 
 #endif

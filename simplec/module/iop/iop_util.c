@@ -36,11 +36,9 @@ socket_start(void) {
 #endif
 }
 
-#define _USHORT_PORT	(1024)
-
 int 
 socket_addr(const char * ip, uint16_t port, sockaddr_t * addr) {
-	if (!ip || !*ip || port <= _USHORT_PORT || !addr)
+	if (!ip || !*ip || !addr)
 		RETURN(Error_Param, "check empty ip = %s, port = %hu, addr = %p.", ip, port, addr);
 
 	addr->sin_family = AF_INET;
@@ -48,9 +46,10 @@ socket_addr(const char * ip, uint16_t port, sockaddr_t * addr) {
 	addr->sin_addr.s_addr = inet_addr(ip);
 	if (addr->sin_addr.s_addr == INADDR_NONE) {
 		struct hostent * host = gethostbyname(ip);
-		if (NULL == host)
+		if (!host || !host->h_addr)
 			RETURN(Error_Param, "check ip is error = %s.", ip);
-		memcpy(&addr->sin_addr, host->h_addr_list[0], host->h_length);
+		// 尝试一种, 默认ipv4
+		memcpy(&addr->sin_addr, host->h_addr, host->h_length);
 	}
 	memset(addr->sin_zero, 0, sizeof addr->sin_zero);
 

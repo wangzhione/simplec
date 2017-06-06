@@ -108,4 +108,13 @@
  sudo apt-get install openssl
  sudo apt-get install libssl-dev
 
+ 除了编译, 然后添加配置
+
+ sudo vi /etc/ld.so.conf
+ Shift + G
+ i
+ /usr/local/lib
+
+ sudo ldconfig
+
  */

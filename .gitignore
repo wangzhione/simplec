@@ -27,6 +27,7 @@
 *.out
 *.obj
 *.idb
+*.TMP
 .*.swo
 *.iobj
 *.ipdb

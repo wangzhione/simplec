@@ -48,6 +48,7 @@
     <ClCompile Include="test\test_cjson.c" />
     <ClCompile Include="test\test_clog.c" />
     <ClCompile Include="test\test_csv.c" />
+    <ClCompile Include="test\test_ddos.c" />
     <ClCompile Include="test\test_httputil.c" />
     <ClCompile Include="test\test_iopserver.c" />
     <ClCompile Include="test\test_json_read.c" />

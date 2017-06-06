@@ -46,7 +46,7 @@ TESTE	=	$(foreach v, $(TESTC), $(notdir $(basename $(v))).exe)
 #
 CC		= gcc 
 LIB 	= -lpthread -lm -liconv -lssl -lcurl
-CFLAGS 	= -g -Wall -Wno-unused-result -O2 -std=gnu11
+CFLAGS 	= -g -O2 -Wall -Wno-unused-result -std=gnu11
 
 DEF		= -D_HAVE_EPOLL
 
