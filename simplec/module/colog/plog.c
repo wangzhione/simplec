@@ -53,15 +53,13 @@ static void _openfile(void) {
 }
 
 // 消息队列中消息对象销毁
-static inline void _die(void * arg) {
-	struct log * log = arg;
+static inline void _die(struct log * log) {
 	fputs(log->str, _plog.log);
 	objs_free(_plog.pool, log);
 }
 
 // 轮询器的主体
-static void _run(void * arg) {
-	struct log * log = arg;
+static void _run(struct log * log) {
 
 	// 重新构建文件信息
 	if (_plog.size >= _UINT_PLOG) {

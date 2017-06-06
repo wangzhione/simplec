@@ -12,14 +12,14 @@ struct stnode {
 	int type;					//0表示不开启多线程, 1表示开启多线程
 	die_f timer;				//执行的函数事件
 	void * arg;					//执行函数参数
-	struct stnode* next;		//下一个定时器结点
+	struct stnode * next;		//下一个定时器结点
 };
 
 // 当前链表对象管理器
 struct stlist {
 	int lock;					//加锁用的
 	int nowid;					//当前使用的最大timer id
-	int status;					//0表示停止态, 1表示主线程loop运行态
+	bool status;				//false表示停止态, true表示主线程loop运行态
 	pthread_t tid;				//主循环线程id, 0表示没有启动
 	struct stnode * head;		//定时器链表的头结点
 };
@@ -49,20 +49,19 @@ static struct stnode * _new_stnode(int start, int cnt, int intval, die_f timer, 
 }
 
 // 如果stl < str 返回true, 否则返回false
-inline static bool _stnode_cmp(struct stnode* stl, struct stnode* str) {
+inline static bool _stnode_cmp(struct stnode * stl, struct stnode * str) {
 	return (stl->stime < str->stime) || 
 		(stl->stime == str->stime && stl->ms < str->ms);
 }
 
 // 添加链表对象, 返回true表示插入的是头结点, 当你执行的时候需要全额加锁
 static bool _stlist_add(struct stlist * st, struct stnode * node) {
-	struct stnode * head;
+	struct stnode * head = st->head;
 
 	// 插入为头结点直接返回
-	if (!(head=st->head) || _stnode_cmp(node, head)) {
+	if (!head || _stnode_cmp(node, head)) {
 		node->next = head;
 		st->head = node;
-		ATOM_UNLOCK(st->lock);
 		return true;
 	}
 
@@ -80,11 +79,11 @@ static bool _stlist_add(struct stlist * st, struct stnode * node) {
 
 // 根据id,删除一个timer结点, 返回NULL表示没有找见不处理,多线程安全的
 static struct stnode * _stlist_del(struct stlist * st, int id) {
-	struct stnode *head, *tmp = NULL;
-	if (!(head = st->head)) 
-		return NULL;
+	struct stnode * head = st->head, * tmp = NULL;
+	if (!head) return NULL;
 
 	ATOM_LOCK(st->lock);
+
 	// 删除为头结点直接返回
 	if (head->id == id) {
 		st->head = head->next;
@@ -107,11 +106,11 @@ static struct stnode * _stlist_del(struct stlist * st, int id) {
 }
 
 // 得到等待的时间,毫秒, <=0的时候头时间就可以执行了
-inline static int _sleeptime(struct stlist* st) {
+inline static int _sleeptime(struct stlist * st) {
 	struct stnode * head = st->head;
     struct timeval tv;
 	gettimeofday(&tv, NULL);
-	return (int)(1000 * (head->stime - tv.tv_sec) + head->ms - tv.tv_usec/1000);
+	return (int)(1000 * (head->stime - tv.tv_sec) + head->ms - tv.tv_usec / 1000);
 }
 
 // timer线程执行的函数
@@ -155,9 +154,9 @@ static void _slnode_again_run(struct stlist * st) {
 static void * _stlist_loop(struct stlist * st) {
 	int nowt;
 	
-	//设置线程属性, 默认线程属性 允许退出线程 
-    pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, NULL); //设置立即取消 
-	pthread_detach(pthread_self()); //设置线程分离,自销毁
+	//设置线程分离,自销毁, 默认线程属性 允许退出线程, 设置立即取消 
+	pthread_detach(pthread_self());
+    pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, NULL);
 	
 	// 正常轮询,检测时间
 	while (st->head) {
@@ -168,8 +167,9 @@ static void * _stlist_loop(struct stlist * st) {
 		else //没有人到这那就继续等待
 			sh_sleep(nowt);
 	}
+
 	// 已经运行结束
-	st->status = 0;
+	st->status = false;
 	return NULL;
 }
 
@@ -185,25 +185,27 @@ static void * _stlist_loop(struct stlist * st) {
  */
 int 
 st_add(int start, int cnt, int intval, die_f timer, void * arg, bool fb) {
-	struct stnode* now;
+	struct stnode * now;
 	DEBUG_CODE({
 		if(start < 0 || cnt < 0 || intval < 0 || !timer)
 			CERR_EXIT("debug start,cut,intval,timer => %d,%d,%d,%p.", start, cnt, intval, timer);
 	});
+
 	// 这里开始创建对象往 线程队列中添加
 	now = _new_stnode(start, cnt, intval, timer, arg, fb);
 	
 	ATOM_LOCK(_st.lock); //核心添加模块 要等, 添加到链表, 看线程能否取消等
+
 	_stlist_add(&_st, now);
 	// 看是否需要取消线程
-	if(_st.status == 1 && _sleeptime(&_st) < 0){
+	if(_st.status && _sleeptime(&_st) < 0){
 		pthread_cancel(_st.tid);
-		_st.status = 0;
+		_st.status = false;
 	}
 	// 这个时候重新开启线程
-	if(_st.status == 0){
-		pthread_create(&_st.tid, NULL, (void* (*)(void*))_stlist_loop, &_st);
-		_st.status = 1; //延迟真实运行态
+	if(_st.status){
+		pthread_create(&_st.tid, NULL, (start_f)_stlist_loop, &_st);
+		_st.status = true; //延迟真实运行态
 	}
 	ATOM_UNLOCK(_st.lock);
 	
@@ -217,6 +219,7 @@ st_add(int start, int cnt, int intval, die_f timer, void * arg, bool fb) {
 inline void 
 st_del(int st) {
 	struct stnode * sn = _stlist_del(&_st, st);
-	if(sn) 
+	if (sn) {
 		free(sn);
+	}
 }

@@ -15,7 +15,8 @@ typedef struct threads * threads_t;
 // arg		: run的参数
 // return	: >= Success_Base 表示成功
 //
-extern int async_run(die_f run, void * arg);
+extern int async_run_(die_f run, void * arg);
+#define async_run(run, arg) async_run_((die_f)(run), arg)
 
 //
 // threads_create - 创建一个线程池处理对象

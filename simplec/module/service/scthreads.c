@@ -8,10 +8,9 @@ struct func {
 };
 
 // thread_run 中 pthread 执行的实体
-static void * _run(void * arg) {
-	struct func * func = arg;
+static void * _run(struct func * func) {
 	func->run(func->arg);
-	free(arg);
+	free(func);
 	return NULL;
 }
 
@@ -22,7 +21,7 @@ static void * _run(void * arg) {
 // return	: >= Success_Base 表示成功
 //
 int 
-async_run(die_f run, void * arg) {
+async_run_(die_f run, void * arg) {
 	pthread_t tid;
 	pthread_attr_t attr;
 	struct func * func = malloc(sizeof(struct func));
@@ -36,7 +35,7 @@ async_run(die_f run, void * arg) {
 	pthread_attr_init(&attr);
 	pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
 	
-	if (pthread_create(&tid, &attr, _run, func) < 0) {
+	if (pthread_create(&tid, &attr, (start_f)_run, func) < 0) {
 		free(func);
 		pthread_attr_destroy(&attr);
 		RETURN(Error_Base, "pthread_create error run, arg = %p | %p.", run, arg);
@@ -214,7 +213,6 @@ static void * _consumer(void * arg) {
 	pthread_mutex_t * mutx = &pool->mutx;
 
 	// 设置线程属性, 设置线程 允许退出线程
-	pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, NULL);
 	pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, NULL);
 
 	// 消费者线程加锁, 防止线程被取消锁没有释放

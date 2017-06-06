@@ -92,15 +92,17 @@ typedef enum {
 } flag_e;
 
 //
-// 定义一些通用的函数指针帮助,主要用于基库的封装中.
-// 有构造函数, 析构函数, 比较函数, 轮询函数等 
+// 定义一些通用的函数指针帮助, 主要用于基库的封装.
+// 有构造函数, 析构函数, 比较函数, 轮询函数 ... 
+// cmp_f	- int cmp(const void * ln, const void * rn); 标准结构
+// each_f	- flag_e <=> int, echh循环操作, arg 外部参数, node 内部节点
+// start_f	- pthread 线程启动的辅助函数宏, 方便优化
 //
+typedef int (* cmp_f)();
 typedef void * (* new_f)();
 typedef void (* die_f)(void * node);
-// cmp_f 最好 是 int cmp(const void * ln, const void * rn); 标准结构
-typedef int (* cmp_f)();
-// 循环操作函数, arg 外部参数, node 内部节点
 typedef flag_e (* each_f)(void * node, void * arg);
+typedef void * (* start_f) (void * arg);
 
 #define _ENUM_FLAG
 #endif // !_ENUM_FLAG

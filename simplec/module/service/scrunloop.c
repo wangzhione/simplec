@@ -14,9 +14,8 @@ struct srl {
 // 线程阻塞的毫秒数
 #define _INT_SCRUNLOOP		(1)
 
-static void * _srl_loop(void * arg) {
-	struct srl * s = arg;
-	
+static void * _srl_loop(struct srl * s) {
+
 	while (s->loop) {
 		void * pop = mq_pop(s->mq);
 		if (NULL == pop) {
@@ -28,7 +27,7 @@ static void * _srl_loop(void * arg) {
 		s->run(pop);
 	}
 
-	return arg;
+	return s;
 }
 
 //
@@ -38,14 +37,14 @@ static void * _srl_loop(void * arg) {
 // return	: void 
 //
 srl_t
-srl_create(die_f run, die_f die) {
+srl_create_(die_f run, die_f die) {
 	struct srl * s = malloc(sizeof(struct srl));
 	assert(s && run);
 	s->mq = mq_create(die);
 	s->loop = true;
 	s->run = run;
 	// 创建线程,并启动
-	if (pthread_create(&s->th, NULL, _srl_loop, s)) {
+	if (pthread_create(&s->th, NULL, (start_f)_srl_loop, s)) {
 		mq_delete(s->mq);
 		free(s);
 		RETURN(NULL, "pthread_create create error !!!");

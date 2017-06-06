@@ -32,8 +32,7 @@ http_start(void) {
 }
 
 // 具体看 curl_write_callback , 这里使用libcurl 内部强转
-static inline size_t _http_write(char * buf, size_t s, size_t n, void * arg) {
-	tstr_t str = arg;
+static inline size_t _http_write(char * buf, size_t s, size_t n, tstr_t str) {
 	size_t sn = s * n;
 	
 	tstr_appendn(str, buf, sn);
@@ -54,7 +53,7 @@ static CURL * _http_head(const char * url, tstr_t str) {
 	curl_easy_setopt(crl, CURLOPT_HEADER, true);				// 下载数据包括HTTP头部
 	curl_easy_setopt(crl, CURLOPT_NOSIGNAL, true);				// 屏蔽其它信号
 
-	curl_easy_setopt(crl, CURLOPT_WRITEFUNCTION, _http_write);	// 输入函数类型
+	curl_easy_setopt(crl, CURLOPT_WRITEFUNCTION, (curl_write_callback)_http_write);	// 输入函数类型
 	curl_easy_setopt(crl, CURLOPT_WRITEDATA, str);				// 输入参数
 
 	return crl;

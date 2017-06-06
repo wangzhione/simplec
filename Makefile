@@ -113,3 +113,5 @@ clean :
 
 cleanall :
 	-rm -rf $(TAR_PATH)
+	-rm -rf Debug logs Release
+	-rm -rf $(SRC_PATH)/Debug $(SRC_PATH)/logs $(SRC_PATH)/Release
