@@ -1,11 +1,13 @@
 # Ignore the uploaded folders
 /.vs
-/Output
+/logs
 /Debug
+/Output
 /Release
 /simplec/x64
-/simplec/Debug
 /simplec/logs
+/simplec/Debug
+/simplec/Release
 
 # Ignore the uploaded files
 -p
