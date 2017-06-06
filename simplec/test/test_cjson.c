@@ -48,8 +48,4 @@ void test_cjson(void) {
 	}
 
 	cjson_delete(js);
-
-#ifdef __GNUC__
-	exit(EXIT_SUCCESS);
-#endif
 }

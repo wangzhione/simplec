@@ -22,6 +22,8 @@ TEST_DIR		?= test
 TAR_PATH		?= ./Output
 OBJ_DIR			?= obj
 
+OUT				?= exe
+
 #
 # DIRS		: 所有可变编译文件目录
 # IINC		: -I 需要导入的include 目录
@@ -39,7 +41,7 @@ OBJO	=	$(foreach v, $(OBJC), $(notdir $(basename $(v))).o)
 OBJP	=	$(TAR_PATH)/$(OBJ_DIR)/
 
 TESTC	=	$(wildcard $(SRC_PATH)/$(TEST_DIR)/*.c)
-TESTE	=	$(foreach v, $(TESTC), $(notdir $(basename $(v))).exe)
+TESTE	=	$(foreach v, $(TESTC), $(notdir $(basename $(v))).$(OUT))
 
 #
 # 全局编译的设置
@@ -51,24 +53,25 @@ CFLAGS 	= -g -O2 -Wall -Wno-unused-result -std=gnu11
 DEF		= -D_HAVE_EPOLL
 
 RHAD	= $(CC) $(CFLAGS) $(IINC) $(DEF)
+RTAL	= $(foreach v, $^, $(OBJP)$(v)) $(LIB)
 RUNO	= $(RHAD) -c -o $(OBJP)$@ $<
-RUN		= $(RHAD) -o $(TAR_PATH)/$@ $(foreach v, $^, $(OBJP)$(v)) $(LIB)
+RUN		= $(RHAD) -o $(TAR_PATH)/$@ $(RTAL)
 
-# 单元测试使用, 生成指定主函数的运行程序
-RUNT	= $(CC) $(CFLAGS) $(DIR) --entry=$(basename $@) -nostartfiles \
-		  -o $(TAR_PATH)/$(TEST_DIR)/$@ $(foreach v, $^, $(OBJP)$(v))
+# 单元测试使用, 生成指定主函数的运行程序, 替换回main操作
+RUNT	= $(RHAD) -o $(TAR_PATH)/$(TEST_DIR)/$@ $(RTAL)
+COPT	= objcopy --redefine-sym $(basename $@)=main $(OBJP)$(basename $@).o
 
 #
 # 具体的产品生产								
 #
 .PHONY:all clean cleanall
 
-all : main.exe $(TESTE)
+all : main.$(OUT) $(TESTE)
 
 #
 # 主运行程序main
 #
-main.exe:main.o simplec.o libsimplec.a
+main.$(OUT):main.o simplec.o libsimplec.a
 	$(RUN)
 
 #
@@ -76,7 +79,8 @@ main.exe:main.o simplec.o libsimplec.a
 #
 define CALL_TEST
 $(1) : $$(notdir $$(basename $(1))).o libsimplec.a | $$(TAR_PATH)
-	$$(RUNT) $(LIB)
+	$$(COPT)
+	$$(RUNT)
 endef
 
 $(foreach v, $(TESTE), $(eval $(call CALL_TEST, $(v))))

@@ -23,8 +23,4 @@ void test_sctimer(void) {
 
 	// 再注册一个方法, 这个是永久执行, 没有被 st_del的话, 将会和系统共存亡
 	st_add(100, 0, 5000, _timer, (void*)5, false);
-	
-#ifdef __GNUC__
-	exit(EXIT_SUCCESS);
-#endif
 }

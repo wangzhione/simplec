@@ -61,10 +61,6 @@ void test_array(void) {
 	array_each(a, (each_f)_dict_echo, NULL);
 
 	array_die(a);
-
-#ifdef __GNUC__
-	exit(EXIT_SUCCESS);
-#endif
 }
 
 void test_array_stack(void) {

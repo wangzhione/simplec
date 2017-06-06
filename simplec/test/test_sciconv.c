@@ -10,8 +10,4 @@ void test_sciconv(void) {
 	printf("[%s] is utf8 = %d.\n", name, si_isutf8(name));
 	si_gbktoutf8(name);
 	printf("[%s] is utf8 = %d.\n", name, si_isutf8(name));
-
-#ifdef __GNUC__
-	exit(EXIT_SUCCESS);
-#endif
 }

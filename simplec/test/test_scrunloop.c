@@ -59,8 +59,4 @@ void test_scrunloop(void) {
 	pthread_join(th, NULL);
 
 	srl_delete(s);
-
-#ifdef __GNUC__
-	exit(EXIT_FAILURE);
-#endif
 }

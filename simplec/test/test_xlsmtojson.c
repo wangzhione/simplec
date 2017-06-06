@@ -19,10 +19,6 @@ void test_xlsmtojson(void) {
 		printf("%s 转换成功\n", _STR_CSVPATH);
 	else
 		printf("%s 转换失败, rt = %d\n", _STR_CSVPATH, rt);
-	
-#ifdef __GNUC__
-	exit(EXIT_SUCCESS);
-#endif
 }
 
 // 得到生成json文件的名称, 需要自己free

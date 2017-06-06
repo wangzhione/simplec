@@ -28,8 +28,4 @@ void test_tstring(void) {
 	tstr_appends(ts, "AN,but WAI!");
 	printf("str:%s, len:%zu, size:%zu.\n", ts->str, ts->len, ts->cap);
 	TSTR_DELETE(ts);
-
-#ifdef __GNUC__
-	exit(EXIT_SUCCESS);
-#endif
 }

@@ -43,8 +43,4 @@ void test_json_read(void) {
 	cjson_delete(firefighting_rule);
 	// rule 释放
 	cjson_delete(rule);
-
-#ifdef __GNUC__
-	exit(EXIT_SUCCESS);
-#endif
 }

@@ -23,8 +23,4 @@ void test_objs(void) {
 	}
 
 	objs_delete(pool);
-
-#ifdef __GNUC__
-	exit(EXIT_SUCCESS);
-#endif
 }

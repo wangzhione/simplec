@@ -39,8 +39,4 @@ void test_scthreads(void) {
 	sh_sleep(10000);
 	//清除当前线程池资源, 实战上线程池是常驻内存,不要清除.
 	threads_delete(pool);
-
-#ifdef __GNUC__
-	exit(EXIT_SUCCESS);
-#endif
 }

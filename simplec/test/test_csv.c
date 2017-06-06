@@ -28,8 +28,4 @@ void test_csv(void) {
 
 	//开心 测试圆满成功
 	sccsv_delete(csv);
-
-#ifdef __GNUC__
-	exit(EXIT_SUCCESS);
-#endif
 }

@@ -56,8 +56,4 @@ void test_scoroutine(void) {
 
 	puts("\n--------------------笑了笑, 我自己.--------------------");
 	sco_close(sco);
-
-#ifdef __GNUC__
-	exit(EXIT_SUCCESS);
-#endif
 }

@@ -19,9 +19,4 @@ void test_scurl(void) {
 	url_decode(nurl, nlen);
 	printf("nurl[nlen = %d]: %s\n", nlen, nurl);
 	free(nurl);
-
-
-#ifdef __GNUC__
-	exit(EXIT_SUCCESS);
-#endif
 }

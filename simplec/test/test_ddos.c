@@ -47,11 +47,6 @@ void test_ddos(void) {
 		printf(" %"PRIu64"			 %"PRIu64"				 %"PRIu64"\n", arg.connect, arg.tcpsend, arg.udpsend);
 		sh_sleep(_INT_TIMEOUT);
 	}
-
-
-#ifdef __GNUC__
-	exit(EXIT_SUCCESS);
-#endif
 }
 
 // 得到玩家输入的地址信息

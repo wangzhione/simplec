@@ -34,10 +34,6 @@ void test_atom_rwlock(void) {
 	// 写线程再跑起来
 	for (i = 0; i<_INT_WTH; ++i)
 		pthread_create((pthread_t *)&arg, NULL, (void * (*)(void *))twrite, &arg);
-
-#ifdef __GNUC__
-	exit(EXIT_SUCCESS);
-#endif
 }
 
 // 写线程, 主要随机写字符进去

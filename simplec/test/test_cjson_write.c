@@ -41,8 +41,4 @@ void test_cjson_write(void) {
 
 	//另一个测试 输出内存值
 	printf("d = %d\n", (int)strlen("{\"name\":\"Jack (\\\"Bee\\\") Nimble\",\"format\":{\"type\":[1,3,4,5.660000],\"height\":1080,\"interlace\":false}}"));
-
-#ifdef __GNUC__
-	exit(EXIT_SUCCESS);
-#endif
 }

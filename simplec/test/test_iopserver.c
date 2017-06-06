@@ -1,11 +1,11 @@
-#include <iop_server.h>
+ï»¿#include <iop_server.h>
 
-// Êı¾İ¼ì²é
+// æ•°æ®æ£€æŸ¥
 static int _echo_parser(const char * buf, uint32_t len) {
 	return (int)len;
 }
 
-// Êı¾İ´¦Àí
+// æ•°æ®å¤„ç†
 static int _echo_processor(iopbase_t base, uint32_t id, char * data, uint32_t len, void * arg) {
 	char buf[BUFSIZ];
 
@@ -16,24 +16,24 @@ static int _echo_processor(iopbase_t base, uint32_t id, char * data, uint32_t le
 
 	printf("recv data len = %u, data = %s.\n", len, buf);
 
-	// ¿ªÊ¼·¢ËÍÊı¾İ
+	// å¼€å§‹å‘é€æ•°æ®
 	int r = iop_send(base, id, data, len);
 	if (r < 0)
 		CERR("iop_send error id = %u, len = %u.\n", id, len);
 	return r;
 }
 
-// Á¬½Ó´¦Àí
+// è¿æ¥å¤„ç†
 static void _echo_connect(iopbase_t base, uint32_t id, void * arg) {
 	printf("_echo_connect base = %p, id : %u, arg = %p.\n", base, id, arg);
 }
 
-// ×îÖÕÏú»Ù´¦Àí
+// æœ€ç»ˆé”€æ¯å¤„ç†
 static void _echo_destroy(iopbase_t base, uint32_t id, void * arg) {
 	printf("_echo_destroy base = %p, id : %u, arg = %p.\n", base, id, arg);
 }
 
-// ´íÎó´¦Àí
+// é”™è¯¯å¤„ç†
 static int _echo_error(iopbase_t base, uint32_t id, uint32_t err, void * arg) {
 	switch (err) {
 	case EV_READ:
@@ -59,7 +59,7 @@ static int _echo_error(iopbase_t base, uint32_t id, uint32_t err, void * arg) {
 #define _UINT_TIMEOUT	(60)
 
 //
-// ²âÊÔ»ØÏÔ·şÎñÆ÷
+// æµ‹è¯•å›æ˜¾æœåŠ¡å™¨
 //
 static iopbase_t _test_echo_server(pthread_t * tid) {
 	int r;
@@ -86,22 +86,22 @@ static iopbase_t _test_echo_server(pthread_t * tid) {
 #define _INT_SLEEP	(3)
 
 //
-// »áÏÔ·şÎñÆ÷¿Í»§¶Ë
+// ä¼šæ˜¾æœåŠ¡å™¨å®¢æˆ·ç«¯
 //
 static void _test_echo_client(void) {
 	int r, i = -1;
-	char str[] = "ÍõÖ¾ - ÄãºÃ!";
+	char str[] = "ç‹å¿— - ä½ å¥½!";
 
 	printf("_test_echo_client connect [%s:%d]...\n", _STR_IP, _SHORT_PORT);
 
-	// Á¬½Óµ½·şÎñÆ÷
+	// è¿æ¥åˆ°æœåŠ¡å™¨
 	socket_t s = socket_connectos(_STR_IP, _SHORT_PORT, _UINT_TIMEOUT);
 	if (s == INVALID_SOCKET) {
 		CERR_EXIT("socket_connectos error [%s:%u:%d]", _STR_IP, _SHORT_PORT, _UINT_TIMEOUT);
 	}
 
 	while (++i < _INT_LOOP) {
-		// ·¢ËÍÒ»¸öÊı¾İ½ÓÊÕÒ»¸öÊı¾İ
+		// å‘é€ä¸€ä¸ªæ•°æ®æ¥æ”¶ä¸€ä¸ªæ•°æ®
 		printf("socket_sendn len = %zd, str = [%s].\n", sizeof str, str);
 		r = socket_sendn(s, str, sizeof str);
 		if (r == SOCKET_ERROR) {
@@ -122,33 +122,29 @@ static void _test_echo_client(void) {
 }
 
 //
-// ÍøÂçIO ×óÓÒ»¥²©Ö®Êõ ²âÊÔ
+// ç½‘ç»œIO å·¦å³äº’åšä¹‹æœ¯ æµ‹è¯•
 //
 void test_iopserver(void) {
 	int i = 1;
 	pthread_t tid;
 	iopbase_t base;
 
-	// Æô¶¯ * ×°ÔØ socket ¿â
+	// å¯åŠ¨ * è£…è½½ socket åº“
 	socket_start();
 
-	// ²âÊÔ»ù´¡µÄ·şÎñÆ÷Æô¶¯
+	// æµ‹è¯•åŸºç¡€çš„æœåŠ¡å™¨å¯åŠ¨
 	base = _test_echo_server(&tid);
 
-	// µÈ´ı 5s
+	// ç­‰å¾… 5s
 	while (i <= _INT_SLEEP) {
 		printf("test_iopserver sleep %d ...\n", i);
 		sh_sleep(1000);
 		++i;
 	}
 
-	// ¿Í»§¶ËºÍ·şÎñÆ÷´ÆĞÛÍ¬Ìå
+	// å®¢æˆ·ç«¯å’ŒæœåŠ¡å™¨é›Œé›„åŒä½“
 	_test_echo_client();
 
-	// µÈ´ı¿ªÆôµÄiopÏß³Ì½áÊø
+	// ç­‰å¾…å¼€å¯çš„iopçº¿ç¨‹ç»“æŸ
 	iop_end_pthread(base, &tid);
-
-#ifdef __GNUC__
-	exit(EXIT_SUCCESS);
-#endif
 }

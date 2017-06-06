@@ -50,8 +50,4 @@ void test_sclog(void) {
 	pthread_join(tone, NULL);
 
 	SL_NOTICE("main log test end!");
-
-#ifdef __GNUC__
-	exit(EXIT_SUCCESS);
-#endif
 }

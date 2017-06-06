@@ -24,9 +24,6 @@ void test_httputil(void) {
 	puts(music->str);
 
 	TSTR_DELETE(music);
-#ifdef __GNUC__
-	exit(EXIT_SUCCESS);
-#endif
 }
 
 #undef _STR_ZYQ

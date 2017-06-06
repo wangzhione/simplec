@@ -59,10 +59,8 @@
 
 	void test_xxxx(void) {
 		...
-	
-	#ifdef __GNUC__
-		exit(EXIT_SUCCESS);
-	#endif
+		,,
+		,
 	}
 
 	这样做方便linux挨个生成单元测试的可执行文件

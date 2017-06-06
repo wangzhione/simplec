@@ -48,8 +48,4 @@ void test_plog(void) {
 
 	// 开始奔跑等待了
 	pthread_join(th, NULL);
-
-#ifdef __GUNC__
-	exit(EXIT_SUCCESS);
-#endif
 }

@@ -1,9 +1,9 @@
-#include <stdio.h>
+ï»¿#include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
 #include <semaphore.h>
 
-// ²âÊÔÏß³ÌÊıÁ¿
+// æµ‹è¯•çº¿ç¨‹æ•°é‡
 #define _INT_THS	(3)
 
 struct threadarg {
@@ -11,24 +11,24 @@ struct threadarg {
 	sem_t sids[_INT_THS];
 };
 
-// ¼òµ¥ÔËĞĞº¯Êı
+// ç®€å•è¿è¡Œå‡½æ•°
 static void * _run(void * arg) {
 	int i = -1, j = -1;
 	struct threadarg * ths = arg;
 	pthread_t tid = pthread_self();
 	pthread_detach(tid);
 
-	// È·¶¨ÕâÊÇµÚ¼¸¸öÏß³Ì
+	// ç¡®å®šè¿™æ˜¯ç¬¬å‡ ä¸ªçº¿ç¨‹
 	while (++i < _INT_THS)
 		if (pthread_equal(tid, ths->tids[i]))
 			break;
 	
-	// Ñ­»·¸öÌØ¶¨±éÊı¾Í½áÊø°É
+	// å¾ªç¯ä¸ªç‰¹å®šéæ•°å°±ç»“æŸå§
 	while (++j < _INT_THS) {
-		// µÚ i ¸öÏß³Ì, µÈ´ı µÚ i - 1 ¸öÏß³Ì, Êä³ö 'A' + i 
+		// ç¬¬ i ä¸ªçº¿ç¨‹, ç­‰å¾… ç¬¬ i - 1 ä¸ªçº¿ç¨‹, è¾“å‡º 'A' + i 
 		sem_wait(ths->sids + (i - 1 + _INT_THS) % _INT_THS);
 		putchar('A' + i);
-		// µÚ i ¸öÏß³Ì, ¼¤»î µÚ i ¸öĞÅºÅÁ¿
+		// ç¬¬ i ä¸ªçº¿ç¨‹, æ¿€æ´» ç¬¬ i ä¸ªä¿¡å·é‡
 		sem_post(ths->sids + i);
 	}
 
@@ -36,39 +36,36 @@ static void * _run(void * arg) {
 }
 
 //
-// Ğ´¸ö²âÊÔÏß³ÌĞÅºÅÁ¿´úÂë
-// ¿ªÆô _INT_THS ¸öÏß³Ì, Ë³Ğò´òÓ¡Êı¾İ A->B->C->...->A->B->....
+// å†™ä¸ªæµ‹è¯•çº¿ç¨‹ä¿¡å·é‡ä»£ç 
+// å¼€å¯ _INT_THS ä¸ªçº¿ç¨‹, é¡ºåºæ‰“å°æ•°æ® A->B->C->...->A->B->....
 //
 void test_pthread_sem(void) {
-	// ¿ªÊ¼³õÊ¼»¯ÁË
+	// å¼€å§‹åˆå§‹åŒ–äº†
 	int i, j;
 	struct threadarg targ;
 	
-	// ÏÈ³õÊ¼»¯ĞÅºÅÁ¿,ºó³õÊ¼»¯Ïß³Ì
+	// å…ˆåˆå§‹åŒ–ä¿¡å·é‡,ååˆå§‹åŒ–çº¿ç¨‹
 	for (i = 0; i < _INT_THS; ++i) {
-		// 0 : ±íÊ¾¾Ö²¿ĞÅºÅÁ¿µ±Ç°¿ÉÓÃ; 0 : µ±Ç°ĞÅºÅÁ¿ÖµÎª0
+		// 0 : è¡¨ç¤ºå±€éƒ¨ä¿¡å·é‡å½“å‰å¯ç”¨; 0 : å½“å‰ä¿¡å·é‡å€¼ä¸º0
 		if (sem_init(targ.sids + i, 0, 0) < 0)
 			goto __for_exit;
 	}
 
-	// ¿ªÆôÏß³Ì
+	// å¼€å¯çº¿ç¨‹
 	for (j = 0; j < _INT_THS; ++j) {
-		// ¿ªÆôÈı¸öÏß³Ì
+		// å¼€å¯ä¸‰ä¸ªçº¿ç¨‹
 		if (pthread_create(targ.tids + j, NULL, _run, &targ) < 0)
 			goto __for_exit;
 	}
 
-	// ¼¤»îµÚÒ»¸öÏß³Ì, Êä³ö 'A' ¿ªÍ·
+	// æ¿€æ´»ç¬¬ä¸€ä¸ªçº¿ç¨‹, è¾“å‡º 'A' å¼€å¤´
 	sem_post(targ.sids + _INT_THS - 1);
 
-	// ÖĞ¼äµÈ´ıÒ»Ğ©Ê±¼ä°É
+	// ä¸­é—´ç­‰å¾…ä¸€äº›æ—¶é—´å§
 	getchar();
 
 __for_exit:
-	// ×¢ÒâµÄÊÇ, ¼ÙÈçĞÅºÅÁ¿ÊÍ·ÅÁË, Ïß³Ì»¹ÔÚÅÜ, »áÒì³£
+	// æ³¨æ„çš„æ˜¯, å‡å¦‚ä¿¡å·é‡é‡Šæ”¾äº†, çº¿ç¨‹è¿˜åœ¨è·‘, ä¼šå¼‚å¸¸
 	for (j = 0; j < i; ++j)
 		sem_destroy(targ.sids + j);
-#ifdef __GNUC__
-	exit(EXIT_SUCCESS);
-#endif
 }
