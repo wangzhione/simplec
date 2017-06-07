@@ -1,7 +1,7 @@
 ﻿#include <httputil.h>
 #include <sciconv.h>
 
-#define _STR_BAIDU	"www.baidu.com/"
+#define _STR_BAIDU	"www.baidu.com"
 
 //
 // 测试 http 请求, 测试

@@ -113,6 +113,7 @@ $(TAR_PATH):
 
 # 清除操作
 clean :
+	-rm -rf $(TAR_PATH)/main.$(OUT)
 	-rm -rf $(OBJP)*
 
 cleanall :
