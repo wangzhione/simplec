@@ -62,8 +62,10 @@ simplec_test(void) {
 	extern void test_httputil(void);
 	// 单元测试 - 测试 玩具 ddos攻击
 	extern void test_ddos(void);
+	// 单元测试 - 测试 iop server 服务器部分
+	extern void test_iopserver(void);
 
-	test_ddos();
+	test_iopserver();
 }
 
 #endif

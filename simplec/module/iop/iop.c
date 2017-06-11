@@ -91,12 +91,7 @@ iop_delete(iopbase_t base) {
 		base->op.ffree(base);
 
 	// 删除链表
-	while (base->tplist) {
-		ilist_t next = base->tplist->next;
-		free(base->tplist->data);
-		free(base->tplist);
-		base->tplist = next;
-	}
+	vlist_delete(base->tplist);
 
 	free(base);
 }

@@ -2,6 +2,7 @@
 #define _H_LIBIOP_IOP_DEF
 
 #include <iop_util.h>
+#include <vlist.h>
 #include <tstr.h>
 
 //
@@ -129,7 +130,7 @@ struct iopbase {
 	time_t lastt;			// 上次调度时间
 	time_t lastkeepalivet;	// 最后一次心跳的时间
 
-	ilist_t tplist;			// use for advance tcp server model.
+	vlist_t tplist;			// use for advance tcp server model.
 };
 
 //

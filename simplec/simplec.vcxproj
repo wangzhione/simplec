@@ -42,6 +42,7 @@
     <ClCompile Include="module\struct\mq.c" />
     <ClCompile Include="module\struct\tree.c" />
     <ClCompile Include="module\struct\tstr.c" />
+    <ClCompile Include="module\struct\vlist.c" />
     <ClCompile Include="test\test_array.c" />
     <ClCompile Include="test\test_atom_rwlock.c" />
     <ClCompile Include="test\test_cjson_write.c" />
@@ -192,6 +193,7 @@
     <ClInclude Include="module\struct\include\struct.h" />
     <ClInclude Include="module\struct\include\tree.h" />
     <ClInclude Include="module\struct\include\tstr.h" />
+    <ClInclude Include="module\struct\include\vlist.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="config\config.ini" />
@@ -222,7 +224,7 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <UseOfMfc>false</UseOfMfc>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">

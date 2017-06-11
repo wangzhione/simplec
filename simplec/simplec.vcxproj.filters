@@ -273,6 +273,9 @@
     <ClCompile Include="test\test_ddos.c">
       <Filter>test</Filter>
     </ClCompile>
+    <ClCompile Include="module\struct\vlist.c">
+      <Filter>module\struct</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="module\schead\include\schead.h">
@@ -646,6 +649,9 @@
     </ClInclude>
     <ClInclude Include="extern\openssl\include\md5util.h">
       <Filter>extern\openssl\include</Filter>
+    </ClInclude>
+    <ClInclude Include="module\struct\include\vlist.h">
+      <Filter>module\struct\include</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

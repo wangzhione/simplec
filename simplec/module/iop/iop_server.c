@@ -109,23 +109,6 @@ static int _iop_add_connect(iopbase_t base, uint32_t id, uint32_t events, void *
 	return Success_Base;
 }
 
-
-
-// 添加数据到 ilist_t base->tplist 后面
-static ilist_t _ilist_add(ilist_t list, void * arg) {
-	ilist_t node = malloc(sizeof(struct ilist));
-	if (!node) {
-		RETURN(list, "malloc sizeof(struct ilist) is error!");
-	}
-	node->data = arg;
-	node->next = NULL;
-
-	if (!list)
-		return node;
-	list->next = node;
-	return list;
-}
-
 //
 // iop_add_ioptcp - 添加tcp服务
 // base			: iop对象集
@@ -170,7 +153,7 @@ int iop_add_ioptcp(iopbase_t base,
 	sarg->ferror = ferror;
 	sarg->fparser = fparser;
 	sarg->fprocessor = fprocessor;
-	base->tplist = _ilist_add(base->tplist, sarg);
+	base->tplist = vlist_add(base->tplist, sarg);
 
 	return iop_add(base, s, EV_READ, INVALID_SOCKET, _iop_add_connect, sarg);
 }
