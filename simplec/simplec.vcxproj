@@ -63,7 +63,7 @@
     <ClCompile Include="test\test_scrunloop.c" />
     <ClCompile Include="test\test_scthreads.c" />
     <ClCompile Include="test\test_sctimer.c" />
-    <ClCompile Include="test\test_sctimeutil.c" />
+    <ClCompile Include="test\test_sctime.c" />
     <ClCompile Include="test\test_scurl.c" />
     <ClCompile Include="test\test_tstring.c" />
     <ClCompile Include="test\test_xlsmtojson.c" />
@@ -224,7 +224,7 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <UseOfMfc>false</UseOfMfc>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">

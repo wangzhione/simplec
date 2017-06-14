@@ -2,7 +2,7 @@
 #include <stdio.h>
 
 // 为Visual Studio导入一些和linux上优质思路
-#if defined(_MSC_VER)
+#ifdef _MSC_VER
 
 /*
  * Linux sys/time.h 中获取时间函数在Windows上一种移植实现
@@ -32,11 +32,32 @@ gettimeofday(struct timeval * tv, void * tz) {
 
 #endif
 
+//
+// stu_clock - 从UTC1970-1-1 0:0:0开始计时, 计算精度和纳秒
+// tp		: 返回值, tv_sec 秒, tv_nsec 纳秒
+// return	: void 
+//
+void 
+stu_clock(struct timespec * tp) {
+#ifdef __GNUC__
+	clock_gettime(CLOCK_REALTIME, tp);
+#endif
+
+#ifdef _MSC_VER
+	LARGE_INTEGER fre, cnt;
+
+	QueryPerformanceFrequency(&fre);
+	QueryPerformanceCounter(&cnt);
+
+	time(&tp->tv_sec);
+	tp->tv_nsec = (long)(cnt.QuadPart % fre.QuadPart * 1000000000 / fre.QuadPart);
+#endif
+}
+
 // 从时间串中提取出来年月日时分秒
 static bool _stu_gettm(stime_t tstr, struct tm * otm) {
-	int * py, * es;
 	char c;
-	int sum;
+	int sum, * py, * es;
 
 	if ((!tstr) || !(c = *tstr) || c < '0' || c > '9')
 		return false;
@@ -143,6 +164,38 @@ stu_tisweek(time_t lt, time_t rt) {
 	return rt >= lt - mt;
 }
 
+//
+// stu_sisday - 判断当前时间串是否是同一天的.
+// ls : 判断时间一
+// rs : 判断时间二
+//    : 返回true表示是同一天, 返回false表示不是
+//
+bool
+stu_sisday(stime_t ls, stime_t rs) {
+	time_t lt, rt;
+	// 解析失败直接返回结果
+	if (!stu_gettime(ls, &lt, NULL) || !stu_gettime(rs, &rt, NULL))
+		return false;
+
+	return stu_tisday(lt, rt);
+}
+
+//
+// 判断当前时间串是否是同一周的.
+// ls : 判断时间一
+// rs : 判断时间二
+//    : 返回true表示是同一周, 返回false表示不是
+//
+bool
+stu_sisweek(stime_t ls, stime_t rs) {
+	time_t lt, rt;
+	// 解析失败直接返回结果
+	if (!stu_gettime(ls, &lt, NULL) || !stu_gettime(rs, &rt, NULL))
+		return false;
+
+	return stu_tisweek(lt, rt);
+}
+
 /*
  * 将时间戳转成时间串 [2016-7-10 22:38:34]
  * nt	: 当前待转的时间戳
@@ -167,38 +220,6 @@ stu_gettstr(time_t nt, stime_t tstr) {
 inline char * 
 stu_getntstr(stime_t tstr) {
 	return stu_gettstr(time(NULL), tstr);
-}
-
-/*
- * 判断当前时间戳是否是同一天的.
- * ls : 判断时间一
- * rs : 判断时间二
- *    : 返回true表示是同一天, 返回false表示不是
- */
-bool
-stu_sisday(stime_t ls, stime_t rs) {
-	time_t lt, rt;
-	// 解析失败直接返回结果
-	if (!stu_gettime(ls, &lt, NULL) || !stu_gettime(rs, &rt, NULL))
-		return false;
-
-	return stu_tisday(lt, rt);
-}
-
-/*
- * 判断当前时间戳是否是同一周的.可以优化
- * ls : 判断时间一
- * rs : 判断时间二
- *    : 返回true表示是同一周, 返回false表示不是
- */
-bool
-stu_sisweek(stime_t ls, stime_t rs) {
-	time_t lt, rt;
-	// 解析失败直接返回结果
-	if (!stu_gettime(ls, &lt, NULL) || !stu_gettime(rs, &rt, NULL))
-		return false;
-
-	return stu_tisweek(lt, rt);
 }
 
 //

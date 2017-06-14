@@ -141,9 +141,6 @@
     <ClCompile Include="test\test_sctimer.c">
       <Filter>test</Filter>
     </ClCompile>
-    <ClCompile Include="test\test_sctimeutil.c">
-      <Filter>test</Filter>
-    </ClCompile>
     <ClCompile Include="test\test_tstring.c">
       <Filter>test</Filter>
     </ClCompile>
@@ -275,6 +272,9 @@
     </ClCompile>
     <ClCompile Include="module\struct\vlist.c">
       <Filter>module\struct</Filter>
+    </ClCompile>
+    <ClCompile Include="test\test_sctime.c">
+      <Filter>test</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -4,8 +4,26 @@
 #include <time.h>
 #include <stdbool.h>
 
+// struct tm 中 tm_year, tm_mon 用的偏移量
+#define _INT_YEAROFFSET		(1900)
+#define _INT_MONOFFSET		(1)
+// 定义每天是开始为 0时0分0秒
+#define _INT_MINSECOND		(60)
+#define _INT_HOURSECOND		(3600)
+#define _INT_DAYSECOND		(24UL * _INT_HOURSECOND)
+#define _INT_DAYSTART		( 8UL * _INT_HOURSECOND)
+// 定义每天新的开始时间
+#define _INT_DAYNEWSTART	( 0UL * _INT_HOURSECOND + 0 * _INT_MINSECOND + 0)
+
+// gcc 上导入 gettimeofday 函数引用
+#ifdef __GNUC__
+
+#include <sys/time.h>
+
+#endif
+
 // 为Visual Studio导入一些和linux上优质思路
-#if defined(_MSC_VER)
+#ifdef _MSC_VER
 
 #include <WinSock2.h>
 
@@ -27,33 +45,16 @@ extern int gettimeofday(struct timeval * tv, void * tz);
 
 #endif
 
-// gcc 上导入 gettimeofday 函数引用
-#if defined(__GNUC__)
-
-#include <sys/time.h>
-
-#endif
-
-
-// 定义每天是开始为 0时0分0秒
-#define _INT_MINSECOND		(60)
-#define _INT_HOURSECOND		(3600)
-#define _INT_DAYSECOND		(24UL*_INT_HOURSECOND)
-#define _INT_DAYSTART		(8UL*_INT_HOURSECOND)
-// 定义每天新的开始时间
-#define _INT_DAYNEWSTART	(0UL*_INT_HOURSECOND + 0*_INT_MINSECOND + 0)
-
-// struct tm 中 tm_year, tm_mon 用的偏移量
-#define _INT_YEAROFFSET		(1900)
-#define _INT_MONOFFSET		(1)
+//
+// stu_clock - 从UTC1970-1-1 0:0:0开始计时, 计算精度和纳秒
+// tp		: 返回值, tv_sec 秒, tv_nsec 纳秒
+// return	: void 
+//
+extern void stu_clock(struct timespec * tp);
 
 // 定义时间串类型
 #define _INT_STULEN			(64)
 typedef char stime_t[_INT_STULEN];
-
-// 定义时间串格式
-#define _STR_TIME			"%04d-%02d-%02d %02d:%02d:%02d"
-#define _STR_MTIME			"%04d-%02d-%02d %02d:%02d:%02d %03ld"
 
 /*
  * 将 [2016-7-10 21:22:34] 格式字符串转成时间戳
@@ -80,12 +81,29 @@ extern bool stu_tisday(time_t lt, time_t rt);
  */
 extern bool stu_tisweek(time_t lt, time_t rt);
 
+//
+// stu_sisday - 判断当前时间串是否是同一天的.
+// ls : 判断时间一
+// rs : 判断时间二
+//    : 返回true表示是同一天, 返回false表示不是
+//
+extern bool stu_sisday(stime_t ls, stime_t rs);
+
+//
+// 判断当前时间串是否是同一周的.
+// ls : 判断时间一
+// rs : 判断时间二
+//    : 返回true表示是同一周, 返回false表示不是
+//
+extern bool stu_sisweek(stime_t ls, stime_t rs);
+
 /*
  * 将时间戳转成时间串 [2016-7-10 22:38:34]
  * nt	: 当前待转的时间戳
  * tstr	: 保存的转后时间戳位置
  *		: 返回传入tstr的首地址
  */
+#define _STR_TIME			"%04d-%02d-%02d %02d:%02d:%02d"
 extern char * stu_gettstr(time_t nt, stime_t tstr);
 
 /*
@@ -95,27 +113,12 @@ extern char * stu_gettstr(time_t nt, stime_t tstr);
  */
 extern char * stu_getntstr(stime_t tstr);
 
-/*
- * 判断当前时间串是否是同一天的.
- * ls : 判断时间一
- * rs : 判断时间二
- *    : 返回true表示是同一天, 返回false表示不是
- */
-extern bool stu_sisday(stime_t ls, stime_t rs);
-
-/*
- * 判断当前时间串是否是同一周的.
- * ls : 判断时间一
- * rs : 判断时间二
- *    : 返回true表示是同一周, 返回false表示不是
- */
-extern bool stu_sisweek(stime_t ls, stime_t rs);
-
 //
 // stu_getmstr - 得到加毫秒的串 [2016-7-10 22:38:34 500]
 // tstr		: 保存最终结果的串
 // return	: 返回当前串长度
 //
+#define _STR_MTIME			"%04d-%02d-%02d %02d:%02d:%02d %03ld"
 extern size_t stu_getmstr(stime_t tstr);
 
 //

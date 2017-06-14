@@ -52,20 +52,10 @@ simplec_go(void) {
  */
 void 
 simplec_test(void) {
-	// 单元测试 - 测试 plog 日志系统
-	extern void test_plog(void);
-	// 单元测试 - 测试 scthreads 线程池
-	extern void test_scthreads(void);
-	// 单元测试 - 测试 iop 网络io
-	extern void test_iopserver(void);
-	// 单元测试 - 测试 libcurl http 库
-	extern void test_httputil(void);
-	// 单元测试 - 测试 玩具 ddos攻击
-	extern void test_ddos(void);
-	// 单元测试 - 测试 iop server 服务器部分
-	extern void test_iopserver(void);
+	// 单元测试 - 测试 sctime 时间业务
+	extern void test_sctime(void);
 
-	test_iopserver();
+	test_sctime();
 }
 
 #endif

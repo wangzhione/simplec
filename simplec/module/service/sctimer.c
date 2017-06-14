@@ -198,7 +198,7 @@ st_add(int start, int cnt, int intval, die_f timer, void * arg, bool fb) {
 
 	_stlist_add(&_st, now);
 	// 看是否需要取消线程
-	if(_st.status && _sleeptime(&_st) < 0){
+	if(_st.status && _sleeptime(&_st) < 0) {
 		pthread_cancel(_st.tid);
 		_st.status = false;
 	}
