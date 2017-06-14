@@ -1,16 +1,15 @@
 ﻿#include <list.h>
 
-/*
- *  采用头查法插入结点, 第一使用需要 list_t head = NULL;
- * 返回 Success_Base 表示成功!
- * ph		: 指向头结点的指针
- * node		: 待插入的结点对象
- */
+//
+// list_add - 采用头查法插入结点, 第一使用需要 list_t head = NULL;
+// ph		: 指向头结点的指针
+// node		: 待插入的结点对象
+// return	: 返回 Success_Base 表示成功!
+//
 inline int 
 list_add(list_t * ph, void * node) {
-	if (ph == NULL || node == NULL){
-		CERR("list_add check (pal == NULL || node == NULL)!");
-		return Error_Param;
+	if (!ph || !node){
+		RETURN(Error_Param, "list_add check (pal == %p || node == %p)!", ph, node);
 	}
 
 	list_next(node) = *ph;
@@ -30,7 +29,7 @@ list_add(list_t * ph, void * node) {
 void * 
 list_find(list_t h, cmp_f cmp, const void * left) {
 	struct $lnode * head;
-	if(cmp == NULL || left == NULL){
+	if(cmp == NULL || left == NULL) {
 		CERR("list_find check (cmp == NULL || left == NULL)!");
 		return NULL;
 	}
@@ -41,26 +40,27 @@ list_find(list_t h, cmp_f cmp, const void * left) {
 	return head;
 }
 
-/*
- *  查找到要的结点,并弹出,需要你自己回收
- * ph		: 指向头结点的指针
- * cmp		: 比较函数,将left同 *ph中对象按个比较
- * left		: cmp(left, x) 比较返回 0 >0 <0
- *			: 找到了退出/返回结点, 否则返回NULL
- */
+//
+// list_findpop - 查找到要的结点,并弹出,需要你自己回收
+// ph		: 指向头结点的指针
+// cmp		: 比较函数,将left同 *ph中对象按个比较
+// left		: cmp(left, x) 比较返回 0 >0 <0
+// return	: 找到了退出/返回结点, 否则返回NULL
+//
 void * 
 list_findpop(list_t * ph, cmp_f cmp, const void * left) {
 	struct $lnode * head, * tmp;
 	if((!ph) || (!cmp) || (!left) || !(head = *ph)){
-		CERR("check find {(!ph) || (!cmp) || (!left) || !(head = *ph)}!");
-		return NULL;
+		RETURN(NULL, "check find {(!ph) || (!cmp) || (!left) || !(head = *ph)}!");
 	}
-	//头部检测
+
+	// 头部检测
 	if(cmp(left, head) == 0){
 		*ph = head->next;
 		return head;
 	}
-	//后面就是普通的
+
+	// 后面就是普通的查找
 	while((tmp = head->next)){
 		if(cmp(left, tmp) == 0){
 			head->next = tmp->next;
@@ -69,7 +69,7 @@ list_findpop(list_t * ph, cmp_f cmp, const void * left) {
 		head = tmp;
 	}
 	
-	return tmp; //仍然没有找见
+	return tmp;
 }
 
 /*
@@ -211,19 +211,26 @@ list_addidx(list_t * ph, int idx, void * node) {
 	return Success_Base;
 }
 
-/*
- * 这里的销毁函数,只有这些数据都是堆上的才推荐这么做,会自动让其指向NULL
- * ph 		: 指向当前链表结点的指针
- */
+//
+// list_destroy_ - 链表销毁函数.对于只是栈上数据就不用调这个api
+// ph 		: 指向当前链表结点的指针
+// die		: 销毁执行的函数
+// return	: void
+//
 void 
-list_destroy(list_t* ph) {
-	struct $lnode * head, * next;
+list_destroy_(list_t * ph, die_f die) {
+	struct $lnode * head;
 	if((!ph) || !(head = *ph))
 		return;
-	do { //do 循环可以省略一次判断,但是有点丑陋
-		next = head->next;
-		free(head);
-	} while((head=next));
+
+	if (die)
+	{
+		do {
+			struct $lnode * next = head->next;
+			die(head);
+			head = next;
+		} while (head);
+	}
 	
 	*ph = NULL;
 }
