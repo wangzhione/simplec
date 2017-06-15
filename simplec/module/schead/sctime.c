@@ -34,12 +34,13 @@ gettimeofday(struct timeval * tv, void * tz) {
 #endif
 
 //
-// stu_hightime - 从UTC1970-1-1 0:0:0开始计时, 计算精度和纳秒
+// stu_precisetime - 从UTC1970-1-1 0:0:0开始计时, 计算精度和纳秒
 // spec		: 返回值, tv_sec 秒, tv_nsec 纳秒
 // return	: void 
 //
 void 
-stu_hightime(struct timespec * spec) {
+stu_precisetime(struct timespec * spec) {
+
 #ifdef __GNUC__
 	clock_gettime(CLOCK_REALTIME, spec);
 #endif

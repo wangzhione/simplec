@@ -1,13 +1,72 @@
 ﻿#include <list.h>
 
 //
-// list_add - 采用头查法插入结点, 第一使用需要 list_t head = NULL;
+// list_destroy_ - 链表销毁函数.对于只是栈上数据就不用调这个api
+// ph 		: 指向当前链表结点的指针
+// die		: 销毁执行的函数
+// return	: void
+//
+void
+list_destroy_(list_t * ph, die_f die) {
+	struct $lnode * head;
+	if ((!ph) || !(head = *ph))
+		return;
+
+	if (die)
+	{
+		do {
+			struct $lnode * next = head->next;
+			die(head);
+			head = next;
+		} while (head);
+	}
+
+	*ph = NULL;
+}
+
+//
+// list_add - 在 cmp(left, x) <= 0 x处前面插入node结点
+// ph		: 指向头结点的指针
+// cmp		: 比较函数,将left同 *ph中对象按个比较
+// left		: cmp(left, x) 比较返回 <=0 or >0
+// return	: 返回 Success_Base 表示成功!
+//
+int 
+list_add(list_t * ph, cmp_f cmp, void * left) {
+	struct $lnode * head;
+	DEBUG_CODE({
+		if (!ph || !cmp || !left) {
+			RETURN(Error_Param, "list_add check ph=%p, cmp=%p, left=%p.", ph, cmp, left);
+		}
+	});
+
+	head = *ph;
+	// 插入为头结点直接返回
+	if (!head || cmp(left, head) <= 0) {
+		list_next(left) = head;
+		*ph = left;
+		return Success_Base;
+	}
+
+	// 中间插入了
+	while (head->next) {
+		if (cmp(left, head->next) <= 0)
+			break;
+		head = head->next;
+	}
+	list_next(left) = head->next;
+	head->next = left;
+	return Success_Base;
+}
+
+//
+// list_addhead - 采用头查法插入结点, 第一次用需要 list_t head = NULL;
 // ph		: 指向头结点的指针
 // node		: 待插入的结点对象
 // return	: 返回 Success_Base 表示成功!
 //
 inline int 
-list_add(list_t * ph, void * node) {
+list_addhead(list_t * ph, void * node) {
 	if (!ph || !node){
 		RETURN(Error_Param, "list_add check (pal == %p || node == %p)!", ph, node);
 	}
@@ -18,26 +77,30 @@ list_add(list_t * ph, void * node) {
 	return Success_Base;
 }
 
-/*
- *  链表中查找函数,查找失败返回NULL,查找成功直接返回那个结点,推荐不要乱改,否则就崩了.
- * 如果需要改的话,推荐 用 list_findpop, 找到并弹出
- * h		: 链表头结点
- * cmp		: 查找的比较函数
- * left		: cmp(left, right) 用的左结点
- *			: 返回查找的结点对象
- */
-void * 
-list_find(list_t h, cmp_f cmp, const void * left) {
+//
+// list_addtail - 和 list_add 功能相似,但是插入位置在尾巴那
+// ph		: 待插入结点的指针
+// node		: 待插入的当前结点
+// return	: 返回 Success_Base 表示成功!
+//
+int
+list_addtail(list_t * ph, void * node) {
 	struct $lnode * head;
-	if(cmp == NULL || left == NULL) {
-		CERR("list_find check (cmp == NULL || left == NULL)!");
-		return NULL;
+	if (!ph || !node) {
+		RETURN(Error_Param, "list_addlast check (pal == %p || node == %p)!", ph, node);
 	}
-	//找到结果直接结束
-	for(head = h; head; head = head->next)
-		if(cmp(left, head) == 0)
-			break;
-	return head;
+
+	list_next(node) = NULL;//将这个结点的置空
+	if (!(head = *ph)) { //插入的是头结点直接返回
+		*ph = node;
+		return Success_Base;
+	}
+
+	while (!!(head->next))
+		head = head->next;
+	head->next = node;
+
+	return Success_Base;
 }
 
 //
@@ -72,13 +135,37 @@ list_findpop(list_t * ph, cmp_f cmp, const void * left) {
 	return tmp;
 }
 
-/*
- *  这里获取当前链表长度, 推荐调用一次就记住len
- * h		: 当前链表的头结点
- *			: 返回 链表长度 >=0
- */
-int list_len(list_t h) {
-	int len = 0;
+//
+// list_find - 链表中查找函数,查找失败返回NULL, 查找成功直接返回那个结点.
+// head		: 链表头结点
+// cmp		: 查找的比较函数
+// left		: cmp(left, right) 用的左结点
+// return	: 返回查找的结点对象
+//
+void *
+list_find(list_t head, cmp_f cmp, const void * left) {
+	if (cmp == NULL || left == NULL) {
+		RETURN(NULL, "list_find check(cmp == NULL || left == NULL)!");
+	}
+
+	//找到结果直接结束
+	while (!!(head)) {
+		if (cmp(left, head) == 0)
+			break;
+		head = list_next(head);
+	}
+
+	return head;
+}
+
+//
+// list_len - 这里获取当前链表长度, 推荐调用一次就记住len
+// h		: 当前链表的头结点
+// return	: 返回 链表长度 >=0
+//
+size_t
+list_len(list_t h) {
+	size_t len = 0;
 	while(h){
 		++len;
 		h = list_next(h);
@@ -86,151 +173,88 @@ int list_len(list_t h) {
 	return len;
 }
 
-/*
- *  查找索引位置为idx的结点,找不见返回NULL
- * h		: 当前结点
- * idx		: 查找的索引值[0,len)
- *			: 返回查到的结点,如果需要删除的推荐调用 list_pop(&h, idx);
- */
+//
+// list_getidx - 查找索引位置为idx的结点,找不见返回NULL
+// head		: 当前结点
+// idx		: 查找的索引值[0,len)
+// return	: 返回查到的结点
+//
 void * 
-list_get(list_t h, int idx) {
-	if(h==NULL || idx < 0){
-		CERR("check is {h==NULL || idx < 0}");
-		return NULL;
+list_getidx(list_t head, int idx) {
+	if(head == NULL || idx < 0) {
+		RETURN(NULL, "check is h == %p || idx = %d.", head, idx);
 	}
+
 	// 主要查找函数,代码还是比较精简的还是值得学习的
-	while(h){
-		if(idx-- == 0)
-			return h;
-		h = list_next(h);
+	while(head){
+		if (idx-- == 0)
+			break;
+		head = list_next(head);
 	}
 	
-	if(idx > 0)
-		CERR("check is idx >= length!, idx-length=%d.", idx);
-	return NULL;
+	return head;
 }
 
-/*
- *  按照索引弹出并返回结点, 需要自己回收这个结点 推荐 free(list_pop...);
- * ph		: 指向链表结点的指针
- * idx		: 弹出的索引
- * return	: 无效的弹出,返回NULL
- */
-void* 
-list_pop(list_t * ph, int idx) {
+//
+// list_popidx - 按照索引弹出并返回结点, 需要自己free
+// ph		: 指向链表结点的指针
+// idx		: 弹出的索引
+// return	: 无效的弹出,返回NULL
+//
+void * 
+list_popidx(list_t * ph, int idx) {
 	struct $lnode * head, * front; // 第一个是要找的结点,后面是它的前驱结点
-	if((!ph) || (idx<0) || !(head=*ph)){
-		CERR("check is {(!ph) || (idx<0) || !(head=*ph)}");
-		return NULL;
+	if((!ph) || (idx<0) || !(head = *ph)){
+		RETURN(NULL, "check is {(!ph) || (idx<0) || !(head = *ph)}");
 	}
 	
-	for(front = NULL; head && idx>0; --idx){
+	for(front = NULL; head && idx > 0; --idx){
 		front = head;
 		head = head->next;
 		--idx;
 	}
 	
-	if(idx>0){
-		CERR("check is idx>length, idx-length = %d.", idx);
-		return NULL;
+	if(idx > 0){
+		RETURN(NULL, "check is idx>length, idx-length = %d.", idx);
 	}
+
 	//下面就是找到的请况,返回结果
 	if(front == NULL)
 		*ph = head->next;
 	else
 		front->next = head->next;
+
 	return head;
 }
 
-/*
- *  返回结点node 的上一个结点,如果node = NULL, 返回最后一个结点
- * h		: 当前链表结点
- * node		: 待查找的结点信息
- * return	: 返回查找到的结点,不存在返回NULL
- */
-void * 
-list_front(list_t h, void * node) {
-	struct $lnode* head = h; //直接跑到崩溃同strcpy
-	while(head->next && head->next != node)
-		head = head->next;
-	return head->next == node ? head : NULL;
-}
-
-/*
- *  和 list_add 功能相似,但是插入位置在尾巴那
- * ph		: 待插入结点的指针
- * node		: 待插入的当前结点
- */ 
-int 
-list_addlast(list_t * ph, void * node) {
-	struct $lnode * head;
-	if(!ph || !node){
-		CERR("check is {!ph || !node}! not nothing in it!");
-		return Error_Param;
-	}
-	
-	list_next(node) = NULL;//将这个结点的置空
-	if(!(head=*ph)){ //插入的是头结点直接返回
-		*ph = node;
-		return Success_Base;
-	}
-	
-	while(head->next)
-		head = head->next;
-	head->next = node;
-	return Success_Base;
-}
-
-/*
- *  在链表的第idx索引处插入结点,也必须需要 list_t head = NULL; 在idx过大的时候
- * 插入尾巴处,如果<0直接返回 Error_Param. 成功了返回 Success_Base
- * ph		: 指向头结点的指针
- * idx		: 结点的索引处
- * node		: 待插入的结点
- */
+//
+// list_addidx - 在链表idx处插入节点, 结点过大插入到尾巴处 
+// ph		: 指向头结点的指针
+// idx		: 结点的索引处
+// node		: 待插入的结点
+// return	: 成功了返回 Success_Base
+//
 int 
 list_addidx(list_t * ph, int idx, void * node) {
 	struct $lnode * head;
-	if(!ph || idx<0 || !node){ //以后可能加入 idx < 0的尾巴插入细则
-		CERR("check is {!ph || idx<0 || !node}! Don't naughty again!");
-		return Error_Param;
+	if(!ph || idx < 0 || !node){ //以后可能加入 idx < 0的尾巴插入细则
+		RETURN(Error_Param, "check is {!ph || idx<0 || !node}! Don't naughty again!");
 	}
+
 	//插入做为头结点
-	if(!(head=*ph) || idx == 0){
+	if(!(head = *ph) || idx == 0){
 		list_next(node) = *ph;
 		*ph = node;
 		return Success_Base;
 	}
 	
-	while(head->next && idx>1){
+	while(head->next && idx > 1){
 		--idx;
 		head = head->next;
 	}
+
 	list_next(node) = head->next;
 	head->next = node;
+
 	return Success_Base;
-}
-
-//
-// list_destroy_ - 链表销毁函数.对于只是栈上数据就不用调这个api
-// ph 		: 指向当前链表结点的指针
-// die		: 销毁执行的函数
-// return	: void
-//
-void 
-list_destroy_(list_t * ph, die_f die) {
-	struct $lnode * head;
-	if((!ph) || !(head = *ph))
-		return;
-
-	if (die)
-	{
-		do {
-			struct $lnode * next = head->next;
-			die(head);
-			head = next;
-		} while (head);
-	}
-	
-	*ph = NULL;
 }

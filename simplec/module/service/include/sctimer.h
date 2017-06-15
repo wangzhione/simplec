@@ -14,9 +14,9 @@ extern int st_add(int intval, die_f timer, void * arg);
 
 //
 // st_del - 删除指定事件
-// st		: st_add 返回的定时器id
+// id		: st_add 返回的定时器id
 // return	: void
 //
-extern void st_del(int st);
+extern void st_del(int id);
 
 #endif // !_H_SIMPLEC_SCTIMER
