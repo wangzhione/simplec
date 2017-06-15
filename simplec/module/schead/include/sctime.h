@@ -46,11 +46,11 @@ extern int gettimeofday(struct timeval * tv, void * tz);
 #endif
 
 //
-// stu_clock - 从UTC1970-1-1 0:0:0开始计时, 计算精度和纳秒
-// tp		: 返回值, tv_sec 秒, tv_nsec 纳秒
+// stu_hightime - 从UTC1970-1-1 0:0:0开始计时, 计算精度和纳秒
+// spec		: 返回值, tv_sec 秒, tv_nsec 纳秒
 // return	: void 
 //
-extern void stu_clock(struct timespec * tp);
+extern void stu_hightime(struct timespec * spec);
 
 // 定义时间串类型
 #define _INT_STULEN			(64)

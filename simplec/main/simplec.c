@@ -57,7 +57,7 @@ simplec_test(void) {
 	// 单元测试 - 测试 sctimer 定时器业务
 	extern void test_sctimer(void);
 
-	test_sctimer();
+	test_sctime();
 }
 
 #endif

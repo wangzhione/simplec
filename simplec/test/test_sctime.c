@@ -27,6 +27,6 @@ void test_sctime(void) {
 	printf("Now e n d time is : %s\n", stu_getntstr(tstr));
 
 	// 测试精准时间
-	stu_clock(&tp);
+	stu_hightime(&tp);
 	printf("sec = %"PRId64", nsec = %ld.\n", tp.tv_sec, tp.tv_nsec);
 }

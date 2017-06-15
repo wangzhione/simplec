@@ -95,7 +95,7 @@ static void _slnode_run(struct stlist * st) {
 static void * _stlist_loop(struct stlist * st) {
 	// 正常轮询,检测时间
 	while (st->head) {
-		int nowt = _sleepms(st);
+		int nowt = (int)_sleepms(st);
 		if (nowt >= 0) {
 			sh_sleep(nowt);
 			continue;
