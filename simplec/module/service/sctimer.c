@@ -57,9 +57,10 @@ static void _slnode_run(struct stlist * st) {
 	ATOM_LOCK(st->lock); // 加锁防止调整关系覆盖,可用还是比较重要的
 	sn = st->head;
 	st->head = list_next(sn);
+	ATOM_UNLOCK(st->lock);
+
 	sn->timer(sn->arg);
 	free(sn);
-	ATOM_UNLOCK(st->lock);
 }
 
 // 运行的主loop,基于timer管理器

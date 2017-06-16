@@ -8,6 +8,13 @@ static void _timer(void * arg) {
 	printf("%p + %d => %s\n", arg, ++_sm, tstr);
 }
 
+// 连环施法
+static void _timertwo(void * arg) {
+	printf("2s after _timer arg = %p.\n", arg);
+
+	st_add(2000, _timer, arg);
+}
+
 void test_sctimer(void) {
 	int tid;
 	
@@ -22,6 +29,6 @@ void test_sctimer(void) {
 	sh_sleep(5000);
 	st_del(tid);
 
-	// 再注册一个方法, 这个是永久执行, 没有被 st_del的话, 将会和系统共存亡
-	st_add(100, _timer, (void *)5);
+	// 测试一个连环施法
+	st_add(1000, _timertwo, (void *)5);
 }
