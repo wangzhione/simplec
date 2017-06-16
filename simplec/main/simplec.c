@@ -46,18 +46,23 @@ simplec_go(void) {
 
 #if defined(_MSC_VER) && defined(_DEBUG)
 
+//
+// TEST_RUN - simplec 单元测试宏, 方便进行单元测试
+// test		: 需要单元测试的函数名, 通test 目录下文件名
+//
+#define TEST_RUN(test) \
+	do {\
+		extern void test(void);\
+		test();\
+	} while(0)
+
 /*
  * simple c 单元测试主函数
  * return	: void
  */
 void 
 simplec_test(void) {
-	// 单元测试 - 测试 sctime 时间业务
-	extern void test_sctime(void);
-	// 单元测试 - 测试 sctimer 定时器业务
-	extern void test_sctimer(void);
-
-	test_sctimer();
+	TEST_RUN(test_sctimer);
 }
 
 #endif
