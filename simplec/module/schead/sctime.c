@@ -33,54 +33,6 @@ gettimeofday(struct timeval * tv, void * tz) {
 
 #endif
 
-//
-// stu_precisetime - 从UTC1970-1-1 0:0:0开始计时, 计算精度和纳秒
-// spec		: 返回值, tv_sec 秒, tv_nsec 纳秒
-// return	: void 
-//
-void 
-stu_precisetime(struct timespec * spec) {
-
-#ifdef __GNUC__
-	clock_gettime(CLOCK_REALTIME, spec);
-#endif
-
-#ifdef _MSC_VER
-
-	#define exp7           10000000ll     //1E+7     //C-file part
-	#define exp9         1000000000ll     //1E+9
-	#define w2ux 116444736000000000ll     //1.jan1601 to 1.jan1970
-
-	static struct timespec _spec;
-	// exp9 / tps is ticks2nano
-	static int64_t _ticks, _tps = 0;
-
-	int64_t ticks, curticks;
-
-	// init once on same system
-	QueryPerformanceFrequency((LARGE_INTEGER *)&ticks);
-	if (_tps != ticks) {
-		_tps = ticks;
-		QueryPerformanceCounter((LARGE_INTEGER *)&_ticks);
-
-		GetSystemTimeAsFileTime((FILETIME *)&ticks);
-		ticks -= w2ux;
-		_spec.tv_sec = ticks / exp7;
-		_spec.tv_nsec = ticks % exp7 * 100;
-	}
-
-	QueryPerformanceCounter((LARGE_INTEGER *)&curticks);
-	curticks -= _ticks;
-	spec->tv_sec = _spec.tv_sec + curticks / _tps;
-	spec->tv_nsec = _spec.tv_nsec + (long)(curticks % _tps * exp9 / _tps);
-	if (spec->tv_nsec >= exp9) {
-		spec->tv_sec++;
-		spec->tv_nsec -= exp9;
-	}
-
-#endif
-}
-
 // 从时间串中提取出来年月日时分秒
 static bool _stu_gettm(stime_t tstr, struct tm * otm) {
 	char c;

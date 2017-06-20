@@ -25,8 +25,4 @@ void test_sctime(void) {
 	printf("rt = %d\n", rt);
 
 	printf("Now e n d time is : %s\n", stu_getntstr(tstr));
-
-	// 测试精准时间
-	stu_precisetime(&tp);
-	printf("sec = %"PRId64", nsec = %ld.\n", tp.tv_sec, tp.tv_nsec);
 }

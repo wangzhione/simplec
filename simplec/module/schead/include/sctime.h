@@ -45,13 +45,6 @@ extern int gettimeofday(struct timeval * tv, void * tz);
 
 #endif
 
-//
-// stu_precisetime - 从UTC1970-1-1 0:0:0开始计时, 计算精度和纳秒
-// spec		: 返回值, tv_sec 秒, tv_nsec 纳秒
-// return	: void 
-//
-extern void stu_precisetime(struct timespec * spec);
-
 // 定义时间串类型
 #define _INT_STULEN			(64)
 typedef char stime_t[_INT_STULEN];
