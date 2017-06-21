@@ -18,7 +18,7 @@ void test_httputil(void) {
 
 	if (si_isutf8(music->str)) {
 		printf("music %s is utf-8.\n", _STR_BAIDU);
-		si_utf8togbk(music->str);
+		si_utf8togbks(music->str);
 	}
 
 	puts(music->str);

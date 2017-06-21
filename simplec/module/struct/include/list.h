@@ -15,7 +15,9 @@ struct $lnode {
 // 不多说了一定放在想使用链表结构的结构体头部
 #define _LIST_HEAD struct $lnode $node
 
+//
 // 简单链表结构, 当你使用这个链表的时候 需要 list_t head = NULL; 开始使用之旅
+//
 typedef void * list_t;
 
 //
@@ -25,14 +27,13 @@ typedef void * list_t;
 // return	: void
 //
 extern void list_destroy_(list_t * ph, die_f die);
-#define list_destroy(ph) list_destroy_(ph, free)
+#define list_destroy(ph) list_destroy_((list_t *)ph, free)
 
 //
 // list_next - 主要返回结点n的下一个结点. 用法 node->next = list_node(n) or list_node(n) = node;
 // n		: 当前结点
 //
-#define list_next(n) \
-	(void *)(((struct $lnode *)(n))->next)
+#define list_next(n) ((struct $lnode *)(n))->next
 
 //
 // list_add - 在 cmp(left, x) <= 0 x处前面插入node结点

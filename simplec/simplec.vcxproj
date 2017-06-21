@@ -12,7 +12,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="extern\curl\httputil.c" />
-    <ClCompile Include="extern\iconv\sciconv.c" />
     <ClCompile Include="extern\openssl\md5util.c" />
     <ClCompile Include="main\main.c" />
     <ClCompile Include="main\simplec.c" />
@@ -24,6 +23,7 @@
     <ClCompile Include="module\iop\iop_poll.c" />
     <ClCompile Include="module\iop\iop_server.c" />
     <ClCompile Include="module\iop\iop_util.c" />
+    <ClCompile Include="module\schead\sciconv.c" />
     <ClCompile Include="module\schead\scjson.c" />
     <ClCompile Include="module\schead\scalloc.c" />
     <ClCompile Include="module\schead\sccsv.c" />
@@ -80,8 +80,6 @@
     <ClInclude Include="extern\curl\include\curl\system.h" />
     <ClInclude Include="extern\curl\include\curl\typecheck-gcc.h" />
     <ClInclude Include="extern\curl\include\httputil.h" />
-    <ClInclude Include="extern\iconv\include\iconv.h" />
-    <ClInclude Include="extern\iconv\include\sciconv.h" />
     <ClInclude Include="extern\openssl\include\md5util.h" />
     <ClInclude Include="extern\openssl\include\openssl\aes.h" />
     <ClInclude Include="extern\openssl\include\openssl\asn1.h" />
@@ -176,6 +174,7 @@
     <ClInclude Include="module\schead\include\scatom.h" />
     <ClInclude Include="module\schead\include\sccsv.h" />
     <ClInclude Include="module\schead\include\schead.h" />
+    <ClInclude Include="module\schead\include\sciconv.h" />
     <ClInclude Include="module\schead\include\scrwlock.h" />
     <ClInclude Include="module\schead\include\sctime.h" />
     <ClInclude Include="module\schead\include\scurl.h" />
@@ -209,7 +208,6 @@
   </ItemGroup>
   <ItemGroup>
     <Library Include="extern\curl\lib\libcurl_a.lib" />
-    <Library Include="extern\iconv\lib\libiconv.lib" />
     <Library Include="extern\openssl\lib\libcrypto32MT.lib" />
     <Library Include="extern\openssl\lib\libssl32MT.lib" />
     <Library Include="extern\pthread\lib\pthread_dll.lib" />
@@ -224,7 +222,7 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <UseOfMfc>false</UseOfMfc>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -248,8 +246,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(ProjectDir)main/body/include;$(ProjectDir)extern/pthread/include;$(ProjectDir)extern/iconv/include;$(ProjectDir)extern/curl/include;$(ProjectDir)extern/openssl/include;$(ProjectDir)module/schead/include;$(ProjectDir)module/struct/include;$(ProjectDir)module/service/include;$(ProjectDir)module/logic/include;$(ProjectDir)module/colog/include;$(ProjectDir)module/iop/include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)extern/pthread/lib;$(ProjectDir)extern/iconv/lib;$(ProjectDir)extern/curl/lib;$(ProjectDir)extern/openssl/lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)main/body/include;$(ProjectDir)extern/pthread/include;$(ProjectDir)extern/curl/include;$(ProjectDir)extern/openssl/include;$(ProjectDir)module/schead/include;$(ProjectDir)module/struct/include;$(ProjectDir)module/service/include;$(ProjectDir)module/logic/include;$(ProjectDir)module/colog/include;$(ProjectDir)module/iop/include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)extern/pthread/lib;$(ProjectDir)extern/curl/lib;$(ProjectDir)extern/openssl/lib;$(LibraryPath)</LibraryPath>
     <LibraryWPath>$(LibraryWPath)</LibraryWPath>
     <ReferencePath>$(ReferencePath)</ReferencePath>
     <ExecutablePath>$(ExecutablePath)</ExecutablePath>
@@ -258,8 +256,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ReferencePath>$(ReferencePath)</ReferencePath>
     <ExecutablePath>$(ExecutablePath)</ExecutablePath>
-    <IncludePath>$(ProjectDir)main/body/include;$(ProjectDir)extern/pthread/include;$(ProjectDir)extern/iconv/include;$(ProjectDir)extern/iconv/include;$(ProjectDir)extern/curl/include;$(ProjectDir)extern/openssl/include;$(ProjectDir)module/schead/include;$(ProjectDir)module/struct/include;$(ProjectDir)module/service/include;$(ProjectDir)module/logic/include;$(ProjectDir)module/colog/include;$(ProjectDir)module/iop/include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)module/pthread/lib;$(ProjectDir)module/iconv/lib;$(ProjectDir)extern/curl/lib;$(ProjectDir)extern/openssl/lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)main/body/include;$(ProjectDir)extern/pthread/include;$(ProjectDir)extern/curl/include;$(ProjectDir)extern/openssl/include;$(ProjectDir)module/schead/include;$(ProjectDir)module/struct/include;$(ProjectDir)module/service/include;$(ProjectDir)module/logic/include;$(ProjectDir)module/colog/include;$(ProjectDir)module/iop/include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)module/pthread/lib;$(ProjectDir)extern/curl/lib;$(ProjectDir)extern/openssl/lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -278,7 +276,7 @@
     <Link>
       <AdditionalDependencies>ws2_32.lib;libcurl_a.lib;libssl32MT.lib;libcrypto32MT.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
-      <AdditionalOptions>/LTCG /ignore:4099 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/ignore:4099 %(AdditionalOptions)</AdditionalOptions>
       <GenerateDebugInformation>DebugFastLink</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>

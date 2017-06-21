@@ -70,15 +70,6 @@
     <Filter Include="extern\pthread\lib">
       <UniqueIdentifier>{c2fe23d9-92e6-4d7d-99b5-a4834c179797}</UniqueIdentifier>
     </Filter>
-    <Filter Include="extern\iconv">
-      <UniqueIdentifier>{38958f01-8b25-49b3-8f26-a59e2dc1f5a2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="extern\iconv\include">
-      <UniqueIdentifier>{1186f389-0306-42d4-a82c-4df122c32a88}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="extern\iconv\lib">
-      <UniqueIdentifier>{e95319e3-960e-4562-8416-6c0b7ab6fef3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="extern\curl">
       <UniqueIdentifier>{add8d6a6-5d0d-496a-886c-8889044ae4b6}</UniqueIdentifier>
     </Filter>
@@ -255,9 +246,6 @@
     <ClCompile Include="test\test_iopserver.c">
       <Filter>test</Filter>
     </ClCompile>
-    <ClCompile Include="extern\iconv\sciconv.c">
-      <Filter>extern\iconv</Filter>
-    </ClCompile>
     <ClCompile Include="extern\curl\httputil.c">
       <Filter>extern\curl</Filter>
     </ClCompile>
@@ -275,6 +263,9 @@
     </ClCompile>
     <ClCompile Include="test\test_sctime.c">
       <Filter>test</Filter>
+    </ClCompile>
+    <ClCompile Include="module\schead\sciconv.c">
+      <Filter>module\schead</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -376,12 +367,6 @@
     </ClInclude>
     <ClInclude Include="module\iop\include\iop_util.h">
       <Filter>module\iop\include</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\iconv\include\iconv.h">
-      <Filter>extern\iconv\include</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\iconv\include\sciconv.h">
-      <Filter>extern\iconv\include</Filter>
     </ClInclude>
     <ClInclude Include="extern\pthread\include\pthread.h">
       <Filter>extern\pthread\include</Filter>
@@ -653,6 +638,9 @@
     <ClInclude Include="module\struct\include\vlist.h">
       <Filter>module\struct\include</Filter>
     </ClInclude>
+    <ClInclude Include="module\schead\include\sciconv.h">
+      <Filter>module\schead\include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="test\config\destiny.csv">
@@ -683,9 +671,6 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
-    <Library Include="extern\iconv\lib\libiconv.lib">
-      <Filter>extern\iconv\lib</Filter>
-    </Library>
     <Library Include="extern\curl\lib\libcurl_a.lib">
       <Filter>extern\curl\lib</Filter>
     </Library>

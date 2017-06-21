@@ -10,7 +10,6 @@ void test_sctime(void) {
 	time_t t;
 	struct tm st;
 	stime_t tstr;
-	struct timespec tp;
 
 	printf("Now begin time is : %s\n", stu_getntstr(tstr));
 

@@ -9,7 +9,6 @@
 1.1. 添加 包含目录
 	$(ProjectDir)main/body/include					--	框架入口外部业务处理头文件文件夹
 	$(ProjectDir)extern/pthread/include				--	框架内置的线程库头文件文件夹
-	$(ProjectDir)extern/iconv/include				--	libiconv linux 移植, https://github.com/wangzhione/libiconv-for-window
 	$(ProjectDir)extern/curl/include				--	框架libcurl库头文件文件夹
 	$(ProjectDir)extern/openssl/include				--	框架libopenssl库头文件文件夹
 	$(ProjectDir)module/schead/include				--	框架帮助库头文件文件夹
@@ -86,22 +85,13 @@
  附注: linux 编译有关处理
  系统是 Best new Ubuntu + GCC (gcc (Ubuntu 6.3.0-12ubuntu2) 6.3.0 20170406)
 
- 依赖 libiconv 解码库, libcurl http 处理库, libopenssl 安全加解密库
+ 依赖 libcurl http 处理库, libopenssl 安全加解密库
 
- a) libiconv
-
- wget https://ftp.gnu.org/pub/gnu/libiconv/libiconv-1.15.tar.gz
- tar -zxvf libiconv-1.15.tar.gz
- cd libiconv-1.15
- ./configure --prefix=/usr/local
- make
- sudo make install
-
- b) libcurl
+ a) libcurl
 
  sudo apt-get install libcurl4-openssl-dev
 
- c) libopenssl
+ b) libopenssl
 
  sudo apt-get install openssl
  sudo apt-get install libssl-dev

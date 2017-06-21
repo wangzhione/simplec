@@ -56,7 +56,7 @@ static void _slnode_run(struct stlist * st) {
 
 	ATOM_LOCK(st->lock); // 加锁防止调整关系覆盖,可用还是比较重要的
 	sn = st->head;
-	st->head = list_next(sn);
+	st->head = (struct stnode *)list_next(sn);
 	ATOM_UNLOCK(st->lock);
 
 	sn->timer(sn->arg);
@@ -112,7 +112,7 @@ st_add(int intval, die_f timer, void * arg) {
 
 	ATOM_LOCK(_st.lock); //核心添加模块 要等, 添加到链表, 看线程能否取消等
 
-	list_add(&_st.head, _stnode_cmptime, now);
+	list_add((list_t *)&_st.head, _stnode_cmptime, now);
 
 	// 这个时候重新开启线程
 	if(!_st.status){
@@ -131,7 +131,7 @@ st_add(int intval, die_f timer, void * arg) {
 }
 
 // 通过id开始查找
-static inline int _stnode_cmpid(int id, struct stnode * sr) {
+static inline int _stnode_cmpid(intptr_t id, struct stnode * sr) {
 	return id - sr->id;
 }
 
@@ -146,7 +146,7 @@ st_del(int id) {
 	if (!_st.head) return;
 
 	ATOM_LOCK(_st.lock);
-	node = list_findpop(&_st.head, _stnode_cmpid, (const void *)id);
+	node = list_findpop((list_t *)&_st.head, _stnode_cmpid, (const void *)(intptr_t)id);
 	ATOM_UNLOCK(_st.lock);
 	
 	free(node);
