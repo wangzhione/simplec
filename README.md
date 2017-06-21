@@ -3,7 +3,7 @@
     Best new gcc and cl compile successfully, Zero warnning!
 ![simplec title image hello ya!](http://images.cnblogs.com/cnblogs_com/life2refuel/1022495/o_simplec.jpg)
 
-    这个库是 C 跨平台的简历开发 基础库.(搭建框架层的小型底层库)
+    这个库是 C 跨平台的简单的基础库.(搭建框架层的小型底层库)
     非常的 simple , 高效. 特别适合喜欢C的和学有余力的在校生可以的学习和参考. 
     
     目前具备的功能如下:
