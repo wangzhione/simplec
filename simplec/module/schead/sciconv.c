@@ -113,8 +113,8 @@ static int _utf8tounicode(char * utf8char, int * unicode, int * len, int leaveLe
 //
 void 
 si_gbktoutf8(char strgbk[], char strutf8[]) {
-	int_fast32_t strgbklen = strlen(strgbk);
-	int_fast32_t indexutf8 = 0, indexgbk = 0, iutf8, ctmp;
+	size_t strgbklen = strlen(strgbk), indexutf8 = 0, indexgbk = 0;
+	uint32_t iutf8, ctmp;
 
 	while (strgbklen > indexgbk) {
 		ctmp = strgbk[indexgbk++] & 0xFF;
@@ -145,7 +145,7 @@ si_gbktoutf8(char strgbk[], char strutf8[]) {
 
 void 
 si_gbktoutf8s(char strgbk[]) {
-	int_fast32_t strgbklen = strlen(strgbk);
+	size_t strgbklen = strlen(strgbk);
 	char * strutf8 = malloc(2 * strgbklen + 1);
 	if (NULL == strutf8)
 		return;
@@ -166,9 +166,9 @@ si_gbktoutf8s(char strgbk[]) {
 //
 void 
 si_utf8togbk(char strutf8[], char strgbk[]) {
+	uint32_t gbk;
 	int unicode, len;
-	uint_fast32_t strutf8len = strlen(strutf8);
-	uint_fast32_t gbk, indexutf8 = 0, indexgbk = 0;
+	size_t strutf8len = strlen(strutf8), indexutf8 = 0, indexgbk = 0;
 
 	while (strutf8len > indexutf8) {
 		unicode = len = 0;
@@ -192,7 +192,7 @@ si_utf8togbk(char strutf8[], char strgbk[]) {
 
 void 
 si_utf8togbks(char strutf8[]) {
-	uint_fast32_t strutf8len = strlen(strutf8);
+	size_t strutf8len = strlen(strutf8);
 	char * strgbk = malloc(strutf8len + 1);
 	if (NULL == strgbk)
 		return;
