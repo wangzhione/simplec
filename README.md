@@ -34,7 +34,7 @@
     目前是Best New Ubuntu and GCC 搭建开发的. 
     (Makefile可能更新不是那么及时, 每次发布一个合适的版本, 会统一构建一次Makefile.)
     
-    一般编译步骤, 首次需要安装 libiconv, libcurl, libssl 等库
+    一般编译步骤, 首次需要安装 libcurl, libssl 等库
 ```bash
 
 a) libcurl
