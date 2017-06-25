@@ -41,7 +41,7 @@ static int _selects_dispatch(iopbase_t base, uint32_t timeout) {
 	if (n < 0 && socket_errno == SOCKET_EAGAIN) {
 		// 当定时器时候等待
 		n = 0;
-		usleep(tv.tv_sec * _INT_MSTONS + tv.tv_usec);
+		Sleep(tv.tv_sec * _INT_STOMS + tv.tv_usec / _INT_STOMS);
 	}
 #else
 	do {
