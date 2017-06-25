@@ -138,7 +138,7 @@ void test_iopserver(void) {
 	// 等待 5s
 	while (i <= _INT_SLEEP) {
 		printf("test_iopserver sleep %d ...\n", i);
-		sh_sleep(1000);
+		sh_msleep(1000);
 		++i;
 	}
 

@@ -5,13 +5,13 @@
 // 为Visual Studio导入一些和linux上优质思路
 #ifdef _MSC_VER
 
-/*
- * Linux sys/time.h 中获取时间函数在Windows上一种移植实现
- * tv	:	返回结果包含秒数和微秒数
- * tz	:	包含的时区,在window上这个变量没有用不返回
- * 		:   默认返回0
- */
-inline int
+//
+// gettimeofday - Linux sys/time.h 中得到微秒的一种实现
+// tv		:	返回结果包含秒数和微秒数
+// tz		:	包含的时区,在window上这个变量没有用不返回
+// return	:   默认返回0
+//
+inline int 
 gettimeofday(struct timeval * tv, void * tz) {
 	struct tm st;
 	SYSTEMTIME wtm;
@@ -26,7 +26,7 @@ gettimeofday(struct timeval * tv, void * tz) {
 	st.tm_isdst = -1; // 不考虑夏令时
 
 	tv->tv_sec = (long)mktime(&st); // 32位使用数据强转
-	tv->tv_usec = wtm.wMilliseconds * 1000; // 毫秒转成微秒
+	tv->tv_usec = wtm.wMilliseconds * _INT_STOMS; // 毫秒转成微秒
 
 	return 0;
 }
@@ -210,15 +210,15 @@ size_t
 stu_getmstr(stime_t tstr) {
 	time_t t;
 	struct tm st;
-	struct timeval tv;
+	struct timespec tv;
 
-	gettimeofday(&tv, NULL);
+	timespec_get(&tv, TIME_UTC);
 	t = tv.tv_sec;
 	localtime_r(&t, &st);
 	return snprintf(tstr, sizeof(stime_t), _STR_MTIME,
 					st.tm_year + _INT_YEAROFFSET, st.tm_mon + _INT_MONOFFSET, st.tm_mday,
 					st.tm_hour, st.tm_min, st.tm_sec,
-					tv.tv_usec / 1000);
+					tv.tv_nsec / _INT_MSTONS);
 }
 
 //
@@ -232,13 +232,13 @@ size_t
 stu_getmstrn(char buf[], size_t len, const char * const fmt) {
 	time_t t;
 	struct tm st;
-	struct timeval tv;
+	struct timespec tv;
 
-	gettimeofday(&tv, NULL);
+	timespec_get(&tv, TIME_UTC);
 	t = tv.tv_sec;
 	localtime_r(&t, &st);
 	return snprintf(buf, len, fmt,
 					st.tm_year + _INT_YEAROFFSET, st.tm_mon + _INT_MONOFFSET, st.tm_mday,
 					st.tm_hour, st.tm_min, st.tm_sec,
-					tv.tv_usec / 1000);
+					tv.tv_nsec / _INT_MSTONS);
 }

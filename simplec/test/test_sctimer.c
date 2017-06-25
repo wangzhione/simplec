@@ -26,7 +26,7 @@ void test_sctimer(void) {
 	tid = st_add(1000, _timer, (void *)4);
 
 	// 等待5秒后关闭 上面永久的定时器事件
-	sh_sleep(5000);
+	sh_msleep(5000);
 	st_del(tid);
 
 	// 测试一个连环施法

@@ -26,24 +26,12 @@ struct plog {
 // plog 单例对象
 static struct plog _plog;
 
-// plog 日志库退出的时候执行体
-static void _pl_end(void) {
-	if (_plog.log) {
-		srl_delete(_plog.loop);
-		// 业务越封装越复杂, C++相比C真的不仅仅是改进也是噩梦
-		objs_delete(_plog.pool);
-		fclose(_plog.log);
-		BZERO(_plog);
-	}
-}
-
 // 打开新的文件系统写入
 static void _openfile(void) {
 	FILE * log;
 
 	stu_getmstrn(_plog.path, sizeof(_plog.path), _STR_PLOG_NAME);
 	log = fopen(_plog.path, "ab");
-	
 	if (NULL == log) {
 		if(NULL == _plog.log)
 			CERR_EXIT("fopen path ab error = %s.", _plog.path);
@@ -98,8 +86,7 @@ pl_start(void) {
 		CERR_EXIT("srl_create _run, _die is error! _run | _die = %p, %p.", _run, _die);
 	}
 
-	// 开始注册退出处理事件
-	atexit(_pl_end);
+	// 退出处理事件, 全部交给操作系统
 }
 
 //

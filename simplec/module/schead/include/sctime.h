@@ -15,11 +15,12 @@
 // 定义每天新的开始时间
 #define _INT_DAYNEWSTART	( 0UL * _INT_HOURSECOND + 0 * _INT_MINSECOND + 0)
 
-// gcc 上导入 gettimeofday 函数引用
+// 秒到毫秒|毫秒到微秒, 毫秒到纳秒|秒到微秒 
+#define _INT_STOMS			(1000)
+#define _INT_MSTONS			(1000000)
+
 #ifdef __GNUC__
-
 #include <sys/time.h>
-
 #endif
 
 // 为Visual Studio导入一些和linux上优质思路
@@ -35,13 +36,13 @@
  */
 #define localtime_r(pt, ptm) localtime_s(ptm, pt), ptm
 
-/*
- * Linux sys/time.h 中获取时间函数在Windows上一种移植实现
- * tv	:	返回结果包含秒数和微秒数
- * tz	:	包含的时区,在window上这个变量没有用不返回
- * 		:   默认返回0
- */
-extern int gettimeofday(struct timeval * tv, void * tz);
+//
+// gettimeofday - Linux sys/time.h 中得到微秒的一种实现
+// tv		:	返回结果包含秒数和微秒数
+// tz		:	包含的时区,在window上这个变量没有用不返回
+// return	:   默认返回0
+//
+extern inline int gettimeofday(struct timeval * tv, void * tz);
 
 #endif
 

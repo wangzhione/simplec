@@ -11,7 +11,7 @@
 // error info debug printf log  
 //
 #define CL_ERROR(fmt,	...)	CL_PRINTF("[ERROR]",	fmt, ##__VA_ARGS__)
-#define CL_INFO( fmt,	...)	CL_PRINTF( "[INFO]",	fmt, ##__VA_ARGS__)
+#define CL_INFOS(fmt,	...)	CL_PRINTF("[INFOS]",	fmt, ##__VA_ARGS__)
 #if defined(_DEBUG)
 #define CL_DEBUG(fmt,	...)	CL_PRINTF("[DEBUG]",	fmt, ##__VA_ARGS__)
 #else

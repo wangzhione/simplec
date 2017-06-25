@@ -27,7 +27,7 @@ static void * _write(void * arg) {
 		srl_push(s, msg);
 	}
 
-	sh_sleep(_INT_SLEEP);
+	sh_msleep(_INT_SLEEP);
 
 	// 再写五次数据
 	for (i = 5; i < 10; ++i) {
@@ -37,7 +37,7 @@ static void * _write(void * arg) {
 		srl_push(s, msg);
 	}
 
-	sh_sleep(_INT_SLEEP);
+	sh_msleep(_INT_SLEEP);
 
 	return arg;
 }

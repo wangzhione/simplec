@@ -7,14 +7,6 @@
 
 static FILE * _log;
 
-// 在当前日志库退出的时候所做的事情
-static inline void _cl_end(void) {
-	if (_log) {
-		fclose(_log);
-		_log = NULL;
-	}
-}
-
 //
 // cl_start - 开启单机日志库
 // return	: void
@@ -24,7 +16,6 @@ void cl_start(void) {
 		_log = fopen(_STR_CLOG_NAME, "ab");
 		if(NULL == _log)
 			CERR_EXIT("fopen %s ab is error!", _STR_CLOG_NAME);
-		atexit(_cl_end);
 	}
 }
 

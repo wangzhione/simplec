@@ -9,14 +9,14 @@ static void * _write(void * arg) {
 
 	for (int i = 0; i < 1024; ++i) {
 		PL_ERROR("_write for cnt = %d.", _cnt++);
-		PL_INFO("_write for cnt = %d.", _cnt++);
+		PL_INFOS("_write for cnt = %d.", _cnt++);
 		PL_DEBUG("_write for cnt = %d.", _cnt++);
 	}
 
-	sh_sleep(2000);
+	sh_msleep(2000);
 
 	PL_ERROR("_write cnt = %d.", _cnt++);
-	PL_INFO("_write cnt = %d.", _cnt++);
+	PL_INFOS("_write cnt = %d.", _cnt++);
 	PL_DEBUG("_write cnt = %d.", _cnt++);
 
 	return arg;
@@ -32,7 +32,7 @@ void test_plog(void) {
 	pl_start();
 
 	PL_ERROR("_write cnt = %d.", _cnt++);
-	PL_INFO("_write cnt = %d.", _cnt++);
+	PL_INFOS("_write cnt = %d.", _cnt++);
 	PL_DEBUG("_write cnt = %d.", _cnt++);
 
 	// 开启线程, 跑起来测试
@@ -42,7 +42,7 @@ void test_plog(void) {
 
 	for (int i = 0; i < 1024; ++i) {
 		PL_ERROR("_write for cnt = %d.", _cnt++);
-		PL_INFO("_write for cnt = %d.", _cnt++);
+		PL_INFOS("_write for cnt = %d.", _cnt++);
 		PL_DEBUG("_write for cnt = %d.", _cnt++);
 	}
 

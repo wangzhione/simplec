@@ -8,7 +8,7 @@ struct stnode {
 	_LIST_HEAD;
 
 	int id;						//当前定时器的id
-	struct timeval tv;			//运行的具体时间
+	struct timespec tv;			//运行的具体时间
 	die_f timer;				//执行的函数事件
 	void * arg;					//执行函数参数
 };
@@ -33,9 +33,9 @@ static struct stnode * _stnode_new(int s, die_f timer, void * arg) {
 
 	// 初始化, 首先初始化当前id
 	node->id = ATOM_ADD_FETCH(_st.nowid, 1);
-	gettimeofday(&node->tv, NULL);
-	node->tv.tv_sec += s / 1000;
-	node->tv.tv_usec += s % 1000;
+	timespec_get(&node->tv, TIME_UTC);
+	node->tv.tv_sec += s / _INT_STOMS;
+	node->tv.tv_nsec += (s % _INT_STOMS) * _INT_MSTONS;
 	node->timer = timer;
 	node->arg = arg;
 	node->$node.next = NULL;
@@ -43,11 +43,12 @@ static struct stnode * _stnode_new(int s, die_f timer, void * arg) {
 	return node;
 }
 
-// 得到等待的时间,毫秒, <=0的时候头时间就可以执行了
-static inline int _sleepms(struct stlist * st) {
-	struct timeval tv[1], * th = &st->head->tv;
-	gettimeofday(tv, NULL);
-	return (int)((th->tv_sec - tv->tv_sec) * 1000 + (th->tv_usec - tv->tv_usec) / 1000);
+// 得到等待的微秒时间, <=0的时候头时间就可以执行了
+static inline int _sleepus(struct stlist * st) {
+	struct timespec tv[1], * th = &st->head->tv;
+	timespec_get(tv, TIME_UTC);
+	return (unsigned)((th->tv_sec - tv->tv_sec) * _INT_MSTONS
+		+ (th->tv_nsec - tv->tv_nsec) / _INT_STOMS);
 }
 
 // 重新调整, 只能在 _stlist_loop 后面调用, 线程安全,只加了一把锁
@@ -67,9 +68,9 @@ static void _slnode_run(struct stlist * st) {
 static void * _stlist_loop(struct stlist * st) {
 	// 正常轮询,检测时间
 	while (st->head) {
-		int nowt = _sleepms(st);
-		if (nowt >= 0) {
-			sh_sleep(nowt);
+		int nowt = _sleepus(st);
+		if (nowt > 0) {
+			usleep(nowt);
 			continue;
 		}
 
@@ -84,8 +85,8 @@ static void * _stlist_loop(struct stlist * st) {
 // st < sr 返回 < 0, == 返回 0, > 返回 > 0
 static inline int _stnode_cmptime(struct stnode * sl, struct stnode * sr) {
 	if (sl->tv.tv_sec != sr->tv.tv_sec)
-		return sl->tv.tv_sec - sr->tv.tv_sec;
-	return sl->tv.tv_usec - sr->tv.tv_usec;
+		return (int)(sl->tv.tv_sec - sr->tv.tv_sec);
+	return sl->tv.tv_nsec - sr->tv.tv_nsec;
 }
 
 //

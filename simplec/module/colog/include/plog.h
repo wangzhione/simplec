@@ -14,7 +14,7 @@
 // Simple is best, but this is complicated.
 //
 #define PL_ERROR(fmt,	...)	PL_PRINTF("[ERROR]",	fmt, ##__VA_ARGS__)
-#define PL_INFO( fmt,	...)	PL_PRINTF( "[INFO]",	fmt, ##__VA_ARGS__)
+#define PL_INFOS(fmt,	...)	PL_PRINTF("[INFOS]",	fmt, ##__VA_ARGS__)
 #if defined(_DEBUG)
 #define PL_DEBUG(fmt,	...)	PL_PRINTF("[DEBUG]",	fmt, ##__VA_ARGS__)
 #else

@@ -19,7 +19,7 @@ static void * _srl_loop(struct srl * s) {
 	while (s->loop) {
 		void * pop = mq_pop(s->mq);
 		if (NULL == pop) {
-			sh_sleep(_INT_SCRUNLOOP);
+			sh_msleep(_INT_SCRUNLOOP);
 			continue;
 		}
 

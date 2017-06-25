@@ -45,7 +45,7 @@ void test_ddos(void) {
 	puts("connect count		tcp send count			udp send count");
 	for (;;) {
 		printf(" %"PRIu64"			 %"PRIu64"				 %"PRIu64"\n", arg.connect, arg.tcpsend, arg.udpsend);
-		sh_sleep(_INT_TIMEOUT);
+		sh_msleep(_INT_TIMEOUT);
 	}
 }
 

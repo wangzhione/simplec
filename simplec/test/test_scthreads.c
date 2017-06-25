@@ -36,7 +36,7 @@ void test_scthreads(void) {
 	}
 
 	//等待5s 再结束吧
-	sh_sleep(10000);
+	sh_msleep(10000);
 	//清除当前线程池资源, 实战上线程池是常驻内存,不要清除.
 	threads_delete(pool);
 }

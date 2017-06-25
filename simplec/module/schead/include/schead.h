@@ -18,12 +18,12 @@
 #include <sys/types.h>
 
 /*
- * 睡眠函数, 时间颗粒度是毫秒.
- *  m		: 待睡眠的毫秒数
- *  return	: void
+ * sh_msleep - 睡眠函数, 时间颗粒度是毫秒.
+ * m		: 待睡眠的毫秒数
+ * return	: void
  */
-#define sh_sleep(m) \
-		usleep(m * 1000)
+#define sh_msleep(m) \
+		usleep(m * _INT_STOMS)
 
 /*
  * 屏幕清除宏, 依赖系统脚本
@@ -55,11 +55,18 @@ extern int getch(void);
 #define sh_cls() \
 		system("cls")
 
-#define sh_sleep(m) \
+#define sh_msleep(m) \
 		Sleep(m)	
 
 #define sh_mkdir(path) \
 	mkdir(path)
+
+//
+// usleep - 毫秒级别等待函数
+// usec		: 等待的毫秒
+// return	: The usleep() function returns 0 on success.  On error, -1 is returned.
+//
+extern int usleep(unsigned usec);
 
 #else
 	#error "error : Currently only supports the Visual Studio and GCC!"
