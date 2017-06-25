@@ -62,9 +62,7 @@ simplec_go(void) {
  */
 void 
 simplec_test(void) {
-	TEST_RUN(test_clog);
-	TEST_RUN(test_plog);
-	TEST_RUN(test_sclog);
+	TEST_RUN(test_iopserver);
 }
 
 #endif
