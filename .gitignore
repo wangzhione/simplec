@@ -4,10 +4,10 @@
 /Debug
 /Output
 /Release
-/simplec/x64
-/simplec/logs
-/simplec/Debug
-/simplec/Release
+/*/x64
+/*/logs
+/*/Debug
+/*/Release
 
 # Ignore the uploaded files
 -p

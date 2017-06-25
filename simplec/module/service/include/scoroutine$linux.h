@@ -3,15 +3,8 @@
 
 #include "scoroutine.h"
 #include <ucontext.h>
-#include <string.h>
-#include <stdlib.h>
-#include <assert.h>
 #include <stddef.h>
 #include <stdint.h>
-
-// 默认协程栈大小 和 初始化协程数量
-#define _INT_STACK		(256 * 1024)
-#define _INT_COROUTINE	(16)
 
 // 声明协程结构 和 协程管理器结构
 struct sco {
@@ -37,10 +30,10 @@ struct scomng {
 	int cnt;				// 当前存在的协程个数
 };
 
-/*
- * 开启协程系统函数, 并返回创建的协程管理器
- *			: 返回创建的协程对象
- */
+//
+// sco_open - 开启协程系统函数, 并返回创建的协程管理器
+//			: 返回创建的协程对象
+//
 inline scomng_t
 sco_open(void) {
 	struct scomng * comng = malloc(sizeof(struct scomng));
@@ -60,10 +53,10 @@ static inline void _sco_delete(struct sco * co) {
 	free(co);
 }
 
-/*
- * 关闭已经开启的协程系统函数
- *	sco		: sco_oepn 返回的当前协程中协程管理器
- */
+//
+// sco_close - 关闭已经开启的协程系统函数
+// sco		: sco_oepn 返回的当前协程中协程管理器
+//
 void
 sco_close(scomng_t sco) {
 	int i = -1;
@@ -95,13 +88,13 @@ static inline struct sco * _sco_new(sco_f func, void * arg) {
 	return co;
 }
 
-/*
- * 创建一个协程, 此刻是就绪态
- *  sco		: 协程管理器
- *	func	: 协程体执行的函数体
- *  arg		: 协程体中传入的参数
- *			: 返回创建好的协程id
- */
+//
+// sco_create - 创建一个协程, 此刻是就绪态
+// sco		: 协程管理器
+// func		: 协程体执行的函数体
+// arg		: 协程体中传入的参数
+// return	: 返回创建好的协程id
+//
 int
 sco_create(scomng_t sco, sco_f func, void * arg) {
 	struct sco * co = _sco_new(func, arg);
@@ -152,11 +145,12 @@ static inline void _sco_main(uint32_t low32, uint32_t hig32) {
 	comng->idx = id;
 	comng->running = -1;
 }
-/*
- * 通过协程id激活协程
- *	sco		: 协程系统管理器
- *	id		: 具体协程id, sco_create 返回的协程id
- */
+
+//
+// sco_resume - 通过协程id激活协程
+// sco		: 协程系统管理器
+// id		: 具体协程id, sco_create 返回的协程id
+//
 void
 sco_resume(scomng_t sco, int id) {
 	uintptr_t ptr;
@@ -209,10 +203,10 @@ static void _sco_savestack(struct sco * co, char * top) {
 	memcpy(co->stack, &dummy, size);
 }
 
-/*
- * 关闭当前正在运行的协程, 让协程处理暂停状态
- *	sco		: 协程系统管理器
- */
+//
+// sco_yield - 关闭当前正在运行的协程, 让协程处理暂停状态
+// sco		: 协程系统管理器
+//
 void
 sco_yield(scomng_t sco) {
 	struct sco * co;
@@ -224,28 +218,6 @@ sco_yield(scomng_t sco) {
 	co->status = _SCO_SUSPEND;
 	sco->running = -1;
 	swapcontext(&co->ctx, &sco->main);
-}
-
-/*
- * 得到当前协程状态
- *	sco		: 协程系统管理器
- *	id		: 协程id
- *			: 返回 _SCO_* 相关的协程状态信息
- */
-inline int
-sco_status(scomng_t sco, int id) {
-	assert(sco && id >= 0 && id < sco->cap);
-	return sco->cos[id] ? sco->cos[id]->status : _SCO_DEAD;
-}
-
-/*
- * 当前协程系统中运行的协程id
- *	sco		: 协程系统管理器
- *			: 返回 < 0 表示没有协程在运行
- */
-inline int
-sco_running(scomng_t sco) {
-	return sco->running;
 }
 
 #endif // !_H_SIMPLEC_SCOROUTINE$LINUX

@@ -34,16 +34,15 @@ static void _test(void * sco) {
 	puts("********************_test e n d********************");
 }
 
-/*
- * 测试主函数, 主要测试协程使用
- * 书写要求
- *	0. [文件名].c
- *	1. void [文件名]()(void) { ... }
- *	2. 在上面函数的最后一行加上 exit(EXIT_SUCCESS);
- */
+//
+// 测试主函数, 主要测试协程使用
+// 书写要求
+//	0. [文件名].c
+//	1. void [文件名]()(void) { ... }
+//
 void test_scoroutine(void) {
 
-	void * sco = sco_open();
+	scomng_t sco = sco_open();
 
 	puts("--------------------突然想起了什么,--------------------\n");
 	_test(sco);
