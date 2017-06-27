@@ -109,6 +109,7 @@ static int _utf8tounicode(char * utf8char, int * unicode, int * len, int leaveLe
 // si_gbktoutf8 - 将字符串数组in, 转成utf8编码
 // strgbk	: gbk字符数组
 // strutf8	: utf8保存的字符数组
+// cap		: strgbk字符数组最多能够保存多大的串
 // return	: void
 //
 void 
@@ -144,7 +145,7 @@ si_gbktoutf8(char strgbk[], char strutf8[]) {
 }
 
 void 
-si_gbktoutf8s(char strgbk[]) {
+si_gbktoutf8s(char strgbk[], size_t cap) {
 	size_t strgbklen = strlen(strgbk);
 	char * strutf8 = malloc(2 * strgbklen + 1);
 	if (NULL == strutf8)
@@ -153,7 +154,8 @@ si_gbktoutf8s(char strgbk[]) {
 	// 开始转换
 	si_gbktoutf8(strgbk, strutf8);
 	// 返回数据
-	strncpy(strgbk, strutf8, strgbklen + 1);
+	strncpy(strgbk, strutf8, cap - 1);
+	strgbk[cap - 1] = '\0';
 
 	free(strutf8);
 }

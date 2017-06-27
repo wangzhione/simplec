@@ -9,7 +9,7 @@ void test_sciconv(void) {
 	char name[_INT_STR] = "王志 - simplec";
 
 	printf("[%s] is utf8 = %d.\n", name, si_isutf8(name));
-	si_gbktoutf8s(name);
+	si_gbktoutf8s(name, sizeof name);
 	printf("[%s] is utf8 = %d.\n", name, si_isutf8(name));
 	si_utf8togbks(name);
 	printf("[%s] is utf8 = %d.\n", name, si_isutf8(name));

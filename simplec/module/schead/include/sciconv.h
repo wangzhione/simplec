@@ -1,6 +1,7 @@
 ﻿#ifndef _H_SIMPLEC_SCICONV
 #define _H_SIMPLEC_SCICONV
 
+#include <stdint.h>
 #include <stdbool.h>
 
 //
@@ -19,10 +20,11 @@ extern bool si_isutf8(const char * in);
 // si_gbktoutf8 - 将字符串数组in, 转成utf8编码
 // strgbk	: gbk字符数组
 // strutf8	: utf8保存的字符数组
+// cap		: strgbk字符数组最多能够保存多大的串
 // return	: void
 //
 extern void si_gbktoutf8(char strgbk[], char strutf8[]);
-extern void si_gbktoutf8s(char strgbk[]);
+extern void si_gbktoutf8s(char strgbk[], size_t cap);
 
 //
 // si_utf8togbk - 将字符串数组in, 转成gbk编码
