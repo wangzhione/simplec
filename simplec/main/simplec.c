@@ -62,7 +62,8 @@ simplec_go(void) {
  */
 void 
 simplec_test(void) {
-	TEST_RUN(test_sciconv);
+	TEST_RUN(test_cjson);
+	TEST_RUN(test_cjson_write);
 }
 
 #endif

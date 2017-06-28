@@ -20,21 +20,21 @@ struct cjson {
 	struct cjson * child;	// type == ( _CJSON_ARRAY or _CJSON_OBJECT ) 那么 child 就不为空
 
 	unsigned char type;		// 数据类型和方式定义, 一个美好的意愿
-	char * key;		// json内容那块的 key名称 	
+	char * key;				// json内容那块的 key名称 	
 	union {
-		char * vs;	// type == _CJSON_STRING, 是一个字符串 	
-		double vd;	// type == _CJSON_NUMBER, 是一个num值, ((int)c->vd) 转成int 或 bool
+		char * vs;			// type == _CJSON_STRING, 是一个字符串 	
+		double vd;			// type == _CJSON_NUMBER, 是一个num值, ((int)c->vd) 转成int 或 bool
 	};
 };
 
 //定义cjson_t json类型
 typedef struct cjson * cjson_t;
 
-/*
- * 这个宏,协助我们得到 int 值 或 bool 值 
- * 
- * item : 待处理的目标cjson_t结点
- */
+//
+// cjson_getint - 这个宏,协助我们得到 int 值 或 bool 值 
+// item		: 待处理的目标cjson_t结点
+// return	: int / bool
+//
 #define cjson_getint(item) \
 	((int)((item)->vd))
 
@@ -105,9 +105,9 @@ extern cjson_t cjson_newarray(void);
 extern cjson_t cjson_newobject(void);
 
 /*
- * 按照类型,创建 对映类型的数组 cjson对象
- *目前支持 _CJSON_NULL _CJSON_BOOL/FALSE or TRUE , _CJSON_NUMBER, _CJSON_STRING
- * NULL => array 传入NULL, FALSE 使用char[],也可以传入NULL, NUMBER 只接受double, string 只接受char**
+ * 按照类型, 创建对映类型的数组 cjson对象
+ * 目前支持 _CJSON_NULL _CJSON_BOOL/FALSE or TRUE , _CJSON_NUMBER, _CJSON_STRING
+ * NULL => array 传入NULL, FALSE 使用char[], 也可以传入NULL, NUMBER只接受double, string只接受char **
  * type		: 类型目前支持 上面几种类型
  * array	: 数组原始数据
  * len		: 数组中元素长度

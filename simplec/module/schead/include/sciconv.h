@@ -1,7 +1,7 @@
 ﻿#ifndef _H_SIMPLEC_SCICONV
 #define _H_SIMPLEC_SCICONV
 
-#include <stdint.h>
+#include <stddef.h>
 #include <stdbool.h>
 
 //

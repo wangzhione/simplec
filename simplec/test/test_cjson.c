@@ -2,6 +2,21 @@
 
 // 测试 cjson 函数
 void test_cjson(void) {
+	// 第一个测试, 测试一下简单数组
+	puts("测试 cjson array number");
+	char text0[] = "[ 0.11, -.99, +.88, 12 ]";
+	TSTR_CREATE(jstr0);
+	jstr0->str = text0;
+	cjson_t js0 = cjson_newtstr(jstr0);
+
+	cjson_t one = cjson_getarray(js0, 0);
+	printf("one = %lf.\n", one->vd);
+
+	cjson_t two = cjson_getarray(js0, 1);
+	printf("two = %lf.\n", two->vd);
+
+	cjson_delete(js0);
+
 	// 第二个 测试 json 串的解析
 	puts("测试 cjson 是否可用");
 	char text1[] = "{\n\"name\": \"Jack (\\\"Bee\\\") Nimble\", \n\"format\": {\"type\":       \"rect\", \n\"width\":      1920, \n\"height\":     1080, \n\"interlace\":  false,\"frame rate\": 24\n}\n}";
