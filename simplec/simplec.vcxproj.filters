@@ -123,9 +123,6 @@
     <ClCompile Include="test\test_csv.c">
       <Filter>test</Filter>
     </ClCompile>
-    <ClCompile Include="test\test_json_read.c">
-      <Filter>test</Filter>
-    </ClCompile>
     <ClCompile Include="test\test_scconf.c">
       <Filter>test</Filter>
     </ClCompile>
@@ -266,6 +263,9 @@
     </ClCompile>
     <ClCompile Include="module\schead\sciconv.c">
       <Filter>module\schead</Filter>
+    </ClCompile>
+    <ClCompile Include="test\test_cjson_read.c">
+      <Filter>test</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -1,18 +1,20 @@
 ﻿#include <scjson.h>
-#include <math.h>
-#include <float.h>
-#include <limits.h>
 
-// 删除cjson
-static void _cjson_delete(cjson_t c) {
+//
+// cjson_delete - 删除json串内容  
+// c		: 待释放json_t串内容
+// return	: void
+//
+void 
+cjson_delete(cjson_t c) {
 	while (c) {
 		cjson_t next = c->next;
-		//递归删除儿子
 		if (!(c->type & _CJSON_ISREF)) {
-			if (c->child) //递归删除子节点
-				_cjson_delete(c->child);
 			if (c->type & _CJSON_STRING)
 				free(c->vs);
+			// 递归删除子节点
+			if (c->child)
+				cjson_delete(c->child);
 		}
 		else if (!(c->type & _CJSON_ISCONST) && c->key)
 			free(c->key);
@@ -21,29 +23,17 @@ static void _cjson_delete(cjson_t c) {
 	}
 }
 
-/*
- *  删除json串内容,最近老是受清华的老学生打击, 会起来的......
- *  c		: 待释放json_t串内容
- */
-inline void 
-cjson_delete(cjson_t c) {
-	if (NULL == c)
-		return;
-	_cjson_delete(c);
-}
-
 //构造一个空 cjson 对象
 static inline cjson_t _cjson_new(void) {
 	cjson_t node = malloc(sizeof(struct cjson));
 	if (NULL == node)
 		CERR_EXIT("malloc struct cjson is null!");
-	return memset(node, 0, sizeof(struct cjson));;
+	return memset(node, 0, sizeof(struct cjson));
 }
 
 // parse 4 digit hexadecimal number
-static unsigned _parse_hex4(const char * str) {
-	size_t i = 0;
-	unsigned c, h = 0;
+static unsigned _parse_hex4(const char str[]) {
+	unsigned c, h = 0, i = 0;
 	// 开始转换16进制
 	for(;;) {
 		c = *str;
@@ -69,10 +59,8 @@ static unsigned _parse_hex4(const char * str) {
 static const char * _parse_string(cjson_t item, const char * str) {
 	static unsigned char _marks[] = { 0x00, 0x00, 0xC0, 0xE0, 0xF0, 0xF8, 0xFC };
 	const char * ptr;
-	char * nptr, * out;
-	char c;
-	int len;
-	unsigned uc, nuc;
+	char c, * nptr, * out;
+	unsigned len, uc, nuc;
 
 	if (*str != '\"') { // 检查是否是字符串内容
 		RETURN(NULL, "need \\\" str => %s error!", str);
@@ -144,15 +132,15 @@ static const char * _parse_string(cjson_t item, const char * str) {
 
 // 分析数值的子函数,写的可以
 static const char * _parse_number(cjson_t item, const char * str) {
-	double n = 0.0, ns = 1.0, nd = 0.0; //n把偶才能值, ns表示开始正负, 负为-1, nd 表示小数后面位数
-	int e = 0, es = 1; //e表示后面指数, es表示 指数的正负,负为-1
+	double n = .0, ns = 1.0, nd = .0; // n把偶才能值, ns表示开始正负, 负为-1, nd表示小数后面位数
+	int e = 0, es = 1; // e表示后面指数, es表示 指数的正负, 负为-1
 	char c;
 
 	if ((c = *str) == '-' || c == '+') {
-		ns = c == '-' ? -1.0 : 1.0; //正负号检测, 1表示负数
+		ns = c == '-' ? -1.0 : 1.0; // 正负号检测, 1表示负数
 		++str;
 	}
-	//处理整数部分
+	// 处理整数部分
 	for (c = *str; c >= '0' && c <= '9'; c = *++str)
 		n = n * 10 + c - '0';
 	if (c == '.')
@@ -170,32 +158,31 @@ static const char * _parse_number(cjson_t item, const char * str) {
 	}
 
 	//返回最终结果 number = +/- number.fraction * 10^+/- exponent
-	n = ns * n * pow(10.0, nd + es * e);
-	item->vd = n;
+	item->vd = ns * n * pow(10.0, nd + es * e);
 	item->type = _CJSON_NUMBER;
 	return str;
 }
 
 // 递归下降分析 需要声明这些函数
+static const char * _parse_value(cjson_t item, const char * str);
 static const char * _parse_array(cjson_t item, const char * str);
 static const char * _parse_object(cjson_t item, const char * str);
-static const char * _parse_value(cjson_t item, const char * value);
 
 // 分析数组的子函数, 采用递归下降分析
 static const char * _parse_array(cjson_t item, const char * str) {
-	cjson_t child, nitem;
+	cjson_t child;
 
 	if (*str != '[') {
 		RETURN(NULL, "array str error start: %s.", str);
 	}
 
 	item->type = _CJSON_ARRAY;
-	if (*++str == ']') // 低估提前结束
+	if (*++str == ']') // 低估提前结束, 跳过']'
 		return str + 1;
 
 	item->child = child = _cjson_new();
 	str = _parse_value(child, str);
-	if (NULL == str) { // 解析失败 直接返回
+	if (NULL == str) {
 		RETURN(NULL, "array str error e n d one: %s.", str);
 	}
 
@@ -204,10 +191,11 @@ static const char * _parse_array(cjson_t item, const char * str) {
 		if (str[1] == ']')
 			return str + 1;
 
-		child->next = nitem = _cjson_new();
-		child = nitem;
+		// 写代码是一件很爽的事
+		child->next = _cjson_new();
+		child = child->next;
 		str = _parse_value(child, str + 1);
-		if (NULL == str) {// 写代码是一件很爽的事
+		if (NULL == str) {
 			RETURN(NULL, "array str error e n d two: %s.", str);
 		}
 	}
@@ -215,12 +203,12 @@ static const char * _parse_array(cjson_t item, const char * str) {
 	if (*str != ']') {
 		RETURN(NULL, "array str error e n d: %s.", str);
 	}
-	return str + 1; // 跳过']'
+	return str + 1;
 }
 
 // 分析对象的子函数
 static const char * _parse_object(cjson_t item, const char * str) {
-	cjson_t child, nitem;
+	cjson_t child;
 
 	if (*str != '{') {
 		RETURN(NULL, "object str error start: %s.", str);
@@ -234,35 +222,34 @@ static const char * _parse_object(cjson_t item, const char * str) {
 	item->child = child = _cjson_new();
 	str = _parse_string(child, str);
 	if (!str || *str != ':') {
-		RETURN(NULL, "_skip _parse_string is error : %s!", str);
+		RETURN(NULL, "_parse_string is error : %s!", str);
 	}
 	child->key = child->vs;
-	child->vs = NULL;
 
+	child->vs = NULL;
 	str = _parse_value(child, str + 1);
 	if (!str) {
-		RETURN(NULL, "_parse_object _parse_value is error 2!");
+		RETURN(NULL, "_parse_value is error 2!");
 	}
 
 	// 递归解析
 	while (*str == ',') {
 		// 支持行尾处理多余 ','
-		if (str[1] == ']')
+		if (str[1] == '}')
 			return str + 1;
 
-		nitem = _cjson_new();
-		child->next = nitem;
-		child = nitem;
+		child->next = _cjson_new();
+		child = child->next;
 		str = _parse_string(child, str + 1);
 		if (!str || *str != ':'){
 			RETURN(NULL, "_parse_string need name or no equal ':' %s.", str);
 		}
 		child->key = child->vs;
-		child->vs = NULL;
 
+		child->vs = NULL;
 		str = _parse_value(child, str+1);
 		if (!str) {
-			RETURN(NULL, "_parse_string need item two ':' %s.", str);
+			RETURN(NULL, "_parse_value need item two ':' %s.", str);
 		}
 	}
 
@@ -272,49 +259,30 @@ static const char * _parse_object(cjson_t item, const char * str) {
 	return str + 1;
 }
 
-// 将value 转换塞入 item json值中一部分
-static const char * _parse_value(cjson_t item, const char * value) {
-	char c; 
-	if ((value) && (c = *value)) {
+// 将 value 转换塞入 item json 值中一部分
+static const char * _parse_value(cjson_t item, const char * str) {
+	char c = '\0'; 
+	if ((str) && (c = *str)) {
 		switch (c) {
-			// n = null, f = false, t = true
-		case 'n' : return item->type = _CJSON_NULL, value + 4;
-		case 'f' : return item->type = _CJSON_FALSE, value + 5;
-		case 't' : return item->type = _CJSON_TRUE, item->vd = 1.0, value + 4;
-		case '\"': return _parse_string(item, value);
+		// n = null, f = false, t = true ... 
+		case 'n' : return item->type = _CJSON_NULL, str + 4;
+		case 'f' : return item->type = _CJSON_FALSE, str + 5;
+		case 't' : return item->type = _CJSON_TRUE, item->vd = 1.0, str + 4;
+		case '\"': return _parse_string(item, str);
 		case '0' : case '1' : case '2' : case '3' : case '4' : case '5' :
 		case '6' : case '7' : case '8' : case '9' :
-		case '+' : case '-': return _parse_number(item, value);
-		case '[' : return _parse_array(item, value);
-		case '{' : return _parse_object(item, value);
+		case '+' : case '-' : case '.' : return _parse_number(item, str);
+		case '[' : return _parse_array(item, str);
+		case '{' : return _parse_object(item, str);
 		}
 	}
 	// 循环到这里是意外 数据
-	RETURN(NULL, "params value = %s!", value);
-}
-
-/*
- * 对json字符串解析返回解析后的结果
- * jstr		: 待解析的字符串
- *			: 返回解析好的字符串内容
- */
-static cjson_t _cjson_parse(const char * jstr) {
-	cjson_t c = _cjson_new();
-	const char * end;
-
-	if (!(end = _parse_value(c, jstr))) {
-		CERR("_parse_value params end = %s!", end);
-		cjson_delete(c);
-		return NULL;
-	}
-
-	//这里是否检测 返回测试数据
-	return c;
+	RETURN(NULL, "params value = %c, %s!", c, str);
 }
 
 //  将 jstr中 不需要解析的字符串都去掉, 返回压缩后串的长度. 并且纪念mini 比男的还平
 static size_t _cjson_mini(char * jstr) {
-	char c, *in = jstr, *to = jstr;
+	char c, * in = jstr, * to = jstr;
 
 	while ((c = *to)) {
 		// step 1 : 处理字符串
@@ -328,13 +296,11 @@ static size_t _cjson_mini(char * jstr) {
 			}
 			continue;
 		}
-
 		// step 2 : 处理不可见特殊字符
 		if (c < '!') {
 			++to;
 			continue;
 		}
-
 		if (c == '/') {
 			// step 3 : 处理 // 解析到行末尾
 			if (to[1] == '/') {
@@ -352,7 +318,6 @@ static size_t _cjson_mini(char * jstr) {
 				continue;
 			}
 		}
-
 		// step 5 : 合法数据直接保存
 		*in++ = *to++;
 	}
@@ -361,38 +326,67 @@ static size_t _cjson_mini(char * jstr) {
 	return in - jstr;
 }
 
-/*
- * 对json字符串解析返回解析后的结果
- * jstr		: 待解析的字符串
- */
-inline cjson_t 
-cjson_newtstr(tstr_t str) {
-	str->len = _cjson_mini(str->str);
-	return _cjson_parse(str->str);
+// jstr 必须是 _cjson_mini 解析好的串
+static cjson_t _cjson_parse(const char * jstr) {
+	const char * end;
+	cjson_t json = _cjson_new();
+
+	if (!(end = _parse_value(json, jstr))) {
+		cjson_delete(json);
+		RETURN(NULL, "_parse_value params end = %s!", end);
+	}
+
+	return json;
 }
 
-/*
- *	将json文件解析成json内容返回. 需要自己调用 cjson_delete
- * path		: json串路径
- *			: 返回处理好的cjson_t 内容,失败返回NULL
- */
-cjson_t
+//
+// cjson_newxxx - 通过特定源, 得到内存中json对象
+// str		: 普通格式的串
+// tstr		: tstr_t 字符串, 成功后会压缩 tstr_t
+// path		: json 文件路径
+// return	: 解析好的 json_t对象, 失败为NULL
+//
+inline cjson_t 
+cjson_newstr(const char * str) {
+	cjson_t json;
+
+	TSTR_CREATE(tstr);
+	tstr_appends(tstr, str);
+
+	_cjson_mini(tstr->str);
+	json = _cjson_parse(tstr->str);
+
+	TSTR_DELETE(tstr);
+	return json;
+}
+
+inline cjson_t 
+cjson_newtstr(tstr_t tstr) {
+	tstr->len = _cjson_mini(tstr->str);
+	return _cjson_parse(tstr->str);
+}
+
+cjson_t 
 cjson_newfile(const char * path) {
-	tstr_t tstr = tstr_freadend(path); 
+	cjson_t json;
+	tstr_t tstr = tstr_freadend(path);
 	if (!tstr) {
 		RETURN(NULL, "tstr_freadend path:%s is error!", path);
 	}
-	return cjson_newtstr(tstr);
+
+	json = cjson_newtstr(tstr);
+	tstr_delete(tstr);
+	return json;
 }
 
-/*
- * 根据 item当前结点的 next 一直寻找到 NULL, 返回个数. 推荐在数组的时候使用
- * array	: 待处理的cjson_t数组对象
- *			: 返回这个数组中长度
- */
-int 
+//
+// cjson_getlen - 得到当前数组个数
+// array	: 待处理的cjson_t数组对象
+// return	: 返回这个数组中长度
+//
+size_t 
 cjson_getlen(cjson_t array) {
-	int len = 0;
+	size_t len = 0;
 	if (array) {
 		for (array = array->child; array; array = array->next)
 			++len;
@@ -400,20 +394,17 @@ cjson_getlen(cjson_t array) {
 	return len;
 }
 
-/*
- * 根据索引得到这个数组中对象
- * array	: 数组对象
- * idx		: 查找的索引 必须 [0,cjson_getlen(array)) 范围内
- *			: 返回查找到的当前对象
- */
+//
+// cjson_getxxx - 得到指定的json结点对象
+// array	: json数组对象
+// idx		: 数组查询索引
+// object	: json关联对象
+// key		: 具体的key信息
+// return	: 返回查询到的json结点
+//
 cjson_t 
-cjson_getarray(cjson_t array, int idx) {
+cjson_getarray(cjson_t array, size_t idx) {
 	cjson_t c;
-	DEBUG_CODE({
-		if (!array || idx < 0) {
-			RETURN(NULL, "array:%p, idx=%d params is error!", array, idx);
-		}
-	});
 
 	for (c = array->child; c && idx > 0; c = c->next)
 		--idx;
@@ -421,12 +412,6 @@ cjson_getarray(cjson_t array, int idx) {
 	return c;
 }
 
-/*
- * 根据key得到这个对象 相应位置的值
- * object	: 待处理对象中值
- * key		: 寻找的key
- *			: 返回 查找 cjson_t 对象
- */
 cjson_t 
 cjson_getobject(cjson_t object, const char * key) {
 	cjson_t c;
@@ -442,76 +427,32 @@ cjson_getobject(cjson_t object, const char * key) {
 	return c;
 }
 
-// --------------------------------- 下面是 cjson 输出部分的处理代码 -----------------------------------------
-
-// 2^n >= x , n是最小的整数
-static inline int _pow2gt(int x) {
-	--x;
-	x |= x >> 1;
-	x |= x >> 2;
-	x |= x >> 4;
-	x |= x >> 8;
-	x |= x >> 16;
-	return x + 1;
-}
-
-//
-// 这里使用 tstr_t 结构 size 这里表示 字符串总大小,没有变化
-// len 表示当前字符串的字符串起始偏移量 即 tstr_t->str + tstr_t->len 起始的
-//
-static char * _ensure(tstr_t p, size_t need) {
-	char * nbuf;
-	size_t nsize;
-	if (!p || !p->str) {
-		RETURN(NULL, "p:%p need:%zu is error!", p, need);
-	}
-	need += p->len;
-	if (need <= p->cap) //内存够用直接返回结果
-		return p->str + p->len;
-
-	nsize = _pow2gt(need);
-	// 这里复制内容, 一定会成功, 否则一切都回归奇点
-	nbuf = calloc(nsize, sizeof(char));
-	assert(NULL != nbuf);
-	memcpy(nbuf, p->str, p->cap);
-	free(p->str);
-	p->cap = nsize;
-	p->str = nbuf;
-	return nbuf + p->len;
-}
-
-// 这里更新一下 当前字符串, 返回当前字符串的长度
-static inline size_t _update(tstr_t p) {
-	return (!p || !p->str) ? 0 : p->len + strlen(p->str + p->len);
-}
+// --------------------------------- 下面是 cjson 输出部分的辅助代码 -----------------------------------------
 
 // 将item 中值转换成字符串 保存到p中
 static char * _print_number(cjson_t item, tstr_t p) {
-	char* str = NULL;
+	char * str = NULL;
 	double d = item->vd;
 	int i = (int)d;
 	
 	if (d == 0) {  // 普通0
-		str = _ensure(p, 2);
-		if (str)
-			str[0] = '0', str[1] = '\0';
+		str = tstr_expand(p, 2);
+		str[0] = '0', str[1] = '\0';
 	}
 	else if ((fabs(d - i)) <= DBL_EPSILON && d <= INT_MAX && d >= INT_MIN) {
-		str = _ensure(p, 21); // int 值 
-		if (str)
-			sprintf(str, "%d", i);
+		str = tstr_expand(p, 21); // int 值 
+		sprintf(str, "%d", i);
 	}
 	else {
-		str = _ensure(p, 64); // double值 
-		if (str) {
-			double nd = fabs(d); // 得到正值开始比较
-			if(fabs(floor(d) - d) <= DBL_EPSILON && nd < 1.0e60)
-				sprintf(str, "%.0f", d);
-			else if(nd < 1.0e-6 || nd > 1.0e9) //科学计数法
-				sprintf(str, "%e", d);
-			else
-				sprintf(str, "%f", d);
-		}
+		// 得到正值开始比较
+		double nd = fabs(d);
+		str = tstr_expand(p, 64);
+		if (fabs(floor(d) - d) <= DBL_EPSILON && nd < 1.0e60)
+			sprintf(str, "%.0f", d);
+		else if (nd < 1.0e-6 || nd > 1.0e9) // 科学计数法
+			sprintf(str, "%e", d);
+		else
+			sprintf(str, "% f", d);
 	}
 
 	return str;
@@ -521,28 +462,11 @@ static char * _print_number(cjson_t item, tstr_t p) {
 static char * _print_string(char * str, tstr_t p) {
 	size_t len = 0;
 	const char * ptr;
-	char * nptr, *out;
-	unsigned char c, flag = 0;
+	char c, * nptr, *out;
 
 	if (!str || !*str) { //最特殊情况,什么都没有 返回NULL
-		out = _ensure(p, 3);
-		if (!out) return NULL;
+		out = tstr_expand(p, 3);
 		out[0] = '\"', out[1] = '\"', out[2] = '\0';
-		return out;
-	}
-
-	for (ptr = str; (c=*ptr); ++ptr)
-		flag |= ((c > 0 && c < 32) || c == '\"' || c == '\\');
-	
-	if (!flag) {  //没有特殊字符直接处理结果
-		len = ptr - str;
-		out = _ensure(p, len + 3);
-		if (!out) return NULL;
-		nptr = out;
-		*nptr++ = '\"';
-		strcpy(nptr, str);
-		nptr[len] = '\"';
-		nptr[len + 1] = '\0';
 		return out;
 	}
 
@@ -554,11 +478,18 @@ static char * _print_string(char * str, tstr_t p) {
 			len += 5;
 	}
 
-	if ((out = _ensure(p, len + 3)) == NULL)
-		return NULL;
-	//先添加 \"
-	nptr = out;
+	//扩充内存, 然后添加 \"
+	nptr = out = tstr_expand(p, len + 3);
 	*nptr++ = '\"';
+
+	//没有特殊字符直接处理结果
+	if (len == ptr - str) {
+		strcpy(nptr, str);
+		nptr[len] = '\"';
+		nptr[len + 1] = '\0';
+		return out;
+	}
+
 	for (ptr = str; (c = *ptr); ++ptr) {
 		if (c > 31 && c != '\"' && c != '\\') {
 			*nptr++ = c;
@@ -566,16 +497,17 @@ static char * _print_string(char * str, tstr_t p) {
 		}
 		*nptr++ = '\\';
 		switch (c){
-		case '\\':	*nptr++ = '\\';	break;
-		case '\"':	*nptr++ = '\"';	break;
-		case '\b':	*nptr++ = 'b';	break;
-		case '\f':	*nptr++ = 'f';	break;
-		case '\n':	*nptr++ = 'n';	break;
-		case '\r':	*nptr++ = 'r';	break;
-		case '\t':	*nptr++ = 't';	break;
-		default: sprintf(nptr, "u%04x", c);nptr += 5;	/* 不可见字符 采用 4字节字符编码 */
+		case '\b': *nptr++ = 'b'; break;
+		case '\f': *nptr++ = 'f'; break;
+		case '\n': *nptr++ = 'n'; break;
+		case '\r': *nptr++ = 'r'; break;
+		case '\t': *nptr++ = 't'; break;
+		case '\\': case '\"': *nptr++ = c; break;
+		// 不可见字符 采用4字节字符编码
+		default : sprintf(nptr, "u%04x", c); nptr += 5;
 		}
 	}
+
 	*nptr++ = '\"';
 	*nptr = '\0';
 	return out;
@@ -589,54 +521,42 @@ static char * _print_object(cjson_t item, tstr_t p);
 // 定义实现部分, 内部私有函数 认为 item 和 p都是存在的
 static char * _print_value(cjson_t item, tstr_t p) {
 	char * out = NULL;
-	switch ((item->type) & UCHAR_MAX) { // 0xff
-	case _CJSON_FALSE: if ((out = _ensure(p, 6))) strcpy(out, "false"); break;
-	case _CJSON_TRUE: if ((out = _ensure(p, 5))) strcpy(out, "true"); break;
-	case _CJSON_NULL: if ((out = _ensure(p, 5))) strcpy(out, "null"); break;
-	case _CJSON_NUMBER:	out = _print_number(item, p); break;
-	case _CJSON_STRING:	out = _print_string(item->vs, p); break;
-	case _CJSON_ARRAY:	out = _print_array(item, p); break;
-	case _CJSON_OBJECT:	out = _print_object(item, p); break;
+	switch (item->type) {
+	case _CJSON_FALSE: out = tstr_expand(p, 6); strcpy(out, "false"); break;
+	case _CJSON_TRUE: out = tstr_expand(p, 5); strcpy(out, "true"); break;
+	case _CJSON_NULL: out = tstr_expand(p, 5); strcpy(out, "null"); break;
+	case _CJSON_NUMBER	: out = _print_number(item, p); break;
+	case _CJSON_STRING	: out = _print_string(item->vs, p); break;
+	case _CJSON_ARRAY	: out = _print_array(item, p); break;
+	case _CJSON_OBJECT	: out = _print_object(item, p); break;
 	}
+	p->len += strlen(p->str + p->len);
 
 	return out;
 }
 
 // 同样 假定 item 和 p都是存在且不为NULL
 static char * _print_array(cjson_t item, tstr_t p) {
-	size_t i, ncut;
-	char * ptr = NULL;
-	cjson_t child = item->child;
-
-	// 得到孩子结点的深度
-	for (ncut = 0; (child); child = child->child)
-		++ncut;
-	if (!ncut) { //没有孩子结点 直接空数组返回结果
-		if ((ptr = _ensure(p, 3)))
-			strcpy(ptr, "[]");
-		return ptr;
-	}
+	size_t i;
+	char * ptr;
+	cjson_t child;
 
 	i = p->len;
-	if (!(ptr = _ensure(p, 1)))
-		return NULL;
+	ptr = tstr_expand(p, 1);
 	*ptr = '[';
 	++p->len;
 
 	for (child = item->child; (child); child = child->next) {
 		_print_value(child, p);
-		p->len = _update(p);
 		if (child->next) {
-			if (!(ptr = _ensure(p, 2)))
-				return NULL;
+			ptr = tstr_expand(p, 2);
 			*ptr++ = ',';
 			*ptr = '\0';
 			p->len += 1;
 		}
 	}
 
-	if (!(ptr = _ensure(p, 2)))
-		return NULL;
+	ptr = tstr_expand(p, 2);
 	*ptr++ = ']';
 	*ptr = '\0';
 	return p->str + i;
@@ -645,196 +565,168 @@ static char * _print_array(cjson_t item, tstr_t p) {
 
 // 同样 假定 item 和 p都是存在且不为NULL, 相信这些代码是安全的
 static char * _print_object(cjson_t item, tstr_t p) {
-	char * ptr = NULL;
-	size_t i, ncut, len;
-	cjson_t child = item->child;
-
-	// 得到孩子结点的深度
-	for (ncut = 0; child; child = child->child)
-		++ncut;
-	if (!ncut) {
-		if ((ptr = _ensure(p, 3)))
-			strcpy(ptr, "{}");
-		return ptr;
-	}
+	size_t i;
+	char * ptr;
+	cjson_t child;
 
 	i = p->len;
-	if (!(ptr = _ensure(p, 1)))
-		return NULL;
+	ptr = tstr_expand(p, 1);
 	*ptr++ = '{';
 	++p->len;
 
 	// 根据子结点 处理
 	for (child = item->child; (child); child = child->next) {
 		_print_string(child->key, p);
-		p->len = _update(p);
+		p->len += strlen(p->str + p->len);
 
 		//加入一个冒号
-		if (!(ptr = _ensure(p, 1)))
-			return NULL;
+		ptr = tstr_expand(p, 1);
 		*ptr++ = ':';
 		p->len += 1;
 
 		//继续打印一个值
 		_print_value(child, p);
-		p->len = _update(p);
 
 		//结算最后内容
-		len = child->next ? 1 : 0;
-		if ((ptr = _ensure(p, len + 1)) == NULL)
-			return NULL;
-		if (child->next)
+		if (child->next) {
+			ptr = tstr_expand(p, 2);
 			*ptr++ = ',';
-		*ptr = '\0';
-		p->len += len;
+			*ptr = '\0';
+			p->len += 1;
+		}
 	}
 
-	if (!(ptr = _ensure(p, 2)))
-		return NULL;
+	ptr = tstr_expand(p, 2);
 	*ptr++ = '}';
 	*ptr = '\0';
 	return p->str + i;
 }
 
-#define _INT_CJONSTR	(256)
-/*
- *  这里是将 cjson_t item 转换成字符串内容,需要自己free
- * item		: cjson的具体结点
- *			: 返回生成的item的json串内容
- */
-char * 
-cjson_print(cjson_t item) {
-	char * out;
-	struct tstr p;
-	if (NULL == item) {
-		RETURN(NULL, "item is error = %p!", item);
+//
+// cjson_gett?str - 通过json对象得到输出串
+// json		: 模板json内容
+// return	: 指定的类型保存json串内容
+//
+char *
+cjson_getstr(cjson_t json) {
+	TSTR_CREATE(tstr);
+	if (NULL == _print_value(json, tstr)) {
+		TSTR_DELETE(tstr);
+		RETURN(NULL, "_print_value json is error :%p !", json);
 	}
-
-	// 构建内存
-	p.str = calloc(_INT_CJONSTR, sizeof(char));
-	assert(NULL != p.str);
-	p.cap = _INT_CJONSTR;
-	p.len = 0;
-
-	out = _print_value(item, &p); //从值处理开始, 返回最终结果
-	if (NULL == out) {
-		free(p.str);
-		RETURN(NULL, "_print_value item:%p, p:%p is error!", item, &p);
-	}
-
-	p.len = strlen(out) + 1;
-	return 	realloc(out, p.len); // 体积变小 realloc返回一定成功
+	return realloc(tstr->str, tstr->len + 1);
 }
 
-// --------------------------------- 下面是 cjson 输出部分的辅助代码 -----------------------------------------
+tstr_t
+cjson_gettstr(cjson_t json) {
+	tstr_t tstr = tstr_creates(NULL);
+	if (NULL == _print_value(json, tstr)) {
+		tstr_delete(tstr);
+		RETURN(NULL, "_print_value json is error :%p !", json);
+	}
+	return tstr;
+}
 
-/*
- * 创建一个bool的对象 b==0表示false,否则都是true, 需要自己释放 cjson_delete
- * b		: bool 值 最好是 _Bool
- *			: 返回 创建好的json 内容
- */
-inline cjson_t
-cjson_newnull() {
+// --------------------------------- 下面是 cjson 构建部分的辅助代码 -----------------------------------------
+
+static inline cjson_t _cjson_newt(unsigned char type) {
 	cjson_t item = _cjson_new();
-	item->type = _CJSON_NULL; 
+	item->type = type;
 	return item;
 }
 
+//
+// cjson_newxxx - 创建对应对象
+// b		: bool 值
+// vd		: double 值
+// vs		: string 值
+// return	: 返回创建好的对映对象
+//
 inline cjson_t
-cjson_newbool(int b) {
-	cjson_t item = _cjson_new();
-	item->vd = item->type = b ? _CJSON_TRUE : _CJSON_FALSE; 
+cjson_newnull(void) {
+	return _cjson_new();
+}
+
+inline cjson_t
+cjson_newarray(void) {
+	return _cjson_newt(_CJSON_ARRAY);
+}
+
+inline cjson_t
+cjson_newobject(void) {
+	return _cjson_newt(_CJSON_OBJECT);
+}
+
+inline cjson_t
+cjson_newbool(bool b) {
+	cjson_t item = _cjson_newt(1 + b);
+	item->vd = b;
 	return item;
 }
 
 inline cjson_t
 cjson_newnumber(double vd) {
-	cjson_t item = _cjson_new();
-	item->type = _CJSON_NUMBER;
+	cjson_t item = _cjson_newt(_CJSON_NUMBER);
 	item->vd = vd;
 	return item;
 }
 
 inline cjson_t
 cjson_newstring(const char* vs) {
-	cjson_t item = _cjson_new();
-	item->type = _CJSON_STRING;
+	cjson_t item = _cjson_newt(_CJSON_STRING);
 	item->vs = tstr_dup(vs);
 	return item;
 }
 
-inline cjson_t
-cjson_newarray(void) {
-	cjson_t item = _cjson_new();
-	item->type = _CJSON_ARRAY;
-	return item;
-}
+//
+// cjson_newtypearray - 按照基础类型, 创建对映类型的数组 cjson对象
+// type		: 类型宏
+// array	: 源数组对象
+// len		: 源数组长度
+// return	: 返回创建好的json数组对象
+//
+extern cjson_t cjson_newtypearray(unsigned char type, const void * array, size_t len) {
+	size_t i;
+	cjson_t n = NULL, p = NULL, a = NULL;
 
-inline cjson_t
-cjson_newobject(void) {
-	cjson_t item = _cjson_new();
-	item->type = _CJSON_OBJECT;
-	return item;
-}
-
-/*
- * 按照类型,创建 对映类型的数组 cjson对象
- * 目前支持 _CJSON_NULL _CJSON_BOOL/FALSE or TRUE , _CJSON_NUMBER, _CJSON_STRING
- * NULL => array传入NULL, FALSE使用 char[], 也可以传入NULL, NUMBER只接受double, string 只接受char**
- * type		: 类型目前支持 上面几种类型
- * array	: 数组原始数据
- * len		: 数组中元素长度
- *			: 返回创建的数组对象
- */
-cjson_t 
-cjson_newtypearray(int type, const void * array, int len) {
-	int i;
-	cjson_t n = NULL, p = NULL, a;
-	// _DEBUG 模式下简单检测一下
-	DEBUG_CODE({
-		if(type < _CJSON_FALSE || type > _CJSON_STRING || len <=0){
-			RETURN(NULL, "check param is error! type = %d, len = %d.", type, len);
-		}
-	});
-	
-	// 这里是实际执行代码
-	a = cjson_newarray();
 	for(i = 0; i < len; ++i){
 		switch(type){
-		case _CJSON_NULL: n = cjson_newnull(); break;
-		case _CJSON_FALSE: n = cjson_newbool(array? ((char *)array)[i] : 0); break;
-		case _CJSON_TRUE: n = cjson_newbool(array? ((char *)array)[i] : 1); break;
-		case _CJSON_NUMBER: n = cjson_newnumber(((double *)array)[i]); break;
-		case _CJSON_STRING: n = cjson_newstring(((char **)array)[i]); break;
+		case _CJSON_NULL	: n = cjson_newnull(); break;
+		case _CJSON_TRUE: n = cjson_newbool(array ? ((bool *)array)[i] : true); break;
+		case _CJSON_FALSE	: n = cjson_newbool(array? ((bool *)array)[i] : false); break;
+		case _CJSON_NUMBER	: n = cjson_newnumber(((double *)array)[i]); break;
+		case _CJSON_STRING	: n = cjson_newstring(((char **)array)[i]); break;
+		default: RETURN(NULL, "type is error = %d.", type);
 		}
-		if(i) //有你更好
+		if(i) // 有你更好
 			p->next = n;
-		else
+		else {
+			a = cjson_newarray();
 			a->child = n;
+		}
 		p = n;
 	}
 	return a;
 }
 
-/*
- * 在array中分离第idx个索引项内容.
- * array	: 待处理的json_t 数组内容
- * idx		: 索引内容
- *			: 返回分离的json_t内容
- */
+//
+// cjson_detacharray - 在array中分离第idx个索引项内容.
+// array	: 待处理的json_t 数组内容
+// idx		: 索引内容
+// return	: 返回分离的json_t内容
+//
 cjson_t 
-cjson_detacharray(cjson_t array, int idx) {
+cjson_detacharray(cjson_t array, size_t idx) {
 	cjson_t c;
-	DEBUG_CODE({
-		if(!array || idx<0){
-			RETURN(NULL, "check param is array:%p, idx:%d.", array, idx);
-		}
-	});
-	
-	for(c=array->child; idx>0 && c; c = c->next)
+	if ((!array) || !(c = array->child))
+		RETURN(NULL, "check param is array:%p, idx:%zu is error!", array, idx);
+
+	while (idx > 0 && c) {
 		--idx;
-	if( c > 0){
-		RETURN(NULL, "check param is too dig idx:sub %d.", idx);
+		c = c->next;
+	}
+	if(!c) {
+		RETURN(NULL, "check param is too dig idx:sub %zu.", idx);
 	}
 	if(c == array->child)
 		array->child = c->next;
@@ -842,25 +734,23 @@ cjson_detacharray(cjson_t array, int idx) {
 	return c;
 }
 
-/*
- * 在object json 中分离 key 的项出去
- * object	: 待分离的对象主体内容
- * key		: 关联的键
- *			: 返回分离的 object中 key的项json_t
- */
+//
+// cjson_detachobject - 在 object json 中分离 key 的项出去
+// object	: 待分离的对象主体内容
+// key		: 关联的键
+// return	: 返回分离的 object中 key的项json_t
+//
 cjson_t 
 cjson_detachobject(cjson_t object, const char * key) {
 	cjson_t c;
-	DEBUG_CODE({
-		if(!object || !object->child || !key || !*key){
-			RETURN(NULL, "check param is object:%p, key:%s.", object, key);
-		}
-	});
+	if ((!object) || !(c = object->child) || !key || !*key) {
+		RETURN(NULL, "check param is object:%p, key:%s.", object, key);
+	}
 	
-	for(c=object->child; c && tstr_icmp(c->key, key); c=c->next)
-		;
+	while(c && tstr_icmp(c->key, key))
+		c = c->next;
 	if(!c) {
-		RETURN(NULL, "check param key:%s => vlaue is empty.", key);
+		RETURN(NULL, "check param key:%s to empty!", key);
 	}
 	if(c == object->child)
 		object->child = c->next;

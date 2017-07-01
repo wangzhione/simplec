@@ -4,7 +4,7 @@
 void test_cjson(void) {
 	// 第一个测试, 测试一下简单数组
 	puts("测试 cjson array number");
-	char text0[] = "[ 0.11, -.99, +.88, 12 ]";
+	char text0[] = "[ .64, -.99, 0.11, +.88, 12 ]";
 	TSTR_CREATE(jstr0);
 	jstr0->str = text0;
 	cjson_t js0 = cjson_newtstr(jstr0);
@@ -28,10 +28,15 @@ void test_cjson(void) {
 	printf("name => %s\n", name->vs);
 
 	cjson_t format = cjson_getobject(js, "format");
-	printf("len(format) => %d\n", cjson_getlen(format));
+	printf("len(format) => %zu\n", cjson_getlen(format));
 
 	cjson_t interlace = cjson_getobject(format, "interlace");
-	printf("interlace => %d\n", cjson_getint(interlace));
+	printf("interlace => %d\n", cjson_getvi(interlace));
+
+	// 测试输出
+	char * pjs = cjson_getstr(js);
+	puts(pjs);
+	free(pjs);
 
 	cjson_delete(js);
 
@@ -42,11 +47,10 @@ void test_cjson(void) {
 	TSTR_CREATE(jstr2);
 	jstr2->str = text2;
 	js = cjson_newtstr(jstr2);
-	int len = cjson_getlen(js);
-	int i;
+	size_t i, len = cjson_getlen(js);
 	for (i = 0; i < len; ++i) {
 		cjson_t item = cjson_getarray(js,i);
-		printf("%d => %s.\n", i, item->vs);
+		printf("%zu => %s.\n", i, item->vs);
 	}
 	cjson_delete(js);
 
@@ -59,7 +63,7 @@ void test_cjson(void) {
 	len = cjson_getlen(js);
 	for (i = 0; i < len; ++i) {
 		cjson_t item = cjson_getarray(js, i);
-		printf("%d => %d.\n", i, cjson_getlen(item));
+		printf("%zu => %zu.\n", i, cjson_getlen(item));
 	}
 
 	cjson_delete(js);

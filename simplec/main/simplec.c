@@ -64,6 +64,7 @@ void
 simplec_test(void) {
 	TEST_RUN(test_cjson);
 	TEST_RUN(test_cjson_write);
+	TEST_RUN(test_cjson_read);
 }
 
 #endif

@@ -52,7 +52,7 @@
     <ClCompile Include="test\test_ddos.c" />
     <ClCompile Include="test\test_httputil.c" />
     <ClCompile Include="test\test_iopserver.c" />
-    <ClCompile Include="test\test_json_read.c" />
+    <ClCompile Include="test\test_cjson_read.c" />
     <ClCompile Include="test\test_objs.c" />
     <ClCompile Include="test\test_plog.c" />
     <ClCompile Include="test\test_sclog.c" />

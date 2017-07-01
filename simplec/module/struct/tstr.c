@@ -184,32 +184,33 @@ tstr_delete(tstr_t tstr) {
 }
 
 // 文本字符串创建的初始化大小
-#define _INT_TSTRING	(32)
+#define _UINT_TSTR		(32u)
 
 //
 // tstr_expand - 为当前字符串扩容, 属于低级api
 // tstr		: 可变字符串
 // len		: 扩容的长度
-// return	: void
+// return	: tstr->str + tstr->len 位置的串
 //
-void
+char *
 tstr_expand(tstr_t tstr, size_t len) {
-	char * nstr;
 	size_t cap = tstr->cap;
-	if ((len += tstr->len) < cap)
-		return;
+	if ((len += tstr->len) >= cap) {
+		char * nstr;
+		for (cap = cap < _UINT_TSTR ? _UINT_TSTR : cap; cap < len; cap <<= 1)
+			;
+		// 开始分配内存
+		if ((nstr = realloc(tstr->str, cap)) == NULL) {
+			tstr_delete(tstr);
+			CERR_EXIT("realloc cap = %zu empty!!!", cap);
+		}
 
-	// 开始分配内存
-	for (cap = cap < _INT_TSTRING ? _INT_TSTRING : cap; cap < len; cap <<= 1)
-		;
-	if ((nstr = realloc(tstr->str, cap)) == NULL) {
-		tstr_delete(tstr);
-		CERR_EXIT("realloc cap = %zu empty!!!", cap);
+		// 重新内联内存
+		tstr->str = nstr;
+		tstr->cap = cap;
 	}
 
-	// 重新内联内存
-	tstr->str = nstr;
-	tstr->cap = cap;
+	return tstr->str + tstr->len;
 }
 
 //

@@ -4,9 +4,9 @@
 #include <tstr.h>
 
 // json中几种数据结构和方式定义, 对于程序开发而言最难的还是理解思路(思想 or 业务)
-#define _CJSON_FALSE	(0u)
-#define _CJSON_TRUE		(1u)
-#define _CJSON_NULL		(1u << 1)
+#define _CJSON_NULL		(0u << 0)
+#define _CJSON_FALSE	(1u << 0)
+#define _CJSON_TRUE		(1u << 1)
 #define _CJSON_NUMBER	(1u << 2)
 #define _CJSON_STRING	(1u << 3)
 #define _CJSON_ARRAY	(1u << 4)
@@ -31,104 +31,98 @@ struct cjson {
 typedef struct cjson * cjson_t;
 
 //
-// cjson_getint - 这个宏,协助我们得到 int 值 或 bool 值 
-// item		: 待处理的目标cjson_t结点
-// return	: int / bool
+// cjson_delete - 删除json串内容  
+// c		: 待释放json_t串内容
+// return	: void
 //
-#define cjson_getint(item) \
-	((int)((item)->vd))
-
-/*
- *  删除json串内容  
- *  c		: 待释放json_t串内容
- */
 extern void cjson_delete(cjson_t c);
 
-/*
- * 对json字符串解析返回解析后的结果
- * jstr		: 待解析的字符串
- */
-extern cjson_t cjson_newtstr(tstr_t str);
-
-/*
- *	将json文件解析成json内容返回. 需要自己调用 cjson_delete
- * path		: json串路径
- *			: 返回处理好的cjson_t 内容,失败返回NULL
- */
+//
+// cjson_newxxx - 通过特定源, 得到内存中json对象
+// str		: 普通格式的串
+// tstr		: tstr_t 字符串, 成功后会压缩 tstr_t
+// path		: json 文件路径
+// return	: 解析好的 json_t对象, 失败为NULL
+//
+extern cjson_t cjson_newstr(const char * str);
+extern cjson_t cjson_newtstr(tstr_t tstr);
 extern cjson_t cjson_newfile(const char * path);
 
-/*
- * 根据 item当前结点的 next 一直寻找到 NULL, 返回个数. 推荐在数组的时候使用
- * array	: 待处理的cjson_t数组对象
- *			: 返回这个数组中长度
- */
-extern int cjson_getlen(cjson_t array);
+//
+// cjson_getint - 这个宏, 协助我们得到 int 值
+// item		: 待处理的目标cjson_t结点
+// return	: int
+//
+#define cjson_getvi(item) \
+	((int)((item)->vd))
 
-/*
- * 根据索引得到这个数组中对象
- * array	: 数组对象
- * idx		: 查找的索引 必须 [0,cjson_getlen(array)) 范围内
- *			: 返回查找到的当前对象
- */
-extern cjson_t cjson_getarray(cjson_t array, int idx);
+//
+// cjson_getlen - 得到当前数组个数
+// array	: 待处理的cjson_t数组对象
+// return	: 返回这个数组中长度
+//
+extern size_t cjson_getlen(cjson_t array);
 
-/*
- * 根据key得到这个对象 相应位置的值
- * object	: 待处理对象中值
- * key		: 寻找的key
- *			: 返回 查找 cjson_t 对象
- */
+//
+// cjson_getxxx - 得到指定的json结点对象
+// array	: json数组对象
+// idx		: 数组查询索引
+// object	: json关联对象
+// key		: 具体的key信息
+// return	: 返回查询到的json结点
+//
+extern cjson_t cjson_getarray(cjson_t array, size_t idx);
 extern cjson_t cjson_getobject(cjson_t object, const char * key);
 
+// --------------------------------- 下面是 cjson 输出部分的接口 -----------------------------------------
 
-// --------------------------------- 下面是 cjson 输出部分的处理代码 -----------------------------------------
+//
+// cjson_gett?str - 通过json对象得到输出串
+// json		: 模板json内容
+// return	: 指定的类型保存json串内容, 需要自己free
+//
+extern char * cjson_getstr(cjson_t json);
+extern tstr_t cjson_gettstr(cjson_t json);
 
-/*
- *  这里是将 cjson_t item 转换成字符串内容,需要自己free 
- * item		: cjson的具体结点
- *			: 返回生成的item的json串内容
- */
-extern char* cjson_print(cjson_t item);
+// --------------------------------- 下面是 cjson 构建部分的接口 -----------------------------------------
 
-// --------------------------------- 下面是 cjson 输出部分的辅助代码 -----------------------------------------
-
-/*
- * 创建一个bool的对象 b==0表示false,否则都是true, 需要自己释放 cjson_delete
- * b		: bool 值 最好是 _Bool
- *			: 返回 创建好的json 内容
- */
-extern cjson_t cjson_newnull();
-extern cjson_t cjson_newbool(int b);
-extern cjson_t cjson_newnumber(double vd);
-extern cjson_t cjson_newstring(const char * vs);
+//
+// cjson_newxxx - 创建对应对象
+// b		: bool 值
+// vd		: double 值
+// vs		: string 值
+// return	: 返回创建好的对映对象
+//
+extern cjson_t cjson_newnull(void);
 extern cjson_t cjson_newarray(void);
 extern cjson_t cjson_newobject(void);
+extern cjson_t cjson_newbool(bool b);
+extern cjson_t cjson_newnumber(double vd);
+extern cjson_t cjson_newstring(const char * vs);
 
-/*
- * 按照类型, 创建对映类型的数组 cjson对象
- * 目前支持 _CJSON_NULL _CJSON_BOOL/FALSE or TRUE , _CJSON_NUMBER, _CJSON_STRING
- * NULL => array 传入NULL, FALSE 使用char[], 也可以传入NULL, NUMBER只接受double, string只接受char **
- * type		: 类型目前支持 上面几种类型
- * array	: 数组原始数据
- * len		: 数组中元素长度
- *			: 返回创建的数组对象
- */
-extern cjson_t cjson_newtypearray(int type, const void * array, int len);
+//
+// cjson_newtypearray - 按照基础类型, 创建对映类型的数组 cjson对象
+// type		: 类型宏
+// array	: 源数组对象
+// len		: 源数组长度
+// return	: 返回创建好的json数组对象
+//
+extern cjson_t cjson_newtypearray(unsigned char type, const void * array, size_t len);
 
-/*
- * 在array中分离第idx个索引项内容.
- * array	: 待处理的json_t 数组内容
- * idx		: 索引内容
- *			: 返回分离的json_t内容
- */
-extern cjson_t cjson_detacharray(cjson_t array, int idx);
+//
+// cjson_detacharray - 在array中分离第idx个索引项内容.
+// array	: 待处理的json_t 数组内容
+// idx		: 索引内容
+// return	: 返回分离的json_t内容
+//
+extern cjson_t cjson_detacharray(cjson_t array, size_t idx);
 
-/*
- * 在object json 中分离 key 的项出去
- * object	: 待分离的对象主体内容
- * key		: 关联的键
- *			: 返回分离的 object中 key的项json_t
- */
+//
+// cjson_detachobject - 在 object json 中分离 key 的项出去
+// object	: 待分离的对象主体内容
+// key		: 关联的键
+// return	: 返回分离的 object中 key的项json_t
+//
 extern cjson_t cjson_detachobject(cjson_t object, const char * key);
 
 #endif // !_H_SIMPLEC_SCJSON

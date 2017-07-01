@@ -109,7 +109,7 @@ sl_start(void) {
 	if (NULL == _slmain.log) {
 		_slmain.log = fopen(_STR_LOGDIR "/" _STR_SCLOG_LOG, "a+");
 		if (NULL == _slmain.log)
-			CERR_EXIT("__slmain.log fopen %s error!", _STR_SCLOG_LOG);
+			CERR_EXIT("_slmain.log fopen %s error!", _STR_SCLOG_LOG);
 	}
 
 	// 继续打开 wf 文件
@@ -117,7 +117,7 @@ sl_start(void) {
 		_slmain.wf = fopen(_STR_LOGDIR "/" _STR_SCLOG_WFLOG, "a+");
 		if (!_slmain.wf) {
 			fclose(_slmain.log); // 其实这都没有必要,图个心安
-			CERR_EXIT("__slmain.log fopen %s error!", _STR_SCLOG_WFLOG);
+			CERR_EXIT("_slmain.log fopen %s error!", _STR_SCLOG_WFLOG);
 		}
 	}
 

@@ -21,7 +21,7 @@ void test_cjson_write(void) {
 	}
 
 	//这里简单测试输出内容
-	char* njstr = cjson_print(root);
+	char * njstr = cjson_getstr(root);
 
 	if (njstr == NULL) {
 		puts("输出内容失败,程序退出中!");

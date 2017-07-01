@@ -91,9 +91,9 @@ extern void tstr_delete(tstr_t tstr);
 // tstr_expand - 为当前字符串扩容, 属于低级api
 // tstr		: 可变字符串
 // len		: 扩容的长度
-// return	: void
+// return	: tstr->str + tstr->len 位置的串
 //
-void tstr_expand(tstr_t tstr, size_t len);
+char * tstr_expand(tstr_t tstr, size_t len);
 
 //
 // 向tstr_t串结构中添加字符等, 内存分配失败内部会自己处理
