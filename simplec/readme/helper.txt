@@ -71,12 +71,12 @@
 	echo update directory $(TargetDir)config begin 
 	if not exist  $(TargetDir)config mkdir $(TargetDir)config
 	xcopy /D /S /E /Y $(ProjectDir)config $(TargetDir)config
-	echo update directory $(TargetDir)config end
+	echo update directory $(TargetDir)config e n d
 
 	echo update dll begin
 	xcopy /D /S /E /Y $(ProjectDir)extern\pthread\dll $(TargetDir)
 	xcopy /D /S /E /Y $(ProjectDir)extern\openssl\dll $(TargetDir)
-	echo update dll end
+	echo update dll e n d
 
 */
 
