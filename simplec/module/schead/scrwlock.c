@@ -8,13 +8,13 @@ rwlock_rlock(struct rwlock * lock) {
 		while (lock->wlock)
 			ATOM_SYNC();
 
-		ATOM_ADD_FETCH(lock->rlock, 1);
+		ATOM_INC(lock->rlock);
 		// 没有写占用, 开始读了
 		if (!lock->wlock)
 			break;
 
 		// 还是有写, 删掉添加的读
-		ATOM_ADD_FETCH(lock->rlock, -1);
+		ATOM_DEC(lock->rlock);
 	}
 }
 
@@ -36,5 +36,5 @@ rwlock_runlock(struct rwlock * lock) {
 // unlock write
 inline void 
 rwlock_wunlock(struct rwlock * lock) {
-	ATOM_ADD_FETCH(lock->rlock, -1);
+	ATOM_DEC(lock->rlock);
 }

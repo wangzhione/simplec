@@ -32,7 +32,7 @@ static struct stnode * _stnode_new(int s, die_f timer, void * arg) {
 		RETURN(NULL, "malloc struct stnode is error!");
 
 	// 初始化, 首先初始化当前id
-	node->id = ATOM_ADD_FETCH(_st.nowid, 1);
+	node->id = ATOM_INC(_st.nowid);
 	timespec_get(&node->tv, TIME_UTC);
 	node->tv.tv_sec += s / _INT_STOMS;
 	node->tv.tv_nsec += (s % _INT_STOMS) * _INT_MSTONS;

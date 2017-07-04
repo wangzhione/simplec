@@ -53,7 +53,7 @@ sl_init(const char mod[_INT_LITTLE], const char reqip[_INT_LITTLE]) {
 
 	timespec_get(&pl->timec, TIME_UTC);
 	//设置日志logid, 有设置, 没有默认原子自增
-	pl->logid = ATOM_ADD_FETCH(_slmain.logid, 1);
+	pl->logid = ATOM_INC(_slmain.logid);
 	strncpy(pl->mod, mod, _INT_LITTLE); //复制一些数据
 	strncpy(pl->reqip, reqip, _INT_LITTLE);
 

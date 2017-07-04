@@ -659,7 +659,7 @@ cjson_newobject(void) {
 
 inline cjson_t
 cjson_newbool(bool b) {
-	cjson_t item = _cjson_newt(1u << 1 + b);
+	cjson_t item = _cjson_newt(1u << (1 + b));
 	item->vd = b;
 	return item;
 }
