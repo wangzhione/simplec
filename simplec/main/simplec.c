@@ -35,10 +35,8 @@ void simplec_main(void) {
 // 第一次见面的函数
 void 
 simplec_go(void) {
-	const char * image;
-
 	// 得到配置的版本信息
-	image = mconf_get("Image");
+	const char * image = mconf_get("Image");;
 
 	// 打印简单信息
 	puts(image);
@@ -50,10 +48,10 @@ simplec_go(void) {
 // TEST_RUN - simplec 单元测试宏, 方便进行单元测试
 // test		: 需要单元测试的函数名, 通test 目录下文件名
 //
-#define TEST_RUN(test) \
+#define TEST_RUN(test, ...) \
 	do {\
-		extern void test(void);\
-		test();\
+		void test();\
+		test(##__VA_ARGS__);\
 	} while(0)
 
 /*
@@ -62,9 +60,7 @@ simplec_go(void) {
  */
 void 
 simplec_test(void) {
-	TEST_RUN(test_cjson);
-	TEST_RUN(test_cjson_write);
-	TEST_RUN(test_cjson_read);
+	TEST_RUN(test_scpipe);
 }
 
 #endif

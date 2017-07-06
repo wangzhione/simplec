@@ -58,8 +58,7 @@ usleep(unsigned usec) {
 #endif
 
 #define _STR_PAUSEMSG "Press any key to continue . . ."
-
-//简单通用的等待函数
+// 简单通用的等待函数
 inline void
 sh_pause(void) {
 	rewind(stdin);
@@ -67,25 +66,12 @@ sh_pause(void) {
 	getch();
 }
 
-//12.0 判断是大端序还是小端序,大端序返回true
+// 判断是大端序还是小端序,大端序返回true
 inline bool
 sh_isbig(void) {
 	static union {
-		unsigned short _s;
-		unsigned char _c;
+		uint16_t us;
+		uint8_t  uc;
 	} _u = { 1 };
-	return _u._c == 0;
-}
-
-//
-// sh_free - 简单粗暴的野指针销毁函数,并置空
-// pobj		: 指向待释放内存的指针(void*)
-// return	: void
-//
-inline void
-sh_free(void ** pobj) {
-	if (!pobj || !*pobj) 
-		return;
-	free(*pobj);
-	*pobj = NULL;
+	return 0 == _u.uc;
 }

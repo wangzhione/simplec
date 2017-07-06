@@ -1,9 +1,9 @@
 ﻿#ifndef _H_LIBIOP_IOP_DEF
 #define _H_LIBIOP_IOP_DEF
 
-#include <iop_util.h>
 #include <vlist.h>
 #include <tstr.h>
+#include <scsocket.h>
 
 //
 // EV_XXX 是特定消息处理动作的标识

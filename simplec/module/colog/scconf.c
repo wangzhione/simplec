@@ -54,7 +54,7 @@ static void _sconf_create(FILE * txt, tree_t root) {
 	//这里处理读取问题
 	while ((c = fgetc(txt)) != EOF) {
 		//1.0 先跳过空白字符
-		while ((c != EOF) && sh_isspace(c))
+		while (c != EOF && isspace(c))
 			c = fgetc(txt);
 
 		//2.0 如果遇到第一个字符不是 '$'
@@ -75,7 +75,7 @@ static void _sconf_create(FILE * txt, tree_t root) {
 
 		//3.0 找到第一个等号 
 		while (c != EOF && c != '=') {
-			if(!sh_isspace(c))
+			if(!isspace(c))
 				tstr_appendc(tstr, c);
 			c = fgetc(txt);
 		}
@@ -85,7 +85,7 @@ static void _sconf_create(FILE * txt, tree_t root) {
 		c = '\0';
 		//4.0 找到 第一个 "
 		while (c != EOF && c != '\"') {
-			if (!sh_isspace(c))
+			if (!isspace(c))
 				tstr_appendc(tstr, c);
 			c = fgetc(txt);
 		}

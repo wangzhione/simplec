@@ -83,6 +83,7 @@
 //
 typedef enum {
 
+	Error_Empty		= -6,	//返回数据为空
 	Error_Tout		= -5,	//超时错误
 	Error_Fd		= -4,	//文件打开失败
 	Error_Alloc		= -3,	//内存分配错误

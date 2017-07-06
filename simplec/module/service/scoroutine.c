@@ -1,6 +1,6 @@
 ﻿// Compiler Foreplay
 #if !defined(_MSC_VER) && !defined(__GNUC__)
-#	error "error : Currently only supports the Visual Studio and GCC!"
+#	error "error : Currently only supports the Best New CL and GCC!"
 #endif
 
 #include <string.h>

@@ -69,6 +69,6 @@ extern void * tree_find(tree_t root, const void * node);
 // pparent	: 返回查找到的父亲结点
 // return	: 返回查找到的结点对象
 //
-extern void* tree_get(tree_t root, const void * node, void ** pparent);
+extern void * tree_get(tree_t root, const void * node, void ** pparent);
 
 #endif // !_H_SIMPLEC_TREE

@@ -237,9 +237,6 @@
     <ClCompile Include="module\iop\iop_server.c">
       <Filter>module\iop</Filter>
     </ClCompile>
-    <ClCompile Include="module\iop\iop_util.c">
-      <Filter>module\iop</Filter>
-    </ClCompile>
     <ClCompile Include="test\test_iopserver.c">
       <Filter>test</Filter>
     </ClCompile>
@@ -265,6 +262,15 @@
       <Filter>module\schead</Filter>
     </ClCompile>
     <ClCompile Include="test\test_cjson_read.c">
+      <Filter>test</Filter>
+    </ClCompile>
+    <ClCompile Include="module\schead\scsocket.c">
+      <Filter>module\schead</Filter>
+    </ClCompile>
+    <ClCompile Include="module\schead\scpipe.c">
+      <Filter>module\schead</Filter>
+    </ClCompile>
+    <ClCompile Include="test\test_scpipe.c">
       <Filter>test</Filter>
     </ClCompile>
   </ItemGroup>
@@ -363,9 +369,6 @@
       <Filter>module\iop\include</Filter>
     </ClInclude>
     <ClInclude Include="module\iop\include\iop_server.h">
-      <Filter>module\iop\include</Filter>
-    </ClInclude>
-    <ClInclude Include="module\iop\include\iop_util.h">
       <Filter>module\iop\include</Filter>
     </ClInclude>
     <ClInclude Include="extern\pthread\include\pthread.h">
@@ -639,6 +642,12 @@
       <Filter>module\struct\include</Filter>
     </ClInclude>
     <ClInclude Include="module\schead\include\sciconv.h">
+      <Filter>module\schead\include</Filter>
+    </ClInclude>
+    <ClInclude Include="module\schead\include\scsocket.h">
+      <Filter>module\schead\include</Filter>
+    </ClInclude>
+    <ClInclude Include="module\schead\include\scpipe.h">
       <Filter>module\schead\include</Filter>
     </ClInclude>
   </ItemGroup>

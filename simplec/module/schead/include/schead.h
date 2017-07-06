@@ -69,7 +69,7 @@ extern int getch(void);
 extern int usleep(unsigned usec);
 
 #else
-	#error "error : Currently only supports the Visual Studio and GCC!"
+#	error "error : Currently only supports the Best New CL and GCC!"
 #endif
 
 #if !defined(_H_LOG_HELP)
@@ -114,23 +114,21 @@ extern int usleep(unsigned usec);
 #define _H_ARRAY_HELP
 #endif
 
-/* 比较大小辅助宏 */
+/* 范围内比较大小辅助宏 */
 #if !defined(_H_EQUAL)
 
 // 浮点数据判断宏帮助, __开头表示不希望你使用的宏
-#define __DIFF(x, y)				((x)-(y))					//两个表达式做差宏
-#define __IF_X(x, z)				((x)<z && (x)>-z)			//判断宏,z必须是宏常量
-#define EQ(x, y, c)					EQ_ZERO(__DIFF(x,y), c)		//判断x和y是否在误差范围内相等
+#define __DIFF(x, y)			((x)-(y))				//两个表达式做差宏
+#define __IF_X(x, c)			((x)<c && (x)>-c)		//判断宏,z必须是宏常量
+#define EQC(x, y, c)			__IF_X(__DIFF(x, y), c)	//判断x和y是否在误差范围内相等
 
 // float判断定义的宏
-#define _FLOAT_ZERO				(0.000001f)						//float 0的误差判断值
-#define EQ_FLOAT_ZERO(x)		__IF_X(x, _FLOAT_ZERO)			//float 判断x是否为零是返回true
-#define EQ_FLOAT(x, y)			EQ(x, y, _FLOAT_ZERO)			//判断表达式x与y是否相等
+#define EQ_FLOAT_ZERO(x)		__IF_X(x, FLT_MIN)		//float 判断x是否为零是返回true
+#define EQ_FLOAT(x, y)			EQC(x, y, FLT_MIN)		//判断表达式x与y是否相等
 
 // double判断定义的宏
-#define _DOUBLE_ZERO			(0.000000000001)				//double 0误差判断值
-#define EQ_DOUBLE_ZERO(x)		__IF_X(x, _DOUBLE_ZERO)			//double 判断x是否为零是返回true
-#define EQ_DOUBLE(x,y)			EQ(x, y, _DOUBLE_ZERO)			//判断表达式x与y是否相等
+#define EQ_DOUBLE_ZERO(x)		__IF_X(x, DBL_MIN)		//double 判断x是否为零是返回true
+#define EQ_DOUBLE(x,y)			EQC(x, y, DBL_MIN)		//判断表达式x与y是否相等
 
 #define _H_EQUAL
 #endif 
@@ -139,12 +137,12 @@ extern int usleep(unsigned usec);
 #ifndef SAFE_SCANF
 #define _STR_SAFE_SCANF "Input error, please according to the prompt!"
 #define SAFE_SCANF(scanf_code, ...) \
-		while(printf(##__VA_ARGS__), scanf_code){\
+		while (printf(##__VA_ARGS__), scanf_code){\
 			rewind(stdin);\
 			puts(_STR_SAFE_SCANF);\
 		}\
 		rewind(stdin);\
-	} while(0)
+	} while (0)
 #endif // !SAFE_SCANF
 
 // 简单的time时间记录宏
@@ -157,7 +155,7 @@ extern int usleep(unsigned usec);
 		code\
 		$et = clock();\
 		printf(_STR_TIME_PRINT, (0.0 + $et - $st) / CLOCKS_PER_SEC);\
-	} while(0)
+	} while (0)
 #endif // !TIME_PRINT
 
 // 等待的宏 是个单线程没有加锁 | "请按任意键继续. . ."
@@ -172,20 +170,7 @@ extern void sh_pause(void);
 
 #endif // !INIT_PAUSE
 
-/*
- * c 如果是空白字符返回 true, 否则返回false
- * c : 必须是 int 值,最好是 char 范围
- */
-#define sh_isspace(c)	((c==' ')||(c>='\t'&&c<='\r'))
-
-//12.0 判断是大端序还是小端序,大端序返回true
+// 判断是大端序还是小端序,大端序返回true
 extern bool sh_isbig(void);
-
-//
-// sh_free - 简单粗暴的野指针销毁函数,并置空
-// pobj		: 指向待释放内存的指针(void*)
-// return	: void
-//
-extern void sh_free(void ** pobj);
 
 #endif// ! _H_SIMPLEC_SCHEAD

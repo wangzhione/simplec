@@ -1,33 +1,26 @@
 ﻿#include <scconf.h>
-#include <iop_util.h>
+#include <scsocket.h>
 
 // stderr 信息重定位到文件中
 #define _STR_STDERRLOG		_STR_LOGDIR "/stderr.log"
 
-static FILE * _err;
-static inline void _err_exit(void) {
-	fclose(_err);
-}
-
 /*
  * simple c 框架业务启动入口的代码
  */
-extern void simplec_main(void);
+void simplec_main(void);
 
 //
 // simple c 开发框架的启动函数总入口
-// 函数启动顺序, 改动要慎重, atexit 先注册, 后调用 等同于数组栈
+// 变量函数环境启动初始化, 改动要慎重. atexit 先注册, 后调用 等同于数组栈
 //
 int main(int argc, char * argv[]) {
 	// 简单创建 _STR_LOGDIR 日志目录
 	sh_mkdir(_STR_LOGDIR);
 
-	// stderr 错误信息重定位, 需要在日志系统启动之后
-	_err = freopen(_STR_STDERRLOG, "ab", stderr);
-	if (NULL == _err) {
+	// stderr 错误信息重定位, 跟随系统长生不死
+	if (!freopen(_STR_STDERRLOG, "ab", stderr)) {
 		CERR_EXIT("freopen ab " _STR_STDERRLOG " is error!");
 	}
-	atexit(_err_exit);
 
 	// 目前系统是默认启动 clog 日志
 	cl_start();
