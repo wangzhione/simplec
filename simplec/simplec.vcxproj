@@ -68,6 +68,7 @@
     <ClCompile Include="test\test_sctime.c" />
     <ClCompile Include="test\test_scurl.c" />
     <ClCompile Include="test\test_tstring.c" />
+    <ClCompile Include="test\test_winselect.c" />
     <ClCompile Include="test\test_xlsmtojson.c" />
   </ItemGroup>
   <ItemGroup>

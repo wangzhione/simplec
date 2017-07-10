@@ -273,6 +273,9 @@
     <ClCompile Include="test\test_scpipe.c">
       <Filter>test</Filter>
     </ClCompile>
+    <ClCompile Include="test\test_winselect.c">
+      <Filter>test</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="module\schead\include\schead.h">
