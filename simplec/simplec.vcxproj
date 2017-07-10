@@ -36,6 +36,7 @@
     <ClCompile Include="module\service\scrunloop.c" />
     <ClCompile Include="module\service\scthreads.c" />
     <ClCompile Include="module\service\sctimer.c" />
+    <ClCompile Include="module\skynet\socket_poll.c" />
     <ClCompile Include="module\struct\array.c" />
     <ClCompile Include="module\struct\list.c" />
     <ClCompile Include="module\struct\objs.c" />
@@ -188,6 +189,8 @@
     <ClInclude Include="module\service\include\scrunloop.h" />
     <ClInclude Include="module\service\include\scthreads.h" />
     <ClInclude Include="module\service\include\sctimer.h" />
+    <ClInclude Include="module\skynet\include\socket$select.h" />
+    <ClInclude Include="module\skynet\include\socket_poll.h" />
     <ClInclude Include="module\struct\include\array.h" />
     <ClInclude Include="module\struct\include\list.h" />
     <ClInclude Include="module\struct\include\objs.h" />
@@ -250,7 +253,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(ProjectDir)main/body/include;$(ProjectDir)extern/pthread/include;$(ProjectDir)extern/curl/include;$(ProjectDir)extern/openssl/include;$(ProjectDir)module/schead/include;$(ProjectDir)module/struct/include;$(ProjectDir)module/service/include;$(ProjectDir)module/logic/include;$(ProjectDir)module/colog/include;$(ProjectDir)module/iop/include;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)main/body/include;$(ProjectDir)extern/pthread/include;$(ProjectDir)extern/curl/include;$(ProjectDir)extern/openssl/include;$(ProjectDir)module/schead/include;$(ProjectDir)module/struct/include;$(ProjectDir)module/service/include;$(ProjectDir)module/logic/include;$(ProjectDir)module/colog/include;$(ProjectDir)module/iop/include;$(ProjectDir)module/skynet/include;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)extern/pthread/lib;$(ProjectDir)extern/curl/lib;$(ProjectDir)extern/openssl/lib;$(LibraryPath)</LibraryPath>
     <LibraryWPath>$(LibraryWPath)</LibraryWPath>
     <ReferencePath>$(ReferencePath)</ReferencePath>
@@ -260,7 +263,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ReferencePath>$(ReferencePath)</ReferencePath>
     <ExecutablePath>$(ExecutablePath)</ExecutablePath>
-    <IncludePath>$(ProjectDir)main/body/include;$(ProjectDir)extern/pthread/include;$(ProjectDir)extern/curl/include;$(ProjectDir)extern/openssl/include;$(ProjectDir)module/schead/include;$(ProjectDir)module/struct/include;$(ProjectDir)module/service/include;$(ProjectDir)module/logic/include;$(ProjectDir)module/colog/include;$(ProjectDir)module/iop/include;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)main/body/include;$(ProjectDir)extern/pthread/include;$(ProjectDir)extern/curl/include;$(ProjectDir)extern/openssl/include;$(ProjectDir)module/schead/include;$(ProjectDir)module/struct/include;$(ProjectDir)module/service/include;$(ProjectDir)module/logic/include;$(ProjectDir)module/colog/include;$(ProjectDir)module/iop/include;$(ProjectDir)module/skynet/include;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)module/pthread/lib;$(ProjectDir)extern/curl/lib;$(ProjectDir)extern/openssl/lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -269,7 +272,6 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_HAVE_SELECT;CURL_STATICLIB;WIN32_LEAN_AND_MEAN;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;_WINSOCK_DEPRECATED_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)module/pthread/dll/x86;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <CompileAs>CompileAsC</CompileAs>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>

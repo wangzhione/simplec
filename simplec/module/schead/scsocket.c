@@ -16,6 +16,8 @@ socket_start(void) {
 	WSADATA wsad;
 	WSAStartup(WINSOCK_VERSION, &wsad);
 	atexit(_socket_start);
+#else
+	IGNORE_SIGPIPE();
 #endif
 }
 
