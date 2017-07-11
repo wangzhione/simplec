@@ -36,8 +36,7 @@ rbtree_t
 rb_create(new_f new, cmp_f cmp, die_f die) {
 	rbtree_t tree = malloc(sizeof(*tree));
 	if(NULL == tree) {
-		CERR("rb_new malloc is error!");
-		return NULL;	
+		RETURN(NULL, "rb_new malloc is error!");
 	}
 	
 	tree->root = NULL;
@@ -219,8 +218,7 @@ rb_insert(rbtree_t tree, void * pack) {
 	cmp_f cmp;
 	struct $rbnode * node, * x, * y;
 	if((!tree) || (!pack) || !(node = _rb_new(tree, pack))) {
-		CERR("rb_insert param is empty! tree = %p, pack = %p.\n", tree, pack);
-		return;	
+		RETURN(NIL, "rb_insert param is empty! tree = %p, pack = %p.\n", tree, pack);
 	}
 	
 	cmp = tree->cmp;
@@ -350,8 +348,7 @@ rb_remove(rbtree_t tree, void * pack) {
 	int color;
 	
 	if ((!tree) || !(node = (struct $rbnode *)pack)) {
-		CERR("rb_remove check is error, tree = %p, node = %p.", tree, node);
-		return;
+		RETURN(NIL, "rb_remove check is error, tree = %p, node = %p.", tree, node);
 	}
 
 	// 被删除节点的"左右孩子都不为空"的情况。
@@ -447,8 +444,7 @@ rb_get(rbtree_t tree, void * pack) {
 	cmp_f cmp;
 	struct $rbnode * node;
 	if((!tree) || !pack) {
-		CERR("rb_get param is empty! tree = %p, pack = %p.\n", tree, pack);
-		return NULL;	
+		RETURN(NULL, "rb_get param is empty! tree = %p, pack = %p.\n", tree, pack);	
 	}
 	
 	cmp = tree->cmp;

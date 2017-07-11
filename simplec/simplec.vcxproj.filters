@@ -97,10 +97,10 @@
     <Filter Include="extern\openssl\dll">
       <UniqueIdentifier>{56db6bd6-9589-417e-aa60-45a1c0d0dfb2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="module\skynet">
+    <Filter Include="module\poll">
       <UniqueIdentifier>{e190c507-011d-4ebd-b11e-089be0ecc9e5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="module\skynet\include">
+    <Filter Include="module\poll\include">
       <UniqueIdentifier>{e1b25494-5b8f-4978-ba64-4c9ebbe0ca6e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -279,11 +279,11 @@
     <ClCompile Include="test\test_scpipe.c">
       <Filter>test</Filter>
     </ClCompile>
-    <ClCompile Include="test\test_winselect.c">
+    <ClCompile Include="test\test_poll.c">
       <Filter>test</Filter>
     </ClCompile>
-    <ClCompile Include="module\skynet\socket_poll.c">
-      <Filter>module\skynet</Filter>
+    <ClCompile Include="module\poll\socket_poll.c">
+      <Filter>module\poll</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -662,11 +662,17 @@
     <ClInclude Include="module\schead\include\scpipe.h">
       <Filter>module\schead\include</Filter>
     </ClInclude>
-    <ClInclude Include="module\skynet\include\socket_poll.h">
-      <Filter>module\skynet\include</Filter>
+    <ClInclude Include="module\poll\include\socket$epoll.h">
+      <Filter>module\poll\include</Filter>
     </ClInclude>
-    <ClInclude Include="module\skynet\include\socket$select.h">
-      <Filter>module\skynet\include</Filter>
+    <ClInclude Include="module\poll\include\socket$kevent.h">
+      <Filter>module\poll\include</Filter>
+    </ClInclude>
+    <ClInclude Include="module\poll\include\socket$select.h">
+      <Filter>module\poll\include</Filter>
+    </ClInclude>
+    <ClInclude Include="module\poll\include\socket_poll.h">
+      <Filter>module\poll\include</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

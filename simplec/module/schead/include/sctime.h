@@ -19,14 +19,50 @@
 #define _INT_STOMS			(1000)
 #define _INT_MSTONS			(1000000)
 
+#if !defined(_H_LOG_HELP)
+
+//
+// 所有日志相对路径目录, 如果不需要需要配置成""
+// _INT_PATH	- 日志路径大小
+// _INT_LOGS	- 每条日志的大小
+// _STR_LOGDIR	- 存放所有日志的目录
+//
+#define _UINT_PATH		(256u)
+#define _UINT_LOGS		(2048u)
+#define _STR_LOGDIR		"logs"
+#define _STR_LOGTIME	"[" _STR_MTIME "]"
+
+#define _H_LOG_HELP
+#endif
+
 #ifdef __GNUC__
+#include <unistd.h>
 #include <sys/time.h>
+
+//
+// sh_msleep - 睡眠函数, 时间颗粒度是毫秒.
+// m		: 待睡眠的毫秒数
+// return	: void
+//
+#define sh_msleep(m) \
+		usleep(m * _INT_STOMS)
+
 #endif
 
 // 为Visual Studio导入一些和linux上优质思路
 #ifdef _MSC_VER
 
 #include <WinSock2.h>
+
+#define sh_msleep(m) \
+		Sleep(m)	
+
+//
+// usleep - 毫秒级别等待函数
+// usec		: 等待的毫秒
+// return	: The usleep() function returns 0 on success.  On error, -1 is returned.
+//
+extern int usleep(unsigned usec);
 
 /*
  * 返回当前得到的时间结构体, 高仿linux上调用

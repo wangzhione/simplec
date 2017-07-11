@@ -29,34 +29,6 @@ getch(void) {
 
 #endif
 
-#if defined(_MSC_VER)
-
-//
-// usleep - 毫秒级别等待函数
-// usec		: 等待的毫秒
-// return	: The usleep() function returns 0 on success.  On error, -1 is returned.
-//
-int 
-usleep(unsigned usec) {
-	int rt = Error_Base;
-	// Convert to 100 nanosecond interval, negative value indicates relative time
-	LARGE_INTEGER ft = { .QuadPart = -10ll * usec };
-
-	HANDLE timer = CreateWaitableTimer(NULL, TRUE, NULL);
-	if (timer) {
-		// 负数以100ns为单位等待, 正数以标准FILETIME格式时间
-		SetWaitableTimer(timer, &ft, 0, NULL, NULL, FALSE);
-		WaitForSingleObject(timer, INFINITE);
-		if (GetLastError() == ERROR_SUCCESS)
-			rt = Success_Base;
-		CloseHandle(timer);
-	}
-
-	return rt;
-}
-
-#endif
-
 #define _STR_PAUSEMSG "Press any key to continue . . ."
 // 简单通用的等待函数
 inline void

@@ -27,13 +27,11 @@ static char* _csvtojsonpath(const char * path) {
 	size_t len = strlen(path);
 	// 判断后缀名
 	if(tstr_icmp(path + len - 4, ".csv")) {
-		CERR("path is %s need *.csv", path);
-		return NULL;
+		RETURN(NULL, "path is %s need *.csv", path);
 	}
 	// 这里申请内存进行处理
 	if((tarp = malloc(len+2))==NULL) {
-		CERR("malloc is error!");
-		return NULL;
+		RETURN(NULL, "malloc is error!");
 	}
 	
 	// 返回最终结果
@@ -92,26 +90,22 @@ csvtojson(const char* path) {
 	sccsv_t csv;
 	
 	if(!path || !*path) {
-		CERR("path is null!");
-		return Error_Param;
+		RETURN(Error_Param, "path is null!");
 	}
 	
 	// 继续判断后缀名
 	if((tarp = _csvtojsonpath(path)) == NULL ) {
-		CERR("path = %s is error!", path);
-		return Error_Param;
+		RETURN(Error_Param, "path = %s is error!", path);
 	}
 	// 这里开始打开文件, 并判断
 	if((csv = sccsv_create(path)) == NULL) {
 		free(tarp);
-		CERR("sccsv_new %s is error!", path);
-		return Error_Fd;
+		RETURN(Error_Fd, "sccsv_new %s is error!", path);
 	}
 	if((json = fopen(tarp, "wb")) == NULL ) {
 		sccsv_delete(csv);
 		free(tarp);
-		CERR("fopen %s wb is error!", tarp);
-		return Error_Fd;
+		RETURN(Error_Fd, "fopen %s wb is error!", tarp);
 	}
 	
 	// 到这里一切前戏都好了开始转换了

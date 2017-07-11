@@ -60,8 +60,7 @@ tree_insert(tree_t root, void * node) {
 	struct $tnode * tnode, *next, *parent;
 
 	if (!root || !node) {
-		CERR("check is root || node!");
-		return;
+		RETURN(NIL, "check is root || node!");
 	}
 
 	// 构建结点并等待插入时机
@@ -79,8 +78,7 @@ tree_insert(tree_t root, void * node) {
 	cmp = root->acmp;
 	do {
 		if ((tmp = cmp(node, next)) == 0) {
-			CERR("tmp cmp node = %p, next = %p, tmp = 0 error.", node, next);
-			return;
+			RETURN(NIL, "tmp cmp node = %p, next = %p, tmp = 0 error.", node, next);
 		}
 
 		parent = next;
@@ -99,14 +97,12 @@ tree_remove(tree_t root, void * node) {
 	struct $tnode * next, * parent, * tnode, * tparent;
 	// 简单检查一下这个结点, 开始处理
 	if (!root || !node || !root->root) {
-		CERR("check is !root || !node || !root->root.");
-		return;
+		RETURN(NIL, "check is !root || !node || !root->root.");
 	}
 
 	// 没有这个结点直接返回结果
 	if (!(next = tree_get(root, node, (void **)&parent))) {
-		CERR("tree_get node = %p is not find.", node);
-		return;
+		RETURN(NIL, "tree_get node = %p is not find.", node);
 	}
 
 	// 第一种情况, 待删除结点只有一个叶子结点, 保存到tnode中
@@ -158,8 +154,7 @@ tree_find(tree_t root, const void * node) {
 
 	// 简单检查一下这个结点, 开始处理
 	if ((!root) || (!node) || !(next = root->root)) {
-		CERR("check is !root || !node || !root->root.");
-		return NULL;
+		RETURN(NULL, "check is !root || !node || !root->root.");
 	}
 
 	// 查找数据查找到了直接返回结果
@@ -190,8 +185,7 @@ tree_get(tree_t root, const void * node, void ** pparent) {
 
 	// 简单检查一下这个结点, 开始处理
 	if ((!root) || (!node) || !(next = root->root)) {
-		CERR("check is !root || !node || !root->root.");
-		return NULL;
+		RETURN(NULL, "check is !root || !node || !root->root.");
 	}
 
 	// 查找数据查找到了直接返回结果

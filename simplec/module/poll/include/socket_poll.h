@@ -5,8 +5,8 @@
 
 #ifdef _MSC_VER
 typedef struct select_poll * poll_t;
-#elif
-typedef int poll_t;
+#else
+typedef int poll_t;		// * 也就大师背后, 拾人牙慧
 #endif
 
 struct event {
@@ -26,7 +26,7 @@ extern bool sp_invalid(poll_t sp);
 extern void sp_delete(poll_t sp);
 
 //
-// sp_add		- 添加监测的socket, 并设置读模式, 成功返回true
+// sp_add		- 添加监测的socket, 并设置读模式, 失败返回true
 // sp_del		- 删除监测的socket
 // sp_write		- 修改当前socket, 并设置为写模式
 //
@@ -41,6 +41,6 @@ extern void sp_write(poll_t sp, socket_t sock, void * ud, bool enable);
 // max		: e 的最大长度
 // return	: 返回待操作事件长度, <= 0 表示失败
 //
-extern int sp_wait(poll_t sp, struct event e, size_t max);
+extern int sp_wait(poll_t sp, struct event e[], int max);
 
 #endif // !_H_SIMPLEC_SOCKET_POLL

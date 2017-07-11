@@ -107,14 +107,14 @@ sl_start(void) {
 
 	// 单例只执行一次, 打开普通log文件
 	if (NULL == _slmain.log) {
-		_slmain.log = fopen(_STR_LOGDIR "/" _STR_SCLOG_LOG, "a+");
+		_slmain.log = fopen(_STR_SCLOG_LOG, "a+");
 		if (NULL == _slmain.log)
 			CERR_EXIT("_slmain.log fopen %s error!", _STR_SCLOG_LOG);
 	}
 
 	// 继续打开 wf 文件
 	if (NULL == _slmain.wf) {
-		_slmain.wf = fopen(_STR_LOGDIR "/" _STR_SCLOG_WFLOG, "a+");
+		_slmain.wf = fopen(_STR_SCLOG_WFLOG, "a+");
 		if (!_slmain.wf) {
 			fclose(_slmain.log); // 其实这都没有必要,图个心安
 			CERR_EXIT("_slmain.log fopen %s error!", _STR_SCLOG_WFLOG);
@@ -158,7 +158,7 @@ sl_printf(const char * format, ...) {
 	int len;
 	va_list ap;
 	stime_t tstr;
-	char str[_UINT_LOG];
+	char str[_UINT_LOGS];
 
 	//初始化时间参数
 	stu_getntstr(tstr);

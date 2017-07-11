@@ -2,28 +2,17 @@
 #define _H_SIMPLEC_SCHEAD
 
 #include <clog.h>
-#include <struct.h>
-#include <sctime.h>
 
 //
 //  跨平台的丑陋从这里开始, 封装一些共用实现
-//  __GNUC__	= > linux 平台特殊操作
-//  __MSC_VER	= > winds 平台特殊操作
+//  __GNUC__	= > linux GCC 平台特殊操作
+//  __MSC_VER	= > winds  CL 平台特殊操作
 //
-#ifdef __GNUC__  // 下面是依赖GCC编译器实现
+#ifdef __GNUC__
 
-#include <unistd.h>
 #include <termio.h>
 #include <sys/stat.h>
 #include <sys/types.h>
-
-/*
- * sh_msleep - 睡眠函数, 时间颗粒度是毫秒.
- * m		: 待睡眠的毫秒数
- * return	: void
- */
-#define sh_msleep(m) \
-		usleep(m * _INT_STOMS)
 
 /*
  * 屏幕清除宏, 依赖系统脚本
@@ -46,54 +35,27 @@ extern int getch(void);
 #define sh_mkdir(path) \
 	mkdir(path, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH)
 
-#elif _MSC_VER // 下面是依赖Visual Studio编译器实现
+#elif _MSC_VER
 
-#include <Windows.h>
 #include <direct.h> 
 #include <conio.h>
 
 #define sh_cls() \
 		system("cls")
 
-#define sh_msleep(m) \
-		Sleep(m)	
-
 #define sh_mkdir(path) \
 	mkdir(path)
-
-//
-// usleep - 毫秒级别等待函数
-// usec		: 等待的毫秒
-// return	: The usleep() function returns 0 on success.  On error, -1 is returned.
-//
-extern int usleep(unsigned usec);
 
 #else
 #	error "error : Currently only supports the Best New CL and GCC!"
 #endif
 
-#if !defined(_H_LOG_HELP)
-
-//
-// 所有日志相对路径目录, 如果不需要需要配置成""
-// _STR_LOGDIR	- 存放所有日志的目录
-// _INT_LOG		- 每条日志的大小
-// _INT_PATH	- 日志路径大小
-//
-#define _STR_LOGDIR		"logs"
-#define _UINT_LOG		(2048u)
-#define _UINT_PATH		(256u)
-#define _STR_LOGTIME	"[" _STR_MTIME "]"
+/* 栈上辅助操作宏 */
+#if !defined(_H_ARRAY_HELP)
 
 // 添加双引号的宏 
 #define CSTR(a)	_STR(a)
 #define _STR(a) #a
-
-#define _H_LOG_HELP
-#endif
-
-/* 栈上辅助操作宏 */
-#if !defined(_H_ARRAY_HELP)
 
 // 获取数组长度,只能是数组类型或""字符串常量,后者包含'\0'
 #define LEN(arr) (sizeof(arr) / sizeof(*(arr)))

@@ -11,7 +11,7 @@
 // 写的日志内容, 写小日志
 struct log {
 	size_t len;
-	char str[_UINT_LOG];
+	char str[_UINT_LOGS];
 };
 
 struct plog {
@@ -33,10 +33,13 @@ static void _openfile(void) {
 	stu_getmstrn(_plog.path, sizeof(_plog.path), _STR_PLOG_NAME);
 	log = fopen(_plog.path, "ab");
 	if (NULL == log) {
+		// 如果是第一次启动程序自动退出
 		if(NULL == _plog.log)
 			CERR_EXIT("fopen path ab error = %s.", _plog.path);
-		fclose(_plog.log);
+		return;
 	}
+
+	fclose(_plog.log);
 	_plog.log = log;
 }
 
@@ -75,7 +78,7 @@ pl_start(void) {
 	_plog.pool = objs_create(sizeof(struct log), 0u);
 	if (NULL == _plog.pool) {
 		fclose(_plog.log);
-		CERR_EXIT("objs_create _plog.pool is error = 4 + %u.", _UINT_LOG);
+		CERR_EXIT("objs_create _plog.pool is error = 4 + %u.", _UINT_LOGS);
 	}
 
 	// 构建消息轮询器

@@ -2,8 +2,32 @@
 #include <stdio.h>
 #include <stdint.h>
 
-// 为Visual Studio导入一些和linux上优质思路
+// 为 Visual Studio 导入一些 GCC 上优质思路
 #ifdef _MSC_VER
+
+//
+// usleep - 毫秒级别等待函数
+// usec		: 等待的毫秒
+// return	: The usleep() function returns 0 on success.  On error, -1 is returned.
+//
+int
+usleep(unsigned usec) {
+	int rt = -1;
+	// Convert to 100 nanosecond interval, negative value indicates relative time
+	LARGE_INTEGER ft = { .QuadPart = -10ll * usec };
+
+	HANDLE timer = CreateWaitableTimer(NULL, TRUE, NULL);
+	if (timer) {
+		// 负数以100ns为单位等待, 正数以标准FILETIME格式时间
+		SetWaitableTimer(timer, &ft, 0, NULL, NULL, FALSE);
+		WaitForSingleObject(timer, INFINITE);
+		if (GetLastError() == ERROR_SUCCESS)
+			rt = 0;
+		CloseHandle(timer);
+	}
+
+	return rt;
+}
 
 //
 // gettimeofday - Linux sys/time.h 中得到微秒的一种实现

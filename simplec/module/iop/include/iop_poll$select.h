@@ -147,8 +147,7 @@ iop_init_pool(iopbase_t base, unsigned maxsz) {
 	iopop_t op;
 	selects_t mdata = calloc(1, sizeof(struct selects));
 	if (NULL == mdata) {
-		CERR("malloc sizeof(struct selects) is error!");
-		return Error_Alloc;
+		RETURN(Error_Alloc, "malloc sizeof(struct selects) is error!");
 	}
 
 	op = &base->op;

@@ -28,7 +28,7 @@ void cl_start(void) {
 void cl_printf(const char * fmt, ...) {
 	va_list ap;
 	size_t len;
-	char str[_UINT_LOG];
+	char str[_UINT_LOGS];
 
 	// 串:得到时间串并返回长度 [2016-07-10 22:38:34 999]
 	len = stu_getmstrn(str, sizeof(str), _STR_LOGTIME);

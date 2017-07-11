@@ -1,7 +1,8 @@
 ﻿#ifndef _H_SIMPLEC_PLOG
 #define _H_SIMPLEC_PLOG
 
-#include <schead.h>
+#include <struct.h>
+#include <sctime.h>
 
 #ifndef _STR_PLOG_NAME
 #define _STR_PLOG_NAME		_STR_LOGDIR "/simplec-%04d%02d%02d-%02d%02d%02d-%03d.log"

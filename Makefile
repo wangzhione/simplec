@@ -11,6 +11,7 @@ OPENSSL_DIR		?= extern/openssl
 PTHREAD_DIR		?= extern/pthread
 
 IOP_DIR			?= module/iop
+POLL_DIR		?= module/poll
 COLOG_DIR		?= module/colog
 SCHEAD_DIR 		?= module/schead
 STRUCT_DIR		?= module/struct
@@ -29,7 +30,7 @@ OUT				?= exe
 # SRCC		: 所有 .c 文件
 #
 DIRS	=	$(CURL_DIR) $(OPENSSL_DIR) $(IOP_DIR) $(COLOG_DIR)\
-			$(SCHEAD_DIR) $(STRUCT_DIR) $(SERVICE_DIR)
+			$(SCHEAD_DIR) $(STRUCT_DIR) $(SERVICE_DIR) $(POLL_DIR)
 
 IINC	=	$(foreach v, $(DIRS), -I$(SRC_PATH)/$(v)/include)
 SRCC	=	$(wildcard $(foreach v, $(MAIN_DIR) $(DIRS) $(TEST_DIR), $(SRC_PATH)/$(v)/*.c))

@@ -1,18 +1,19 @@
 ﻿#ifndef _H_SIMPLE_SCLOG
 #define _H_SIMPLE_SCLOG
 
-#include <schead.h>
+#include <struct.h>
+#include <sctime.h>
 
 //-------------------------------------------------------------------------------------------|
 // 第一部分 共用的参数宏
 //-------------------------------------------------------------------------------------------|
 
 //
-//关于日志切分,需要用第三方插件例如crontab , 或者下次我自己写一个监测程序.
-#define _INT_LITTLE				(64)		//保存时间或IP长度
+// 关于日志切分,需要用第三方插件例如crontab , 或者下次我自己写一个监测程序.
+#define _INT_LITTLE			(64)						//保存时间或IP长度
 
-#define _STR_SCLOG_LOG			"sc.log"	//普通log日志 DEBUG,INFO,NOTICE,WARNING,FATAL都会输出
-#define _STR_SCLOG_WFLOG		"sc_wf.log"	//级别比较高的日志输出 FATAL和WARNING
+#define _STR_SCLOG_LOG		_STR_LOGDIR "/sc.log"		//普通log日志 DEBUG,INFO,NOTICE,WARNING,FATAL都会输出
+#define _STR_SCLOG_WFLOG	_STR_LOGDIR "/sc_wf.log"	//级别比较高的日志输出 FATAL和WARNING
 
 //
 // SL_PRINTF - 为 sl_printf 输出包装的一个模板宏
