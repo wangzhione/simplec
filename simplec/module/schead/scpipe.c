@@ -1,9 +1,6 @@
 ﻿#include <scpipe.h>
-#include <struct.h>
 
 #ifdef __GNUC__
-
-#include <unistd.h>
 
 struct scpipe {
 	int recv;
@@ -54,7 +51,56 @@ scpipe_send(scpipe_t spie, const char * data, int len) {
 
 #elif _MSC_VER
 
-#include <Windows.h>
+//
+// pipe - 移植 linux函数, 通过 WinSock
+// pipefd	: 索引0表示read, 1表示write
+// return	: zero is error, -1 is returned
+// 
+int
+pipe(socket_t pipefd[2]) {
+	socket_t s;
+	sockaddr_t name = { AF_INET };
+	socklen_t nlen = sizeof name;
+	name.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
+
+	// 开启一个固定 socket
+	if ((s = socket_stream()) == INVALID_SOCKET) {
+		RETURN(Error_Base, "socket_stream s is error!");
+	}
+	if (bind(s, (struct sockaddr *)&name, nlen) < 0) {
+		socket_close(s);
+		RETURN(Error_Base, "bind s is error!");
+	}
+	if (listen(s, SOMAXCONN) < 0) {
+		socket_close(s);
+		RETURN(Error_Base, "listen s is error!");
+	}
+	// 得到绑定的数据
+	if (getsockname(s, (struct sockaddr *)&name, &nlen) < 0) {
+		socket_close(s);
+		RETURN(Error_Base, "getsockname s is error!");
+	}
+
+	// 开始构建互相通信的socket
+	if ((pipefd[0] = socket_stream()) == INVALID_SOCKET) {
+		closesocket(s);
+		RETURN(Error_Base, "socket_stream pipefd[0] is error!");
+	}
+
+	if (socket_connect(pipefd[0], &name) < 0) {
+		socket_close(s);
+		RETURN(Error_Base, "socket_connect pipefd[0] is error!");
+	}
+	// 可以继续添加, 通信协议来避免一些意外
+	if ((pipefd[1] = socket_accept(s, &name, &nlen)) == INVALID_SOCKET) {
+		socket_close(s);
+		socket_close(pipefd[0]);
+		RETURN(Error_Base, "socket_accept sendfd is error!");
+	}
+
+	socket_close(s);
+	return Success_Base;
+}
 
 struct scpipe {
 	HANDLE recv;

@@ -83,6 +83,7 @@
 //
 typedef enum {
 
+	Error_Close		= -7,	//文件描述符读取关闭, 读取完毕也会返回这个
 	Error_Empty		= -6,	//返回数据为空
 	Error_Tout		= -5,	//超时错误
 	Error_Fd		= -4,	//文件打开失败
@@ -91,8 +92,7 @@ typedef enum {
 	Error_Base		= -1,	//错误基类型, 所有错误都可用它, 在不清楚的情况下
 
 	Success_Base	= +0,	//结果正确的返回宏
-	Success_Close	= +1,	//文件描述符读取关闭, 读取完毕也会返回这个
-	Success_Exist	= +2,	//希望存在,设置之前已经存在了.
+	Success_Exist	= +1,	//希望存在,设置之前已经存在了.
 
 } flag_e;
 

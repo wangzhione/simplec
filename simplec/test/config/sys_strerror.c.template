@@ -1,0 +1,43 @@
+#if defined(__GNUC__)
+
+#include <string.h>
+
+inline const char * socket_strerror(int error) {
+    return strerror(error);
+}
+
+#endif
+
+#if defined(_MSC_VER)
+
+#include <stdio.h>
+#include <winerror.h>
+
+#define DWORD int
+
+const char * socket_strerror(int error) {
+    switch(error) {
+	...
+    case {errno}: return "{str}";
+    ...
+    }
+
+    fprintf(stderr, "sys_strerror invaild error = %d.\n", error);
+    return "The aliens are coming. Go tell your favorite people"; 
+}
+
+#undef DWORD
+
+#endif
+
+/*
+    case _HRESULT_TYPEDEF_(0x80000001L)                                         : return "Not implemented";
+	case _HRESULT_TYPEDEF_(0x80000002L)                                         : return "Ran out of memory";
+	case _HRESULT_TYPEDEF_(0x80000003L)                                         : return "One or more arguments are invalid";
+	case _HRESULT_TYPEDEF_(0x80000004L)                                         : return "No such interface supported";
+	case _HRESULT_TYPEDEF_(0x80000005L)                                         : return "Invalid pointer";
+	case _HRESULT_TYPEDEF_(0x80000006L)                                         : return "Invalid handle";
+	case _HRESULT_TYPEDEF_(0x80000007L)                                         : return "Operation aborted";
+	case _HRESULT_TYPEDEF_(0x80000008L)                                         : return "Unspecified error";
+	case _HRESULT_TYPEDEF_(0x80000009L)                                         : return "General access denied error";
+ */

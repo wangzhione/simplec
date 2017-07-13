@@ -20,8 +20,8 @@ static int _iop_tcp_fdispatch(iopbase_t base, uint32_t id, uint32_t events, void
 		}
 
 		// 服务器关闭, 直接返回关闭操作
-		if (n == Success_Close)
-			return Success_Close;
+		if (n == Error_Close)
+			return Error_Close;
 
 		for (;;) {
 			// 读取链接关闭

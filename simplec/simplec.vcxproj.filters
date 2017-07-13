@@ -285,6 +285,15 @@
     <ClCompile Include="module\poll\socket_poll.c">
       <Filter>module\poll</Filter>
     </ClCompile>
+    <ClCompile Include="module\poll\socket_server.c">
+      <Filter>module\poll</Filter>
+    </ClCompile>
+    <ClCompile Include="test\test_sys_strerror.c">
+      <Filter>test</Filter>
+    </ClCompile>
+    <ClCompile Include="module\schead\sys_strerror.c">
+      <Filter>module\schead</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="module\schead\include\schead.h">
@@ -674,6 +683,9 @@
     <ClInclude Include="module\poll\include\socket_poll.h">
       <Filter>module\poll\include</Filter>
     </ClInclude>
+    <ClInclude Include="module\poll\include\socket_server.h">
+      <Filter>module\poll\include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="test\config\destiny.csv">
@@ -696,6 +708,12 @@
     </None>
     <None Include="extern\pthread\dll\pthread_dll.dll">
       <Filter>extern\pthread\dll</Filter>
+    </None>
+    <None Include="test\config\winerror.h.data">
+      <Filter>test\config</Filter>
+    </None>
+    <None Include="test\config\sys_strerror.c.template">
+      <Filter>test\config</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

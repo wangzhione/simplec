@@ -152,7 +152,7 @@ extern int iop_del(iopbase_t base, uint32_t id);
 	do {\
 		if(iop->type != IOP_FREE) {\
 			int $type = iop->fevent(base, iop->id, events, iop->arg);\
-			if ($type >= Success_Base && $type != Success_Close)\
+			if ($type >= Success_Base)\
 				iop->lastt = base->curt;\
 			else\
 				iop_del(base, iop->id);\

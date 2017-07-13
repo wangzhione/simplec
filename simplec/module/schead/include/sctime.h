@@ -78,7 +78,7 @@ extern int usleep(unsigned usec);
 // tz		:	包含的时区,在window上这个变量没有用不返回
 // return	:   默认返回0
 //
-extern inline int gettimeofday(struct timeval * tv, void * tz);
+extern int gettimeofday(struct timeval * tv, void * tz);
 
 #endif
 

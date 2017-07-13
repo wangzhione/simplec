@@ -135,4 +135,11 @@ extern void sh_pause(void);
 // 判断是大端序还是小端序,大端序返回true
 extern bool sh_isbig(void);
 
+//
+// sys_strerror - linux 上面替代 strerror, winds 替代 FormatMessage 
+// error	: linux 是 errno, winds 可以是 WSAGetLastError() ... 
+// return	: system os 拔下来的提示字符串常量
+//
+extern const char * sys_strerror(int error);
+
 #endif// ! _H_SIMPLEC_SCHEAD

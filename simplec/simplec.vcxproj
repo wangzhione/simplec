@@ -23,6 +23,7 @@
     <ClCompile Include="module\iop\iop_poll.c" />
     <ClCompile Include="module\iop\iop_server.c" />
     <ClCompile Include="module\poll\socket_poll.c" />
+    <ClCompile Include="module\poll\socket_server.c" />
     <ClCompile Include="module\schead\sciconv.c" />
     <ClCompile Include="module\schead\scjson.c" />
     <ClCompile Include="module\schead\scalloc.c" />
@@ -33,6 +34,7 @@
     <ClCompile Include="module\schead\scsocket.c" />
     <ClCompile Include="module\schead\sctime.c" />
     <ClCompile Include="module\schead\scurl.c" />
+    <ClCompile Include="module\schead\sys_strerror.c" />
     <ClCompile Include="module\service\scoroutine.c" />
     <ClCompile Include="module\service\scrunloop.c" />
     <ClCompile Include="module\service\scthreads.c" />
@@ -68,6 +70,7 @@
     <ClCompile Include="test\test_sctimer.c" />
     <ClCompile Include="test\test_sctime.c" />
     <ClCompile Include="test\test_scurl.c" />
+    <ClCompile Include="test\test_sys_strerror.c" />
     <ClCompile Include="test\test_tstring.c" />
     <ClCompile Include="test\test_poll.c" />
     <ClCompile Include="test\test_xlsmtojson.c" />
@@ -176,6 +179,7 @@
     <ClInclude Include="module\poll\include\socket$kevent.h" />
     <ClInclude Include="module\poll\include\socket$select.h" />
     <ClInclude Include="module\poll\include\socket_poll.h" />
+    <ClInclude Include="module\poll\include\socket_server.h" />
     <ClInclude Include="module\schead\include\scjson.h" />
     <ClInclude Include="module\schead\include\scalloc.h" />
     <ClInclude Include="module\schead\include\scatom.h" />
@@ -211,6 +215,8 @@
     <None Include="test\config\destiny.csv" />
     <None Include="test\config\firefighting_rule.json" />
     <None Include="test\config\onetime.csv" />
+    <None Include="test\config\sys_strerror.c.template" />
+    <None Include="test\config\winerror.h.data" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="readme\helper.txt" />
@@ -237,7 +243,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
     <UseOfMfc>false</UseOfMfc>

@@ -14,9 +14,9 @@
 #include <netdb.h>
 #include <signal.h>
 #include <arpa/inet.h>
+#include <netinet/tcp.h>
 #include <sys/un.h>
 #include <sys/uio.h>
-#include <sys/socket.h>
 #include <sys/select.h>
 #include <sys/resource.h>
 
@@ -30,8 +30,13 @@
 #define SOCKET_EINTR			EINTR
 #define SOCKET_EAGAIN			EAGAIN
 #define SOCKET_EINVAL			EINVAL
-#define SOCKET_EWOULDBOCK		EAGAIN
 #define SOCKET_EINPROGRESS		EINPROGRESS
+
+#if defined(EWOULDBOCK)
+#define SOCKET_EWOULDBOCK		EWOULDBOCK
+#else
+#define SOCKET_EWOULDBOCK		EAGAIN
+#endif
 
 #define IGNORE_SIGNAL(sig)			signal(sig, SIG_IGN)
 
@@ -45,7 +50,7 @@ typedef int socket_t;
 
 #elif _MSC_VER
 
-#include <WinSock2.h>
+#include <ws2tcpip.h>
 
 #define IGNORE_SIGNAL(sig)
 #define SET_RLIMIT_NOFILE(num)	
@@ -60,6 +65,11 @@ typedef int socket_t;
 typedef int socklen_t;
 typedef SOCKET socket_t;
 
+#define write(fd, buf, count) \
+	send(fd, buf, count, 0)
+#define read(fd, buf, count) \
+	recv(fd, buf, count, 0)
+
 #else
 #	error "error : Currently only supports the Best New CL and GCC!"
 #endif
@@ -67,7 +77,7 @@ typedef SOCKET socket_t;
 //
 // IGNORE_SIGPIPE - 管道破裂,忽略SIGPIPE信号
 //
-#define IGNORE_SIGPIPE()			IGNORE_SIGNAL(SIGPIPE)
+#define IGNORE_SIGPIPE()		IGNORE_SIGNAL(SIGPIPE)
 
 // 目前通用的tcp udp v4地址
 typedef struct sockaddr_in sockaddr_t;

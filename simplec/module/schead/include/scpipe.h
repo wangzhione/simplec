@@ -1,6 +1,19 @@
 ﻿#ifndef _H_SIMPLEC_SCPIPE
 #define _H_SIMPLEC_SCPIPE
 
+#include <scsocket.h>
+
+#if defined(_MSC_VER)
+
+//
+// pipe - 移植 linux函数, 通过 WinSock
+// pipefd	: 索引0表示read, 1表示write
+// return	: zero is error, -1 is returned
+// 
+extern int pipe(socket_t pipefd[2]);
+
+#endif
+
 typedef struct scpipe * scpipe_t;
 
 //

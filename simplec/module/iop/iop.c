@@ -383,7 +383,7 @@ iop_recv(iopbase_t base, uint32_t id) {
 
 	// 返回最终结果
 	if (r == 0)
-		return Success_Close;
+		return Error_Close;
 
 	buf->len += r;
 	return Success_Base;
