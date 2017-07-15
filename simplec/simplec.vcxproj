@@ -70,6 +70,7 @@
     <ClCompile Include="test\test_sctimer.c" />
     <ClCompile Include="test\test_sctime.c" />
     <ClCompile Include="test\test_scurl.c" />
+    <ClCompile Include="test\test_socket_server.c" />
     <ClCompile Include="test\test_sys_strerror.c" />
     <ClCompile Include="test\test_tstring.c" />
     <ClCompile Include="test\test_poll.c" />
@@ -236,16 +237,16 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v141</PlatformToolset>
     <UseOfMfc>false</UseOfMfc>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
     <UseOfMfc>false</UseOfMfc>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
@@ -288,7 +289,7 @@
       <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>ws2_32.lib;libcurl_a.lib;libssl32MT.lib;libcrypto32MT.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libcurl_a.lib;libssl32MT.lib;libcrypto32MT.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
       <AdditionalOptions>/ignore:4099 %(AdditionalOptions)</AdditionalOptions>
       <GenerateDebugInformation>DebugFastLink</GenerateDebugInformation>
@@ -297,6 +298,9 @@
       <Command>echo update directory $(TargetDir)config begin 
 if not exist  $(TargetDir)config mkdir $(TargetDir)config
 xcopy /D /S /E /Y $(ProjectDir)config $(TargetDir)config
+if not exist  $(TargetDir)test mkdir $(TargetDir)test
+if not exist  $(TargetDir)test\config mkdir $(TargetDir)test\config
+xcopy /D /S /E /Y $(ProjectDir)test\config $(TargetDir)test\config
 echo update directory $(TargetDir)config e n d
 
 echo update dll begin
@@ -327,18 +331,21 @@ echo update dll e n d</Command>
       <OptimizeReferences>true</OptimizeReferences>
       <SubSystem>Console</SubSystem>
       <AdditionalOptions>/ignore:4099 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>ws2_32.lib;libcurl_a.lib;libssl32MT.lib;libcrypto32MT.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libcurl_a.lib;libssl32MT.lib;libcrypto32MT.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>echo update directory $(TargetDir)config begin 
 if not exist  $(TargetDir)config mkdir $(TargetDir)config
 xcopy /D /S /E /Y $(ProjectDir)config $(TargetDir)config
-echo update directory $(TargetDir)config end
+if not exist  $(TargetDir)test mkdir $(TargetDir)test
+if not exist  $(TargetDir)test\config mkdir $(TargetDir)test\config
+xcopy /D /S /E /Y $(ProjectDir)test\config $(TargetDir)test\config
+echo update directory $(TargetDir)config e n d
 
 echo update dll begin
 xcopy /D /S /E /Y $(ProjectDir)extern\pthread\dll $(TargetDir)
 xcopy /D /S /E /Y $(ProjectDir)extern\openssl\dll $(TargetDir)
-echo update dll end</Command>
+echo update dll e n d</Command>
       <Message>复制必要的运行资源</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>

@@ -294,6 +294,9 @@
     <ClCompile Include="module\schead\sys_strerror.c">
       <Filter>module\schead</Filter>
     </ClCompile>
+    <ClCompile Include="test\test_socket_server.c">
+      <Filter>test</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="module\schead\include\schead.h">

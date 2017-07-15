@@ -339,7 +339,7 @@ iop_send(iopbase_t base, uint32_t id, const void * data, uint32_t len) {
 			return Success_Base;
 		if (r < 0) {
 			if (socket_errno != SOCKET_EINPROGRESS && socket_errno != SOCKET_EWOULDBOCK) {
-				RETURN(Error_Base, "socket_send socker_errno = %u, r = %d.", socket_errno, r);
+				RETURN(Error_Base, "socket_send error r = %d.", r);
 			}
 			r = 0;
 		}
@@ -376,7 +376,7 @@ iop_recv(iopbase_t base, uint32_t id) {
 	r = socket_recv(iop->s, buf->str + buf->len, buf->cap - buf->len);
 	if (r < 0) {
 		if (socket_errno != SOCKET_EINPROGRESS && socket_errno != SOCKET_EWOULDBOCK) {
-			RETURN(Error_Base, "socket_read socker_errno = %u, r = %d.", socket_errno, r);
+			RETURN(Error_Base, "socket_read error r = %d.", r);
 		}
 		return r;
 	}

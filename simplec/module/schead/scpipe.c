@@ -83,7 +83,7 @@ pipe(socket_t pipefd[2]) {
 
 	// 开始构建互相通信的socket
 	if ((pipefd[0] = socket_stream()) == INVALID_SOCKET) {
-		closesocket(s);
+		socket_close(s);
 		RETURN(Error_Base, "socket_stream pipefd[0] is error!");
 	}
 
@@ -120,7 +120,7 @@ scpipe_create(void) {
 	assert(NULL != spie);
 	if (!CreatePipe(&spie->recv, &spie->send, &sa, 0)) {
 		free(spie);
-		RETURN(NULL, "CreatePipe errno = %lu.", GetLastError());
+		RETURN(NULL, "CreatePipe error!");
 	}
 	return spie;
 }
@@ -139,13 +139,13 @@ scpipe_recv(struct scpipe * spie, char * data, int len) {
 	DWORD lrecv = 0;
 	BOOL ret = PeekNamedPipe(spie->recv, NULL, 0, NULL, &lrecv, NULL);
 	if (!ret || lrecv <= 0) {
-		RETURN(Error_Empty, "PeekNamedPipe recv empty or %lu.", GetLastError());
+		RETURN(Error_Empty, "PeekNamedPipe recv empty error!");
 	}
 
 	// 开始读取数据
 	ret = ReadFile(spie->recv, data, len, &lrecv, NULL);
 	if (!ret) {
-		RETURN(Error_Base, "ReadFile is error %lu.", GetLastError());
+		RETURN(Error_Base, "ReadFile is error!");
 	}
 
 	return (int)lrecv;
@@ -155,7 +155,7 @@ int
 scpipe_send(struct scpipe * spie, const char * data, int len) {
 	DWORD lsend = 0;
 	if (WriteFile(spie->send, data, len, &lsend, NULL)) {
-		RETURN(Error_Base, "WriteFile is error %lu.", GetLastError());
+		RETURN(Error_Base, "WriteFile is error!");
 	}
 	return (int)lsend;
 }

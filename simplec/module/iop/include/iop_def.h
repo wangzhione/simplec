@@ -1,8 +1,8 @@
 ﻿#ifndef _H_LIBIOP_IOP_DEF
 #define _H_LIBIOP_IOP_DEF
 
-#include <vlist.h>
 #include <tstr.h>
+#include <vlist.h>
 #include <scsocket.h>
 
 //

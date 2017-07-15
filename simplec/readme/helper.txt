@@ -51,7 +51,9 @@
 	C/C++ -> 代码生成 -> 运行库 -> 多线程/MT
 
 	链接器 -> 系统 -> 子系统 -> 控制台
-	链接器 -> 输入 -> 附加依赖项 -> ws2_32.lib
+	链接器 -> 输入 -> 附加依赖项 -> libcurl_a.lib
+	链接器 -> 输入 -> 附加依赖项 -> libssl32MT.lib
+	链接器 -> 输入 -> 附加依赖项 -> libcrypto32MT.lib
 
 7. test 单元测试, 规则
 	文件名 test_xxxx.c -> 构建 void test_xxxx() 函数
@@ -71,8 +73,11 @@
 	echo update directory $(TargetDir)config begin 
 	if not exist  $(TargetDir)config mkdir $(TargetDir)config
 	xcopy /D /S /E /Y $(ProjectDir)config $(TargetDir)config
+	if not exist  $(TargetDir)test mkdir $(TargetDir)test
+	if not exist  $(TargetDir)test\config mkdir $(TargetDir)test\config
+	xcopy /D /S /E /Y $(ProjectDir)test\config $(TargetDir)test\config
 	echo update directory $(TargetDir)config e n d
-
+	
 	echo update dll begin
 	xcopy /D /S /E /Y $(ProjectDir)extern\pthread\dll $(TargetDir)
 	xcopy /D /S /E /Y $(ProjectDir)extern\openssl\dll $(TargetDir)

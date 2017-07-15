@@ -31,6 +31,7 @@
 #ifndef _H_CERR
 #define _H_CERR
 
+#undef	CERR
 #define CERR(fmt, ...) \
 	fprintf(stderr, "[%s:%s:%d][errno %d:%s]" fmt "\n",\
 		__FILE__, __func__, __LINE__, errno, strerror(errno), ##__VA_ARGS__)

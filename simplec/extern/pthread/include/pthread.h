@@ -128,20 +128,13 @@
 #  define PTW32_CONFIG_MINGW
 #endif
 #if defined(_MSC_VER)
+#  pragma comment(lib,  "pthread_dll.lib")
 #  if _MSC_VER < 1300
 #    define PTW32_CONFIG_MSVC6
 #  endif
 #  if _MSC_VER < 1400
 #    define PTW32_CONFIG_MSVC7
 #  endif
-#endif
-
-//
-//  这里开始在VS中引用 静态库,减少依赖VS手动添加
-//  wz, 对这个pthread.h 进行了部分修改
-//
-#if defined(_MSC_VER)
-#pragma comment(lib,  "pthread_dll.lib")
 #endif
 
 /*

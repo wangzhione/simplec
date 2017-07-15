@@ -31,6 +31,11 @@
 #define SOCKET_EAGAIN			EAGAIN
 #define SOCKET_EINVAL			EINVAL
 #define SOCKET_EINPROGRESS		EINPROGRESS
+#define SOCKET_EMFILE			EMFILE
+#define SOCKET_ENFILE			ENFILE
+
+// 链接还在进行中, linux这里显示 EINPROGRESS，winds应该是 WSAEWOULDBLOCK
+#define SOCKET_CONNECTED		EINPROGRESS
 
 #if defined(EWOULDBOCK)
 #define SOCKET_EWOULDBOCK		EWOULDBOCK
@@ -50,6 +55,8 @@ typedef int socket_t;
 
 #elif _MSC_VER
 
+#undef	FD_SETSIZE
+#define FD_SETSIZE				(1024)
 #include <ws2tcpip.h>
 
 #define IGNORE_SIGNAL(sig)
@@ -61,17 +68,36 @@ typedef int socket_t;
 #define SOCKET_EINVAL			WSAEINVAL
 #define SOCKET_EWOULDBOCK		WSAEWOULDBLOCK
 #define SOCKET_EINPROGRESS		WSAEINPROGRESS
+#define SOCKET_EMFILE			WSAEMFILE
+#define SOCKET_ENFILE			WSAETOOMANYREFS
+
+#define SOCKET_CONNECTED		WSAEWOULDBLOCK
 
 typedef int socklen_t;
 typedef SOCKET socket_t;
 
-#define write(fd, buf, count) \
-	send(fd, buf, count, 0)
-#define read(fd, buf, count) \
-	recv(fd, buf, count, 0)
+//
+// gettimeofday - Linux sys/time.h 中得到微秒的一种实现
+// tv		:	返回结果包含秒数和微秒数
+// tz		:	包含的时区,在window上这个变量没有用不返回
+// return	:   默认返回0
+//
+extern int gettimeofday(struct timeval * tv, void * tz);
 
 #else
 #	error "error : Currently only supports the Best New CL and GCC!"
+#endif
+
+#undef	CERR
+#define CERR(fmt, ...) \
+	fprintf(stderr, "[%s:%s:%d][errno %d:%s]" fmt "\n",\
+		__FILE__, __func__, __LINE__, socket_errno, sys_strerror(socket_errno), ##__VA_ARGS__)
+
+// EAGAIN and EWOULDBLOCK may be not the same value.
+#if (SOCKET_EAGAIN != SOCKET_EWOULDBOCK)
+#define SOCKET_WAGAIN SOCKET_EAGAIN : case SOCKET_EWOULDBOCK
+#else
+#define SOCKET_WAGAIN SOCKET_EAGAIN
 #endif
 
 //
@@ -110,25 +136,34 @@ extern int socket_addr(const char * ip, uint16_t port, sockaddr_t * addr);
 // socket_dgram		- 创建UDP socket
 // socket_stream	- 创建TCP socket
 // socket_close		- 关闭上面创建后的句柄
-// socket_bind		- socket绑定操作
+// socket_read		- 读取数据
+// socket_write		- 写入数据
 //
 extern socket_t socket_dgram(void);
 extern socket_t socket_stream(void);
 extern int socket_close(socket_t s);
-extern int socket_bind(socket_t s, const char * ip, uint16_t port);
+extern int socket_read(socket_t s, void * data, int sz);
+extern int socket_write(socket_t s, const void * data, int sz);
 
 //
 // socket_set_block		- 设置套接字是阻塞
 // socket_set_nonblock	- 设置套接字是非阻塞
 // socket_set_reuseaddr	- 开启地址复用
+// socket_set_keepalive - 开启心跳包检测, 默认2h 5次
 // socket_set_recvtimeo	- 设置接收数据毫秒超时时间
 // socket_set_sendtimeo	- 设置发送数据毫秒超时时间
 //
 extern int socket_set_block(socket_t s);
 extern int socket_set_nonblock(socket_t s);
 extern int socket_set_reuseaddr(socket_t s);
+extern int socket_set_keepalive(socket_t s);
 extern int socket_set_recvtimeo(socket_t s, int ms);
 extern int socket_set_sendtimeo(socket_t s, int ms);
+
+//
+// socket_get_error - 得到当前socket error值, 0 表示正确, 其它都是错误
+//
+extern int socket_get_error(socket_t s);
 
 //
 // socket_recv		- socket接受信息
@@ -144,6 +179,13 @@ extern int socket_send(socket_t s, const void * buf, int len);
 extern int socket_sendn(socket_t s, const void * buf, int len);
 extern int socket_recvfrom(socket_t s, void * buf, int len, int flags, sockaddr_t * in, socklen_t * inlen);
 extern int socket_sendto(socket_t s, const void * buf, int len, int flags, const sockaddr_t * to, socklen_t tolen);
+
+//
+// socket_bind		- 端口绑定返回绑定好的 socket fd, 失败返回 INVALID_SOCKET or PF_INET PF_INET6
+// socket_listen	- 端口监听返回监听好的 socket fd.
+//
+extern socket_t socket_bind(const char * host, uint16_t port, int protocol, int * family);
+extern socket_t socket_listen(const char * host, uint16_t port);
 
 //
 // socket_tcp			- 创建TCP详细的套接字

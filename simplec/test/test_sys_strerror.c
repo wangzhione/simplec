@@ -17,6 +17,10 @@ void test_sys_strerror(void) {
 	char c;
 	const char * si;
 	tstr_t errf = tstr_freadend(_STR_DATA);
+	if (errf == NULL) {
+		RETURN(NIL, "tstr_freadend error " _STR_DATA);
+	}
+
 	tstr_t cstr = tstr_creates(
 		"#if defined(__GNUC__)\r\n"
 		"\r\n"

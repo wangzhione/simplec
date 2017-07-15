@@ -36,6 +36,7 @@
 #endif
 
 #ifdef __GNUC__
+
 #include <unistd.h>
 #include <sys/time.h>
 
@@ -52,7 +53,7 @@
 // 为Visual Studio导入一些和linux上优质思路
 #ifdef _MSC_VER
 
-#include <WinSock2.h>
+#include <Windows.h>
 
 #define sh_msleep(m) \
 		Sleep(m)	
@@ -71,14 +72,6 @@ extern int usleep(unsigned usec);
  *		: 返回 ptm 值
  */
 #define localtime_r(pt, ptm) localtime_s(ptm, pt), ptm
-
-//
-// gettimeofday - Linux sys/time.h 中得到微秒的一种实现
-// tv		:	返回结果包含秒数和微秒数
-// tz		:	包含的时区,在window上这个变量没有用不返回
-// return	:   默认返回0
-//
-extern int gettimeofday(struct timeval * tv, void * tz);
 
 #endif
 

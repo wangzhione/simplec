@@ -29,32 +29,6 @@ usleep(unsigned usec) {
 	return rt;
 }
 
-//
-// gettimeofday - Linux sys/time.h 中得到微秒的一种实现
-// tv		:	返回结果包含秒数和微秒数
-// tz		:	包含的时区,在window上这个变量没有用不返回
-// return	:   默认返回0
-//
-inline int 
-gettimeofday(struct timeval * tv, void * tz) {
-	struct tm st;
-	SYSTEMTIME wtm;
-
-	GetLocalTime(&wtm);
-	st.tm_year = wtm.wYear - _INT_YEAROFFSET;
-	st.tm_mon = wtm.wMonth - _INT_MONOFFSET; // window的计数更好些
-	st.tm_mday = wtm.wDay;
-	st.tm_hour = wtm.wHour;
-	st.tm_min = wtm.wMinute;
-	st.tm_sec = wtm.wSecond;
-	st.tm_isdst = -1; // 不考虑夏令时
-
-	tv->tv_sec = (long)mktime(&st); // 32位使用数据强转
-	tv->tv_usec = wtm.wMilliseconds * _INT_STOMS; // 毫秒转成微秒
-
-	return 0;
-}
-
 #endif
 
 // 从时间串中提取出来年月日时分秒

@@ -1,6 +1,5 @@
 ﻿#if defined(_MSC_VER)
 
-#define FD_SETSIZE	(1024)
 #include <socket_poll.h>
 
 struct sevent {
@@ -54,7 +53,6 @@ sp_add(poll_t sp, socket_t sock, void * ud) {
 			break;
 		++sev;
 	}
-
 	if (sev == eev) {
 		++sp->n;
 		sev->fd = sock;
@@ -101,7 +99,7 @@ sp_write(poll_t sp, socket_t sock, void * ud, bool enable) {
 //
 int 
 sp_wait(poll_t sp, struct event e[], int max) {
-	int i, n;
+	int i, n, retn;
 	FD_ZERO(&sp->rd);
 	FD_ZERO(&sp->wt);
 
@@ -114,17 +112,16 @@ sp_wait(poll_t sp, struct event e[], int max) {
 
 	n = select(0, &sp->rd, &sp->wt, NULL, NULL);
 	if (n <= 0)
-		return n;
+		RETURN(n, "select n = %d", n);
 
-	int retn = 0;
-	for (i = 0; i < sp->n && retn < max && retn < n; ++i) {
+	for (retn = i = 0; i < sp->n && retn < max && retn < n; ++i) {
 		struct sevent * sev = sp->evs + i;
 		e[retn].read = FD_ISSET(sev->fd, &sp->rd);
 		e[retn].write = sev->write && FD_ISSET(sev->fd, &sp->wt);
 		if (e[retn].read || e[retn].write) {
-			++retn;
 			e[retn].s = sev->ud;
 			e[retn].error = false;
+			++retn;
 		}
 	}
 	return retn;

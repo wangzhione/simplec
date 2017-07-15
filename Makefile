@@ -45,7 +45,7 @@ TESTE	=	$(foreach v, $(TESTC), $(notdir $(basename $(v))).$(OUT))
 #
 # 全局编译的设置
 #
-CC		= gcc 
+CC		= gcc
 LIB 	= -lpthread -lm -lssl -lcurl
 CFLAGS 	= -g -O2 -Wall -Wno-unused-result -std=gnu11
 
