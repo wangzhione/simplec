@@ -8,23 +8,22 @@ struct srl {
 	mq_t mq;				// 消息队列
 	pthread_t th;			// 具体奔跑的线程
 	die_f run;				// 每个消息都会调用 run(pop())
+	die_f die;				// 每个消息体的善后工作
 	volatile bool loop;		// true表示还在继续 
 };
-
-// 线程阻塞的毫秒数
-#define _INT_SCRUNLOOP		(1)
 
 static void * _srl_loop(struct srl * s) {
 
 	while (s->loop) {
 		void * pop = mq_pop(s->mq);
 		if (NULL == pop) {
-			sh_msleep(_INT_SCRUNLOOP);
+			sh_msleep(_INT_SLEEPMIN);
 			continue;
 		}
 
 		// 开始处理消息
 		s->run(pop);
+		s->die(pop);
 	}
 
 	return s;
@@ -40,12 +39,13 @@ srl_t
 srl_create_(die_f run, die_f die) {
 	struct srl * s = malloc(sizeof(struct srl));
 	assert(s && run);
-	s->mq = mq_create(die);
+	s->mq = mq_create();
 	s->loop = true;
 	s->run = run;
+	s->die = die;
 	// 创建线程,并启动
 	if (pthread_create(&s->th, NULL, (start_f)_srl_loop, s)) {
-		mq_delete(s->mq);
+		mq_delete(s->mq, die);
 		free(s);
 		RETURN(NULL, "pthread_create create error !!!");
 	}
@@ -63,7 +63,7 @@ srl_delete(srl_t srl) {
 		srl->loop = false;
 		// 等待线程结束, 然后退出
 		pthread_join(srl->th, NULL);
-		mq_delete(srl->mq);
+		mq_delete(srl->mq, srl->die);
 		free(srl);
 	}
 }

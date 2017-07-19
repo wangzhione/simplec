@@ -15,7 +15,6 @@ struct mq {
 	int tail;			// 消息队列尾索引
 	void ** queue;		// 具体的使用消息
 
-	die_f die;			// 具体的销毁函数
 	volatile bool fee;	// true表示销毁退出
 };
 
@@ -25,7 +24,7 @@ struct mq {
 // return	: 返回创建好的消息队列对象, NULL表示失败
 //
 inline mq_t 
-mq_create(die_f die) {
+mq_create(void) {
 	struct mq * q = malloc(sizeof(struct mq));
 	assert(q);
 	q->lock = 0;
@@ -34,7 +33,6 @@ mq_create(die_f die) {
 	q->tail = -1;
 	q->queue = malloc(sizeof(void *) * _INT_MQ);
 	assert(q->queue);
-	q->die = die;
 	q->fee = false;
 	return q;
 }
@@ -42,26 +40,21 @@ mq_create(die_f die) {
 //
 // mq_delete - 删除创建消息队列, 并回收资源
 // mq		: 消息队列对象
+// die		: 删除push进来的结点
 // return	: void
 //
 void 
-mq_delete(mq_t mq) {
+mq_delete(mq_t mq, die_f die) {
 	if (!mq || mq->fee) return;
 	ATOM_LOCK(mq->lock);
 	mq->fee = true;
-	if (mq->die) {
-		// 销毁所有对象
-		while (mq->tail >= 0) {
-			void * msg = mq->queue[mq->head];
-			mq->die(msg);
-			if (mq->tail != mq->head)
-				mq->head = (mq->head + 1) & (mq->cap - 1);
-			else {
-				// 这是empty,情况, 重置
-				mq->tail = -1;
-				mq->head = 0;
+	// 销毁所有对象
+	if (mq->tail >= 0 && die) {
+		for(;;) {
+			die(mq->queue[mq->head]);
+			if (mq->tail == mq->head)
 				break;
-			}
+			mq->head = (mq->head + 1) & (mq->cap - 1);
 		}
 	}
 	free(mq->queue);

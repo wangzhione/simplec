@@ -10,7 +10,7 @@ static void _return_void(void) {
 //
 void test_objs(void) {
 	
-	objs_t pool = objs_create(sizeof(int), 4);
+	objs_t pool = objs_create(sizeof(int));
 
 	_return_void();
 

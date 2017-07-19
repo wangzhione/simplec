@@ -1,19 +1,21 @@
 ﻿#include <plog.h>
 #include <pthread.h>
 
+#define _INT_TEST		(1024)
+
 // 参数值
-static int _cnt = 0;
+static int _cnt;
 
 // 需要处理的函数操作, 写数据进去
 static void * _write(void * arg) {
 
-	for (int i = 0; i < 1024; ++i) {
+	for (int i = 0; i < _INT_TEST; ++i) {
 		PL_ERROR("_write for cnt = %d.", _cnt++);
 		PL_INFOS("_write for cnt = %d.", _cnt++);
 		PL_DEBUG("_write for cnt = %d.", _cnt++);
 	}
 
-	sh_msleep(2000);
+	sh_msleep(_INT_TEST);
 
 	PL_ERROR("_write cnt = %d.", _cnt++);
 	PL_INFOS("_write cnt = %d.", _cnt++);
@@ -40,7 +42,7 @@ void test_plog(void) {
 		CERR_EXIT("pthread_create is _run error!");
 	}
 
-	for (int i = 0; i < 1024; ++i) {
+	for (int i = 0; i < _INT_TEST; ++i) {
 		PL_ERROR("_write for cnt = %d.", _cnt++);
 		PL_INFOS("_write for cnt = %d.", _cnt++);
 		PL_DEBUG("_write for cnt = %d.", _cnt++);

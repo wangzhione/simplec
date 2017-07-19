@@ -19,7 +19,7 @@ typedef struct tstr * tstr_t;
 
 //文本串栈上创建内容,不想用那些技巧了,就这样吧
 #define TSTR_CREATE(var) \
-	struct tstr var[1] = { NULL }
+	struct tstr var[1] = { { NULL } }
 #define TSTR_DELETE(var) \
 	free((var)->str)
 

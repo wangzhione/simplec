@@ -1,7 +1,7 @@
 ﻿#include <clog.h>
 
 //
-// 一个非常简单, 非常快速单例c多线程单机日志库 clog.h
+// 急速, 清洁, 可靠配合 lograte的 c多线程单机日志库 clog.h
 //					by simplec wz 2017年4月26日
 //
 
@@ -11,11 +11,12 @@ static FILE * _log;
 // cl_start - 开启单机日志库
 // return	: void
 //
-void cl_start(void) {
+inline void 
+cl_start(void) {
 	if (NULL == _log) {
 		_log = fopen(_STR_CLOG_NAME, "ab");
 		if(NULL == _log)
-			CERR_EXIT("fopen %s ab is error!", _STR_CLOG_NAME);
+			CERR_EXIT("fopen " _STR_CLOG_NAME " ab is error!");
 	}
 }
 
@@ -25,7 +26,8 @@ void cl_start(void) {
 // ...		: 对映fmt参数
 // return	: void
 //
-void cl_printf(const char * fmt, ...) {
+void 
+cl_printf(const char * fmt, ...) {
 	va_list ap;
 	size_t len;
 	char str[_UINT_LOGS];

@@ -8,8 +8,6 @@
  *		 推荐用 posix 线程库
  */
 
-#define _INT_USLEEP_LOCK (1)
-
 // 如果 是 VS 编译器
 #if defined(_MSC_VER)
 
@@ -17,7 +15,7 @@
 
 #pragma warning(push)
 //忽略 warning C4047: “==”:“void *”与“LONG”的间接级别不同
-#pragma warning(disable:4047) 
+#pragma warning(disable:4047)
 
 // v 和 a 都是 long 这样数据
 #define ATOM_ADD(v, a)		InterlockedAdd((LONG volatile *)&(v), (LONG)(a))
@@ -36,10 +34,6 @@
 
 #pragma warning(pop)
 
-#define ATOM_LOCK(v) \
-	while(ATOM_SET(v, 1)) \
-		Sleep(_INT_USLEEP_LOCK)
-
 // 保证代码不乱序优化后执行
 #define ATOM_SYNC()			MemoryBarrier()
 
@@ -47,8 +41,6 @@
 
 // 否则 如果是 gcc 编译器
 #elif defined(__GNUC__)
-
-#include <unistd.h>
 
 // v += a ; return v;
 #define ATOM_ADD(v, a)		__sync_add_and_fetch(&(v), (a))
@@ -62,17 +54,6 @@
 #define ATOM_DEC(v)			__sync_sub_and_fetch(&(v), 1)
 // bool b = v == c; b ? v=a : ; return b;
 #define ATOM_CAS(v, c, a)	__sync_bool_compare_and_swap(&(v), (c), (a))
-
-//
-// 使用方式:
-//  int lock = 0;
-//  ATOM_LOCK(lock);
-//  ...
-//  ATOM_UNLOCK(lock);
-//
-#define ATOM_LOCK(v) \
-	while(ATOM_SET(v, 1)) \
-		usleep(_INT_USLEEP_LOCK)
 
  // 保证代码不乱序
 #define ATOM_SYNC()			__sync_synchronize()
@@ -99,5 +80,14 @@
  * 返回0表示得到锁资源, 竞争锁成功
  */
 #define ATOM_TRYLOCK(v)		ATOM_SET(v, 1)
+
+//
+// 使用方式:
+//  int lock = 0;
+//  ATOM_LOCK(lock);
+//  ...
+//  ATOM_UNLOCK(lock);
+//
+#define ATOM_LOCK(v)		while(ATOM_SET(v, 1))
 
 #endif // !_H_SIMPLEC_SCATOM

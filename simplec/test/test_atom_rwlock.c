@@ -8,10 +8,10 @@
 #define _INT_RTH    (10)
 
 struct rwarg {
+	int idx;				// 指示buf中写道那了
+	char buf[BUFSIZ];		// 存储临时数据
 	pthread_t id;
-	struct rwlock lock;    // 加锁用的  
-	int idx;                 // 指示buf中写道那了
-	char buf[BUFSIZ];        // 存储临时数据
+	struct rwlock lock;		// 加锁用的  
 };
 
 // 写线程, 主要随机写字符进去

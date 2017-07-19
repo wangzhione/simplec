@@ -26,7 +26,13 @@
 // return	: 返回待输出的串详细内容
 //
 #define CL_PRINTF(fstr, fmt, ...) \
-	cl_printf(fstr "[%s:%s:%d]" fmt "\n", __FILE__, __func__, __LINE__, ##__VA_ARGS__);
+	cl_printf(fstr "[%s:%s:%d]" fmt "\n", __FILE__, __func__, __LINE__, ##__VA_ARGS__)
+
+//
+// cl_start - 开启单机日志库
+// return	: void
+//
+extern void cl_start(void);
 
 //
 // cl_printf - 具体输出日志内容
@@ -35,11 +41,5 @@
 // return	: void
 //
 void cl_printf(const char * fmt, ...);
-
-//
-// cl_start - 开启单机日志库
-// return	: void
-//
-extern void cl_start(void);
 
 #endif // !_H_SIMPLEC_CLOG

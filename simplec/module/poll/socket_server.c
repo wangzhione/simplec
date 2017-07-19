@@ -538,9 +538,9 @@ send_buffer(sserver_t ss, struct socket * s, smessage_t result) {
 	if (s->high.head == NULL) {
 		// step 2
 		if (s->low.head != NULL) {
-			if (send_list(ss, s, &s->low, result) == SSERVER_CLOSE) {
+			if (send_list(ss, s, &s->low, result) == SSERVER_CLOSE)
 				return SSERVER_CLOSE;
-			}
+
 			// step 3
 			if (list_uncomplete(&s->low)) {
 				raise_uncomplete(s);
@@ -602,7 +602,7 @@ append_sendbuffer(sserver_t ss, struct socket * s, struct request_send * request
 }
 
 static inline void
-append_sendbuffer_low(sserver_t ss,struct socket * s, struct request_send * request) {
+append_sendbuffer_low(sserver_t ss, struct socket * s, struct request_send * request) {
 	struct write_buffer * buf = append_sendbuffer_(ss, &s->low, request, offsetof(struct write_buffer, udp_address), 0);
 	s->wb_size += buf->sz;
 }
@@ -724,7 +724,7 @@ close_socket(sserver_t ss, struct request_close * request, smessage_t result) {
 		return SSERVER_CLOSE;
 	}
 	if (!send_buffer_empty(s)) { 
-		int type = send_buffer(ss,s,result);
+		int type = send_buffer(ss, s, result);
 		// type : -1 or SOCKET_WARNING or SOCKET_CLOSE, SOCKET_WARNING means send_buffer_empty
 		if (type != -1 && type != SSERVER_WARNING)
 			return type;
@@ -979,7 +979,7 @@ static int
 forward_message_udp(sserver_t ss, struct socket * s, smessage_t  result) {
 	union sockaddr_all sa;
 	socklen_t slen = sizeof(sa);
-	int n = recvfrom(s->fd, ss->udpbuffer, MAX_UDP_PACKAGE, 0, &sa.s, &slen);
+	int n = recvfrom(s->fd, (void *)ss->udpbuffer, MAX_UDP_PACKAGE, 0, &sa.s, &slen);
 	if (n < 0) {
 		switch(socket_errno) {
 		case SOCKET_EINTR:
@@ -1137,10 +1137,10 @@ sserver_poll(sserver_t ss, smessage_t result, int * more) {
 		}
 		struct event * e = &ss->ev[ss->event_index++];
 		struct socket * s = e->s;
-		if (s == NULL) {
-			// dispatch pipe message at beginning
+		// dispatch pipe message at beginning
+		if (s == NULL)
 			continue;
-		}
+
 		switch (s->type) {
 		case SOCKET_TYPE_CONNECTING:
 			return report_connect(ss, s, result);
@@ -1155,6 +1155,13 @@ sserver_poll(sserver_t ss, smessage_t result, int * more) {
 			CERR("socket-server: invalid socket");
 			break;
 		default:
+			if (e->error) {
+				// close when error
+				int error = socket_get_error(s->fd);
+				force_close(ss, s, result);
+				result->data = error ? (void *)sys_strerror(error) : "Unknown error";
+				return SSERVER_ERR;
+			}
 			if (e->read) {
 				int type;
 				if (s->protocol == IPPROTO_TCP)
@@ -1182,14 +1189,6 @@ sserver_poll(sserver_t ss, smessage_t result, int * more) {
 					break;
 				return type;
 			}
-			if (e->error) {
-				// close when error
-				int error = socket_get_error(s->fd);
-				force_close(ss, s, result);
-				result->data = error ? (void *)sys_strerror(error) : "Unknown error";
-				return SSERVER_ERR;
-			}
-			break;
 		}
 	}
 }
@@ -1370,7 +1369,7 @@ sserver_udp(sserver_t ss, uintptr_t opaque, const char * addr, uint16_t port) {
 		family = PF_INET;
 		fd = socket(family, SOCK_DGRAM, IPPROTO_UDP);
 	}
-	if (fd < 0)
+	if (fd == INVALID_SOCKET)
 		return -1;
 
 	socket_set_nonblock(fd);
@@ -1439,7 +1438,6 @@ sserver_udp_connect(sserver_t ss, int id, const char * addr, uint16_t port) {
 	struct request_package request;
 	request.u.set_udp.id = id;
 	int protocol;
-
 	if (ai_list->ai_family == AF_INET)
 		protocol = IPPROTO_UDP;
 	else if (ai_list->ai_family == AF_INET6)

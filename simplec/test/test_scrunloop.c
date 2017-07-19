@@ -5,19 +5,15 @@
 #define _INT_SLEEP		(1000)
 
 // 一直写数据
-static void _run(void * arg) {
+static void _run(char * msg) {
 	static int _cnt = 0;
-	char * msg = arg;
-
 	printf("%d = %s.\n", ++_cnt, msg);
-	free(arg);
 }
 
 // 需要处理的函数操作, 写数据进去
-static void * _write(void * arg) {
+static srl_t _write(srl_t s) {
 	int i;
 	char * msg;
-	srl_t s = arg;
 	
 	// 写五次数据
 	for (i = 0; i < 5; ++i) {
@@ -39,7 +35,7 @@ static void * _write(void * arg) {
 
 	sh_msleep(_INT_SLEEP);
 
-	return arg;
+	return s;
 }
 
 //
@@ -50,7 +46,7 @@ void test_scrunloop(void) {
 	srl_t s = srl_create(_run, free);
 
 	// 开启线程, 跑起来测试
-	if (pthread_create(&th, NULL, _write, s) < 0) {
+	if (pthread_create(&th, NULL, (start_f)_write, s) < 0) {
 		srl_delete(s);
 		CERR_EXIT("pthread_create is _run s = %p error!", s);
 	}

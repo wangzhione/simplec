@@ -11,20 +11,20 @@ static void * _poll(void * ud) {
 		case SSERVER_EXIT:
 			return NULL;
 		case SSERVER_DATA:
-			printf("message(%lu) [id=%d] size=%d\n", result.opaque, result.id, result.ud);
+			printf("message(%"PRIdPTR") [id=%d] size=%d\n", result.opaque, result.id, result.ud);
 			free(result.data);
 			break;
 		case SSERVER_CLOSE:
-			printf("close(%lu) [id=%d]\n", result.opaque, result.id);
+			printf("close(%"PRIdPTR") [id=%d]\n", result.opaque, result.id);
 			break;
 		case SSERVER_OPEN:
-			printf("open(%lu) [id=%d] %s\n", result.opaque, result.id, result.data);
+			printf("open(%"PRIdPTR") [id=%d] %s\n", result.opaque, result.id, result.data);
 			break;
 		case SSERVER_ERR:
-			printf("error(%lu) [id=%d]\n", result.opaque, result.id);
+			printf("error(%"PRIdPTR") [id=%d]\n", result.opaque, result.id);
 			break;
 		case SSERVER_ACCEPT:
-			printf("accept(%lu) [id=%d %s] from [%d]\n", result.opaque, result.ud, result.data, result.id);
+			printf("accept(%"PRIdPTR") [id=%d %s] from [%d]\n", result.opaque, result.ud, result.data, result.id);
 			break;
 		}
 	}

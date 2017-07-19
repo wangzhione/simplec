@@ -27,19 +27,14 @@ struct plog {
 static struct plog _plog;
 
 // 打开新的文件系统写入
-static void _openfile(void) {
-	FILE * log;
-
+static inline void _pl_openfile(void) {
 	stu_getmstrn(_plog.path, sizeof(_plog.path), _STR_PLOG_NAME);
-	log = fopen(_plog.path, "ab");
-	if (NULL == log) {
-		// 如果是第一次启动程序自动退出
-		if(NULL == _plog.log)
-			CERR_EXIT("fopen path ab error = %s.", _plog.path);
-		return;
+	FILE * log = fopen(_plog.path, "ab");
+	if (_plog.log) {
+		if (NULL == log)
+			RETURN(NIL, "fopen ab error = %s.", _plog.path);
+		fclose(_plog.log);
 	}
-
-	fclose(_plog.log);
 	_plog.log = log;
 }
 
@@ -50,19 +45,15 @@ static inline void _die(struct log * log) {
 }
 
 // 轮询器的主体
-static void _run(struct log * log) {
-
+static inline void _run(struct log * log) {
 	// 重新构建文件信息
 	if (_plog.size >= _UINT_PLOG) {
 		_plog.size = 0;
-		_openfile();
+		_pl_openfile();
 	}
 
 	// 这里打印信息
 	_plog.size += log->len;
-
-	// 回收消息体
-	_die(log);
 }
 
 //
@@ -72,24 +63,15 @@ static void _run(struct log * log) {
 void
 pl_start(void) {
 	if (_plog.log) return;
-	_openfile();
-
-	// 构建对象池
-	_plog.pool = objs_create(sizeof(struct log), 0u);
-	if (NULL == _plog.pool) {
-		fclose(_plog.log);
-		CERR_EXIT("objs_create _plog.pool is error = 4 + %u.", _UINT_LOGS);
-	}
-
-	// 构建消息轮询器
+	
+	// 构建文件, 对象池, 消息轮询器
+	_pl_openfile();
+	_plog.pool = objs_create(sizeof(struct log));
 	_plog.loop = srl_create(_run, _die);
-	if (NULL == _plog.loop) {
-		objs_delete(_plog.pool);
-		fclose(_plog.log);
-		CERR_EXIT("srl_create _run, _die is error! _run | _die = %p, %p.", _run, _die);
-	}
 
-	// 退出处理事件, 全部交给操作系统
+	// 退出资源销毁, 全部交给操作系统
+	if (!_plog.log || !_plog.pool || !_plog.loop)
+		CERR_EXIT("pl_start error log pool loop = %p, %p, %p.", _plog.log, _plog.pool, _plog.loop);
 }
 
 //

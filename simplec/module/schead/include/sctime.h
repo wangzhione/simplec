@@ -35,6 +35,9 @@
 #define _H_LOG_HELP
 #endif
 
+// sleep 中推荐的最小睡眠数
+#define _INT_SLEEPMIN	(1)
+
 #ifdef __GNUC__
 
 #include <unistd.h>

@@ -74,9 +74,10 @@ tstr_dup(const char * str) {
 //
 tstr_t 
 tstr_freadend(const char * path) {
+	int err;
+	size_t rn;
 	tstr_t tstr;
 	char buf[BUFSIZ];
-	size_t rn;
 	FILE * txt = fopen(path, "rb");
 	if (NULL == txt) {
 		RETURN(NULL, "fopen r %s is error!", path);
@@ -88,18 +89,16 @@ tstr_freadend(const char * path) {
 	// 读取文件内容
 	do {
 		rn = fread(buf, sizeof(char), BUFSIZ, txt);
-		if (rn < 0)
-			break;
+		if ((err = ferror(txt))) {
+			fclose(txt);
+			tstr_delete(tstr);
+			RETURN(NULL, "fread err path = %d, %s.", err, path);
+		}
 		// 保存构建好的数据
 		tstr_appendn(tstr, buf, rn);
 	} while (rn == BUFSIZ);
 
 	fclose(txt);
-	// 最终错误检查
-	if (rn < 0) {
-		tstr_delete(tstr);
-		RETURN(NULL, "fread is error! path = %s. rn = %zu.", path, rn);
-	}
 
 	// 继续构建数据, 最后一行补充一个\0
 	tstr_cstr(tstr);

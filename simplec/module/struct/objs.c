@@ -7,20 +7,17 @@
 //
 // objs_create - 构建一个对象池
 // alloc	: 对象大小, sizeof(type)
-// size		: 对象池容量, 0 就是默认大小
 // return	: NULL表示构建失败, 默认都是成功 
 //
 objs_t 
-objs_create(size_t alloc, size_t size) {
+objs_create(size_t alloc) {
 	objs_t p;
-
 	// 默认的对象池大小
-	if (size <= 0) size = _UINT_SIZE;
-	p = malloc(sizeof(struct objs) + sizeof(void *) * size);
+	p = malloc(sizeof(struct objs) + sizeof(void *) * _UINT_SIZE);
 	if (NULL == p)
-		RETURN(NULL, "malloc struct objsvoid * error size = %zd.", size);
+		RETURN(NULL, "malloc struct objsvoid * error size = %d.", _UINT_SIZE);
 	p->lock = 0;
-	p->size = size;
+	p->size = _UINT_SIZE;
 	p->alloc = alloc;
 	p->len = 0u;
 

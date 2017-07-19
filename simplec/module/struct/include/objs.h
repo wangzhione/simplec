@@ -6,7 +6,7 @@
 typedef struct objs {
 	int			lock;	// 多线程安全
 	size_t		alloc;	// 每个对象的字节大小
-	size_t		size;   // 对象池容量
+	size_t		size;   // 对象池容量, 这个参数决定当前缓冲大小!
 	size_t		len;	// 当前可用对象数
 	void *		as[];	// 对象池
 } * objs_t;
@@ -14,10 +14,9 @@ typedef struct objs {
 //
 // objs_create - 构建一个对象池
 // alloc	: 对象大小, sizeof(type)
-// size		: 对象池容量, 0 就是默认大小
 // return	: NULL表示构建失败, 默认都是成功 
 //
-extern objs_t objs_create(size_t alloc, size_t size);
+extern objs_t objs_create(size_t alloc);
 
 //
 // objs_delete - 销毁一个对象池

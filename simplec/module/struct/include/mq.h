@@ -7,17 +7,17 @@ typedef struct mq * mq_t;
 
 //
 // mq_create - 创建一个消息队列类型
-// die		: 删除push进来的结点
 // return	: 返回创建好的消息队列对象, NULL表示失败
 //
-extern mq_t mq_create(die_f die);
+extern mq_t mq_create(void);
 
 //
 // mq_delete - 删除创建消息队列, 并回收资源
 // mq		: 消息队列对象
+// die		: 删除push进来的结点
 // return	: void
 //
-extern void mq_delete(mq_t mq);
+extern void mq_delete(mq_t mq, die_f die);
 
 //
 // mq_push - 消息队列中压入数据

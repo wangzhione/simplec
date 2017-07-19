@@ -211,7 +211,6 @@ list_popidx(list_t * ph, int idx) {
 	for(front = NULL; head && idx > 0; --idx){
 		front = head;
 		head = head->next;
-		--idx;
 	}
 	
 	if(idx > 0){

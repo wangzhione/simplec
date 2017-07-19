@@ -297,6 +297,9 @@
     <ClCompile Include="test\test_socket_server.c">
       <Filter>test</Filter>
     </ClCompile>
+    <ClCompile Include="module\struct\smq.c">
+      <Filter>module\struct</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="module\schead\include\schead.h">
@@ -688,6 +691,9 @@
     </ClInclude>
     <ClInclude Include="module\poll\include\socket_server.h">
       <Filter>module\poll\include</Filter>
+    </ClInclude>
+    <ClInclude Include="module\struct\include\smq.h">
+      <Filter>module\struct\include</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

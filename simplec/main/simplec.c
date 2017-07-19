@@ -60,7 +60,8 @@ simplec_go(void) {
  */
 void 
 simplec_test(void) {
-	TEST_RUN(test_socket_server);
+	TEST_RUN(test_scrunloop);
+	TEST_RUN(test_plog);
 }
 
 #endif

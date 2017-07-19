@@ -44,6 +44,7 @@
     <ClCompile Include="module\struct\objs.c" />
     <ClCompile Include="module\struct\rbtree.c" />
     <ClCompile Include="module\struct\mq.c" />
+    <ClCompile Include="module\struct\smq.c" />
     <ClCompile Include="module\struct\tree.c" />
     <ClCompile Include="module\struct\tstr.c" />
     <ClCompile Include="module\struct\vlist.c" />
@@ -203,6 +204,7 @@
     <ClInclude Include="module\struct\include\objs.h" />
     <ClInclude Include="module\struct\include\rbtree.h" />
     <ClInclude Include="module\struct\include\mq.h" />
+    <ClInclude Include="module\struct\include\smq.h" />
     <ClInclude Include="module\struct\include\struct.h" />
     <ClInclude Include="module\struct\include\tree.h" />
     <ClInclude Include="module\struct\include\tstr.h" />
@@ -238,7 +240,7 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>LLVM-vs2014</PlatformToolset>
     <UseOfMfc>false</UseOfMfc>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -286,7 +288,7 @@
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <DisableSpecificWarnings>%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <ExceptionHandling>false</ExceptionHandling>
-      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
     </ClCompile>
     <Link>
       <AdditionalDependencies>libcurl_a.lib;libssl32MT.lib;libcrypto32MT.lib;%(AdditionalDependencies)</AdditionalDependencies>
