@@ -99,7 +99,7 @@ socket_close(socket_t s) {
 inline int 
 socket_read(socket_t s, void * data, int sz) {
 #ifdef _MSC_VER
-	return recv(s, data, sz, 0);
+	return sz ? recv(s, data, sz, 0) : 0;
 #else
 	// linux上面 read 封装了 recv
 	return read(s, data, sz);
@@ -263,7 +263,7 @@ socket_sendto(socket_t s, const void * buf, int len, int flags, const sockaddr_t
 // socket_listen	- 端口监听返回监听好的 socket fd.
 //
 socket_t
-socket_bind(const char * host, uint16_t port, int protocol, int * family) {
+socket_bind(const char * host, uint16_t port, uint8_t protocol, int * family) {
 	socket_t fd;
 	struct addrinfo ai_hints = { 0 };
 	struct addrinfo * ai_list = NULL;

@@ -141,13 +141,15 @@ mq_len(mq_t mq) {
 	if (!mq || mq->fee) return 0;
 
 	ATOM_LOCK(mq->lock);
-
+	tail = mq->tail;
+	if (tail < 0) {
+		ATOM_UNLOCK(mq->lock);
+		return 0;
+	}
 	cap = mq->cap;
 	head = mq->head;
-	tail = mq->tail;
-
 	ATOM_UNLOCK(mq->lock);
 
 	tail -= head - 1;
-	return tail < 0 ? tail + cap : tail;
+	return tail > 0 ? tail : tail + cap;
 }

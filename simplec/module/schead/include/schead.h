@@ -142,4 +142,11 @@ extern bool sh_isbig(void);
 //
 extern const char * sys_strerror(int error);
 
+//
+// sh_hton - 将本地四字节数据转成'小端'网络字节
+// sh_ntoh - 将'小端'网络四字节数值转成本地数值
+//
+extern uint32_t sh_hton(uint32_t x);
+extern uint32_t sh_ntoh(uint32_t x);
+
 #endif// ! _H_SIMPLEC_SCHEAD

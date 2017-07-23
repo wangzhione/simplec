@@ -300,6 +300,15 @@
     <ClCompile Include="module\struct\smq.c">
       <Filter>module\struct</Filter>
     </ClCompile>
+    <ClCompile Include="module\poll\socket_message.c">
+      <Filter>module\poll</Filter>
+    </ClCompile>
+    <ClCompile Include="module\struct\recvmq.c">
+      <Filter>module\struct</Filter>
+    </ClCompile>
+    <ClCompile Include="test\test_recvmq.c">
+      <Filter>test</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="module\schead\include\schead.h">
@@ -693,6 +702,12 @@
       <Filter>module\poll\include</Filter>
     </ClInclude>
     <ClInclude Include="module\struct\include\smq.h">
+      <Filter>module\struct\include</Filter>
+    </ClInclude>
+    <ClInclude Include="module\poll\include\socket_message.h">
+      <Filter>module\poll\include</Filter>
+    </ClInclude>
+    <ClInclude Include="module\struct\include\recvmq.h">
       <Filter>module\struct\include</Filter>
     </ClInclude>
   </ItemGroup>

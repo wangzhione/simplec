@@ -184,7 +184,7 @@ extern int socket_sendto(socket_t s, const void * buf, int len, int flags, const
 // socket_bind		- 端口绑定返回绑定好的 socket fd, 失败返回 INVALID_SOCKET or PF_INET PF_INET6
 // socket_listen	- 端口监听返回监听好的 socket fd.
 //
-extern socket_t socket_bind(const char * host, uint16_t port, int protocol, int * family);
+extern socket_t socket_bind(const char * host, uint16_t port, uint8_t protocol, int * family);
 extern socket_t socket_listen(const char * host, uint16_t port);
 
 //

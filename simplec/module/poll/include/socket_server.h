@@ -26,39 +26,39 @@ struct smessage {
 typedef struct smessage * smessage_t;
 
 extern sserver_t sserver_create(void);
-extern void sserver_delete(sserver_t server);
-extern int sserver_poll(sserver_t server, smessage_t result, int * more);
+extern void sserver_delete(sserver_t ss);
+extern int sserver_poll(sserver_t ss, smessage_t result, int * more);
 
-extern void sserver_exit(sserver_t server);
-extern void sserver_close(sserver_t server, uintptr_t opaque, int id);
-extern void sserver_shutdown(sserver_t server, uintptr_t opaque, int id);
-extern void sserver_start(sserver_t server, uintptr_t opaque, int id);
+extern void sserver_exit(sserver_t ss);
+extern void sserver_close(sserver_t ss, uintptr_t opaque, int id);
+extern void sserver_shutdown(sserver_t ss, uintptr_t opaque, int id);
+extern void sserver_start(sserver_t ss, uintptr_t opaque, int id);
 
 // return -1 when error
-extern int sserver_send(sserver_t server, int id, const void * buffer, int sz);
-extern int sserver_send_lowpriority(sserver_t server, int id, const void * buffer, int sz);
+extern int sserver_send(sserver_t ss, int id, const void * buffer, int sz);
+extern int sserver_send_lowpriority(sserver_t ss, int id, const void * buffer, int sz);
 
 // ctrl command below returns id
-extern int sserver_listen(sserver_t server, uintptr_t opaque, const char * addr, uint16_t port);
-extern int sserver_connect(sserver_t server, uintptr_t opaque, const char * addr, uint16_t port);
-extern int sserver_bind(sserver_t server, uintptr_t opaque, socket_t fd);
+extern int sserver_listen(sserver_t ss, uintptr_t opaque, const char * addr, uint16_t port);
+extern int sserver_connect(sserver_t ss, uintptr_t opaque, const char * addr, uint16_t port);
+extern int sserver_bind(sserver_t ss, uintptr_t opaque, socket_t fd);
 
 // for tcp
-extern void sserver_nodelay(sserver_t server, int id);
+extern void sserver_nodelay(sserver_t ss, int id);
 
 
-typedef uint8_t * saddrudp_t;
+typedef uint8_t * udpaddr_t;
 
 // create an udp socket handle, attach opaque with it . udp socket don't need call sserver_start to recv message
 // if port != 0, bind the socket . if addr == NULL, bind ipv4 0.0.0.0 . If you want to use ipv6, addr can be "::" and port 0.
-extern int sserver_udp(sserver_t server, uintptr_t opaque, const char * addr, uint16_t port);
+extern int sserver_udp(sserver_t ss, uintptr_t opaque, const char * addr, uint16_t port);
 // set default dest address, return 0 when success
-extern int sserver_udp_connect(sserver_t server, int id, const char * addr, uint16_t port);
+extern int sserver_udp_connect(sserver_t ss, int id, const char * addr, uint16_t port);
 // If the socket_udp_address is NULL, use last call sserver_udp_connect address instead
 // You can also use sserver_send 
-extern int sserver_udp_send(sserver_t server, int id, const saddrudp_t address, const void * buffer, int sz);
+extern int sserver_udp_send(sserver_t ss, int id, const udpaddr_t udpaddr, const void * buffer, int sz);
 // extract the address of the message, smessage_t  should be SSERVER_UDP
-extern const saddrudp_t sserver_udp_address(sserver_t server, smessage_t msg, int * addrsz);
+extern const udpaddr_t sserver_udp_address(sserver_t ss, smessage_t msg, int * addrsz);
 
 struct sinterface {
 	int (* size)(void * uobj);
@@ -67,6 +67,6 @@ struct sinterface {
 };
 
 // if you send package sz == -1, use soi.
-extern void sserver_userobject(sserver_t server, struct sinterface * soi);
+extern void sserver_userobject(sserver_t ss, struct sinterface * soi);
 
 #endif // !_H_SIMPLEC_SOCKET_SERVER
