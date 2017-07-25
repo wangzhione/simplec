@@ -36,8 +36,8 @@ url_encode(const char * s, int len, int * nlen) {
 			(c > 'Z' && c < 'a' && c != '_') ||
 			(c > 'z')) {
 			to[0] = '%';
-			to[1] = _HEXA(c);
-			to[2] = _HEXB(c);
+			to[1] = (uint8_t)"0123456789ABCDEF"[c >> 4];
+			to[2] = (uint8_t)"0123456789ABCDEF"[c & 15];
 			to += 3;
 			continue;
 		}

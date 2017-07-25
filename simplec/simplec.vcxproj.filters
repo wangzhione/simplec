@@ -64,9 +64,6 @@
     <Filter Include="extern\pthread\include">
       <UniqueIdentifier>{e8ee71f9-96bd-44d8-a9be-de81b3199888}</UniqueIdentifier>
     </Filter>
-    <Filter Include="extern\pthread\dll">
-      <UniqueIdentifier>{a1a23c0a-3f45-4462-a041-276f90e1382e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="extern\pthread\lib">
       <UniqueIdentifier>{c2fe23d9-92e6-4d7d-99b5-a4834c179797}</UniqueIdentifier>
     </Filter>
@@ -81,21 +78,6 @@
     </Filter>
     <Filter Include="extern\curl\lib">
       <UniqueIdentifier>{55fcf159-4056-4cba-8073-19f7c1eb62bf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="extern\openssl">
-      <UniqueIdentifier>{fe8ad525-c6a5-4f0f-acb2-0e7562832542}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="extern\openssl\include">
-      <UniqueIdentifier>{a62fe68c-b7e6-44e0-b397-1954ee273781}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="extern\openssl\include\openssl">
-      <UniqueIdentifier>{7e5e42aa-2fb2-4587-b702-39fcd6f61b64}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="extern\openssl\lib">
-      <UniqueIdentifier>{6f1287d9-9ef8-422a-bd79-34c871a70919}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="extern\openssl\dll">
-      <UniqueIdentifier>{56db6bd6-9589-417e-aa60-45a1c0d0dfb2}</UniqueIdentifier>
     </Filter>
     <Filter Include="module\poll">
       <UniqueIdentifier>{e190c507-011d-4ebd-b11e-089be0ecc9e5}</UniqueIdentifier>
@@ -143,9 +125,6 @@
     </ClCompile>
     <ClCompile Include="main\main.c">
       <Filter>main</Filter>
-    </ClCompile>
-    <ClCompile Include="module\schead\scalloc.c">
-      <Filter>module\schead</Filter>
     </ClCompile>
     <ClCompile Include="module\schead\scrwlock.c">
       <Filter>module\schead</Filter>
@@ -249,9 +228,6 @@
     <ClCompile Include="extern\curl\httputil.c">
       <Filter>extern\curl</Filter>
     </ClCompile>
-    <ClCompile Include="extern\openssl\md5util.c">
-      <Filter>extern\openssl</Filter>
-    </ClCompile>
     <ClCompile Include="test\test_httputil.c">
       <Filter>test</Filter>
     </ClCompile>
@@ -297,9 +273,6 @@
     <ClCompile Include="test\test_socket_server.c">
       <Filter>test</Filter>
     </ClCompile>
-    <ClCompile Include="module\struct\smq.c">
-      <Filter>module\struct</Filter>
-    </ClCompile>
     <ClCompile Include="module\poll\socket_message.c">
       <Filter>module\poll</Filter>
     </ClCompile>
@@ -308,6 +281,9 @@
     </ClCompile>
     <ClCompile Include="test\test_recvmq.c">
       <Filter>test</Filter>
+    </ClCompile>
+    <ClCompile Include="module\schead\md5util.c">
+      <Filter>module\schead</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -328,9 +304,6 @@
     </ClInclude>
     <ClInclude Include="module\service\include\sctimer.h">
       <Filter>module\service\include</Filter>
-    </ClInclude>
-    <ClInclude Include="module\schead\include\scalloc.h">
-      <Filter>module\schead\include</Filter>
     </ClInclude>
     <ClInclude Include="module\schead\include\scrwlock.h">
       <Filter>module\schead\include</Filter>
@@ -416,263 +389,8 @@
     <ClInclude Include="extern\pthread\include\semaphore.h">
       <Filter>extern\pthread\include</Filter>
     </ClInclude>
-    <ClInclude Include="extern\curl\include\curl\curl.h">
-      <Filter>extern\curl\include\curl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\curl\include\curl\curlbuild.h">
-      <Filter>extern\curl\include\curl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\curl\include\curl\curlrules.h">
-      <Filter>extern\curl\include\curl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\curl\include\curl\curlver.h">
-      <Filter>extern\curl\include\curl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\curl\include\curl\easy.h">
-      <Filter>extern\curl\include\curl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\curl\include\curl\mprintf.h">
-      <Filter>extern\curl\include\curl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\curl\include\curl\multi.h">
-      <Filter>extern\curl\include\curl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\curl\include\curl\stdcheaders.h">
-      <Filter>extern\curl\include\curl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\curl\include\curl\system.h">
-      <Filter>extern\curl\include\curl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\curl\include\curl\typecheck-gcc.h">
-      <Filter>extern\curl\include\curl</Filter>
-    </ClInclude>
     <ClInclude Include="extern\curl\include\httputil.h">
       <Filter>extern\curl\include</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\openssl\include\openssl\__DECC_INCLUDE_EPILOGUE.H">
-      <Filter>extern\openssl\include\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\openssl\include\openssl\__DECC_INCLUDE_PROLOGUE.H">
-      <Filter>extern\openssl\include\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\openssl\include\openssl\aes.h">
-      <Filter>extern\openssl\include\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\openssl\include\openssl\asn1.h">
-      <Filter>extern\openssl\include\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\openssl\include\openssl\asn1_mac.h">
-      <Filter>extern\openssl\include\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\openssl\include\openssl\asn1t.h">
-      <Filter>extern\openssl\include\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\openssl\include\openssl\async.h">
-      <Filter>extern\openssl\include\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\openssl\include\openssl\bio.h">
-      <Filter>extern\openssl\include\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\openssl\include\openssl\blowfish.h">
-      <Filter>extern\openssl\include\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\openssl\include\openssl\bn.h">
-      <Filter>extern\openssl\include\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\openssl\include\openssl\buffer.h">
-      <Filter>extern\openssl\include\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\openssl\include\openssl\camellia.h">
-      <Filter>extern\openssl\include\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\openssl\include\openssl\cast.h">
-      <Filter>extern\openssl\include\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\openssl\include\openssl\cmac.h">
-      <Filter>extern\openssl\include\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\openssl\include\openssl\cms.h">
-      <Filter>extern\openssl\include\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\openssl\include\openssl\comp.h">
-      <Filter>extern\openssl\include\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\openssl\include\openssl\conf.h">
-      <Filter>extern\openssl\include\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\openssl\include\openssl\conf_api.h">
-      <Filter>extern\openssl\include\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\openssl\include\openssl\crypto.h">
-      <Filter>extern\openssl\include\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\openssl\include\openssl\ct.h">
-      <Filter>extern\openssl\include\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\openssl\include\openssl\des.h">
-      <Filter>extern\openssl\include\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\openssl\include\openssl\dh.h">
-      <Filter>extern\openssl\include\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\openssl\include\openssl\dsa.h">
-      <Filter>extern\openssl\include\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\openssl\include\openssl\dtls1.h">
-      <Filter>extern\openssl\include\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\openssl\include\openssl\e_os2.h">
-      <Filter>extern\openssl\include\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\openssl\include\openssl\ebcdic.h">
-      <Filter>extern\openssl\include\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\openssl\include\openssl\ec.h">
-      <Filter>extern\openssl\include\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\openssl\include\openssl\ecdh.h">
-      <Filter>extern\openssl\include\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\openssl\include\openssl\ecdsa.h">
-      <Filter>extern\openssl\include\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\openssl\include\openssl\engine.h">
-      <Filter>extern\openssl\include\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\openssl\include\openssl\err.h">
-      <Filter>extern\openssl\include\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\openssl\include\openssl\evp.h">
-      <Filter>extern\openssl\include\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\openssl\include\openssl\hmac.h">
-      <Filter>extern\openssl\include\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\openssl\include\openssl\idea.h">
-      <Filter>extern\openssl\include\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\openssl\include\openssl\kdf.h">
-      <Filter>extern\openssl\include\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\openssl\include\openssl\lhash.h">
-      <Filter>extern\openssl\include\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\openssl\include\openssl\md2.h">
-      <Filter>extern\openssl\include\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\openssl\include\openssl\md4.h">
-      <Filter>extern\openssl\include\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\openssl\include\openssl\md5.h">
-      <Filter>extern\openssl\include\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\openssl\include\openssl\mdc2.h">
-      <Filter>extern\openssl\include\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\openssl\include\openssl\modes.h">
-      <Filter>extern\openssl\include\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\openssl\include\openssl\obj_mac.h">
-      <Filter>extern\openssl\include\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\openssl\include\openssl\objects.h">
-      <Filter>extern\openssl\include\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\openssl\include\openssl\ocsp.h">
-      <Filter>extern\openssl\include\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\openssl\include\openssl\opensslconf.h">
-      <Filter>extern\openssl\include\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\openssl\include\openssl\opensslv.h">
-      <Filter>extern\openssl\include\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\openssl\include\openssl\ossl_typ.h">
-      <Filter>extern\openssl\include\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\openssl\include\openssl\pem.h">
-      <Filter>extern\openssl\include\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\openssl\include\openssl\pem2.h">
-      <Filter>extern\openssl\include\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\openssl\include\openssl\pkcs7.h">
-      <Filter>extern\openssl\include\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\openssl\include\openssl\pkcs12.h">
-      <Filter>extern\openssl\include\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\openssl\include\openssl\rand.h">
-      <Filter>extern\openssl\include\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\openssl\include\openssl\rc2.h">
-      <Filter>extern\openssl\include\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\openssl\include\openssl\rc4.h">
-      <Filter>extern\openssl\include\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\openssl\include\openssl\rc5.h">
-      <Filter>extern\openssl\include\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\openssl\include\openssl\ripemd.h">
-      <Filter>extern\openssl\include\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\openssl\include\openssl\rsa.h">
-      <Filter>extern\openssl\include\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\openssl\include\openssl\safestack.h">
-      <Filter>extern\openssl\include\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\openssl\include\openssl\seed.h">
-      <Filter>extern\openssl\include\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\openssl\include\openssl\sha.h">
-      <Filter>extern\openssl\include\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\openssl\include\openssl\srp.h">
-      <Filter>extern\openssl\include\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\openssl\include\openssl\srtp.h">
-      <Filter>extern\openssl\include\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\openssl\include\openssl\ssl.h">
-      <Filter>extern\openssl\include\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\openssl\include\openssl\ssl2.h">
-      <Filter>extern\openssl\include\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\openssl\include\openssl\ssl3.h">
-      <Filter>extern\openssl\include\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\openssl\include\openssl\stack.h">
-      <Filter>extern\openssl\include\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\openssl\include\openssl\tls1.h">
-      <Filter>extern\openssl\include\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\openssl\include\openssl\ts.h">
-      <Filter>extern\openssl\include\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\openssl\include\openssl\txt_db.h">
-      <Filter>extern\openssl\include\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\openssl\include\openssl\ui.h">
-      <Filter>extern\openssl\include\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\openssl\include\openssl\whrlpool.h">
-      <Filter>extern\openssl\include\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\openssl\include\openssl\x509.h">
-      <Filter>extern\openssl\include\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\openssl\include\openssl\x509_vfy.h">
-      <Filter>extern\openssl\include\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\openssl\include\openssl\x509v3.h">
-      <Filter>extern\openssl\include\openssl</Filter>
-    </ClInclude>
-    <ClInclude Include="extern\openssl\include\md5util.h">
-      <Filter>extern\openssl\include</Filter>
     </ClInclude>
     <ClInclude Include="module\struct\include\vlist.h">
       <Filter>module\struct\include</Filter>
@@ -701,14 +419,38 @@
     <ClInclude Include="module\poll\include\socket_server.h">
       <Filter>module\poll\include</Filter>
     </ClInclude>
-    <ClInclude Include="module\struct\include\smq.h">
-      <Filter>module\struct\include</Filter>
-    </ClInclude>
     <ClInclude Include="module\poll\include\socket_message.h">
       <Filter>module\poll\include</Filter>
     </ClInclude>
     <ClInclude Include="module\struct\include\recvmq.h">
       <Filter>module\struct\include</Filter>
+    </ClInclude>
+    <ClInclude Include="module\schead\include\md5util.h">
+      <Filter>module\schead\include</Filter>
+    </ClInclude>
+    <ClInclude Include="extern\curl\include\curl\curl.h">
+      <Filter>extern\curl\include\curl</Filter>
+    </ClInclude>
+    <ClInclude Include="extern\curl\include\curl\curlver.h">
+      <Filter>extern\curl\include\curl</Filter>
+    </ClInclude>
+    <ClInclude Include="extern\curl\include\curl\easy.h">
+      <Filter>extern\curl\include\curl</Filter>
+    </ClInclude>
+    <ClInclude Include="extern\curl\include\curl\mprintf.h">
+      <Filter>extern\curl\include\curl</Filter>
+    </ClInclude>
+    <ClInclude Include="extern\curl\include\curl\multi.h">
+      <Filter>extern\curl\include\curl</Filter>
+    </ClInclude>
+    <ClInclude Include="extern\curl\include\curl\stdcheaders.h">
+      <Filter>extern\curl\include\curl</Filter>
+    </ClInclude>
+    <ClInclude Include="extern\curl\include\curl\system.h">
+      <Filter>extern\curl\include\curl</Filter>
+    </ClInclude>
+    <ClInclude Include="extern\curl\include\curl\typecheck-gcc.h">
+      <Filter>extern\curl\include\curl</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -724,15 +466,6 @@
     <None Include="config\config.ini">
       <Filter>config</Filter>
     </None>
-    <None Include="extern\openssl\dll\libcrypto-1_1.dll">
-      <Filter>extern\openssl\dll</Filter>
-    </None>
-    <None Include="extern\openssl\dll\libssl-1_1.dll">
-      <Filter>extern\openssl\dll</Filter>
-    </None>
-    <None Include="extern\pthread\dll\pthread_dll.dll">
-      <Filter>extern\pthread\dll</Filter>
-    </None>
     <None Include="test\config\winerror.h.data">
       <Filter>test\config</Filter>
     </None>
@@ -746,17 +479,11 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
-    <Library Include="extern\curl\lib\libcurl_a.lib">
-      <Filter>extern\curl\lib</Filter>
-    </Library>
-    <Library Include="extern\openssl\lib\libcrypto32MT.lib">
-      <Filter>extern\openssl\lib</Filter>
-    </Library>
-    <Library Include="extern\openssl\lib\libssl32MT.lib">
-      <Filter>extern\openssl\lib</Filter>
-    </Library>
-    <Library Include="extern\pthread\lib\pthread_dll.lib">
+    <Library Include="extern\pthread\lib\pthread_lib.lib">
       <Filter>extern\pthread\lib</Filter>
+    </Library>
+    <Library Include="extern\curl\lib\libcurl.lib">
+      <Filter>extern\curl\lib</Filter>
     </Library>
   </ItemGroup>
 </Project>

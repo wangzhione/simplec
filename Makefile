@@ -7,8 +7,6 @@ MAIN_DIR		?= main
 BODY_DIR		?= main/body
 
 CURL_DIR		?= extern/curl
-OPENSSL_DIR		?= extern/openssl
-PTHREAD_DIR		?= extern/pthread
 
 IOP_DIR			?= module/iop
 POLL_DIR		?= module/poll
@@ -29,7 +27,7 @@ OUT				?= exe
 # IINC		: -I 需要导入的include 目录
 # SRCC		: 所有 .c 文件
 #
-DIRS	=	$(CURL_DIR) $(OPENSSL_DIR) $(IOP_DIR) $(COLOG_DIR)\
+DIRS	=	$(BODY_DIR) $(CURL_DIR) $(IOP_DIR) $(COLOG_DIR)\
 			$(SCHEAD_DIR) $(STRUCT_DIR) $(SERVICE_DIR) $(POLL_DIR)
 
 IINC	=	$(foreach v, $(DIRS), -I$(SRC_PATH)/$(v)/include)
@@ -46,7 +44,7 @@ TESTE	=	$(foreach v, $(TESTC), $(notdir $(basename $(v))).$(OUT))
 # 全局编译的设置
 #
 CC		= gcc
-LIB 	= -lpthread -lm -lssl -lcurl
+LIB 	= -lpthread -lm -lcurl
 CFLAGS 	= -g -O2 -Wall -Wno-unused-result -std=gnu11
 
 DEF		= -D_HAVE_EPOLL

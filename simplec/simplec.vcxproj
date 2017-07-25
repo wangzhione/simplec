@@ -12,7 +12,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="extern\curl\httputil.c" />
-    <ClCompile Include="extern\openssl\md5util.c" />
     <ClCompile Include="main\main.c" />
     <ClCompile Include="main\simplec.c" />
     <ClCompile Include="module\colog\plog.c" />
@@ -25,9 +24,9 @@
     <ClCompile Include="module\poll\socket_message.c" />
     <ClCompile Include="module\poll\socket_poll.c" />
     <ClCompile Include="module\poll\socket_server.c" />
+    <ClCompile Include="module\schead\md5util.c" />
     <ClCompile Include="module\schead\sciconv.c" />
     <ClCompile Include="module\schead\scjson.c" />
-    <ClCompile Include="module\schead\scalloc.c" />
     <ClCompile Include="module\schead\sccsv.c" />
     <ClCompile Include="module\schead\schead.c" />
     <ClCompile Include="module\schead\scpipe.c" />
@@ -46,7 +45,6 @@
     <ClCompile Include="module\struct\objs.c" />
     <ClCompile Include="module\struct\rbtree.c" />
     <ClCompile Include="module\struct\mq.c" />
-    <ClCompile Include="module\struct\smq.c" />
     <ClCompile Include="module\struct\tree.c" />
     <ClCompile Include="module\struct\tstr.c" />
     <ClCompile Include="module\struct\vlist.c" />
@@ -82,8 +80,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="extern\curl\include\curl\curl.h" />
-    <ClInclude Include="extern\curl\include\curl\curlbuild.h" />
-    <ClInclude Include="extern\curl\include\curl\curlrules.h" />
     <ClInclude Include="extern\curl\include\curl\curlver.h" />
     <ClInclude Include="extern\curl\include\curl\easy.h" />
     <ClInclude Include="extern\curl\include\curl\mprintf.h" />
@@ -92,81 +88,6 @@
     <ClInclude Include="extern\curl\include\curl\system.h" />
     <ClInclude Include="extern\curl\include\curl\typecheck-gcc.h" />
     <ClInclude Include="extern\curl\include\httputil.h" />
-    <ClInclude Include="extern\openssl\include\md5util.h" />
-    <ClInclude Include="extern\openssl\include\openssl\aes.h" />
-    <ClInclude Include="extern\openssl\include\openssl\asn1.h" />
-    <ClInclude Include="extern\openssl\include\openssl\asn1t.h" />
-    <ClInclude Include="extern\openssl\include\openssl\asn1_mac.h" />
-    <ClInclude Include="extern\openssl\include\openssl\async.h" />
-    <ClInclude Include="extern\openssl\include\openssl\bio.h" />
-    <ClInclude Include="extern\openssl\include\openssl\blowfish.h" />
-    <ClInclude Include="extern\openssl\include\openssl\bn.h" />
-    <ClInclude Include="extern\openssl\include\openssl\buffer.h" />
-    <ClInclude Include="extern\openssl\include\openssl\camellia.h" />
-    <ClInclude Include="extern\openssl\include\openssl\cast.h" />
-    <ClInclude Include="extern\openssl\include\openssl\cmac.h" />
-    <ClInclude Include="extern\openssl\include\openssl\cms.h" />
-    <ClInclude Include="extern\openssl\include\openssl\comp.h" />
-    <ClInclude Include="extern\openssl\include\openssl\conf.h" />
-    <ClInclude Include="extern\openssl\include\openssl\conf_api.h" />
-    <ClInclude Include="extern\openssl\include\openssl\crypto.h" />
-    <ClInclude Include="extern\openssl\include\openssl\ct.h" />
-    <ClInclude Include="extern\openssl\include\openssl\des.h" />
-    <ClInclude Include="extern\openssl\include\openssl\dh.h" />
-    <ClInclude Include="extern\openssl\include\openssl\dsa.h" />
-    <ClInclude Include="extern\openssl\include\openssl\dtls1.h" />
-    <ClInclude Include="extern\openssl\include\openssl\ebcdic.h" />
-    <ClInclude Include="extern\openssl\include\openssl\ec.h" />
-    <ClInclude Include="extern\openssl\include\openssl\ecdh.h" />
-    <ClInclude Include="extern\openssl\include\openssl\ecdsa.h" />
-    <ClInclude Include="extern\openssl\include\openssl\engine.h" />
-    <ClInclude Include="extern\openssl\include\openssl\err.h" />
-    <ClInclude Include="extern\openssl\include\openssl\evp.h" />
-    <ClInclude Include="extern\openssl\include\openssl\e_os2.h" />
-    <ClInclude Include="extern\openssl\include\openssl\hmac.h" />
-    <ClInclude Include="extern\openssl\include\openssl\idea.h" />
-    <ClInclude Include="extern\openssl\include\openssl\kdf.h" />
-    <ClInclude Include="extern\openssl\include\openssl\lhash.h" />
-    <ClInclude Include="extern\openssl\include\openssl\md2.h" />
-    <ClInclude Include="extern\openssl\include\openssl\md4.h" />
-    <ClInclude Include="extern\openssl\include\openssl\md5.h" />
-    <ClInclude Include="extern\openssl\include\openssl\mdc2.h" />
-    <ClInclude Include="extern\openssl\include\openssl\modes.h" />
-    <ClInclude Include="extern\openssl\include\openssl\objects.h" />
-    <ClInclude Include="extern\openssl\include\openssl\obj_mac.h" />
-    <ClInclude Include="extern\openssl\include\openssl\ocsp.h" />
-    <ClInclude Include="extern\openssl\include\openssl\opensslconf.h" />
-    <ClInclude Include="extern\openssl\include\openssl\opensslv.h" />
-    <ClInclude Include="extern\openssl\include\openssl\ossl_typ.h" />
-    <ClInclude Include="extern\openssl\include\openssl\pem.h" />
-    <ClInclude Include="extern\openssl\include\openssl\pem2.h" />
-    <ClInclude Include="extern\openssl\include\openssl\pkcs12.h" />
-    <ClInclude Include="extern\openssl\include\openssl\pkcs7.h" />
-    <ClInclude Include="extern\openssl\include\openssl\rand.h" />
-    <ClInclude Include="extern\openssl\include\openssl\rc2.h" />
-    <ClInclude Include="extern\openssl\include\openssl\rc4.h" />
-    <ClInclude Include="extern\openssl\include\openssl\rc5.h" />
-    <ClInclude Include="extern\openssl\include\openssl\ripemd.h" />
-    <ClInclude Include="extern\openssl\include\openssl\rsa.h" />
-    <ClInclude Include="extern\openssl\include\openssl\safestack.h" />
-    <ClInclude Include="extern\openssl\include\openssl\seed.h" />
-    <ClInclude Include="extern\openssl\include\openssl\sha.h" />
-    <ClInclude Include="extern\openssl\include\openssl\srp.h" />
-    <ClInclude Include="extern\openssl\include\openssl\srtp.h" />
-    <ClInclude Include="extern\openssl\include\openssl\ssl.h" />
-    <ClInclude Include="extern\openssl\include\openssl\ssl2.h" />
-    <ClInclude Include="extern\openssl\include\openssl\ssl3.h" />
-    <ClInclude Include="extern\openssl\include\openssl\stack.h" />
-    <ClInclude Include="extern\openssl\include\openssl\tls1.h" />
-    <ClInclude Include="extern\openssl\include\openssl\ts.h" />
-    <ClInclude Include="extern\openssl\include\openssl\txt_db.h" />
-    <ClInclude Include="extern\openssl\include\openssl\ui.h" />
-    <ClInclude Include="extern\openssl\include\openssl\whrlpool.h" />
-    <ClInclude Include="extern\openssl\include\openssl\x509.h" />
-    <ClInclude Include="extern\openssl\include\openssl\x509v3.h" />
-    <ClInclude Include="extern\openssl\include\openssl\x509_vfy.h" />
-    <ClInclude Include="extern\openssl\include\openssl\__DECC_INCLUDE_EPILOGUE.H" />
-    <ClInclude Include="extern\openssl\include\openssl\__DECC_INCLUDE_PROLOGUE.H" />
     <ClInclude Include="extern\pthread\include\pthread.h" />
     <ClInclude Include="extern\pthread\include\sched.h" />
     <ClInclude Include="extern\pthread\include\semaphore.h" />
@@ -186,8 +107,8 @@
     <ClInclude Include="module\poll\include\socket_message.h" />
     <ClInclude Include="module\poll\include\socket_poll.h" />
     <ClInclude Include="module\poll\include\socket_server.h" />
+    <ClInclude Include="module\schead\include\md5util.h" />
     <ClInclude Include="module\schead\include\scjson.h" />
-    <ClInclude Include="module\schead\include\scalloc.h" />
     <ClInclude Include="module\schead\include\scatom.h" />
     <ClInclude Include="module\schead\include\sccsv.h" />
     <ClInclude Include="module\schead\include\schead.h" />
@@ -209,7 +130,6 @@
     <ClInclude Include="module\struct\include\objs.h" />
     <ClInclude Include="module\struct\include\rbtree.h" />
     <ClInclude Include="module\struct\include\mq.h" />
-    <ClInclude Include="module\struct\include\smq.h" />
     <ClInclude Include="module\struct\include\struct.h" />
     <ClInclude Include="module\struct\include\tree.h" />
     <ClInclude Include="module\struct\include\tstr.h" />
@@ -217,9 +137,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="config\config.ini" />
-    <None Include="extern\openssl\dll\libcrypto-1_1.dll" />
-    <None Include="extern\openssl\dll\libssl-1_1.dll" />
-    <None Include="extern\pthread\dll\pthread_dll.dll" />
     <None Include="test\config\destiny.csv" />
     <None Include="test\config\firefighting_rule.json" />
     <None Include="test\config\onetime.csv" />
@@ -230,10 +147,8 @@
     <Text Include="readme\helper.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Library Include="extern\curl\lib\libcurl_a.lib" />
-    <Library Include="extern\openssl\lib\libcrypto32MT.lib" />
-    <Library Include="extern\openssl\lib\libssl32MT.lib" />
-    <Library Include="extern\pthread\lib\pthread_dll.lib" />
+    <Library Include="extern\curl\lib\libcurl.lib" />
+    <Library Include="extern\pthread\lib\pthread_lib.lib" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{1F91FC48-7534-4CA9-9140-F2839158DA16}</ProjectGuid>
@@ -243,11 +158,11 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -262,25 +177,26 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(ProjectDir)main/body/include;$(ProjectDir)extern/pthread/include;$(ProjectDir)extern/curl/include;$(ProjectDir)extern/openssl/include;$(ProjectDir)module/schead/include;$(ProjectDir)module/struct/include;$(ProjectDir)module/service/include;$(ProjectDir)module/logic/include;$(ProjectDir)module/colog/include;$(ProjectDir)module/iop/include;$(ProjectDir)module/poll/include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)extern/pthread/lib;$(ProjectDir)extern/curl/lib;$(ProjectDir)extern/openssl/lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)main/body/include;$(ProjectDir)extern/pthread/include;$(ProjectDir)extern/curl/include;$(ProjectDir)module/schead/include;$(ProjectDir)module/struct/include;$(ProjectDir)module/service/include;$(ProjectDir)module/logic/include;$(ProjectDir)module/colog/include;$(ProjectDir)module/iop/include;$(ProjectDir)module/poll/include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)extern/pthread/lib;$(ProjectDir)extern/curl/lib;$(LibraryPath)</LibraryPath>
+    <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(ProjectDir)main/body/include;$(ProjectDir)extern/pthread/include;$(ProjectDir)extern/curl/include;$(ProjectDir)extern/openssl/include;$(ProjectDir)module/schead/include;$(ProjectDir)module/struct/include;$(ProjectDir)module/service/include;$(ProjectDir)module/logic/include;$(ProjectDir)module/colog/include;$(ProjectDir)module/iop/include;$(ProjectDir)module/poll/include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)module/pthread/lib;$(ProjectDir)extern/curl/lib;$(ProjectDir)extern/openssl/lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)main/body/include;$(ProjectDir)extern/pthread/include;$(ProjectDir)extern/curl/include;$(ProjectDir)module/schead/include;$(ProjectDir)module/struct/include;$(ProjectDir)module/service/include;$(ProjectDir)module/logic/include;$(ProjectDir)module/colog/include;$(ProjectDir)module/iop/include;$(ProjectDir)module/poll/include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)module/pthread/lib;$(ProjectDir)extern/curl/lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <PreprocessorDefinitions>_DEBUG;_HAVE_SELECT;CURL_STATICLIB;WIN32_LEAN_AND_MEAN;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;_WINSOCK_DEPRECATED_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;WIN32_LEAN_AND_MEAN;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;_WINSOCK_DEPRECATED_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <CompileAs>CompileAsC</CompileAs>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <DisableLanguageExtensions>false</DisableLanguageExtensions>
       <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>libcurl_a.lib;libssl32MT.lib;libcrypto32MT.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libcurl.lib;wldap32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
-      <AdditionalOptions>/ignore:4099 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/ignore:4099 /LTCG %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <PostBuildEvent>
       <Command>echo update directory $(TargetDir)config begin 
@@ -289,19 +205,14 @@ xcopy /D /S /E /Y $(ProjectDir)config $(TargetDir)config
 if not exist  $(TargetDir)test mkdir $(TargetDir)test
 if not exist  $(TargetDir)test\config mkdir $(TargetDir)test\config
 xcopy /D /S /E /Y $(ProjectDir)test\config $(TargetDir)test\config
-echo update directory $(TargetDir)config e n d
-
-echo update dll begin
-xcopy /D /S /E /Y $(ProjectDir)extern\pthread\dll $(TargetDir)
-xcopy /D /S /E /Y $(ProjectDir)extern\openssl\dll $(TargetDir)
-echo update dll e n d</Command>
+echo update directory $(TargetDir)config e n d</Command>
       <Message>复制必要的运行资源</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <FunctionLevelLinking>true</FunctionLevelLinking>
-      <PreprocessorDefinitions>_HAVE_SELECT;CURL_STATICLIB;WIN32_LEAN_AND_MEAN;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;_WINSOCK_DEPRECATED_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32_LEAN_AND_MEAN;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;_WINSOCK_DEPRECATED_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <CompileAs>CompileAsC</CompileAs>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
@@ -313,8 +224,8 @@ echo update dll e n d</Command>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <SubSystem>Console</SubSystem>
-      <AdditionalOptions>/ignore:4099 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>libcurl_a.lib;libssl32MT.lib;libcrypto32MT.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>/ignore:4099 /LTCG %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalDependencies>libcurl.lib;wldap32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>echo update directory $(TargetDir)config begin 
@@ -323,12 +234,7 @@ xcopy /D /S /E /Y $(ProjectDir)config $(TargetDir)config
 if not exist  $(TargetDir)test mkdir $(TargetDir)test
 if not exist  $(TargetDir)test\config mkdir $(TargetDir)test\config
 xcopy /D /S /E /Y $(ProjectDir)test\config $(TargetDir)test\config
-echo update directory $(TargetDir)config e n d
-
-echo update dll begin
-xcopy /D /S /E /Y $(ProjectDir)extern\pthread\dll $(TargetDir)
-xcopy /D /S /E /Y $(ProjectDir)extern\openssl\dll $(TargetDir)
-echo update dll e n d</Command>
+echo update directory $(TargetDir)config e n d</Command>
       <Message>复制必要的运行资源</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>

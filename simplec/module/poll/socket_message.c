@@ -1,5 +1,4 @@
-﻿#include <smq.h>
-#include <socket_message.h>
+﻿#include <socket_message.h>
 
 static sserver_t _server;
 

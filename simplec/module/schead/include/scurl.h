@@ -12,18 +12,6 @@
 // ('0' <= c && c <= '9')
 // ( c != '&' && c != '-' && c != '.' && c != '/' && c != ':' && c != '&' && c != '?' && c != '_')
 
-#ifndef _STR_HEX16
-//
-// 16进制使用的串操作
-// 1byte = 8bit = 0xa0 | 0xb
-// x : 必须是char or unsigned char
-//
-#define _STR_HEX16	"0123456789ABCDEF"
-#define _HEXA(x)	(unsigned char)_STR_HEX16[(unsigned char)(x) >> 4]
-#define _HEXB(x)	(unsigned char)_STR_HEX16[(unsigned char)(x) & 15]
-
-#endif // !_STR_HEX16
-
 //
 // url_encode - url 编码, 需要自己free
 // s		: url串

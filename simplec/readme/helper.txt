@@ -10,52 +10,44 @@
 	$(ProjectDir)main/body/include					--	框架入口外部业务处理头文件文件夹
 	$(ProjectDir)extern/pthread/include				--	框架内置的线程库头文件文件夹
 	$(ProjectDir)extern/curl/include				--	框架libcurl库头文件文件夹
-	$(ProjectDir)extern/openssl/include				--	框架libopenssl库头文件文件夹
 	$(ProjectDir)module/schead/include				--	框架帮助库头文件文件夹
 	$(ProjectDir)module/struct/include				--	框架数据结构头文件文件夹
 	$(ProjectDir)module/service/include				--	框架提供的辅助服务头文件文件夹
 	$(ProjectDir)module/colog/include				--	框架辅助日志业务头文件文件夹
 	$(ProjectDir)module/iop/include					--	框架网络IO文件文件夹
+	$(ProjectDir)module/poll/include				--	框架网络IO文件文件夹, 采用结构模式
 
 2. lib 库添加
 2.1 添加 pthread 模块lib 引用, 看 引用目录
-	$(ProjectDir)/pthread/lib
-	$(ProjectDir)/iconv/lib
+	$(ProjectDir)/extern/pthread/lib
+	$(ProjectDir)/extern/curl/lib
 
 2.2 对于 x64 附注
 	当前删掉了 x64 支持, 如果需要推荐自己弄弄, 或者联系我技术支持 csharpwz@outlook.com
 	以后默认都是 x86 的库
 
-3. dll 库的添加
-3.1 添加 dll 目前这个需要手工操作,目前不智能,VS 对C++支持的好缓慢, M$确实很坑
-	找到相应的 生成的exe目录下添加 对应的 dll, 
-
-	$(ProjectDir)/pthread/dll	-- 参照 https://github.com/GerHobbelt/pthread-win32
-
-4. 添加部分宏 C/C++ -> 预处理器 -> 预处理器定义
+3. 添加部分宏 C/C++ -> 预处理器 -> 预处理器定义
 	_DEBUG
-	_HAVE_SELECT
-	CURL_STATICLIB
 	WIN32_LEAN_AND_MEAN
 	_CRT_SECURE_NO_WARNINGS
 	_CRT_NONSTDC_NO_DEPRECATE
 	_WINSOCK_DEPRECATED_NO_WARNINGS
 
-5. 文件保存(文件->文件高级保存选项)直接采用UTF-8(带签名)格式保存
+4. 文件保存(文件->文件高级保存选项)直接采用UTF-8(带签名)格式保存
 	window 采用 > notepad++ convert | 安装自动转换插件
 	linux  采用 > enca -L zh_CN -x UTF-8 *
 	config 采用 > 环境而定
 
-6. 编译额外选项 
+5. 编译额外选项 
 	C/C++ -> 高级 -> 编译为 -> 编译为C代码
 	C/C++ -> 代码生成 -> 运行库 -> 多线程/MT
 
 	链接器 -> 系统 -> 子系统 -> 控制台
-	链接器 -> 输入 -> 附加依赖项 -> libcurl_a.lib
-	链接器 -> 输入 -> 附加依赖项 -> libssl32MT.lib
-	链接器 -> 输入 -> 附加依赖项 -> libcrypto32MT.lib
+	链接器 -> 输入 -> 附加依赖项 -> libcurl.lib
+	链接器 -> 输入 -> 附加依赖项 -> wldap32.lib
+	链接器 -> 命令行 -> /ignore:4099 /LTCG 
 
-7. test 单元测试, 规则
+6. test 单元测试, 规则
 	文件名 test_xxxx.c -> 构建 void test_xxxx() 函数
 
 	void test_xxxx() {
@@ -77,37 +69,26 @@
 	if not exist  $(TargetDir)test\config mkdir $(TargetDir)test\config
 	xcopy /D /S /E /Y $(ProjectDir)test\config $(TargetDir)test\config
 	echo update directory $(TargetDir)config e n d
-	
-	echo update dll begin
-	xcopy /D /S /E /Y $(ProjectDir)extern\pthread\dll $(TargetDir)
-	xcopy /D /S /E /Y $(ProjectDir)extern\openssl\dll $(TargetDir)
-	echo update dll e n d
 
 */
 
 /*
- 
- 附注: linux 编译有关处理
- 系统是 Best new Ubuntu + GCC (gcc (Ubuntu 6.3.0-12ubuntu2) 6.3.0 20170406)
-
- 依赖 libcurl http 处理库, libopenssl 安全加解密库
-
- a) libcurl
-
- sudo apt-get install libcurl4-openssl-dev
-
- b) libopenssl
-
- sudo apt-get install openssl
- sudo apt-get install libssl-dev
-
- 除了编译, 然后添加配置
-
- sudo vi /etc/ld.so.conf
- Shift + G
- i
- /usr/local/lib
-
- sudo ldconfig
+	附注: linux 编译有关处理
+	系统是 Best new Ubuntu + GCC (gcc (Ubuntu 6.3.0-12ubuntu2) 6.3.0 20170406)
+	
+	依赖 libcurl http 处理库, libopenssl 安全加解密库
+	
+	a) libcurl
+	
+	sudo apt-get install libcurl4-openssl-dev
+	
+	除了编译, 然后添加配置
+	
+	sudo vi /etc/ld.so.conf
+	Shift + G
+	i
+	/usr/local/lib
+	
+	sudo ldconfig
 
  */

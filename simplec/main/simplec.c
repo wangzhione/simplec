@@ -60,7 +60,7 @@ simplec_go(void) {
  */
 void 
 simplec_test(void) {
-	TEST_RUN(test_recvmq);
+	TEST_RUN(test_httputil);
 }
 
 #endif
