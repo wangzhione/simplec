@@ -9,18 +9,17 @@
     目前具备的功能如下:
     
     1) extern - 通用外部库(希望尽可能的少)
-        a) pthread      : POSIX线程库, window 采用的是 GerHobbelt/pthread-win32 最新版本编译
-        b) libcurl      : http 库, 下载类最新源码编译, window and linux
-        c) libssl       : openssl 加解密库, window and linux 最新源码编译
+        a) pthread      : POSIX线程库, winds 采用的是 GerHobbelt/pthread-win32 最新版本单独升级编译
+        b) libcurl      : http 库, 下载类最新源码编译, winds and linux
     
     2) module - 内部功能
         a) 单元测试, 可以参照 simplec 和 test 文件夹下
         b) 丰富高效的日志, 见 colog 文件下, 写了三种模型的日志轮子
         c) 精简的配置解析库 scconf.h
-        d) 快速的scjson.h 解析引擎, 比cJSON库好. 序列化方案, 自己插入
-        e) 跨平台的网络io, 基于 select<winds and linux> + epoll
+        d) 快速的 scjson.h 解析引擎, 比cJSON库好. 序列化方案, 自己插入
+        e) 跨平台的网络io's, 基于 select<winds and linux> + epoll + kqueue
         f) 内存监测, csv解析, 自旋锁, 读写锁, 时间业务, 中文加解码, 协程库...
-        g) 常用数据结构, string, array, tree, rbtree, list, queue, mq....
+        g) 常用数据结构, string, array, tree, rbtree, list, queue....
         ... ...
     
     ヽ(^_−)ﾉ  一切才刚刚开始 ~~
@@ -41,10 +40,6 @@ a) libcurl
 
 sudo apt-get install libcurl4-openssl-dev
 
-b) libopenssl
-
-sudo apt-get install openssl
-sudo apt-get install libssl-dev
 ```
 
     后面使用编译直接 make.
