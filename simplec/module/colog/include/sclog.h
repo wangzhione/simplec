@@ -62,7 +62,7 @@
 **
 ** mod		: 当前线程名称
 ** reqip	: 请求的ip
-** return	: Success_Base 表示正常, Error_Alloc内存分配错误
+** return	: SufBase 表示正常, ErrAlloc内存分配错误
 **/
 extern int sl_init(const char mod[_INT_LITTLE], const char reqip[_INT_LITTLE]);
 

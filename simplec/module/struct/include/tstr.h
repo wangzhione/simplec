@@ -26,7 +26,7 @@ typedef struct tstr * tstr_t;
 //-----------------------------------字符串相关的协助API -------------------------------
 
 //
-// 采用jshash算法,计算字符串返回后的hash值,碰撞率为80%
+// tstr_hash - 简易高效的hash函数, 碰撞概率 <= 4 / 5
 // str		: 字符串内容
 // return	: 返回计算后的hash值
 //
@@ -58,17 +58,17 @@ extern tstr_t tstr_freadend(const char * path);
 // 将c串str覆盖写入到path路径的文件中
 // path		: 文件路径
 // str		: c的串内容
-// return	: Success_Base | Error_Param | Error_Fd
+// return	: SufBase | ErrParam | ErrFd
 //
-extern flag_e tstr_fwrites(const char * path, const char * str);
+extern int tstr_fwrites(const char * path, const char * str);
 
 //
 // 将c串str写入到path路径的文件中末尾
 // path		: 文件路径
 // str		: c的串内容
-// return	: Success_Base | Error_Param | Error_Fd
+// return	: SufBase | ErrParam | ErrFd
 //
-extern flag_e tstr_fappends(const char * path, const char * str);
+extern int tstr_fappends(const char * path, const char * str);
 
 //-----------------------------------字符串相关的核心API -------------------------------
 

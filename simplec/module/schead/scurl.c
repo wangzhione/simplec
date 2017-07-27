@@ -81,7 +81,7 @@ url_decode(char s[], int len) {
 
 	DEBUG_CODE({
 		if (!s || !*s || len <= 0)
-			return Error_Param;
+			return ErrParam;
 	});
 
 	dest = data = s;

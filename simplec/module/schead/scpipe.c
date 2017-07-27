@@ -35,7 +35,7 @@ scpipe_recv(scpipe_t spie, char * data, int len) {
 	ssize_t lrecv = read(spie->recv, data, len);
 	if (lrecv < 0) {
 		// 不考虑信号中断
-		RETURN(Error_Base, "read is error = %ld", lrecv);
+		RETURN(ErrBase, "read is error = %ld", lrecv);
 	}
 	return (int)lrecv;
 }
@@ -44,7 +44,7 @@ int
 scpipe_send(scpipe_t spie, const char * data, int len) {
 	ssize_t lsend = write(spie->send, data, len);
 	if (lsend < 0) {
-		RETURN(Error_Base, "write is error = %ld", lsend);
+		RETURN(ErrBase, "write is error = %ld", lsend);
 	}
 	return (int)lsend;
 }
@@ -65,41 +65,41 @@ pipe(socket_t pipefd[2]) {
 
 	// 开启一个固定 socket
 	if ((s = socket_stream()) == INVALID_SOCKET) {
-		RETURN(Error_Base, "socket_stream s is error!");
+		RETURN(ErrBase, "socket_stream s is error!");
 	}
 	if (bind(s, (struct sockaddr *)&name, nlen) < 0) {
 		socket_close(s);
-		RETURN(Error_Base, "bind s is error!");
+		RETURN(ErrBase, "bind s is error!");
 	}
 	if (listen(s, SOMAXCONN) < 0) {
 		socket_close(s);
-		RETURN(Error_Base, "listen s is error!");
+		RETURN(ErrBase, "listen s is error!");
 	}
 	// 得到绑定的数据
 	if (getsockname(s, (struct sockaddr *)&name, &nlen) < 0) {
 		socket_close(s);
-		RETURN(Error_Base, "getsockname s is error!");
+		RETURN(ErrBase, "getsockname s is error!");
 	}
 
 	// 开始构建互相通信的socket
 	if ((pipefd[0] = socket_stream()) == INVALID_SOCKET) {
 		socket_close(s);
-		RETURN(Error_Base, "socket_stream pipefd[0] is error!");
+		RETURN(ErrBase, "socket_stream pipefd[0] is error!");
 	}
 
 	if (socket_connect(pipefd[0], &name) < 0) {
 		socket_close(s);
-		RETURN(Error_Base, "socket_connect pipefd[0] is error!");
+		RETURN(ErrBase, "socket_connect pipefd[0] is error!");
 	}
 	// 可以继续添加, 通信协议来避免一些意外
 	if ((pipefd[1] = socket_accept(s, &name, &nlen)) == INVALID_SOCKET) {
 		socket_close(s);
 		socket_close(pipefd[0]);
-		RETURN(Error_Base, "socket_accept sendfd is error!");
+		RETURN(ErrBase, "socket_accept sendfd is error!");
 	}
 
 	socket_close(s);
-	return Success_Base;
+	return SufBase;
 }
 
 struct scpipe {
@@ -139,13 +139,13 @@ scpipe_recv(struct scpipe * spie, char * data, int len) {
 	DWORD lrecv = 0;
 	BOOL ret = PeekNamedPipe(spie->recv, NULL, 0, NULL, &lrecv, NULL);
 	if (!ret || lrecv <= 0) {
-		RETURN(Error_Empty, "PeekNamedPipe recv empty error!");
+		RETURN(ErrEmpty, "PeekNamedPipe recv empty error!");
 	}
 
 	// 开始读取数据
 	ret = ReadFile(spie->recv, data, len, &lrecv, NULL);
 	if (!ret) {
-		RETURN(Error_Base, "ReadFile is error!");
+		RETURN(ErrBase, "ReadFile is error!");
 	}
 
 	return (int)lrecv;
@@ -155,7 +155,7 @@ int
 scpipe_send(struct scpipe * spie, const char * data, int len) {
 	DWORD lsend = 0;
 	if (WriteFile(spie->send, data, len, &lsend, NULL)) {
-		RETURN(Error_Base, "WriteFile is error!");
+		RETURN(ErrBase, "WriteFile is error!");
 	}
 	return (int)lsend;
 }

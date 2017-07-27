@@ -13,9 +13,9 @@ typedef struct threads * threads_t;
 // async_run - 开启一个自销毁的线程 运行 run
 // run		: 运行的主体
 // arg		: run的参数
-// return	: >= Success_Base 表示成功
+// return	: >= SufBase 表示成功
 //
-extern int async_run_(die_f run, void * arg);
+int async_run_(die_f run, void * arg);
 #define async_run(run, arg) async_run_((die_f)(run), arg)
 
 //

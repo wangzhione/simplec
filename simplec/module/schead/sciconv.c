@@ -106,7 +106,7 @@ static int _utf8tounicode(char * utf8char, int * unicode, int * len, int leaveLe
 }
 
 //
-// si_gbktoutf8 - 将字符串数组in, 转成utf8编码
+// si_gbktoutf8 - 将待转换字符串数组, 转成utf8编码
 // strgbk	: gbk字符数组
 // strutf8	: utf8保存的字符数组
 // cap		: strgbk字符数组最多能够保存多大的串
@@ -161,7 +161,7 @@ si_gbktoutf8s(char strgbk[], size_t cap) {
 }
 
 //
-// si_utf8togbk - 将字符串数组in, 转成gbk编码
+// si_utf8togbk - 将待转换字符串数组, 转成gbk编码
 // strutf8	: utf8字符数组
 // strgbk	: gbk输出数组
 // return	: void

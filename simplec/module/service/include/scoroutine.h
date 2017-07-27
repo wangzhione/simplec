@@ -14,7 +14,7 @@ typedef struct scomng * scomng_t;
 // sco		: 创建开启的协程总对象
 // arg		: 用户创建协程的时候传入的参数
 //
-typedef void(*sco_f)(scomng_t sco, void * arg);
+typedef void (* sco_f)(scomng_t sco, void * arg);
 
 //
 // sco_open - 开启协程系统函数, 并返回创建的协程管理器

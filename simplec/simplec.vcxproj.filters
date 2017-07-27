@@ -90,9 +90,6 @@
     <ClCompile Include="module\schead\schead.c">
       <Filter>module\schead</Filter>
     </ClCompile>
-    <ClCompile Include="module\struct\tree.c">
-      <Filter>module\struct</Filter>
-    </ClCompile>
     <ClCompile Include="module\struct\list.c">
       <Filter>module\struct</Filter>
     </ClCompile>
@@ -176,9 +173,6 @@
     </ClCompile>
     <ClCompile Include="test\test_clog.c">
       <Filter>test</Filter>
-    </ClCompile>
-    <ClCompile Include="module\colog\scconf.c">
-      <Filter>module\colog</Filter>
     </ClCompile>
     <ClCompile Include="module\colog\clog.c">
       <Filter>module\colog</Filter>
@@ -285,6 +279,21 @@
     <ClCompile Include="module\schead\md5util.c">
       <Filter>module\schead</Filter>
     </ClCompile>
+    <ClCompile Include="module\schead\scconf.c">
+      <Filter>module\schead</Filter>
+    </ClCompile>
+    <ClCompile Include="module\schead\scrand.c">
+      <Filter>module\schead</Filter>
+    </ClCompile>
+    <ClCompile Include="test\test_scrand.c">
+      <Filter>test</Filter>
+    </ClCompile>
+    <ClCompile Include="module\struct\dict.c">
+      <Filter>module\struct</Filter>
+    </ClCompile>
+    <ClCompile Include="test\test_dict.c">
+      <Filter>test</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="module\schead\include\schead.h">
@@ -292,9 +301,6 @@
     </ClInclude>
     <ClInclude Include="module\schead\include\scatom.h">
       <Filter>module\schead\include</Filter>
-    </ClInclude>
-    <ClInclude Include="module\struct\include\tree.h">
-      <Filter>module\struct\include</Filter>
     </ClInclude>
     <ClInclude Include="module\struct\include\list.h">
       <Filter>module\struct\include</Filter>
@@ -334,9 +340,6 @@
     </ClInclude>
     <ClInclude Include="module\service\include\scrunloop.h">
       <Filter>module\service\include</Filter>
-    </ClInclude>
-    <ClInclude Include="module\colog\include\scconf.h">
-      <Filter>module\colog\include</Filter>
     </ClInclude>
     <ClInclude Include="module\colog\include\clog.h">
       <Filter>module\colog\include</Filter>
@@ -451,6 +454,15 @@
     </ClInclude>
     <ClInclude Include="extern\curl\include\curl\typecheck-gcc.h">
       <Filter>extern\curl\include\curl</Filter>
+    </ClInclude>
+    <ClInclude Include="module\schead\include\scconf.h">
+      <Filter>module\schead\include</Filter>
+    </ClInclude>
+    <ClInclude Include="module\schead\include\scrand.h">
+      <Filter>module\schead\include</Filter>
+    </ClInclude>
+    <ClInclude Include="module\struct\include\dict.h">
+      <Filter>module\struct\include</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

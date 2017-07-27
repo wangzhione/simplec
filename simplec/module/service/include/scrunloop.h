@@ -11,7 +11,7 @@ typedef struct srl * srl_t;
 // die		: srl_push msg 的销毁函数
 // return	: void 
 //
-extern srl_t srl_create_(die_f run, die_f die);
+srl_t srl_create_(die_f run, die_f die);
 #define srl_create(run, die) srl_create_((die_f)(run), (die_f)(die))
 
 //

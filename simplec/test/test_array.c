@@ -8,10 +8,10 @@ struct dict {
 };
 
 // 单独遍历函数
-static flag_e _dict_echo(struct dict * node, void * arg)
+static int _dict_echo(struct dict * node, void * arg)
 {
 	printf("[%s]	=> [%s]\n", node->key, node->value);
-	return Success_Base;
+	return SufBase;
 }
 
 // 比较函数

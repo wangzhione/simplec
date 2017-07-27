@@ -152,13 +152,13 @@ array_sort(array_t a, cmp_f compare) {
 /*
 * 数组进行遍历
 * a		: 可变数组对象
-* func		: 执行每个结点函数, typedef flag_e	(* each_f)(void * node, void * arg);
+* func		: 执行每个结点函数, typedef int	(* each_f)(void * node, void * arg);
 * arg		: 附加参数
 *			: 返回操作结果状态码
 */
-flag_e 
+int 
 array_each(array_t a, each_f func, void * arg) {
-	flag_e rt;
+	int rt;
 	unsigned char * s, * e;
 
 	assert(NULL != a && NULL != func);
@@ -167,10 +167,10 @@ array_each(array_t a, each_f func, void * arg) {
 	e = s + a->alloc * a->len;
 	while (s < e) {
 		rt = func(s, arg);
-		if (Success_Base != rt)
+		if (SufBase != rt)
 			return rt;
 		s += a->alloc;
 	}
 
-	return Success_Base;
+	return SufBase;
 }

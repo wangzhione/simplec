@@ -25,7 +25,7 @@ typedef struct ioptcp {
 // fconnect		: 当连接创建时候回调
 // fdestroy		: 退出时间的回调
 // ferror		: 错误的时候回调
-// return		: 成功返回>=0的id, 失败返回 -1 Error_Base
+// return		: 成功返回>=0的id, 失败返回 -1 ErrBase
 //
 extern int iop_add_ioptcp(iopbase_t base, 
 	const char * host, uint16_t port, uint32_t timeout,

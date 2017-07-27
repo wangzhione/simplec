@@ -36,7 +36,7 @@ void simplec_main(void) {
 void 
 simplec_go(void) {
 	// 得到配置的版本信息
-	const char * image = mconf_get("Image");;
+	const char * image = mcnf_get("Image");
 
 	// 打印简单信息
 	puts(image);
@@ -60,7 +60,8 @@ simplec_go(void) {
  */
 void 
 simplec_test(void) {
-	TEST_RUN(test_httputil);
+	TEST_RUN(test_dict);
+	TEST_RUN(test_scconf);
 }
 
 #endif

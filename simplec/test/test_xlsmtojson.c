@@ -90,22 +90,22 @@ csvtojson(const char* path) {
 	sccsv_t csv;
 	
 	if(!path || !*path) {
-		RETURN(Error_Param, "path is null!");
+		RETURN(ErrParam, "path is null!");
 	}
 	
 	// 继续判断后缀名
 	if((tarp = _csvtojsonpath(path)) == NULL ) {
-		RETURN(Error_Param, "path = %s is error!", path);
+		RETURN(ErrParam, "path = %s is error!", path);
 	}
 	// 这里开始打开文件, 并判断
 	if((csv = sccsv_create(path)) == NULL) {
 		free(tarp);
-		RETURN(Error_Fd, "sccsv_new %s is error!", path);
+		RETURN(ErrFd, "sccsv_new %s is error!", path);
 	}
 	if((json = fopen(tarp, "wb")) == NULL ) {
 		sccsv_delete(csv);
 		free(tarp);
-		RETURN(Error_Fd, "fopen %s wb is error!", tarp);
+		RETURN(ErrFd, "fopen %s wb is error!", tarp);
 	}
 	
 	// 到这里一切前戏都好了开始转换了
@@ -114,5 +114,5 @@ csvtojson(const char* path) {
 	fclose(json);
 	sccsv_delete(csv);
 	free(tarp);
-	return Success_Base;
+	return SufBase;
 }

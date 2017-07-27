@@ -8,7 +8,7 @@ struct func {
 };
 
 // thread_run 中 pthread 执行的实体
-static void * _run(struct func * func) {
+static inline void * _run(struct func * func) {
 	func->run(func->arg);
 	free(func);
 	return NULL;
@@ -18,7 +18,7 @@ static void * _run(struct func * func) {
 // async_run - 开启一个自销毁的线程 运行 run
 // run		: 运行的主体
 // arg		: run的参数
-// return	: >= Success_Base 表示成功
+// return	: >= SufBase 表示成功
 //
 int 
 async_run_(die_f run, void * arg) {
@@ -26,7 +26,7 @@ async_run_(die_f run, void * arg) {
 	pthread_attr_t attr;
 	struct func * func = malloc(sizeof(struct func));
 	if (NULL == func)
-		RETURN(Error_Alloc, "malloc sizeof(struct func) is error");
+		RETURN(ErrAlloc, "malloc sizeof(struct func) is error");
 
 	func->run = run;
 	func->arg = arg;
@@ -38,11 +38,11 @@ async_run_(die_f run, void * arg) {
 	if (pthread_create(&tid, &attr, (start_f)_run, func) < 0) {
 		free(func);
 		pthread_attr_destroy(&attr);
-		RETURN(Error_Base, "pthread_create error run, arg = %p | %p.", run, arg);
+		RETURN(ErrBase, "pthread_create error run, arg = %p | %p.", run, arg);
 	}
 
 	pthread_attr_destroy(&attr);
-	return Success_Base;
+	return SufBase;
 }
 
 // 任务链表 结构 和 构造

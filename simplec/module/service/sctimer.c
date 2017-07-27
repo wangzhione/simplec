@@ -103,12 +103,12 @@ st_add(int intval, die_f timer, void * arg) {
 	// 各种前戏操作
 	if (intval <= 0) {
 		timer(arg);
-		return Success_Base;
+		return SufBase;
 	}
 
 	now = _stnode_new(intval, timer, arg);
 	if (NULL == now) {
-		RETURN(Error_Alloc, "_new_stnode is error intval = %d.", intval);
+		RETURN(ErrAlloc, "_new_stnode is error intval = %d.", intval);
 	}
 
 	ATOM_LOCK(_st.lock); //核心添加模块 要等, 添加到链表, 看线程能否取消等
@@ -120,7 +120,7 @@ st_add(int intval, die_f timer, void * arg) {
 		int rt = pthread_create(&_st.tid, NULL, (start_f)_stlist_loop, &_st);
 		if (rt < 0) {
 			list_destroy(&_st.head);
-			RETURN(Error_Fd, "pthread_create is error!");
+			RETURN(ErrFd, "pthread_create is error!");
 		}
 		_st.status = true;
 		pthread_detach(_st.tid);

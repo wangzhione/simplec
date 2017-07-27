@@ -51,7 +51,7 @@ static int _echo_error(iopbase_t base, uint32_t id, uint32_t err, void * arg) {
 	default:
 		CERR("default id = %u, err = %u.", id, err);
 	}
-	return Success_Base;
+	return SufBase;
 }
 
 #define _STR_IP			"127.0.0.1"
@@ -67,14 +67,14 @@ static iopbase_t _test_echo_server(pthread_t * tid) {
 	printf("create a new iopbase_t = %p.\n", base);
 	r = iop_add_ioptcp(base, _STR_IP, _SHORT_PORT, _UINT_TIMEOUT,
 		_echo_parser, _echo_processor, _echo_connect, _echo_destroy, _echo_error);
-	if (r < Success_Base)
+	if (r < SufBase)
 		CERR_EXIT("iop_add_ioptcp is error base, r = %p, %d.", base, r);
 
 	printf("create a new tcp server on ip %s, port %d.", _STR_IP, _SHORT_PORT);
 	puts("start iop run loop.");
 
 	r = iop_run_pthread(base, tid);
-	if (r < Success_Base) {
+	if (r < SufBase) {
 		iop_delete(base);
 		CERR_EXIT("iop_run_pthread base r = %p, %d.", base, r);
 	}

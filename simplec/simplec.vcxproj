@@ -15,7 +15,6 @@
     <ClCompile Include="main\main.c" />
     <ClCompile Include="main\simplec.c" />
     <ClCompile Include="module\colog\plog.c" />
-    <ClCompile Include="module\colog\scconf.c" />
     <ClCompile Include="module\colog\clog.c" />
     <ClCompile Include="module\colog\sclog.c" />
     <ClCompile Include="module\iop\iop.c" />
@@ -25,11 +24,13 @@
     <ClCompile Include="module\poll\socket_poll.c" />
     <ClCompile Include="module\poll\socket_server.c" />
     <ClCompile Include="module\schead\md5util.c" />
+    <ClCompile Include="module\schead\scconf.c" />
     <ClCompile Include="module\schead\sciconv.c" />
     <ClCompile Include="module\schead\scjson.c" />
     <ClCompile Include="module\schead\sccsv.c" />
     <ClCompile Include="module\schead\schead.c" />
     <ClCompile Include="module\schead\scpipe.c" />
+    <ClCompile Include="module\schead\scrand.c" />
     <ClCompile Include="module\schead\scrwlock.c" />
     <ClCompile Include="module\schead\scsocket.c" />
     <ClCompile Include="module\schead\sctime.c" />
@@ -40,12 +41,12 @@
     <ClCompile Include="module\service\scthreads.c" />
     <ClCompile Include="module\service\sctimer.c" />
     <ClCompile Include="module\struct\array.c" />
+    <ClCompile Include="module\struct\dict.c" />
     <ClCompile Include="module\struct\recvmq.c" />
     <ClCompile Include="module\struct\list.c" />
     <ClCompile Include="module\struct\objs.c" />
     <ClCompile Include="module\struct\rbtree.c" />
     <ClCompile Include="module\struct\mq.c" />
-    <ClCompile Include="module\struct\tree.c" />
     <ClCompile Include="module\struct\tstr.c" />
     <ClCompile Include="module\struct\vlist.c" />
     <ClCompile Include="test\test_array.c" />
@@ -55,6 +56,7 @@
     <ClCompile Include="test\test_clog.c" />
     <ClCompile Include="test\test_csv.c" />
     <ClCompile Include="test\test_ddos.c" />
+    <ClCompile Include="test\test_dict.c" />
     <ClCompile Include="test\test_httputil.c" />
     <ClCompile Include="test\test_iopserver.c" />
     <ClCompile Include="test\test_cjson_read.c" />
@@ -67,6 +69,7 @@
     <ClCompile Include="test\test_sciconv.c" />
     <ClCompile Include="test\test_scoroutine.c" />
     <ClCompile Include="test\test_scpipe.c" />
+    <ClCompile Include="test\test_scrand.c" />
     <ClCompile Include="test\test_scrunloop.c" />
     <ClCompile Include="test\test_scthreads.c" />
     <ClCompile Include="test\test_sctimer.c" />
@@ -92,7 +95,6 @@
     <ClInclude Include="extern\pthread\include\sched.h" />
     <ClInclude Include="extern\pthread\include\semaphore.h" />
     <ClInclude Include="module\colog\include\plog.h" />
-    <ClInclude Include="module\colog\include\scconf.h" />
     <ClInclude Include="module\colog\include\clog.h" />
     <ClInclude Include="module\colog\include\sclog.h" />
     <ClInclude Include="module\iop\include\iop.h" />
@@ -108,12 +110,14 @@
     <ClInclude Include="module\poll\include\socket_poll.h" />
     <ClInclude Include="module\poll\include\socket_server.h" />
     <ClInclude Include="module\schead\include\md5util.h" />
+    <ClInclude Include="module\schead\include\scconf.h" />
     <ClInclude Include="module\schead\include\scjson.h" />
     <ClInclude Include="module\schead\include\scatom.h" />
     <ClInclude Include="module\schead\include\sccsv.h" />
     <ClInclude Include="module\schead\include\schead.h" />
     <ClInclude Include="module\schead\include\sciconv.h" />
     <ClInclude Include="module\schead\include\scpipe.h" />
+    <ClInclude Include="module\schead\include\scrand.h" />
     <ClInclude Include="module\schead\include\scrwlock.h" />
     <ClInclude Include="module\schead\include\scsocket.h" />
     <ClInclude Include="module\schead\include\sctime.h" />
@@ -125,13 +129,13 @@
     <ClInclude Include="module\service\include\scthreads.h" />
     <ClInclude Include="module\service\include\sctimer.h" />
     <ClInclude Include="module\struct\include\array.h" />
+    <ClInclude Include="module\struct\include\dict.h" />
     <ClInclude Include="module\struct\include\recvmq.h" />
     <ClInclude Include="module\struct\include\list.h" />
     <ClInclude Include="module\struct\include\objs.h" />
     <ClInclude Include="module\struct\include\rbtree.h" />
     <ClInclude Include="module\struct\include\mq.h" />
     <ClInclude Include="module\struct\include\struct.h" />
-    <ClInclude Include="module\struct\include\tree.h" />
     <ClInclude Include="module\struct\include\tstr.h" />
     <ClInclude Include="module\struct\include\vlist.h" />
   </ItemGroup>
@@ -219,13 +223,13 @@ echo update directory $(TargetDir)config e n d</Command>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
+      <Optimization>Full</Optimization>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <SubSystem>Console</SubSystem>
-      <AdditionalOptions>/ignore:4099 /LTCG %(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>libcurl.lib;wldap32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>/ignore:4099 /LTCG %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <PostBuildEvent>
       <Command>echo update directory $(TargetDir)config begin 

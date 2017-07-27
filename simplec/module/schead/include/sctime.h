@@ -59,7 +59,7 @@
 #include <Windows.h>
 
 #define sh_msleep(m) \
-		Sleep(m)	
+		Sleep(m)
 
 //
 // usleep - 毫秒级别等待函数
@@ -79,7 +79,7 @@ extern int usleep(unsigned usec);
 #endif
 
 // 定义时间串类型
-#define _INT_STULEN			(64)
+#define _INT_STULEN (64)
 typedef char stime_t[_INT_STULEN];
 
 /*

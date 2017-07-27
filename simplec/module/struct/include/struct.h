@@ -33,8 +33,7 @@
 
 #undef	CERR
 #define CERR(fmt, ...) \
-	fprintf(stderr, "[%s:%s:%d][errno %d:%s]" fmt "\n",\
-		__FILE__, __func__, __LINE__, errno, strerror(errno), ##__VA_ARGS__)
+	fprintf(stderr, "[%s:%s:%d][errno %d:%s]" fmt "\n", __FILE__, __func__, __LINE__, errno, strerror(errno), ##__VA_ARGS__)
 
 #define CERR_EXIT(fmt,...) \
 	CERR(fmt, ##__VA_ARGS__), exit(EXIT_FAILURE)
@@ -79,36 +78,36 @@
 
 #ifndef _ENUM_FLAG
 //
-// flag_e - 函数返回值全局状态码
+// int - 函数返回值全局状态码
 // >= 0 标识 Success状态, < 0 标识 Error状态
 //
-typedef enum {
+enum flag {
 
-	Error_Close		= -7,	//文件描述符读取关闭, 读取完毕也会返回这个
-	Error_Empty		= -6,	//返回数据为空
-	Error_Tout		= -5,	//超时错误
-	Error_Fd		= -4,	//文件打开失败
-	Error_Alloc		= -3,	//内存分配错误
-	Error_Param		= -2,	//调用的参数错误
-	Error_Base		= -1,	//错误基类型, 所有错误都可用它, 在不清楚的情况下
+	ErrClose    = -7,  //文件描述符读取关闭, 读取完毕也会返回这个
+	ErrEmpty    = -6,  //返回数据为空
+	ErrTout     = -5,  //超时错误
+	ErrFd       = -4,  //文件打开失败
+	ErrAlloc    = -3,  //内存分配错误
+	ErrParam    = -2,  //调用的参数错误
+	ErrBase	    = -1,  //错误基类型, 所有错误都可用它, 在不清楚的情况下
 
-	Success_Base	= +0,	//结果正确的返回宏
-	Success_Exist	= +1,	//希望存在,设置之前已经存在了.
+	SufBase     = +0,  //结果正确的返回宏
+	SufExist    = +1,  //希望存在,设置之前已经存在了.
 
-} flag_e;
+};
 
 //
 // 定义一些通用的函数指针帮助, 主要用于基库的封装.
 // 有构造函数, 析构函数, 比较函数, 轮询函数 ... 
 // cmp_f	- int cmp(const void * ln, const void * rn); 标准结构
-// each_f	- flag_e <-> int, each循环操作, arg 外部参数, node 内部节点
+// each_f	- int <-> int, each循环操作, arg 外部参数, node 内部节点
 // start_f	- pthread 线程启动的辅助函数宏, 方便优化
 //
-typedef int		(* cmp_f  )();
-typedef void *	(* new_f  )();
-typedef void	(* die_f  )(void * node);
-typedef flag_e	(* each_f )(void * node, void * arg);
-typedef void *	(* start_f)(void * arg);
+typedef int    (* cmp_f  )();
+typedef void * (* new_f  )();
+typedef void   (* die_f  )(void * node);
+typedef int    (* each_f )(void * node, void * arg);
+typedef void * (* start_f)(void * arg);
 
 #define _ENUM_FLAG
 #endif // !_ENUM_FLAG

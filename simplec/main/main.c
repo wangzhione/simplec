@@ -14,6 +14,9 @@ void simplec_main(void);
 // 变量函数环境启动初始化, 改动要慎重. atexit 先注册, 后调用 等同于数组栈
 //
 int main(int argc, char * argv[]) {
+	// 初始化随机序列
+	sh_srand((int32_t)time(NULL));
+
 	// 简单创建 _STR_LOGDIR 日志目录
 	sh_mkdir(_STR_LOGDIR);
 
@@ -25,7 +28,7 @@ int main(int argc, char * argv[]) {
 	// 目前系统是默认启动 clog 日志
 	cl_start();
 	// 启动基础配置系统, 并得到配置的单例对象
-	mconf_start();
+	mcnf_start();
 	// 初始化socket 库操作
 	socket_start();
 

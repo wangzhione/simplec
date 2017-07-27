@@ -9,16 +9,13 @@
 //
 unsigned 
 tstr_hash(const char * str) {
-	unsigned i, h, sp;
-	if (!str || !*str) 
-		return 1;
-
-	h = (unsigned)strlen(str);
-	sp = (h >> 5) + 1;
-	for (i = h; i >= sp; i -= sp)
-		h ^= (h << 5) + (h >> 2) + (unsigned char)str[i - 1];
-
-	return h ? h : 1;
+	register unsigned h = 0;
+	if (str) {
+		register unsigned c;
+		while ((c = *str++))
+			h = h * 131 + c;
+	}
+	return h;
 }
 
 //
@@ -106,29 +103,29 @@ tstr_freadend(const char * path) {
 	return tstr;
 }
 
-static flag_e _tstr_fwrite(const char * path, const char * str, const char * mode) {
+static int _tstr_fwrite(const char * path, const char * str, const char * mode) {
 	FILE * txt;
 	if (!path || !*path || !str) {
-		RETURN(Error_Param, "check !path || !*path || !str'!!!");
+		RETURN(ErrParam, "check !path || !*path || !str'!!!");
 	}
 
 	// 打开文件, 写入消息, 关闭文件
 	if ((txt = fopen(path, mode)) == NULL) {
-		RETURN(Error_Fd, "fopen mode = '%s', path = '%s' error!", mode, path);
+		RETURN(ErrFd, "fopen mode = '%s', path = '%s' error!", mode, path);
 	}
 	fputs(str, txt);
 	fclose(txt);
 
-	return Success_Base;
+	return SufBase;
 }
 
 //
 // 将c串str覆盖写入到path路径的文件中
 // path		: 文件路径
 // str		: c的串内容
-// return	: Success_Base | Error_Param | Error_Fd
+// return	: SufBase | ErrParam | ErrFd
 //
-inline flag_e 
+inline int 
 tstr_fwrites(const char * path, const char * str) {
 	return _tstr_fwrite(path, str, "wb");
 }
@@ -137,9 +134,9 @@ tstr_fwrites(const char * path, const char * str) {
 // 将c串str写入到path路径的文件中末尾
 // path		: 文件路径
 // str		: c的串内容
-// return	: Success_Base | Error_Param | Error_Fd
+// return	: SufBase | ErrParam | ErrFd
 //
-inline flag_e 
+inline int 
 tstr_fappends(const char * path, const char * str) {
 	return _tstr_fwrite(path, str, "ab");
 }

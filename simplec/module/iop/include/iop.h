@@ -35,7 +35,7 @@ extern void iop_run(iopbase_t base);
 // iop_run_pthread - 开启一个线程来跑这个轮询事件
 // base		: iop 操作类型
 // tid		: 返回的线程id指针
-// return	: >=Success_Base 表示成功, 否则失败
+// return	: >=SufBase 表示成功, 否则失败
 //
 extern int iop_run_pthread(iopbase_t base, pthread_t * tid);
 

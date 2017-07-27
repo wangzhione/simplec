@@ -58,7 +58,7 @@ typedef int (* iop_parse_f)(const char * buf, uint32_t len);
 typedef int (* iop_processor_f)(iopbase_t base, uint32_t id, char * buf, uint32_t len, void * arg);
 
 //
-// iop_event_f - 事件毁掉函数, 返回Error_Base代表要删除对象, 返回Success_Base代表正常
+// iop_event_f - 事件毁掉函数, 返回ErrBase代表要删除对象, 返回SufBase代表正常
 // base		: iopbase 结构指针, iop基础对象集
 // id		: iop对象的id
 // arg		: 自带的参数
@@ -137,7 +137,7 @@ struct iopbase {
 // iop_del - 从iopbase_t中删除指定id的事件对象
 // base		: iopbase_t指针
 // id		: 事件对象id
-// return	: 成功返回Success_Base, 失败返回Error_Base
+// return	: 成功返回SufBase, 失败返回ErrBase
 //
 extern int iop_del(iopbase_t base, uint32_t id);
 
@@ -152,7 +152,7 @@ extern int iop_del(iopbase_t base, uint32_t id);
 	do {\
 		if(iop->type != IOP_FREE) {\
 			int $type = iop->fevent(base, iop->id, events, iop->arg);\
-			if ($type >= Success_Base)\
+			if ($type >= SufBase)\
 				iop->lastt = base->curt;\
 			else\
 				iop_del(base, iop->id);\

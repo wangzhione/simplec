@@ -36,7 +36,7 @@ struct slinfo {
 **
 ** mod		: 当前线程名称
 ** reqip	: 请求的ip
-** return	: Success_Base 表示正常, Error_Alloc内存分配错误
+** return	: SufBase 表示正常, ErrAlloc内存分配错误
 **/
 int
 sl_init(const char mod[_INT_LITTLE], const char reqip[_INT_LITTLE]) {
@@ -48,7 +48,7 @@ sl_init(const char mod[_INT_LITTLE], const char reqip[_INT_LITTLE]) {
 	if ((pl = pthread_getspecific(_slmain.key)) == NULL) {
 		//重新构建
 		if ((pl = malloc(sizeof(struct slinfo))) == NULL)
-			return Error_Alloc;
+			return ErrAlloc;
 	}
 
 	timespec_get(&pl->timec, TIME_UTC);
@@ -60,7 +60,7 @@ sl_init(const char mod[_INT_LITTLE], const char reqip[_INT_LITTLE]) {
 	//设置私有变量
 	pthread_setspecific(_slmain.key, pl);
 
-	return Success_Base;
+	return SufBase;
 }
 
 /**

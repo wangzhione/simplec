@@ -1,7 +1,7 @@
 ﻿#include <recvmq.h>
 #include <scatom.h>
 
-#define _INT_RECVMQ	(1 << 1)
+#define _INT_RECVMQ	(1 << 9)
 
 //
 // tail == -1 ( head = 0 ) -> queue empty

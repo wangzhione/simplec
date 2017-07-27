@@ -40,7 +40,7 @@ extern void list_destroy_(list_t * ph, die_f die);
 // ph		: 指向头结点的指针
 // cmp		: 比较函数,将left同 *ph中对象按个比较
 // left		: cmp(left, x) 比较返回 <=0 or >0
-// return	: 返回 Success_Base 表示成功!
+// return	: 返回 SufBase 表示成功!
 //
 extern int list_add(list_t * ph, cmp_f cmp, void * left);
 
@@ -48,7 +48,7 @@ extern int list_add(list_t * ph, cmp_f cmp, void * left);
 // list_addhead - 采用头查法插入结点, 第一次用需要 list_t head = NULL;
 // ph		: 指向头结点的指针
 // node		: 待插入的结点对象
-// return	: 返回 Success_Base 表示成功!
+// return	: 返回 SufBase 表示成功!
 //
 extern int list_addhead(list_t * ph, void * node);
 
@@ -56,7 +56,7 @@ extern int list_addhead(list_t * ph, void * node);
 // list_addtail - 和 list_add 功能相似,但是插入位置在尾巴那
 // ph		: 待插入结点的指针
 // node		: 待插入的当前结点
-// return	: 返回 Success_Base 表示成功!
+// return	: 返回 SufBase 表示成功!
 //
 extern int list_addtail(list_t * ph, void * node);
 
@@ -106,7 +106,7 @@ extern void * list_popidx(list_t * ph, int idx);
 // ph		: 指向头结点的指针
 // idx		: 结点的索引处
 // node		: 待插入的结点
-// return	: 成功了返回 Success_Base
+// return	: 成功了返回 SufBase
 //
 extern int list_addidx(list_t * ph, int idx, void * node);
 

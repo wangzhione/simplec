@@ -80,7 +80,7 @@ addr_input(sockaddr_t * addr) {
 	printf("connect check input addr ip:port = %s:%hu.\n", ip, port);
 
 	// 下面就是待验证的地址信息
-	if (socket_addr(ip, port, addr) < Success_Base)
+	if (socket_addr(ip, port, addr) < SufBase)
 		CERR_EXIT("socket_addr ip , port is error = %s, %hu.", ip, port);
 }
 
@@ -95,7 +95,7 @@ addr_check(sockaddr_t * addr) {
 
 	r = socket_connecto(s, addr, _INT_TIMEOUT);
 	socket_close(s);
-	if (r < Success_Base) {
+	if (r < SufBase) {
 		RETURN(false, "socket_connecto addr is timeout = %d.", _INT_TIMEOUT);
 	}
 
@@ -113,7 +113,7 @@ static void _connect(struct targ * targ) {
 		}
 
 		// 精确统计, 一定要连接成功
-		while (socket_connect(s, &targ->addr) < Success_Base)
+		while (socket_connect(s, &targ->addr) < SufBase)
 			;
 
 		++targ->connect;
@@ -132,11 +132,11 @@ static void _tcpsend(struct targ * targ) {
 		}
 
 		// 精确统计, 一定要连接成功
-		while (socket_connect(s, &targ->addr) < Success_Base)
+		while (socket_connect(s, &targ->addr) < SufBase)
 			;
 
 		// 疯狂发送数据包
-		while (socket_send(s, targ->ts, BUFSIZ) >= Success_Base)
+		while (socket_send(s, targ->ts, BUFSIZ) >= SufBase)
 			++targ->tcpsend;
 
 		socket_close(s);
@@ -153,7 +153,7 @@ static void _udpsend(struct targ * targ) {
 		}
 
 		// 疯狂发送数据包
-		while (socket_sendto(s, targ->us, BUFSIZ, 0, &targ->addr, sizeof(targ->addr)) >= Success_Base)
+		while (socket_sendto(s, targ->us, BUFSIZ, 0, &targ->addr, sizeof(targ->addr)) >= SufBase)
 			++targ->udpsend;
 
 		socket_close(s);

@@ -29,14 +29,14 @@ list_destroy_(list_t * ph, die_f die) {
 // ph		: 指向头结点的指针
 // cmp		: 比较函数,将left同 *ph中对象按个比较
 // left		: cmp(left, x) 比较返回 <=0 or >0
-// return	: 返回 Success_Base 表示成功!
+// return	: 返回 SufBase 表示成功!
 //
 int 
 list_add(list_t * ph, cmp_f cmp, void * left) {
 	struct $lnode * head;
 	DEBUG_CODE({
 		if (!ph || !cmp || !left) {
-			RETURN(Error_Param, "list_add check ph=%p, cmp=%p, left=%p.", ph, cmp, left);
+			RETURN(ErrParam, "list_add check ph=%p, cmp=%p, left=%p.", ph, cmp, left);
 		}
 	});
 
@@ -45,7 +45,7 @@ list_add(list_t * ph, cmp_f cmp, void * left) {
 	if (!head || cmp(left, head) <= 0) {
 		list_next(left) = head;
 		*ph = left;
-		return Success_Base;
+		return SufBase;
 	}
 
 	// 中间插入了
@@ -56,51 +56,51 @@ list_add(list_t * ph, cmp_f cmp, void * left) {
 	}
 	list_next(left) = head->next;
 	head->next = left;
-	return Success_Base;
+	return SufBase;
 }
 
 //
 // list_addhead - 采用头查法插入结点, 第一次用需要 list_t head = NULL;
 // ph		: 指向头结点的指针
 // node		: 待插入的结点对象
-// return	: 返回 Success_Base 表示成功!
+// return	: 返回 SufBase 表示成功!
 //
 inline int 
 list_addhead(list_t * ph, void * node) {
 	if (!ph || !node){
-		RETURN(Error_Param, "list_add check (pal == %p || node == %p)!", ph, node);
+		RETURN(ErrParam, "list_add check (pal == %p || node == %p)!", ph, node);
 	}
 
 	list_next(node) = *ph;
 	*ph = node;
 
-	return Success_Base;
+	return SufBase;
 }
 
 //
 // list_addtail - 和 list_add 功能相似,但是插入位置在尾巴那
 // ph		: 待插入结点的指针
 // node		: 待插入的当前结点
-// return	: 返回 Success_Base 表示成功!
+// return	: 返回 SufBase 表示成功!
 //
 int
 list_addtail(list_t * ph, void * node) {
 	struct $lnode * head;
 	if (!ph || !node) {
-		RETURN(Error_Param, "list_addlast check (pal == %p || node == %p)!", ph, node);
+		RETURN(ErrParam, "list_addlast check (pal == %p || node == %p)!", ph, node);
 	}
 
 	list_next(node) = NULL;//将这个结点的置空
 	if (!(head = *ph)) { //插入的是头结点直接返回
 		*ph = node;
-		return Success_Base;
+		return SufBase;
 	}
 
 	while (!!(head->next))
 		head = head->next;
 	head->next = node;
 
-	return Success_Base;
+	return SufBase;
 }
 
 //
@@ -231,20 +231,20 @@ list_popidx(list_t * ph, int idx) {
 // ph		: 指向头结点的指针
 // idx		: 结点的索引处
 // node		: 待插入的结点
-// return	: 成功了返回 Success_Base
+// return	: 成功了返回 SufBase
 //
 int 
 list_addidx(list_t * ph, int idx, void * node) {
 	struct $lnode * head;
 	if(!ph || idx < 0 || !node){ //以后可能加入 idx < 0的尾巴插入细则
-		RETURN(Error_Param, "check is {!ph || idx<0 || !node}! Don't naughty again!");
+		RETURN(ErrParam, "check is {!ph || idx<0 || !node}! Don't naughty again!");
 	}
 
 	//插入做为头结点
 	if(!(head = *ph) || idx == 0){
 		list_next(node) = *ph;
 		*ph = node;
-		return Success_Base;
+		return SufBase;
 	}
 	
 	while(head->next && idx > 1){
@@ -255,5 +255,5 @@ list_addidx(list_t * ph, int idx, void * node) {
 	list_next(node) = head->next;
 	head->next = node;
 
-	return Success_Base;
+	return SufBase;
 }

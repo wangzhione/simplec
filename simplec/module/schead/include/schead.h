@@ -2,6 +2,7 @@
 #define _H_SIMPLEC_SCHEAD
 
 #include <clog.h>
+#include <scrand.h>
 
 //
 //  跨平台的丑陋从这里开始, 封装一些共用实现
@@ -63,6 +64,9 @@ extern int getch(void);
 // 置空操作, v必须是个变量
 #define BZERO(v) \
 	memset(&(v), 0, sizeof(v))
+
+// 得到bit位数
+#define BITN(type) (sizeof(type) * 8)
 
 /*
  * 比较两个结构体栈上内容是否相等,相等返回true,不等返回false

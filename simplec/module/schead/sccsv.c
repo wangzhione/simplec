@@ -1,6 +1,5 @@
 ﻿#include <sccsv.h>
 #include <tstr.h>
-#include <clog.h>
 
 //从文件中读取 csv文件内容, 构建一个合法串
 static bool _csv_parse(tstr_t tstr, int * prl, int * pcl) {
@@ -9,14 +8,14 @@ static bool _csv_parse(tstr_t tstr, int * prl, int * pcl) {
 	char * sur, * tar;
 
 	sur = tar = tstr->str;
-	while(!!(c = *tar++)) {
+	while (!!(c = *tar++)) {
 		// 小型状态机切换, 相对于csv文件内容解析
 		switch (c) {
 		case '"': // 双引号包裹的特殊字符处理
 			while (!!(c = *tar++)) {
 				if ('"' == c) {
 					if ((n = *tar) == '\0') // 判断下一个字符
-						goto __err_ext;
+						goto __faild;
 					if (n != '"') // 有效字符再次压入栈, 顺带去掉多余 " 字符
 						break;
 					++tar;
@@ -27,7 +26,7 @@ static bool _csv_parse(tstr_t tstr, int * prl, int * pcl) {
 			}
 			// 继续判断,只有是c == '"' 才会下来,否则都是错的
 			if ('"' != c)
-				goto __err_ext;
+				goto __faild;
 			break;
 		case ',':
 			*sur++ = '\0';
@@ -45,11 +44,9 @@ static bool _csv_parse(tstr_t tstr, int * prl, int * pcl) {
 		}
 	}
 	
-	if(cl % rl){ // 检测 , 号是个数是否正常
-	__err_ext:
-		CL_ERROR("now csv file is illegal! c = %d, n = %d, cl = %d, rl = %d."
-			, c, n, cl, rl);
-		return false;
+	if (cl % rl) { // 检测 , 号是个数是否正常
+	__faild:
+		RETURN(false, "now csv file is illegal! c = %d, n = %d, cl = %d, rl = %d.", c, n, cl, rl);
 	}
 	
 	// 返回最终内容
@@ -72,10 +69,9 @@ static sccsv_t _csv_create(tstr_t tstr) {
 
 	// 分配最终内存
 	pdff = sizeof(struct sccsv) + sizeof(char *) * cl;
-	csv = malloc(pdff + sizeof(char) * tstr->len);
+	csv = malloc(pdff + tstr->len);
 	if (NULL == csv) {
-		CL_ERROR("malloc is error cstr->len = %d, rl = %d, cl = %d.", tstr->len, rl ,cl);
-		return NULL;
+		RETURN(NULL, "malloc is error cstr->len = %zu, rl = %d, cl = %d.", tstr->len, rl, cl);
 	}
 
 	// 这里开始拷贝内存, 构建内容了
@@ -88,7 +84,7 @@ static sccsv_t _csv_create(tstr_t tstr) {
 		csv->data[i] = cstr;
 		while(*cstr++) // 找到下一个位置处
 			;
-	} while(++i<cl);
+	} while(++i < cl);
 	
 	return csv;
 }
@@ -103,8 +99,7 @@ sccsv_create(const char * path) {
 	sccsv_t csv;
 	tstr_t tstr = tstr_freadend(path);
 	if (NULL == tstr) {
-		CL_ERROR("tstr_freadend path = %s is error!", path);
-		return NULL;
+		RETURN(NULL, "tstr_freadend path = %s is error!", path);
 	}
 
 	// 如果解析 csv 文件内容失败直接返回
@@ -134,12 +129,11 @@ sccsv_delete(sccsv_t csv) {
 inline const char * 
 sccsv_get(sccsv_t csv, int ri, int ci) {
 	DEBUG_CODE({
-		if (!csv || ri<0 || ri >= csv->rlen || ci<0 || ci >= csv->clen) {
-			CL_ERROR("params is csv:%p, ri:%d, ci:%d.", csv, ri, ci);
-			return NULL;
+		if (!csv || ri < 0 || ri >= csv->rlen || ci < 0 || ci >= csv->clen) {
+			RETURN(NULL, "params is csv:%p, ri:%d, ci:%d.", csv, ri, ci);
 		}
 	});
 
 	// 返回最终结果
-	return csv->data[ri*csv->clen + ci];
+	return csv->data[ri * csv->clen + ci];
 }
