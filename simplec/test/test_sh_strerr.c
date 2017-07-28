@@ -1,19 +1,19 @@
 ﻿#include <tstr.h>
 
-#define _STR_TEMPLATE	"test/config/sys_strerror.c.template"
+#define _STR_TEMPLATE	"test/config/sh_strerr.c.template"
 #define _STR_DATA		"test/config/winerror.h.data"
-#define _STR_BAK		"test/config/sys_strerror.c"
+#define _STR_BAK		"test/config/sh_strerr.c"
 
 #define _STR_MESSAGEID	"//\r\n// MessageId: "
 
 const char * errstruct_create(const char * data);
 
 //
-// 模板文件 : sys_strerror.c.template
+// 模板文件 : sh_strerr.c.template
 // 素材文件 : winerror.h.data
-// 生成文件 : sys_strerror.c.bak
+// 生成文件 : sh_strerr.c.bak
 //
-void test_sys_strerror(void) {
+void test_sh_strerr(void) {
 	char c;
 	const char * si;
 	tstr_t errf = tstr_freadend(_STR_DATA);
@@ -26,7 +26,7 @@ void test_sys_strerror(void) {
 		"\r\n"
 		"#include <string.h>\r\n"
 		"\r\n"
-		"inline const char * sys_strerror(int error) {\r\n"
+		"inline const char * sh_strerr(int error) {\r\n"
 		"	return strerror(error);\r\n"
 		"}\r\n"
 		"\r\n"
@@ -39,7 +39,7 @@ void test_sys_strerror(void) {
 		"\r\n"
 		"#define DWORD int\r\n"
 		"\r\n"
-		"const char * sys_strerror(int error) {\r\n"
+		"const char * sh_strerr(int error) {\r\n"
 		"	switch (error) {\r\n"
 	);
 
@@ -70,7 +70,7 @@ void test_sys_strerror(void) {
 	tstr_appends(cstr, 
 		"	}\r\n"
 		"\r\n"
-		"	fprintf(stderr, \"sys_strerror invaild error = %d.\\n\", error);\r\n"
+		"	fprintf(stderr, \"sh_strerr invaild error = %d.\\n\", error);\r\n"
 		"	return \"The aliens are coming. Go tell your favorite people\";\r\n"
 		"}\r\n"
 		"\r\n"

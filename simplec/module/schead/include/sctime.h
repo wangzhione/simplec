@@ -19,22 +19,6 @@
 #define _INT_STOMS			(1000)
 #define _INT_MSTONS			(1000000)
 
-#if !defined(_H_LOG_HELP)
-
-//
-// 所有日志相对路径目录, 如果不需要需要配置成""
-// _INT_PATH	- 日志路径大小
-// _INT_LOGS	- 每条日志的大小
-// _STR_LOGDIR	- 存放所有日志的目录
-//
-#define _UINT_PATH		(256u)
-#define _UINT_LOGS		(2048u)
-#define _STR_LOGDIR		"logs"
-#define _STR_LOGTIME	"[" _STR_MTIME "]"
-
-#define _H_LOG_HELP
-#endif
-
 // sleep 中推荐的最小睡眠数
 #define _INT_SLEEPMIN	(1)
 

@@ -1,16 +1,5 @@
-﻿#include <scconf.h>
-
-/*
- * simple c 简单描述
- * return	: void
- */
-void simplec_go(void);
-
-/*
- * simple c 单元测试主函数
- * return	: void
- */
-void simplec_test(void);
+﻿#include <schead.h>
+#include <scconf.h>
 
 /*
  * simple c 框架业务层启动的代码
@@ -19,11 +8,11 @@ void simplec_main(void) {
 
 #if defined(_MSC_VER) && defined(_DEBUG)
 	// 开始简单的测试
-	simplec_test();
+	EXTERN_RUN(simplec_test);
 #endif
 
 	// 开始动画部分
-	simplec_go();
+	EXTERN_RUN(simplec_go);
 
 	/*
 	 * Hero later is your world 
@@ -44,24 +33,13 @@ simplec_go(void) {
 
 #if defined(_MSC_VER) && defined(_DEBUG)
 
-//
-// TEST_RUN - simplec 单元测试宏, 方便进行单元测试
-// test		: 需要单元测试的函数名, 通test 目录下文件名
-//
-#define TEST_RUN(test, ...) \
-	do {\
-		void test();\
-		test(##__VA_ARGS__);\
-	} while(0)
-
 /*
  * simple c 单元测试主函数
  * return	: void
  */
 void 
 simplec_test(void) {
-	TEST_RUN(test_dict);
-	TEST_RUN(test_scconf);
+	EXTERN_RUN(test_scpipe);
 }
 
 #endif

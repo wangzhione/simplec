@@ -44,17 +44,18 @@ union uaglin {
 	uint8_t  s[sizeof(uint32_t)];
 };
 
-// 判断是大端序还是小端序,大端序返回true
+//
+// sh_isbig - 判断是大端序还是小端序,大端序返回true
+// sh_hton - 将本地四字节数据转成'小端'网络字节
+// sh_ntoh - 将'小端'网络四字节数值转成本地数值
+//
+
 inline bool
 sh_isbig(void) {
 	static union uaglin _u = { 1 };
 	return 0 == _u.c;
 }
 
-//
-// sh_hton - 将本地四字节数据转成'小端'网络字节
-// sh_ntoh - 将'小端'网络四字节数值转成本地数值
-//
 inline uint32_t 
 sh_hton(uint32_t x) {
 	if (sh_isbig()) {

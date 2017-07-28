@@ -1,5 +1,4 @@
 ﻿#include <schead.h>
-#include <sclog.h>
 #include <scjson.h>
 
 #define _STR_FILE "test/config/firefighting_rule.json"
@@ -8,9 +7,6 @@
  * 这里 是解析 上面的json文件内容
  */
 void test_cjson_read(void) {
-	// 开启日志记录功能
-	sl_start();
-
 	cjson_t rule = cjson_newfile(_STR_FILE);
 	if (NULL == rule)
 		CERR_EXIT("cjson_dofile " _STR_FILE " is error!");

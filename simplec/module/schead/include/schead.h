@@ -52,7 +52,7 @@ extern int getch(void);
 #endif
 
 /* 栈上辅助操作宏 */
-#if !defined(_H_ARRAY_HELP)
+#if !defined(_H_ARRHELP)
 
 // 添加双引号的宏 
 #define CSTR(a)	_STR(a)
@@ -77,55 +77,67 @@ extern int getch(void);
 #define STRUCTCMP(a, b) \
 	(!memcmp(&a, &b, sizeof(a)))
 
-#define _H_ARRAY_HELP
-#endif
+#define _H_ARRHELP
+#endif//_H_ARRHELP
 
 /* 范围内比较大小辅助宏 */
 #if !defined(_H_EQUAL)
 
 // 浮点数据判断宏帮助, __开头表示不希望你使用的宏
-#define __DIFF(x, y)			((x)-(y))				//两个表达式做差宏
-#define __IF_X(x, c)			((x)<c && (x)>-c)		//判断宏,z必须是宏常量
-#define EQC(x, y, c)			__IF_X(__DIFF(x, y), c)	//判断x和y是否在误差范围内相等
+#define _DIFF(x, y)			((x)-(y))				//两个表达式做差宏
+#define _IF_X(x, c)			((x)<c && (x)>-c)		//判断宏,z必须是宏常量
+#define EQC(x, y, c)		_IF_X(_DIFF(x, y), c)	//判断x和y是否在误差范围内相等
 
 // float判断定义的宏
-#define EQ_FLOAT_ZERO(x)		__IF_X(x, FLT_MIN)		//float 判断x是否为零是返回true
-#define EQ_FLOAT(x, y)			EQC(x, y, FLT_MIN)		//判断表达式x与y是否相等
+#define EQ_FLOAT_ZERO(x)	_IF_X(x, FLT_MIN)		//float 判断x是否为零是返回true
+#define EQ_FLOAT(x, y)		EQC(x, y, FLT_MIN)		//判断表达式x与y是否相等
 
 // double判断定义的宏
-#define EQ_DOUBLE_ZERO(x)		__IF_X(x, DBL_MIN)		//double 判断x是否为零是返回true
-#define EQ_DOUBLE(x,y)			EQC(x, y, DBL_MIN)		//判断表达式x与y是否相等
+#define EQ_DOUBLE_ZERO(x)	_IF_X(x, DBL_MIN)		//double 判断x是否为零是返回true
+#define EQ_DOUBLE(x,y)		EQC(x, y, DBL_MIN)		//判断表达式x与y是否相等
 
 #define _H_EQUAL
-#endif 
+#endif//_H_EQUAL
+
+#ifndef _H_CODEHELP
+
+//
+// EXTERN_RUN - 简单的声明, 并立即使用的宏
+// test		: 需要执行的函数名称
+//
+#define EXTERN_RUN(test, ...) \
+	do { \
+		extern void test(); \
+		test(##__VA_ARGS__); \
+	} while(0)
 
 // scanf 健壮的多次输入宏
-#ifndef SAFE_SCANF
-#define _STR_SAFE_SCANF "Input error, please according to the prompt!"
-#define SAFE_SCANF(scanf_code, ...) \
-		while (printf(##__VA_ARGS__), scanf_code){\
-			rewind(stdin);\
-			puts(_STR_SAFE_SCANF);\
-		}\
-		rewind(stdin);\
+#define _STR_SSCANF "Input error, please according to the prompt!"
+#define SSCANF(scanf_code, ...) \
+		while (printf(##__VA_ARGS__), scanf_code){ \
+			rewind(stdin); \
+			puts(_STR_SSCANF); \
+		} \
+		rewind(stdin); \
 	} while (0)
-#endif // !SAFE_SCANF
 
 // 简单的time时间记录宏
-#ifndef TIME_PRINT
-#define _STR_TIME_PRINT "The current code block running time:%lf seconds\n"
+#define _STR_TPRINT "The current code block running time:%lf seconds.\n"
 #define TIME_PRINT(code) \
-	do {\
-		clock_t $st, $et;\
-		$st = clock();\
-		code\
-		$et = clock();\
-		printf(_STR_TIME_PRINT, (0.0 + $et - $st) / CLOCKS_PER_SEC);\
+	do { \
+		clock_t $st, $et; \
+		$st = clock(); \
+		code \
+		$et = clock(); \
+		printf(_STR_TPRINT, (0.0 + $et - $st) / CLOCKS_PER_SEC); \
 	} while (0)
-#endif // !TIME_PRINT
+
+#define _H_CODEHELP
+#endif//_H_CODEHELP
 
 // 等待的宏 是个单线程没有加锁 | "请按任意键继续. . ."
 extern void sh_pause(void);
+
 #ifndef INIT_PAUSE
 
 #	ifdef _DEBUG
@@ -136,20 +148,19 @@ extern void sh_pause(void);
 
 #endif // !INIT_PAUSE
 
-// 判断是大端序还是小端序,大端序返回true
-extern bool sh_isbig(void);
-
 //
-// sys_strerror - linux 上面替代 strerror, winds 替代 FormatMessage 
+// sh_strerr - linux 上面替代 strerror, winds 替代 FormatMessage 
 // error	: linux 是 errno, winds 可以是 WSAGetLastError() ... 
 // return	: system os 拔下来的提示字符串常量
 //
-extern const char * sys_strerror(int error);
+extern const char * sh_strerr(int error);
 
 //
+// sh_isbig - 判断是大端序还是小端序,大端序返回true
 // sh_hton - 将本地四字节数据转成'小端'网络字节
 // sh_ntoh - 将'小端'网络四字节数值转成本地数值
 //
+extern bool sh_isbig(void);
 extern uint32_t sh_hton(uint32_t x);
 extern uint32_t sh_ntoh(uint32_t x);
 

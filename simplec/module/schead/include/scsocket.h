@@ -90,7 +90,7 @@ extern int gettimeofday(struct timeval * tv, void * tz);
 
 #undef	CERR
 #define CERR(fmt, ...) \
-	fprintf(stderr, "[%s:%s:%d][errno %d:%s]" fmt "\n", __FILE__, __func__, __LINE__, socket_errno, sys_strerror(socket_errno), ##__VA_ARGS__)
+	fprintf(stderr, "[%s:%s:%d][errno %d:%s]" fmt "\n", __FILE__, __func__, __LINE__, socket_errno, sh_strerr(socket_errno), ##__VA_ARGS__)
 
 // EAGAIN and EWOULDBLOCK may be not the same value.
 #if (SOCKET_EAGAIN != SOCKET_EWOULDBOCK)

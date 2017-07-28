@@ -1,5 +1,4 @@
 ﻿#include <schead.h>
-#include <sclog.h>
 #include <sccsv.h>
 #include <tstr.h>
 
@@ -10,9 +9,6 @@ int csvtojson(const char* path);
 
 void test_xlsmtojson(void) {
 	int rt;
-	
-	// sccsv 使用了 sclog 需要启动 sclog
-	sl_start();
 
 	rt = csvtojson(_STR_CSVPATH);
 	if(0 == rt) 

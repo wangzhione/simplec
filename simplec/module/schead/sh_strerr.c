@@ -2,8 +2,8 @@
 
 #include <string.h>
 
-extern const char * sys_strerror(int error);
-inline const char * sys_strerror(int error) {
+extern const char * sh_strerr(int error);
+inline const char * sh_strerr(int error) {
 	return strerror(error);
 }
 
@@ -16,7 +16,7 @@ inline const char * sys_strerror(int error) {
 
 #define DWORD int
 
-const char * sys_strerror(int error) {
+const char * sh_strerr(int error) {
 	switch (error) {
     case ERROR_SUCCESS                                                          : return "The operation completed successfully";
     case ERROR_INVALID_FUNCTION                                                 : return "Incorrect function";
@@ -6224,7 +6224,7 @@ const char * sys_strerror(int error) {
     case UTC_E_ESCALATION_DIRECTORY_ALREADY_EXISTS                              : return "The escalation working directory for the requested escalation could not be created because it already exists";
 	}
 
-	fprintf(stderr, "sys_strerror invaild error = %d.\n", error);
+	fprintf(stderr, "sh_strerr invaild error = %d.\n", error);
 	return "The aliens are coming. Go tell your favorite people";
 }
 

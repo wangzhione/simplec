@@ -1,6 +1,14 @@
 ﻿#include <clog.h>
 
 //
+// _INT_LOGS	- 每条日志的大小
+// _STR_LOGDIR	- 存放所有日志的目录
+//
+#define _UINT_LOGS		(2048u)
+#define _STR_LOGTIME	"[" _STR_MTIME "]"
+
+
+//
 // 急速, 清洁, 可靠配合 lograte的 c多线程单机日志库 clog.h
 //					by simplec wz 2017年4月26日
 //
@@ -8,15 +16,16 @@
 static FILE * _log;
 
 //
-// cl_start - 开启单机日志库
+// cl_start - !单例! 开启单机日志库
+// path		: 初始化日志系统文件名
 // return	: void
 //
 inline void 
-cl_start(void) {
+cl_start(const char * path) {
 	if (NULL == _log) {
-		_log = fopen(_STR_CLOG_NAME, "ab");
-		if(NULL == _log)
-			CERR_EXIT("fopen " _STR_CLOG_NAME " ab is error!");
+		_log = fopen(path, "ab");
+		if (NULL == _log)
+			CERR_EXIT("fopen ab err path = %s!", path);
 	}
 }
 

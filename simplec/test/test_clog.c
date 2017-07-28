@@ -9,7 +9,7 @@ void test_clog(void) {
 	struct timespec tc;
 
 	// 开启 clog 日志库
-	cl_start();
+	cl_start("test_clog.log");
 
 	// 测试一下等待时间函数
 	printf("sec = %"PRId64".\n", time(NULL));

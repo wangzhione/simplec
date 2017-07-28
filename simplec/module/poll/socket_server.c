@@ -428,7 +428,7 @@ open_socket(struct sserver * ss, struct request_open * request, struct smessage 
 	}
 
 	if (sock == INVALID_SOCKET) {
-		result->data = (char *)sys_strerror(socket_errno);
+		result->data = (char *)sh_strerr(socket_errno);
 		goto __failed;
 	}
 
@@ -844,7 +844,7 @@ start_socket(struct sserver * ss, struct request_start * request, struct smessag
 		if (sp_add(ss->event_fd, s->fd, s)) {
 			int error = socket_errno;
 			force_close(ss, s, &l, result);
-			result->data = (char *)sys_strerror(error);
+			result->data = (char *)sh_strerr(error);
 			return SSERVER_ERR;
 		}
 		s->type = (s->type == SOCKET_TYPE_PACCEPT) ? SOCKET_TYPE_CONNECTED : SOCKET_TYPE_LISTEN;
@@ -1057,7 +1057,7 @@ forward_message_udp(struct sserver * ss, struct socket * s, struct socket_lock *
 		default:
 			// close when error
 			force_close(ss, s, l, result);
-			result->data = (char *)sys_strerror(error);
+			result->data = (char *)sh_strerr(error);
 			return SSERVER_ERR;
 		}
 		return -1;
@@ -1090,7 +1090,7 @@ report_connect(struct sserver * ss, struct socket * s, struct socket_lock * l, s
 	int error = socket_get_error(s->fd);
 	if (error) {
 		force_close(ss, s, l, result);
-		result->data = (char *)sys_strerror(error);
+		result->data = (char *)sh_strerr(error);
 		return SSERVER_ERR;
 	}
 	s->type = SOCKET_TYPE_CONNECTED;
@@ -1260,7 +1260,7 @@ sserver_poll(sserver_t ss, smessage_t result, int * more) {
 				// close when error
 				int error = socket_get_error(s->fd);
 				force_close(ss, s, &l, result);
-				result->data = error ? (char *)sys_strerror(error) : "Unknown error";
+				result->data = error ? (char *)sh_strerr(error) : "Unknown error";
 				return SSERVER_ERR;
 			}
 			break;

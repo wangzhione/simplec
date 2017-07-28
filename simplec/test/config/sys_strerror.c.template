@@ -22,7 +22,7 @@ const char * socket_strerror(int error) {
     ...
     }
 
-    fprintf(stderr, "sys_strerror invaild error = %d.\n", error);
+    fprintf(stderr, "sh_strerr invaild error = %d.\n", error);
     return "The aliens are coming. Go tell your favorite people"; 
 }
 

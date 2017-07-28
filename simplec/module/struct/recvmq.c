@@ -127,39 +127,47 @@ static inline void _recvmq_pop_sz(recvmq_t buff) {
 //
 // recvmq_pop - 数据队列中弹出一个解析好的消息体
 // buff		: 数据队列对象, buffq_create 创建
-// psz		: 返回对象长度, -> len
-// return	: NULL 表示没有完整数据 -> data
+// msg		: 返回的消息体对象
+// return	: ErrParse 协议解析错误, ErrEmpty 数据不完整, SufBase 解析成功
 //
-void * 
-recvmq_pop(recvmq_t buff, uint32_t * psz) {
-	int len;
-	char * data = NULL;
+int 
+recvmq_pop(recvmq_t buff, struct recvmsg * msg) {
+	char * data;
+	int len, cnt;
 	ATOM_LOCK(buff->lock);
 
-	len = _recvmq_len(buff);
+	cnt = _recvmq_len(buff);
 
 	// step 1 : 报文长度 buffq.sz check
-	if (buff->sz <= 0)
-	{
-		if (len < sizeof(uint32_t))
-			goto __rpop;
+	if (buff->sz <= 0 && cnt >= sizeof(uint32_t)) {
 		// 得到报文长度, 小端网络字节转成本地字节
 		_recvmq_pop_sz(buff);
+		cnt -= sizeof(buff->sz);
 	}
 
-	// step 2 : buffq.sz > 0 继续看是否有需要的报文内容
-	if (buff->sz <= 0 || (int)buff->sz > len)
-		goto __rpop;
+	
+	len = RECVMSG_LEN(buff->sz);
+	// step 2 : check data parse is true
+	if (len > USHRT_MAX || (buff->sz > 0 && len <= 0)) {
+		ATOM_UNLOCK(buff->lock);
+		return ErrParse;
+	}
+
+	// step 3 : buffq.sz > 0 继续看是否有需要的报文内容
+	if (len <= 0 || len > cnt) {
+		ATOM_UNLOCK(buff->lock);
+		return ErrEmpty;
+	}
 
 	// 索要的报文长度存在, 构建好给弹出去
-	data = malloc(buff->sz);
+	data = malloc(len);
 	assert(NULL != data);
-	_recvmq_pop_dn(buff, data, (int)buff->sz);
-	if (psz)
-		*psz = buff->sz;
+	_recvmq_pop_dn(buff, data, len);
+	// 返回数据
+	msg->sz = buff->sz;
+	msg->data = data;
 	buff->sz = 0;
 
-__rpop:
 	ATOM_UNLOCK(buff->lock);
-	return data;
+	return SufBase;
 }

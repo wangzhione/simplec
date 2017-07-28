@@ -4,10 +4,6 @@
 #include <struct.h>
 #include <sctime.h>
 
-#ifndef _STR_CLOG_NAME
-#define _STR_CLOG_NAME	_STR_LOGDIR "/simplec.log"
-#endif // !_STR_CLOG_NAME
-
 //
 // error info debug printf log  
 //
@@ -29,10 +25,11 @@
 	cl_printf(fstr "[%s:%s:%d]" fmt "\n", __FILE__, __func__, __LINE__, ##__VA_ARGS__)
 
 //
-// cl_start - 开启单机日志库
+// cl_start - !单例! 开启单机日志库
+// path		: 初始化日志系统文件名
 // return	: void
 //
-extern void cl_start(void);
+extern void cl_start(const char * path);
 
 //
 // cl_printf - 具体输出日志内容

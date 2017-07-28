@@ -1,5 +1,4 @@
 ﻿#include <schead.h>
-#include <sclog.h>
 #include <sccsv.h>
 
 #define _STR_PATH "test/config/onetime.csv"
@@ -9,8 +8,6 @@ void test_csv(void) {
 	sccsv_t csv;
 	int i, j;
 	int rlen, clen;
-
-	sl_start();
 
 	// 这里得到 csv 对象
 	csv = sccsv_create(_STR_PATH);

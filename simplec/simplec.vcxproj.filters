@@ -7,20 +7,8 @@
     <Filter Include="main">
       <UniqueIdentifier>{948a31f4-2226-44f0-963a-ff8da72412b1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="main\body">
-      <UniqueIdentifier>{cc5d048e-628f-43f8-8341-29f91e7ad1df}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="main\body\include">
-      <UniqueIdentifier>{438e9db4-0f47-4984-8dfd-538cea24f781}</UniqueIdentifier>
-    </Filter>
     <Filter Include="module">
       <UniqueIdentifier>{c1b1b41e-c0f0-4d91-86d1-0736e03c0094}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="module\colog">
-      <UniqueIdentifier>{6feaf2bd-05ad-4bdf-b7d3-53e35cb313bb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="module\colog\include">
-      <UniqueIdentifier>{57f37278-f396-4a2d-8dc1-a5955ae40220}</UniqueIdentifier>
     </Filter>
     <Filter Include="module\schead">
       <UniqueIdentifier>{33ae7044-0f3c-476c-a57b-be7ced640c47}</UniqueIdentifier>
@@ -174,31 +162,10 @@
     <ClCompile Include="test\test_clog.c">
       <Filter>test</Filter>
     </ClCompile>
-    <ClCompile Include="module\colog\clog.c">
-      <Filter>module\colog</Filter>
-    </ClCompile>
-    <ClCompile Include="module\colog\sclog.c">
-      <Filter>module\colog</Filter>
-    </ClCompile>
-    <ClCompile Include="test\test_sclog.c">
-      <Filter>test</Filter>
-    </ClCompile>
     <ClCompile Include="module\schead\scurl.c">
       <Filter>module\schead</Filter>
     </ClCompile>
     <ClCompile Include="test\test_scurl.c">
-      <Filter>test</Filter>
-    </ClCompile>
-    <ClCompile Include="module\struct\objs.c">
-      <Filter>module\struct</Filter>
-    </ClCompile>
-    <ClCompile Include="test\test_objs.c">
-      <Filter>test</Filter>
-    </ClCompile>
-    <ClCompile Include="module\colog\plog.c">
-      <Filter>module\colog</Filter>
-    </ClCompile>
-    <ClCompile Include="test\test_plog.c">
       <Filter>test</Filter>
     </ClCompile>
     <ClCompile Include="module\service\scthreads.c">
@@ -258,12 +225,6 @@
     <ClCompile Include="module\poll\socket_server.c">
       <Filter>module\poll</Filter>
     </ClCompile>
-    <ClCompile Include="test\test_sys_strerror.c">
-      <Filter>test</Filter>
-    </ClCompile>
-    <ClCompile Include="module\schead\sys_strerror.c">
-      <Filter>module\schead</Filter>
-    </ClCompile>
     <ClCompile Include="test\test_socket_server.c">
       <Filter>test</Filter>
     </ClCompile>
@@ -292,6 +253,15 @@
       <Filter>module\struct</Filter>
     </ClCompile>
     <ClCompile Include="test\test_dict.c">
+      <Filter>test</Filter>
+    </ClCompile>
+    <ClCompile Include="module\schead\clog.c">
+      <Filter>module\schead</Filter>
+    </ClCompile>
+    <ClCompile Include="module\schead\sh_strerr.c">
+      <Filter>module\schead</Filter>
+    </ClCompile>
+    <ClCompile Include="test\test_sh_strerr.c">
       <Filter>test</Filter>
     </ClCompile>
   </ItemGroup>
@@ -341,26 +311,14 @@
     <ClInclude Include="module\service\include\scrunloop.h">
       <Filter>module\service\include</Filter>
     </ClInclude>
-    <ClInclude Include="module\colog\include\clog.h">
-      <Filter>module\colog\include</Filter>
-    </ClInclude>
-    <ClInclude Include="module\colog\include\sclog.h">
-      <Filter>module\colog\include</Filter>
-    </ClInclude>
     <ClInclude Include="module\schead\include\scurl.h">
       <Filter>module\schead\include</Filter>
-    </ClInclude>
-    <ClInclude Include="module\struct\include\objs.h">
-      <Filter>module\struct\include</Filter>
     </ClInclude>
     <ClInclude Include="module\service\include\scoroutine$linux.h">
       <Filter>module\service\include</Filter>
     </ClInclude>
     <ClInclude Include="module\service\include\scoroutine$winds.h">
       <Filter>module\service\include</Filter>
-    </ClInclude>
-    <ClInclude Include="module\colog\include\plog.h">
-      <Filter>module\colog\include</Filter>
     </ClInclude>
     <ClInclude Include="module\service\include\scthreads.h">
       <Filter>module\service\include</Filter>
@@ -463,6 +421,9 @@
     </ClInclude>
     <ClInclude Include="module\struct\include\dict.h">
       <Filter>module\struct\include</Filter>
+    </ClInclude>
+    <ClInclude Include="module\schead\include\clog.h">
+      <Filter>module\schead\include</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

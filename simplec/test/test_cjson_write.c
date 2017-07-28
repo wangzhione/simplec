@@ -1,12 +1,7 @@
 ﻿#include <scjson.h>
-#include <sclog.h>
 
 // 测试 cjson 函数
 void test_cjson_write(void) {
-
-	//启动日志记录功能
-	sl_start();
-
 	// 测试json 串
 	char jstr[] = "{\n\"name\": \"Jack (\\\"Bee\\\") Nimble\", \n\"format\": {\"type\":[1, 3, 4, 5.66], \n\"height\":     1080, \n\"interlace\":  false}\n}";
 

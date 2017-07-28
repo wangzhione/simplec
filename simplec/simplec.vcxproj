@@ -14,15 +14,13 @@
     <ClCompile Include="extern\curl\httputil.c" />
     <ClCompile Include="main\main.c" />
     <ClCompile Include="main\simplec.c" />
-    <ClCompile Include="module\colog\plog.c" />
-    <ClCompile Include="module\colog\clog.c" />
-    <ClCompile Include="module\colog\sclog.c" />
     <ClCompile Include="module\iop\iop.c" />
     <ClCompile Include="module\iop\iop_poll.c" />
     <ClCompile Include="module\iop\iop_server.c" />
     <ClCompile Include="module\poll\socket_message.c" />
     <ClCompile Include="module\poll\socket_poll.c" />
     <ClCompile Include="module\poll\socket_server.c" />
+    <ClCompile Include="module\schead\clog.c" />
     <ClCompile Include="module\schead\md5util.c" />
     <ClCompile Include="module\schead\scconf.c" />
     <ClCompile Include="module\schead\sciconv.c" />
@@ -35,7 +33,7 @@
     <ClCompile Include="module\schead\scsocket.c" />
     <ClCompile Include="module\schead\sctime.c" />
     <ClCompile Include="module\schead\scurl.c" />
-    <ClCompile Include="module\schead\sys_strerror.c" />
+    <ClCompile Include="module\schead\sh_strerr.c" />
     <ClCompile Include="module\service\scoroutine.c" />
     <ClCompile Include="module\service\scrunloop.c" />
     <ClCompile Include="module\service\scthreads.c" />
@@ -44,7 +42,6 @@
     <ClCompile Include="module\struct\dict.c" />
     <ClCompile Include="module\struct\recvmq.c" />
     <ClCompile Include="module\struct\list.c" />
-    <ClCompile Include="module\struct\objs.c" />
     <ClCompile Include="module\struct\rbtree.c" />
     <ClCompile Include="module\struct\mq.c" />
     <ClCompile Include="module\struct\tstr.c" />
@@ -60,10 +57,7 @@
     <ClCompile Include="test\test_httputil.c" />
     <ClCompile Include="test\test_iopserver.c" />
     <ClCompile Include="test\test_cjson_read.c" />
-    <ClCompile Include="test\test_objs.c" />
-    <ClCompile Include="test\test_plog.c" />
     <ClCompile Include="test\test_recvmq.c" />
-    <ClCompile Include="test\test_sclog.c" />
     <ClCompile Include="test\test_pthread_sem.c" />
     <ClCompile Include="test\test_scconf.c" />
     <ClCompile Include="test\test_sciconv.c" />
@@ -76,7 +70,7 @@
     <ClCompile Include="test\test_sctime.c" />
     <ClCompile Include="test\test_scurl.c" />
     <ClCompile Include="test\test_socket_server.c" />
-    <ClCompile Include="test\test_sys_strerror.c" />
+    <ClCompile Include="test\test_sh_strerr.c" />
     <ClCompile Include="test\test_tstring.c" />
     <ClCompile Include="test\test_poll.c" />
     <ClCompile Include="test\test_xlsmtojson.c" />
@@ -94,9 +88,6 @@
     <ClInclude Include="extern\pthread\include\pthread.h" />
     <ClInclude Include="extern\pthread\include\sched.h" />
     <ClInclude Include="extern\pthread\include\semaphore.h" />
-    <ClInclude Include="module\colog\include\plog.h" />
-    <ClInclude Include="module\colog\include\clog.h" />
-    <ClInclude Include="module\colog\include\sclog.h" />
     <ClInclude Include="module\iop\include\iop.h" />
     <ClInclude Include="module\iop\include\iop_def.h" />
     <ClInclude Include="module\iop\include\iop_poll$epoll.h" />
@@ -109,6 +100,7 @@
     <ClInclude Include="module\poll\include\socket_message.h" />
     <ClInclude Include="module\poll\include\socket_poll.h" />
     <ClInclude Include="module\poll\include\socket_server.h" />
+    <ClInclude Include="module\schead\include\clog.h" />
     <ClInclude Include="module\schead\include\md5util.h" />
     <ClInclude Include="module\schead\include\scconf.h" />
     <ClInclude Include="module\schead\include\scjson.h" />
@@ -132,7 +124,6 @@
     <ClInclude Include="module\struct\include\dict.h" />
     <ClInclude Include="module\struct\include\recvmq.h" />
     <ClInclude Include="module\struct\include\list.h" />
-    <ClInclude Include="module\struct\include\objs.h" />
     <ClInclude Include="module\struct\include\rbtree.h" />
     <ClInclude Include="module\struct\include\mq.h" />
     <ClInclude Include="module\struct\include\struct.h" />
@@ -181,12 +172,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(ProjectDir)main/body/include;$(ProjectDir)extern/pthread/include;$(ProjectDir)extern/curl/include;$(ProjectDir)module/schead/include;$(ProjectDir)module/struct/include;$(ProjectDir)module/service/include;$(ProjectDir)module/logic/include;$(ProjectDir)module/colog/include;$(ProjectDir)module/iop/include;$(ProjectDir)module/poll/include;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)extern/pthread/include;$(ProjectDir)extern/curl/include;$(ProjectDir)module/schead/include;$(ProjectDir)module/struct/include;$(ProjectDir)module/service/include;$(ProjectDir)module/logic/include;$(ProjectDir)module/colog/include;$(ProjectDir)module/iop/include;$(ProjectDir)module/poll/include;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)extern/pthread/lib;$(ProjectDir)extern/curl/lib;$(LibraryPath)</LibraryPath>
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(ProjectDir)main/body/include;$(ProjectDir)extern/pthread/include;$(ProjectDir)extern/curl/include;$(ProjectDir)module/schead/include;$(ProjectDir)module/struct/include;$(ProjectDir)module/service/include;$(ProjectDir)module/logic/include;$(ProjectDir)module/colog/include;$(ProjectDir)module/iop/include;$(ProjectDir)module/poll/include;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)extern/pthread/include;$(ProjectDir)extern/curl/include;$(ProjectDir)module/schead/include;$(ProjectDir)module/struct/include;$(ProjectDir)module/service/include;$(ProjectDir)module/logic/include;$(ProjectDir)module/colog/include;$(ProjectDir)module/iop/include;$(ProjectDir)module/poll/include;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)module/pthread/lib;$(ProjectDir)extern/curl/lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
