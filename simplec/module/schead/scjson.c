@@ -9,15 +9,13 @@ void
 cjson_delete(cjson_t c) {
 	while (c) {
 		cjson_t next = c->next;
-		if (!(c->type & _CJSON_ISREF)) {
-			if (c->type & _CJSON_STRING)
-				free(c->vs);
-			// 递归删除子节点
-			if (c->child)
-				cjson_delete(c->child);
-		}
-		else if (!(c->type & _CJSON_ISCONST) && c->key)
-			free(c->key);
+		// 放弃引用和常量的优化选项
+		free(c->key);
+		if (c->type & CJSON_STRING)
+			free(c->vs);
+		// 递归删除子节点
+		if (c->child)
+			cjson_delete(c->child);
 		free(c);
 		c = next;
 	}
@@ -126,7 +124,7 @@ static const char * _parse_string(cjson_t item, const char * str) {
 	if (c == '\"')
 		++ptr;
 	item->vs = out;
-	item->type = _CJSON_STRING;
+	item->type = CJSON_STRING;
 	return ptr;
 }
 
@@ -159,7 +157,7 @@ static const char * _parse_number(cjson_t item, const char * str) {
 
 	//返回最终结果 number = +/- number.fraction * 10^+/- exponent
 	item->vd = ns * n * pow(10.0, nd + es * e);
-	item->type = _CJSON_NUMBER;
+	item->type = CJSON_NUMBER;
 	return str;
 }
 
@@ -176,7 +174,7 @@ static const char * _parse_array(cjson_t item, const char * str) {
 		RETURN(NULL, "array str error start: %s.", str);
 	}
 
-	item->type = _CJSON_ARRAY;
+	item->type = CJSON_ARRAY;
 	if (*++str == ']') // 低估提前结束, 跳过']'
 		return str + 1;
 
@@ -214,7 +212,7 @@ static const char * _parse_object(cjson_t item, const char * str) {
 		RETURN(NULL, "object str error start: %s.", str);
 	}
 
-	item->type = _CJSON_OBJECT;
+	item->type = CJSON_OBJECT;
 	if (*++str == '}')
 		return str + 1;
 
@@ -265,9 +263,9 @@ static const char * _parse_value(cjson_t item, const char * str) {
 	if ((str) && (c = *str)) {
 		switch (c) {
 		// n = null, f = false, t = true ... 
-		case 'n' : return item->type = _CJSON_NULL, str + 4;
-		case 'f' : return item->type = _CJSON_FALSE, str + 5;
-		case 't' : return item->type = _CJSON_TRUE, item->vd = 1.0, str + 4;
+		case 'n' : return item->type = CJSON_NULL, str + 4;
+		case 'f' : return item->type = CJSON_FALSE, str + 5;
+		case 't' : return item->type = CJSON_TRUE, item->vd = 1.0, str + 4;
 		case '\"': return _parse_string(item, str);
 		case '0' : case '1' : case '2' : case '3' : case '4' : case '5' :
 		case '6' : case '7' : case '8' : case '9' :
@@ -522,13 +520,13 @@ static char * _print_object(cjson_t item, tstr_t p);
 static char * _print_value(cjson_t item, tstr_t p) {
 	char * out = NULL;
 	switch (item->type) {
-	case _CJSON_FALSE: out = tstr_expand(p, 6); strcpy(out, "false"); break;
-	case _CJSON_TRUE: out = tstr_expand(p, 5); strcpy(out, "true"); break;
-	case _CJSON_NULL: out = tstr_expand(p, 5); strcpy(out, "null"); break;
-	case _CJSON_NUMBER	: out = _print_number(item, p); break;
-	case _CJSON_STRING	: out = _print_string(item->vs, p); break;
-	case _CJSON_ARRAY	: out = _print_array(item, p); break;
-	case _CJSON_OBJECT	: out = _print_object(item, p); break;
+	case CJSON_FALSE: out = tstr_expand(p, 6); strcpy(out, "false"); break;
+	case CJSON_TRUE: out = tstr_expand(p, 5); strcpy(out, "true"); break;
+	case CJSON_NULL: out = tstr_expand(p, 5); strcpy(out, "null"); break;
+	case CJSON_NUMBER	: out = _print_number(item, p); break;
+	case CJSON_STRING	: out = _print_string(item->vs, p); break;
+	case CJSON_ARRAY	: out = _print_array(item, p); break;
+	case CJSON_OBJECT	: out = _print_object(item, p); break;
 	}
 	p->len += strlen(p->str + p->len);
 
@@ -649,12 +647,12 @@ cjson_newnull(void) {
 
 inline cjson_t
 cjson_newarray(void) {
-	return _cjson_newt(_CJSON_ARRAY);
+	return _cjson_newt(CJSON_ARRAY);
 }
 
 inline cjson_t
 cjson_newobject(void) {
-	return _cjson_newt(_CJSON_OBJECT);
+	return _cjson_newt(CJSON_OBJECT);
 }
 
 inline cjson_t
@@ -666,14 +664,14 @@ cjson_newbool(bool b) {
 
 inline cjson_t
 cjson_newnumber(double vd) {
-	cjson_t item = _cjson_newt(_CJSON_NUMBER);
+	cjson_t item = _cjson_newt(CJSON_NUMBER);
 	item->vd = vd;
 	return item;
 }
 
 inline cjson_t
-cjson_newstring(const char* vs) {
-	cjson_t item = _cjson_newt(_CJSON_STRING);
+cjson_newstring(const char * vs) {
+	cjson_t item = _cjson_newt(CJSON_STRING);
 	item->vs = tstr_dup(vs);
 	return item;
 }
@@ -691,11 +689,11 @@ extern cjson_t cjson_newtypearray(unsigned char type, const void * array, size_t
 
 	for(i = 0; i < len; ++i){
 		switch(type){
-		case _CJSON_NULL	: n = cjson_newnull(); break;
-		case _CJSON_TRUE: n = cjson_newbool(array ? ((bool *)array)[i] : true); break;
-		case _CJSON_FALSE	: n = cjson_newbool(array? ((bool *)array)[i] : false); break;
-		case _CJSON_NUMBER	: n = cjson_newnumber(((double *)array)[i]); break;
-		case _CJSON_STRING	: n = cjson_newstring(((char **)array)[i]); break;
+		case CJSON_NULL   : n = cjson_newnull(); break;
+		case CJSON_TRUE   : n = cjson_newbool(array ? ((bool *)array)[i] : true); break;
+		case CJSON_FALSE  : n = cjson_newbool(array? ((bool *)array)[i] : false); break;
+		case CJSON_NUMBER : n = cjson_newnumber(((double *)array)[i]); break;
+		case CJSON_STRING : n = cjson_newstring(((char **)array)[i]); break;
 		default: RETURN(NULL, "type is error = %d.", type);
 		}
 		if(i) // 有你更好

@@ -237,9 +237,6 @@
     <ClCompile Include="test\test_recvmq.c">
       <Filter>test</Filter>
     </ClCompile>
-    <ClCompile Include="module\schead\md5util.c">
-      <Filter>module\schead</Filter>
-    </ClCompile>
     <ClCompile Include="module\schead\scconf.c">
       <Filter>module\schead</Filter>
     </ClCompile>
@@ -263,6 +260,9 @@
     </ClCompile>
     <ClCompile Include="test\test_sh_strerr.c">
       <Filter>test</Filter>
+    </ClCompile>
+    <ClCompile Include="module\schead\scmd5.c">
+      <Filter>module\schead</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -386,9 +386,6 @@
     <ClInclude Include="module\struct\include\recvmq.h">
       <Filter>module\struct\include</Filter>
     </ClInclude>
-    <ClInclude Include="module\schead\include\md5util.h">
-      <Filter>module\schead\include</Filter>
-    </ClInclude>
     <ClInclude Include="extern\curl\include\curl\curl.h">
       <Filter>extern\curl\include\curl</Filter>
     </ClInclude>
@@ -423,6 +420,9 @@
       <Filter>module\struct\include</Filter>
     </ClInclude>
     <ClInclude Include="module\schead\include\clog.h">
+      <Filter>module\schead\include</Filter>
+    </ClInclude>
+    <ClInclude Include="module\schead\include\scmd5.h">
       <Filter>module\schead\include</Filter>
     </ClInclude>
   </ItemGroup>

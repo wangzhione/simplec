@@ -1,5 +1,5 @@
-﻿#ifndef _H_SIMPLEC_MD5UTIL
-#define _H_SIMPLEC_MD5UTIL
+﻿#ifndef _H_SIMPLEC_SCMD5
+#define _H_SIMPLEC_SCMD5
 
 #include <stddef.h>
 #include <stdint.h>
@@ -26,4 +26,4 @@ extern uint8_t * md5_strs(const void * d, size_t n, md5s_t md5s);
 //
 extern uint8_t * md5_file(const char * file, md5s_t md5s);
 
-#endif // !_H_SIMPLEC_MD5UTIL
+#endif // !_H_SIMPLEC_SCMD5

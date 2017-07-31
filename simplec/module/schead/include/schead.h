@@ -55,11 +55,11 @@ extern int getch(void);
 #if !defined(_H_ARRHELP)
 
 // 添加双引号的宏 
-#define CSTR(a)	_STR(a)
-#define _STR(a) #a
+#define CSTR(v)	_STR(v)
+#define _STR(v) #v
 
 // 获取数组长度,只能是数组类型或""字符串常量,后者包含'\0'
-#define LEN(arr) (sizeof(arr) / sizeof(*(arr)))
+#define LEN(a) (sizeof(a) / sizeof(*(a)))
 
 // 置空操作, v必须是个变量
 #define BZERO(v) \
@@ -79,25 +79,6 @@ extern int getch(void);
 
 #define _H_ARRHELP
 #endif//_H_ARRHELP
-
-/* 范围内比较大小辅助宏 */
-#if !defined(_H_EQUAL)
-
-// 浮点数据判断宏帮助, __开头表示不希望你使用的宏
-#define _DIFF(x, y)			((x)-(y))				//两个表达式做差宏
-#define _IF_X(x, c)			((x)<c && (x)>-c)		//判断宏,z必须是宏常量
-#define EQC(x, y, c)		_IF_X(_DIFF(x, y), c)	//判断x和y是否在误差范围内相等
-
-// float判断定义的宏
-#define EQ_FLOAT_ZERO(x)	_IF_X(x, FLT_MIN)		//float 判断x是否为零是返回true
-#define EQ_FLOAT(x, y)		EQC(x, y, FLT_MIN)		//判断表达式x与y是否相等
-
-// double判断定义的宏
-#define EQ_DOUBLE_ZERO(x)	_IF_X(x, DBL_MIN)		//double 判断x是否为零是返回true
-#define EQ_DOUBLE(x,y)		EQC(x, y, DBL_MIN)		//判断表达式x与y是否相等
-
-#define _H_EQUAL
-#endif//_H_EQUAL
 
 #ifndef _H_CODEHELP
 

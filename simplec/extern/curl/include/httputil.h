@@ -2,7 +2,7 @@
 #define _H_SIMPLEC_HTTPUTIL
 
 #include <tstr.h>
-#include <md5util.h>
+#include <scmd5.h>
 #include <curl/curl.h>
 
 //

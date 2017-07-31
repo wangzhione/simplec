@@ -1,6 +1,6 @@
-﻿#include <stdio.h>
+﻿#include <scmd5.h>
+#include <stdio.h>
 #include <stdint.h>
-#include "md5util.h"
 
 struct md5ctx {
 	uint32_t nl, nh;      /* Number of _bits_ handled mod 2^64 */
