@@ -90,8 +90,8 @@
     <ClInclude Include="extern\pthread\include\semaphore.h" />
     <ClInclude Include="module\iop\include\iop.h" />
     <ClInclude Include="module\iop\include\iop_def.h" />
-    <ClInclude Include="module\iop\include\iop_poll$epoll.h" />
-    <ClInclude Include="module\iop\include\iop_poll$select.h" />
+    <ClInclude Include="module\iop\include\iop_poll%24epoll.h" />
+    <ClInclude Include="module\iop\include\iop_poll%24select.h" />
     <ClInclude Include="module\iop\include\iop_poll.h" />
     <ClInclude Include="module\iop\include\iop_server.h" />
     <ClInclude Include="module\poll\include\socket$epoll.h" />

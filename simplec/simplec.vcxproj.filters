@@ -329,12 +329,6 @@
     <ClInclude Include="module\iop\include\iop_def.h">
       <Filter>module\iop\include</Filter>
     </ClInclude>
-    <ClInclude Include="module\iop\include\iop_poll$epoll.h">
-      <Filter>module\iop\include</Filter>
-    </ClInclude>
-    <ClInclude Include="module\iop\include\iop_poll$select.h">
-      <Filter>module\iop\include</Filter>
-    </ClInclude>
     <ClInclude Include="module\iop\include\iop_poll.h">
       <Filter>module\iop\include</Filter>
     </ClInclude>
@@ -424,6 +418,12 @@
     </ClInclude>
     <ClInclude Include="module\schead\include\scmd5.h">
       <Filter>module\schead\include</Filter>
+    </ClInclude>
+    <ClInclude Include="module\iop\include\iop_poll%24epoll.h">
+      <Filter>module\iop\include</Filter>
+    </ClInclude>
+    <ClInclude Include="module\iop\include\iop_poll%24select.h">
+      <Filter>module\iop\include</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

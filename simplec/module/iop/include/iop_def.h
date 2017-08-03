@@ -1,5 +1,5 @@
-﻿#ifndef _H_LIBIOP_IOP_DEF
-#define _H_LIBIOP_IOP_DEF
+﻿#ifndef _H_SIMPLEC_IOP_DEF
+#define _H_SIMPLEC_IOP_DEF
 
 #include <tstr.h>
 #include <vlist.h>
@@ -100,7 +100,6 @@ struct iop {
 };
 
 struct iopop {
-	const char * name;										// 模块的名称
 	void (* ffree)(iopbase_t);								// 资源释放接口
 	int (* fdispatch)(iopbase_t, uint32_t);					// 模型调度接口
 	int (* fadd)(iopbase_t, uint32_t, socket_t, uint32_t);	// 添加事件接口
@@ -159,4 +158,4 @@ extern int iop_del(iopbase_t base, uint32_t id);
 		}\
 	} while(0)
 
-#endif // !_H_LIBIOP_IOP_DEF
+#endif // !_H_SIMPLEC_IOP_DEF

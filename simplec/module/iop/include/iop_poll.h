@@ -1,5 +1,5 @@
-﻿#ifndef _H_LIBIOP_IOP_POLL
-#define _H_LIBIOP_IOP_POLL
+﻿#ifndef _H_SIMPLEC_IOP_POLL
+#define _H_SIMPLEC_IOP_POLL
 
 #include <iop_def.h>
 
@@ -11,4 +11,4 @@
 //
 extern int iop_init_pool(iopbase_t base, unsigned maxsz);
 
-#endif // !_H_LIBIOP_IOP_POLL
+#endif // !_H_SIMPLEC_IOP_POLL

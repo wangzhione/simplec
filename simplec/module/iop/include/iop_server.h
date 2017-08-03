@@ -1,5 +1,5 @@
-﻿#ifndef _H_LIBIOP_IOP_SERVER
-#define _H_LIBIOP_IOP_SERVER
+﻿#ifndef _H_SIMPLEC_IOP_SERVER
+#define _H_SIMPLEC_IOP_SERVER
 
 #include <iop.h>
 
@@ -7,6 +7,7 @@ typedef struct ioptcp {
 	char host[_INT_HOST];
 	uint16_t port;
 	uint32_t timeout;
+
 	iop_event_f ferror;
 	iop_f fconnect;
 	iop_f fdestroy;
@@ -32,4 +33,4 @@ extern int iop_add_ioptcp(iopbase_t base,
 	iop_parse_f fparser, iop_processor_f fprocessor,
 	iop_f fconnect, iop_f fdestroy, iop_event_f ferror);
 
-#endif // !_H_LIBIOP_IOP_SERVER
+#endif // !_H_SIMPLEC_IOP_SERVER

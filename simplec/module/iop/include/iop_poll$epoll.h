@@ -108,7 +108,6 @@ int
 iop_init_pool(iopbase_t base, unsigned maxsz) {
 	epolls_t mdata;
 	iopop_t op = &base->op;
-
 	int epfd = epoll_create(_INT_POLL);
 	if (epfd < SufBase) {
 		RETURN(ErrBase, "epoll_create %d is error!", _INT_POLL);
@@ -120,15 +119,13 @@ iop_init_pool(iopbase_t base, unsigned maxsz) {
 	}
 	mdata->efd = epfd;
 	mdata->ets = maxsz;
+	base->mdata = mdata;
 
-	op->name = "linux epoll";
 	op->ffree = _epolls_free;
 	op->fdispatch = _epolls_dispatch;
 	op->fadd = _epolls_add;
 	op->fdel = _epolls_del;
 	op->fmod = _epolls_mod;
-
-	base->mdata = mdata;
 
 	return SufBase;
 }

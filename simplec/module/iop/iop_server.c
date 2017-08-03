@@ -14,14 +14,14 @@ static int _iop_tcp_fdispatch(iopbase_t base, uint32_t id, uint32_t events, void
 	// 读事件
 	if (events & EV_READ) {
 		n = iop_recv(base, id);
+		// 服务器关闭, 直接返回关闭操作
+		if (n == ErrClose)
+			return ErrClose;
+
 		if (n < SufBase) {
 			r = sarg->ferror(base, id, EV_READ, arg);
 			return r;
 		}
-
-		// 服务器关闭, 直接返回关闭操作
-		if (n == ErrClose)
-			return ErrClose;
 
 		for (;;) {
 			// 读取链接关闭

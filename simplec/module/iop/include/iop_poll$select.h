@@ -149,23 +149,14 @@ iop_init_pool(iopbase_t base, unsigned maxsz) {
 	if (NULL == mdata) {
 		RETURN(ErrAlloc, "malloc sizeof(struct selects) is error!");
 	}
+	base->mdata = mdata;
 
 	op = &base->op;
-
-#ifdef _MSC_VER
-	op->name = "winds select";
-#else
-	mdata->maxfd = SOCKET_ERROR;
-	op->name = "linux select";
-#endif
-
 	op->ffree = _selects_free;
 	op->fdispatch = _selects_dispatch;
 	op->fadd = _selects_add;
 	op->fdel = _selects_del;
 	op->fmod = _selects_mod;
-
-	base->mdata = mdata;
 
 	return SufBase;
 }

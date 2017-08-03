@@ -2,8 +2,7 @@
 
 #include <string.h>
 
-extern const char * sh_strerr(int error);
-inline const char * sh_strerr(int error) {
+extern inline const char * sh_strerr(int error) {
 	return strerror(error);
 }
 
@@ -16,7 +15,7 @@ inline const char * sh_strerr(int error) {
 
 #define DWORD int
 
-const char * sh_strerr(int error) {
+extern const char * sh_strerr(int error) {
 	switch (error) {
     case ERROR_SUCCESS                                                          : return "The operation completed successfully";
     case ERROR_INVALID_FUNCTION                                                 : return "Incorrect function";

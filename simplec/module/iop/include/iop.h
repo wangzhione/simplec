@@ -1,5 +1,5 @@
-﻿#ifndef _H_LIBIOP_IOP
-#define _H_LIBIOP_IOP
+﻿#ifndef _H_SIMPLEC_IOP
+#define _H_SIMPLEC_IOP
 
 #include <iop_def.h>
 #include <pthread.h>
@@ -87,4 +87,4 @@ extern int iop_mod(iopbase_t base, uint32_t id, uint32_t events);
 extern int iop_send(iopbase_t base, uint32_t id, const void * data, uint32_t len);
 extern int iop_recv(iopbase_t base, uint32_t id);
 
-#endif // !_H_LIBIOP_IOP
+#endif // !_H_SIMPLEC_IOP
