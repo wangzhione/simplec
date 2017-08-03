@@ -4,7 +4,7 @@
 ![simplec title image hello ya!](http://images.cnblogs.com/cnblogs_com/life2refuel/1022495/o_simplec.jpg)
 
     这个库是 C 跨平台的简单的基础库.(搭建框架层的小型底层库)
-    非常的 simple , 高效. 特别适合喜欢C的和学有余力的在校生可以的学习和参考. 
+    非常的 simple, 高效. 特别适合喜欢C的和学有余力的在校生可以的学习和参考. 
     
     目前具备的功能如下:
     
@@ -14,10 +14,10 @@
     
     2) module - 内部功能
         a) 单元测试, 可以参照 simplec 和 test 文件夹下
-        b) 丰富高效的日志, 见 colog 文件下, 写了三种模型的日志轮子
+        b) 精简高效的日志clog 搭配 logrotate
         c) 精简的配置解析库 scconf.h
         d) 快速的 scjson.h 解析引擎, 比cJSON库好. 序列化方案, 自己插入
-        e) 跨平台的网络io's, 基于 select<winds and linux> + epoll + kqueue
+        e) 跨平台的网络io, 基于 select + epoll + kqueue
         f) 内存监测, csv解析, 自旋锁, 读写锁, 时间业务, 中文加解码, 协程库...
         g) 常用数据结构, string, array, tree, rbtree, list, queue....
         ... ...
