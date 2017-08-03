@@ -11,7 +11,6 @@ STRUCT_DIR		?= module/struct
 SCHEAD_DIR 		?= module/schead
 SERVICE_DIR		?= module/service
 POLL_DIR		?= module/poll
-IOP_DIR			?= module/iop
 
 TEST_DIR		?= test
 
@@ -25,7 +24,7 @@ OUT				?= exe
 # IINC		: -I 需要导入的include 目录
 # SRCC		: 所有 .c 文件
 #
-DIRS	=	$(CURL_DIR) $(STRUCT_DIR) $(SCHEAD_DIR) $(SERVICE_DIR) $(POLL_DIR) $(IOP_DIR)
+DIRS	=	$(CURL_DIR) $(STRUCT_DIR) $(SCHEAD_DIR) $(SERVICE_DIR) $(POLL_DIR)
 
 IINC	=	$(foreach v, $(DIRS), -I$(SRC_PATH)/$(v)/include)
 SRCC	=	$(wildcard $(foreach v, $(MAIN_DIR) $(DIRS) $(TEST_DIR), $(SRC_PATH)/$(v)/*.c))
@@ -44,9 +43,7 @@ CC		= gcc
 LIB 	= -lpthread -lm -lcurl
 CFLAGS 	= -g -O2 -Wall -Wno-unused-result -std=gnu11
 
-DEF		= -D_HAVE_EPOLL
-
-RHAD	= $(CC) $(CFLAGS) $(IINC) $(DEF)
+RHAD	= $(CC) $(CFLAGS) $(IINC)
 RTAL	= $(foreach v, $^, $(OBJP)$(v)) $(LIB)
 RUNO	= $(RHAD) -c -o $(OBJP)$@ $<
 RUN		= $(RHAD) -o $(TAR_PATH)/$@ $(RTAL)

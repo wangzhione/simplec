@@ -2,7 +2,7 @@
 
 #include <string.h>
 
-inline const char * socket_strerror(int error) {
+extern inline const char * socket_strerror(int error) {
     return strerror(error);
 }
 
@@ -15,7 +15,7 @@ inline const char * socket_strerror(int error) {
 
 #define DWORD int
 
-const char * socket_strerror(int error) {
+extern const char * socket_strerror(int error) {
     switch(error) {
 	...
     case {errno}: return "{str}";

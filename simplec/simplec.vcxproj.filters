@@ -37,12 +37,6 @@
     <Filter Include="test\config">
       <UniqueIdentifier>{6ff1be27-7c73-46e4-ad84-0a5e6d0fefee}</UniqueIdentifier>
     </Filter>
-    <Filter Include="module\iop">
-      <UniqueIdentifier>{29c00ff9-ac39-46fa-bc2e-a7b117cfe7f0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="module\iop\include">
-      <UniqueIdentifier>{a61b7112-02b8-40a1-884a-a97666f35e8c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="extern">
       <UniqueIdentifier>{18dff8b3-0e26-4c18-b5dd-f44ac2cd5aad}</UniqueIdentifier>
     </Filter>
@@ -174,18 +168,6 @@
     <ClCompile Include="test\test_scthreads.c">
       <Filter>test</Filter>
     </ClCompile>
-    <ClCompile Include="module\iop\iop.c">
-      <Filter>module\iop</Filter>
-    </ClCompile>
-    <ClCompile Include="module\iop\iop_poll.c">
-      <Filter>module\iop</Filter>
-    </ClCompile>
-    <ClCompile Include="module\iop\iop_server.c">
-      <Filter>module\iop</Filter>
-    </ClCompile>
-    <ClCompile Include="test\test_iopserver.c">
-      <Filter>test</Filter>
-    </ClCompile>
     <ClCompile Include="extern\curl\httputil.c">
       <Filter>extern\curl</Filter>
     </ClCompile>
@@ -194,9 +176,6 @@
     </ClCompile>
     <ClCompile Include="test\test_ddos.c">
       <Filter>test</Filter>
-    </ClCompile>
-    <ClCompile Include="module\struct\vlist.c">
-      <Filter>module\struct</Filter>
     </ClCompile>
     <ClCompile Include="test\test_sctime.c">
       <Filter>test</Filter>
@@ -323,18 +302,6 @@
     <ClInclude Include="module\service\include\scthreads.h">
       <Filter>module\service\include</Filter>
     </ClInclude>
-    <ClInclude Include="module\iop\include\iop.h">
-      <Filter>module\iop\include</Filter>
-    </ClInclude>
-    <ClInclude Include="module\iop\include\iop_def.h">
-      <Filter>module\iop\include</Filter>
-    </ClInclude>
-    <ClInclude Include="module\iop\include\iop_poll.h">
-      <Filter>module\iop\include</Filter>
-    </ClInclude>
-    <ClInclude Include="module\iop\include\iop_server.h">
-      <Filter>module\iop\include</Filter>
-    </ClInclude>
     <ClInclude Include="extern\pthread\include\pthread.h">
       <Filter>extern\pthread\include</Filter>
     </ClInclude>
@@ -346,9 +313,6 @@
     </ClInclude>
     <ClInclude Include="extern\curl\include\httputil.h">
       <Filter>extern\curl\include</Filter>
-    </ClInclude>
-    <ClInclude Include="module\struct\include\vlist.h">
-      <Filter>module\struct\include</Filter>
     </ClInclude>
     <ClInclude Include="module\schead\include\sciconv.h">
       <Filter>module\schead\include</Filter>
@@ -418,12 +382,6 @@
     </ClInclude>
     <ClInclude Include="module\schead\include\scmd5.h">
       <Filter>module\schead\include</Filter>
-    </ClInclude>
-    <ClInclude Include="module\iop\include\iop_poll%24epoll.h">
-      <Filter>module\iop\include</Filter>
-    </ClInclude>
-    <ClInclude Include="module\iop\include\iop_poll%24select.h">
-      <Filter>module\iop\include</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

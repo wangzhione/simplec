@@ -26,7 +26,7 @@ void test_sh_strerr(void) {
 		"\r\n"
 		"#include <string.h>\r\n"
 		"\r\n"
-		"inline const char * sh_strerr(int error) {\r\n"
+		"extern inline const char * sh_strerr(int error) {\r\n"
 		"	return strerror(error);\r\n"
 		"}\r\n"
 		"\r\n"
@@ -39,7 +39,7 @@ void test_sh_strerr(void) {
 		"\r\n"
 		"#define DWORD int\r\n"
 		"\r\n"
-		"const char * sh_strerr(int error) {\r\n"
+		"extern const char * sh_strerr(int error) {\r\n"
 		"	switch (error) {\r\n"
 	);
 

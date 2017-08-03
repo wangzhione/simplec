@@ -13,8 +13,6 @@
 	$(ProjectDir)module/schead/include				--	框架帮助库头文件文件夹
 	$(ProjectDir)module/struct/include				--	框架数据结构头文件文件夹
 	$(ProjectDir)module/service/include				--	框架提供的辅助服务头文件文件夹
-	$(ProjectDir)module/colog/include				--	框架辅助日志业务头文件文件夹
-	$(ProjectDir)module/iop/include					--	框架网络IO文件文件夹
 	$(ProjectDir)module/poll/include				--	框架网络IO文件文件夹, 采用结构模式
 
 2. lib 库添加

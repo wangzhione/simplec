@@ -14,9 +14,6 @@
     <ClCompile Include="extern\curl\httputil.c" />
     <ClCompile Include="main\main.c" />
     <ClCompile Include="main\simplec.c" />
-    <ClCompile Include="module\iop\iop.c" />
-    <ClCompile Include="module\iop\iop_poll.c" />
-    <ClCompile Include="module\iop\iop_server.c" />
     <ClCompile Include="module\poll\socket_message.c" />
     <ClCompile Include="module\poll\socket_poll.c" />
     <ClCompile Include="module\poll\socket_server.c" />
@@ -45,7 +42,6 @@
     <ClCompile Include="module\struct\rbtree.c" />
     <ClCompile Include="module\struct\mq.c" />
     <ClCompile Include="module\struct\tstr.c" />
-    <ClCompile Include="module\struct\vlist.c" />
     <ClCompile Include="test\test_array.c" />
     <ClCompile Include="test\test_atom_rwlock.c" />
     <ClCompile Include="test\test_cjson_write.c" />
@@ -55,7 +51,6 @@
     <ClCompile Include="test\test_ddos.c" />
     <ClCompile Include="test\test_dict.c" />
     <ClCompile Include="test\test_httputil.c" />
-    <ClCompile Include="test\test_iopserver.c" />
     <ClCompile Include="test\test_cjson_read.c" />
     <ClCompile Include="test\test_recvmq.c" />
     <ClCompile Include="test\test_pthread_sem.c" />
@@ -88,12 +83,6 @@
     <ClInclude Include="extern\pthread\include\pthread.h" />
     <ClInclude Include="extern\pthread\include\sched.h" />
     <ClInclude Include="extern\pthread\include\semaphore.h" />
-    <ClInclude Include="module\iop\include\iop.h" />
-    <ClInclude Include="module\iop\include\iop_def.h" />
-    <ClInclude Include="module\iop\include\iop_poll%24epoll.h" />
-    <ClInclude Include="module\iop\include\iop_poll%24select.h" />
-    <ClInclude Include="module\iop\include\iop_poll.h" />
-    <ClInclude Include="module\iop\include\iop_server.h" />
     <ClInclude Include="module\poll\include\socket$epoll.h" />
     <ClInclude Include="module\poll\include\socket$kevent.h" />
     <ClInclude Include="module\poll\include\socket$select.h" />
@@ -128,7 +117,6 @@
     <ClInclude Include="module\struct\include\mq.h" />
     <ClInclude Include="module\struct\include\struct.h" />
     <ClInclude Include="module\struct\include\tstr.h" />
-    <ClInclude Include="module\struct\include\vlist.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="config\config.ini" />
@@ -172,12 +160,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(ProjectDir)extern/pthread/include;$(ProjectDir)extern/curl/include;$(ProjectDir)module/schead/include;$(ProjectDir)module/struct/include;$(ProjectDir)module/service/include;$(ProjectDir)module/logic/include;$(ProjectDir)module/colog/include;$(ProjectDir)module/iop/include;$(ProjectDir)module/poll/include;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)extern/pthread/include;$(ProjectDir)extern/curl/include;$(ProjectDir)module/schead/include;$(ProjectDir)module/struct/include;$(ProjectDir)module/service/include;$(ProjectDir)module/logic/include;$(ProjectDir)module/poll/include;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)extern/pthread/lib;$(ProjectDir)extern/curl/lib;$(LibraryPath)</LibraryPath>
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(ProjectDir)extern/pthread/include;$(ProjectDir)extern/curl/include;$(ProjectDir)module/schead/include;$(ProjectDir)module/struct/include;$(ProjectDir)module/service/include;$(ProjectDir)module/logic/include;$(ProjectDir)module/colog/include;$(ProjectDir)module/iop/include;$(ProjectDir)module/poll/include;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)extern/pthread/include;$(ProjectDir)extern/curl/include;$(ProjectDir)module/schead/include;$(ProjectDir)module/struct/include;$(ProjectDir)module/service/include;$(ProjectDir)module/logic/include;$(ProjectDir)module/poll/include;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)module/pthread/lib;$(ProjectDir)extern/curl/lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
