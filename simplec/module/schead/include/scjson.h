@@ -16,7 +16,7 @@ struct cjson {
 	struct cjson * next;	// 采用链表结构处理, 放弃二叉树结构, 优化内存
 	struct cjson * child;	// type == ( CJSON_ARRAY or CJSON_OBJECT ) 那么 child 就不为空
 
-	unsigned char type;		// 数据类型和方式定义, 一个美好的意愿
+	unsigned char type;		// 数据类型 CJSON_XXXX, 一个美好的意愿
 	char * key;				// json内容那块的 key名称 	
 	union {
 		char * vs;			// type == CJSON_STRING, 是一个字符串 	
@@ -26,6 +26,13 @@ struct cjson {
 
 //定义cjson_t json类型
 typedef struct cjson * cjson_t;
+
+//
+// cjson_getint - 这个宏, 协助我们得到 int 值
+// item		: 待处理的目标cjson_t结点
+// return	: int
+//
+#define cjson_getvi(item) ((int)((item)->vd))
 
 //
 // cjson_delete - 删除json串内容  
@@ -39,19 +46,11 @@ extern void cjson_delete(cjson_t c);
 // str		: 普通格式的串
 // tstr		: tstr_t 字符串, 成功后会压缩 tstr_t
 // path		: json 文件路径
-// return	: 解析好的 json_t对象, 失败为NULL
+// return	: 解析好的 json_t对象, 失败为 NULL
 //
 extern cjson_t cjson_newstr(const char * str);
 extern cjson_t cjson_newtstr(tstr_t tstr);
 extern cjson_t cjson_newfile(const char * path);
-
-//
-// cjson_getint - 这个宏, 协助我们得到 int 值
-// item		: 待处理的目标cjson_t结点
-// return	: int
-//
-#define cjson_getvi(item) \
-	((int)((item)->vd))
 
 //
 // cjson_getlen - 得到当前数组个数

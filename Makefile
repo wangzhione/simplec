@@ -6,6 +6,7 @@ SRC_PATH 		?= ./simplec
 MAIN_DIR		?= main
 
 CURL_DIR		?= extern/curl
+MPACK_DIR		?= extern/mpack
 
 STRUCT_DIR		?= module/struct
 SCHEAD_DIR 		?= module/schead
@@ -24,7 +25,7 @@ OUT				?= exe
 # IINC		: -I 需要导入的include 目录
 # SRCC		: 所有 .c 文件
 #
-DIRS	=	$(CURL_DIR) $(STRUCT_DIR) $(SCHEAD_DIR) $(SERVICE_DIR) $(POLL_DIR)
+DIRS	=	$(CURL_DIR) $(STRUCT_DIR) $(SCHEAD_DIR) $(SERVICE_DIR) $(POLL_DIR) $(MPACK_DIR)
 
 IINC	=	$(foreach v, $(DIRS), -I$(SRC_PATH)/$(v)/include)
 SRCC	=	$(wildcard $(foreach v, $(MAIN_DIR) $(DIRS) $(TEST_DIR), $(SRC_PATH)/$(v)/*.c))

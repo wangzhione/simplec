@@ -67,6 +67,12 @@
     <Filter Include="module\poll\include">
       <UniqueIdentifier>{e1b25494-5b8f-4978-ba64-4c9ebbe0ca6e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="extern\mpack">
+      <UniqueIdentifier>{9454d4af-b701-4e73-aeef-9bbcf6d8f511}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="extern\mpack\include">
+      <UniqueIdentifier>{0adc971c-0ddb-4a74-a1f5-b6fd9a381a86}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="module\schead\schead.c">
@@ -82,9 +88,6 @@
       <Filter>module\service</Filter>
     </ClCompile>
     <ClCompile Include="test\test_atom_rwlock.c">
-      <Filter>test</Filter>
-    </ClCompile>
-    <ClCompile Include="test\test_cjson_write.c">
       <Filter>test</Filter>
     </ClCompile>
     <ClCompile Include="test\test_csv.c">
@@ -122,9 +125,6 @@
     </ClCompile>
     <ClCompile Include="module\schead\scjson.c">
       <Filter>module\schead</Filter>
-    </ClCompile>
-    <ClCompile Include="test\test_cjson.c">
-      <Filter>test</Filter>
     </ClCompile>
     <ClCompile Include="module\schead\sctime.c">
       <Filter>module\schead</Filter>
@@ -183,9 +183,6 @@
     <ClCompile Include="module\schead\sciconv.c">
       <Filter>module\schead</Filter>
     </ClCompile>
-    <ClCompile Include="test\test_cjson_read.c">
-      <Filter>test</Filter>
-    </ClCompile>
     <ClCompile Include="module\schead\scsocket.c">
       <Filter>module\schead</Filter>
     </ClCompile>
@@ -242,6 +239,15 @@
     </ClCompile>
     <ClCompile Include="module\schead\scmd5.c">
       <Filter>module\schead</Filter>
+    </ClCompile>
+    <ClCompile Include="extern\mpack\mpack.c">
+      <Filter>extern\mpack</Filter>
+    </ClCompile>
+    <ClCompile Include="test\test_scjson.c">
+      <Filter>test</Filter>
+    </ClCompile>
+    <ClCompile Include="test\test_mpack.c">
+      <Filter>test</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -382,6 +388,9 @@
     </ClInclude>
     <ClInclude Include="module\schead\include\scmd5.h">
       <Filter>module\schead\include</Filter>
+    </ClInclude>
+    <ClInclude Include="extern\mpack\include\mpack.h">
+      <Filter>extern\mpack\include</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

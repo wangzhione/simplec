@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="extern\curl\httputil.c" />
+    <ClCompile Include="extern\mpack\mpack.c" />
     <ClCompile Include="main\main.c" />
     <ClCompile Include="main\simplec.c" />
     <ClCompile Include="module\poll\socket_message.c" />
@@ -44,18 +45,17 @@
     <ClCompile Include="module\struct\tstr.c" />
     <ClCompile Include="test\test_array.c" />
     <ClCompile Include="test\test_atom_rwlock.c" />
-    <ClCompile Include="test\test_cjson_write.c" />
-    <ClCompile Include="test\test_cjson.c" />
     <ClCompile Include="test\test_clog.c" />
     <ClCompile Include="test\test_csv.c" />
     <ClCompile Include="test\test_ddos.c" />
     <ClCompile Include="test\test_dict.c" />
     <ClCompile Include="test\test_httputil.c" />
-    <ClCompile Include="test\test_cjson_read.c" />
+    <ClCompile Include="test\test_mpack.c" />
     <ClCompile Include="test\test_recvmq.c" />
     <ClCompile Include="test\test_pthread_sem.c" />
     <ClCompile Include="test\test_scconf.c" />
     <ClCompile Include="test\test_sciconv.c" />
+    <ClCompile Include="test\test_scjson.c" />
     <ClCompile Include="test\test_scoroutine.c" />
     <ClCompile Include="test\test_scpipe.c" />
     <ClCompile Include="test\test_scrand.c" />
@@ -80,6 +80,7 @@
     <ClInclude Include="extern\curl\include\curl\system.h" />
     <ClInclude Include="extern\curl\include\curl\typecheck-gcc.h" />
     <ClInclude Include="extern\curl\include\httputil.h" />
+    <ClInclude Include="extern\mpack\include\mpack.h" />
     <ClInclude Include="extern\pthread\include\pthread.h" />
     <ClInclude Include="extern\pthread\include\sched.h" />
     <ClInclude Include="extern\pthread\include\semaphore.h" />
@@ -160,12 +161,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(ProjectDir)extern/pthread/include;$(ProjectDir)extern/curl/include;$(ProjectDir)module/schead/include;$(ProjectDir)module/struct/include;$(ProjectDir)module/service/include;$(ProjectDir)module/logic/include;$(ProjectDir)module/poll/include;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)extern/pthread/include;$(ProjectDir)extern/curl/include;$(ProjectDir)module/schead/include;$(ProjectDir)module/struct/include;$(ProjectDir)module/service/include;$(ProjectDir)module/logic/include;$(ProjectDir)module/poll/include;$(ProjectDir)extern/mpack/include;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)extern/pthread/lib;$(ProjectDir)extern/curl/lib;$(LibraryPath)</LibraryPath>
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(ProjectDir)extern/pthread/include;$(ProjectDir)extern/curl/include;$(ProjectDir)module/schead/include;$(ProjectDir)module/struct/include;$(ProjectDir)module/service/include;$(ProjectDir)module/logic/include;$(ProjectDir)module/poll/include;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)extern/pthread/include;$(ProjectDir)extern/curl/include;$(ProjectDir)module/schead/include;$(ProjectDir)module/struct/include;$(ProjectDir)module/service/include;$(ProjectDir)module/logic/include;$(ProjectDir)module/poll/include;$(ProjectDir)extern/mpack/include;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)module/pthread/lib;$(ProjectDir)extern/curl/lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
