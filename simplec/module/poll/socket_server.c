@@ -419,7 +419,7 @@ open_socket(struct sserver * ss, struct request_open * request, struct smessage 
 		socket_set_keepalive(sock);
 		socket_set_nonblock(sock);
 		status = connect(sock, ai_ptr->ai_addr, ai_ptr->ai_addrlen);
-		if (status != 0 && socket_errno != SOCKET_CONNECTED) {
+		if (status != 0 && errno != CONNECTED) {
 			socket_close(sock);
 			sock = INVALID_SOCKET;
 			continue;
@@ -428,7 +428,7 @@ open_socket(struct sserver * ss, struct request_open * request, struct smessage 
 	}
 
 	if (sock == INVALID_SOCKET) {
-		result->data = (char *)sh_strerr(socket_errno);
+		result->data = strerror(errno);
 		goto __failed;
 	}
 
@@ -466,10 +466,10 @@ send_list_tcp(struct sserver * ss, struct socket * s, struct wb_list * list, str
 		for (;;) {
 			int sz = socket_write(s->fd, tmp->ptr, tmp->sz);
 			if (sz < 0) {
-				switch (socket_errno) {
-				case SOCKET_EINTR:
+				switch (errno) {
+				case EINTR:
 					continue;
-				case SOCKET_WAGAIN:
+				case EAGAIN_EWOULDBOCK:
 					return -1;
 				}
 				force_close(ss, s, l, result);
@@ -524,9 +524,9 @@ send_list_udp(struct sserver * ss, struct socket * s, struct wb_list * list, str
 		socklen_t sasz = udp_socket_address(s, tmp->udp_address, &sa);
 		int err = sendto(s->fd, tmp->ptr, tmp->sz, 0, &sa.s, sasz);
 		if (err < 0) {
-			switch (socket_errno) {
-			case SOCKET_EINTR:
-			case SOCKET_WAGAIN:
+			switch (errno) {
+			case EINTR:
+			case EAGAIN_EWOULDBOCK:
 				return -1;
 			}
 			RETURN(-1, "socket-server : udp (%d) sendto error.", s->id);
@@ -842,9 +842,9 @@ start_socket(struct sserver * ss, struct request_start * request, struct smessag
 	socket_lock_init(s, &l);
 	if (s->type == SOCKET_TYPE_PACCEPT || s->type == SOCKET_TYPE_PLISTEN) {
 		if (sp_add(ss->event_fd, s->fd, s)) {
-			int error = socket_errno;
+			int error = errno;
 			force_close(ss, s, &l, result);
-			result->data = (char *)sh_strerr(error);
+			result->data = strerror(error);
 			return SSERVER_ERR;
 		}
 		s->type = (s->type == SOCKET_TYPE_PACCEPT) ? SOCKET_TYPE_CONNECTED : SOCKET_TYPE_LISTEN;
@@ -876,7 +876,7 @@ block_readpipe(socket_t pipefd, void * buffer, int sz) {
 	for (;;) {
 		int n = socket_read(pipefd, buffer, sz);
 		if (n < 0) {
-			if (socket_errno == SOCKET_EINTR)
+			if (errno == EINTR)
 				continue;
 			RETURN(NIL, "socket-server : read pipe error.");
 		}
@@ -986,16 +986,16 @@ forward_message_tcp(struct sserver * ss, struct socket * s, struct socket_lock *
 	int n = socket_read(s->fd, buffer, sz);
 	if (n < 0) {
 		free(buffer);
-		switch ((error = socket_errno)) {
-		case SOCKET_EINTR:
+		switch ((error = errno)) {
+		case EINTR:
 			break;
-		case SOCKET_WAGAIN:
+		case EAGAIN_EWOULDBOCK:
 			CERR("socket - server: EAGAIN capture.");
 			break;
 		default:
 			// close when error
 			force_close(ss, s, l, result);
-			result->data = (char *)strerror(error);
+			result->data = strerror(error);
 			return SSERVER_ERR;
 		}
 		return -1;
@@ -1049,15 +1049,15 @@ forward_message_udp(struct sserver * ss, struct socket * s, struct socket_lock *
 	socklen_t slen = sizeof sa;
 	int n = recvfrom(s->fd, (void *)ss->udpbuffer, LEN(ss->udpbuffer), 0, &sa.s, &slen);
 	if (n < 0) {
-		int error = socket_errno;
+		int error = errno;
 		switch (error) {
-		case SOCKET_EINTR:
-		case SOCKET_WAGAIN:
+		case EINTR:
+		case EAGAIN_EWOULDBOCK:
 			break;
 		default:
 			// close when error
 			force_close(ss, s, l, result);
-			result->data = (char *)sh_strerr(error);
+			result->data = strerror(error);
 			return SSERVER_ERR;
 		}
 		return -1;
@@ -1090,7 +1090,7 @@ report_connect(struct sserver * ss, struct socket * s, struct socket_lock * l, s
 	int error = socket_get_error(s->fd);
 	if (error) {
 		force_close(ss, s, l, result);
-		result->data = (char *)sh_strerr(error);
+		result->data = strerror(error);
 		return SSERVER_ERR;
 	}
 	s->type = SOCKET_TYPE_CONNECTED;
@@ -1120,12 +1120,12 @@ report_accept(struct sserver * ss, struct socket * s, struct smessage * result) 
 	socklen_t len = sizeof(u);
 	socket_t client_fd = accept(s->fd, &u.s, &len);
 	if (client_fd == INVALID_SOCKET) {
-		int error = socket_errno;
-		if (error == SOCKET_EMFILE || error == SOCKET_ENFILE) {
+		int error = errno;
+		if (error == EMFILE || error == ENFILE) {
 			result->opaque = s->opaque;
 			result->id = s->id;
 			result->ud = 0;
-			result->data = (char *)strerror(error);
+			result->data = strerror(error);
 			return -1;
 		}
 		return 0;
@@ -1200,7 +1200,7 @@ sserver_poll(sserver_t ss, smessage_t result, int * more) {
 			ss->event_index = 0;
 			if (ss->event_n <= 0) {
 				ss->event_n = 0;
-				if (socket_errno == SOCKET_EINTR)
+				if (errno == EINTR)
 					continue;
 				return -1;
 			}
@@ -1260,7 +1260,7 @@ sserver_poll(sserver_t ss, smessage_t result, int * more) {
 				// close when error
 				int error = socket_get_error(s->fd);
 				force_close(ss, s, &l, result);
-				result->data = error ? (char *)sh_strerr(error) : "Unknown error";
+				result->data = error ? strerror(error) : "Unknown error";
 				return SSERVER_ERR;
 			}
 			break;
@@ -1275,7 +1275,7 @@ send_request(struct sserver * ss, struct request_package * request, uint8_t type
 	for (;;) {
 		int n = socket_write(ss->sendctrl_fd, &request->header[6], len + 2);
 		if (n < 0) {
-			if (socket_errno != SOCKET_EINTR)
+			if (errno != EINTR)
 				CERR("socket-server : send ctrl command error.");
 			continue;
 		}

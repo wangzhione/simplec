@@ -75,9 +75,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="module\schead\schead.c">
-      <Filter>module\schead</Filter>
-    </ClCompile>
     <ClCompile Include="module\struct\list.c">
       <Filter>module\struct</Filter>
     </ClCompile>
@@ -231,12 +228,6 @@
     <ClCompile Include="module\schead\clog.c">
       <Filter>module\schead</Filter>
     </ClCompile>
-    <ClCompile Include="module\schead\sh_strerr.c">
-      <Filter>module\schead</Filter>
-    </ClCompile>
-    <ClCompile Include="test\test_sh_strerr.c">
-      <Filter>test</Filter>
-    </ClCompile>
     <ClCompile Include="module\schead\scmd5.c">
       <Filter>module\schead</Filter>
     </ClCompile>
@@ -248,6 +239,9 @@
     </ClCompile>
     <ClCompile Include="test\test_mpack.c">
       <Filter>test</Filter>
+    </ClCompile>
+    <ClCompile Include="module\schead\strerr.c">
+      <Filter>module\schead</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -405,12 +399,6 @@
     </None>
     <None Include="config\config.ini">
       <Filter>config</Filter>
-    </None>
-    <None Include="test\config\winerror.h.data">
-      <Filter>test\config</Filter>
-    </None>
-    <None Include="test\config\sys_strerror.c.template">
-      <Filter>test\config</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

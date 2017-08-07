@@ -3,11 +3,13 @@
 
 #include <clog.h>
 #include <scrand.h>
+#include <struct.h>
 
 //
-//  跨平台的丑陋从这里开始, 封装一些共用实现
-//  __GNUC__	= > linux GCC 平台特殊操作
-//  __MSC_VER	= > winds  CL 平台特殊操作
+//  一切的宏都是, 跨平台丑陋的证明~ 宏就是C的金字塔最底层
+//  __clang__ => clang 平台特殊操作
+//  __GNUC__  => gcc 平台特殊操作
+//  __MSC_VER => cl 平台特殊操作
 //
 #ifdef __GNUC__
 
@@ -26,7 +28,24 @@
 // getch - 立即得到用户输入的一个字符, linux实现
 // return	: 返回得到字符
 //
-extern int getch(void);
+inline int getch(void) {
+	int cr;
+	struct termios nts, ots;
+
+	if (tcgetattr(0, &ots) < 0) // 得到当前终端(0表示标准输入)的设置
+		return EOF;
+
+	nts = ots;
+	cfmakeraw(&nts); // 设置终端为Raw原始模式，该模式下所有的输入数据以字节为单位被处理
+	if (tcsetattr(0, TCSANOW, &nts) < 0) // 设置上更改之后的设置
+		return EOF;
+
+	cr = getchar();
+	if (tcsetattr(0, TCSANOW, &ots) < 0) // 设置还原成老的模式
+		return EOF;
+
+	return cr;
+}
 
 //
 // sh_mkdir - 通用的单层目录创建宏 等同于 shell> mkdir path
@@ -55,8 +74,8 @@ extern int getch(void);
 #if !defined(_H_ARRHELP)
 
 // 添加双引号的宏 
-#define CSTR(v)	_STR(v)
 #define _STR(v) #v
+#define CSTR(v)	_STR(v)
 
 // 获取数组长度,只能是数组类型或""字符串常量,后者包含'\0'
 #define LEN(a) (sizeof(a) / sizeof(*(a)))
@@ -86,63 +105,75 @@ extern int getch(void);
 // EXTERN_RUN - 简单的声明, 并立即使用的宏
 // test		: 需要执行的函数名称
 //
-#define EXTERN_RUN(test, ...) \
-	do { \
-		extern void test(); \
-		test(##__VA_ARGS__); \
+#define EXTERN_RUN(test, ...)	\
+	do {						\
+		extern void test();		\
+		test(##__VA_ARGS__);	\
 	} while(0)
 
 // scanf 健壮的多次输入宏
-#define _STR_SSCANF "Input error, please according to the prompt!"
-#define SSCANF(scanf_code, ...) \
-		while (printf(##__VA_ARGS__), scanf_code){ \
-			rewind(stdin); \
-			puts(_STR_SSCANF); \
-		} \
-		rewind(stdin); \
+#define SSCANF(scanf_code, ...)										\
+		while (printf(##__VA_ARGS__), scanf_code){					\
+			rewind(stdin);											\
+			puts("Input error, please according to the prompt!");	\
+		}															\
+		rewind(stdin);												\
 	} while (0)
 
 // 简单的time时间记录宏
-#define _STR_TPRINT "The current code block running time:%lf seconds.\n"
-#define TIME_PRINT(code) \
-	do { \
-		clock_t $st, $et; \
-		$st = clock(); \
-		code \
-		$et = clock(); \
-		printf(_STR_TPRINT, (0.0 + $et - $st) / CLOCKS_PER_SEC); \
+#define TIME_PRINT(code)												\
+	do {																\
+		clock_t $st, $et;												\
+		$st = clock();													\
+		code															\
+		$et = clock();													\
+		printf("The current code block running time:%lf seconds.\n",	\
+		 (0.0 + $et - $st) / CLOCKS_PER_SEC);							\
 	} while (0)
 
 #define _H_CODEHELP
 #endif//_H_CODEHELP
 
 // 等待的宏 是个单线程没有加锁 | "请按任意键继续. . ."
-extern void sh_pause(void);
+inline void sh_pause(void) {
+	rewind(stdin);
+	printf("Press any key to continue . . .");
+	getch();
+}
 
-#ifndef INIT_PAUSE
+#ifndef SH_PAUSE
 
 #	ifdef _DEBUG
-#		define INIT_PAUSE() atexit(sh_pause)
+#		define SH_PAUSE() atexit(sh_pause)
 #	else
-#		define INIT_PAUSE()	/* 别说了,都重新开始吧 */
+#		define SH_PAUSE() /* 别说了,都重新开始吧 */
 #	endif
 
 #endif // !INIT_PAUSE
-
-//
-// sh_strerr - linux 上面替代 strerror, winds 替代 FormatMessage 
-// error	: linux 是 errno, winds 可以是 WSAGetLastError() ... 
-// return	: system os 拔下来的提示字符串常量
-//
-extern const char * sh_strerr(int error);
 
 //
 // sh_isbig - 判断是大端序还是小端序,大端序返回true
 // sh_hton - 将本地四字节数据转成'小端'网络字节
 // sh_ntoh - 将'小端'网络四字节数值转成本地数值
 //
-extern bool sh_isbig(void);
-extern uint32_t sh_hton(uint32_t x);
-extern uint32_t sh_ntoh(uint32_t x);
+inline bool sh_isbig(void) {
+	union { uint16_t i; uint8_t c; } u = { 1 };
+	return 0 == u.c;
+}
 
-#endif// ! _H_SIMPLEC_SCHEAD
+inline uint32_t sh_hton(uint32_t x) {
+	if (sh_isbig()) {
+		uint8_t t;
+		union { uint32_t i; uint8_t s[sizeof(uint32_t)]; } u = { x };
+		t = u.s[0], u.s[0] = u.s[sizeof(u) - 1], u.s[sizeof(u) - 1] = t;
+		t = u.s[1], u.s[1] = u.s[sizeof(u) - 1 - 1], u.s[sizeof(u) - 1 - 1] = t;
+		return u.i;
+	}
+	return x;
+}
+
+inline uint32_t sh_ntoh(uint32_t x) {
+	return sh_hton(x);
+}
+
+#endif//_H_SIMPLEC_SCHEAD

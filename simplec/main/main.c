@@ -6,28 +6,27 @@
 // 变量函数环境启动初始化, 改动要慎重. atexit 先注册, 后调用 等同于数组栈
 //
 int main(int argc, char * argv[]) {
-
-	// 开启_DEBUG模式下结束等待
-	INIT_PAUSE();
-
-	// 启动基础配置系统, 并得到配置的单例对象
-	mcnf_start();
+	// 初始化socket 库操作, 否则 errno == 126
+	socket_start();
 
 	// 初始化随机序列
 	sh_srand((int32_t)time(NULL));
 
+	// 开启 _DEBUG模式下结束等待
+	SH_PAUSE();
+
+	// 启动基础配置系统, 并得到配置的单例对象
+	mcnf_start();
+
 	// 简单创建 _STR_LOGDIR 日志目录
 	sh_mkdir(mcnf_get("LogDir"));
-
-	// stderr 错误信息重定位, 跟随系统长生不死
-	if (!freopen(mcnf_get("SysErrLog"), "ab", stderr))
-		CERR_EXIT("freopen ab %s is error!", mcnf_get("SysErrLog"));
 
 	// 目前系统是默认启动 clog 日志
 	cl_start(mcnf_get("SimplecLog"));
 
-	// 初始化socket 库操作
-	socket_start();
+	// stderr 错误信息重定位, 跟随系统长生不死
+	if (!freopen(mcnf_get("SysErrLog"), "ab", stderr))
+		CERR_EXIT("freopen ab %s is error!", mcnf_get("SysErrLog"));
 
 	/*
 	 * simple c -> 具体业务跑起来 , -> ︿(￣︶￣)︿

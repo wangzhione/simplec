@@ -1,12 +1,7 @@
 ﻿#include <clog.h>
-
-//
-// _INT_LOGS	- 每条日志的大小
-// _STR_LOGDIR	- 存放所有日志的目录
-//
-#define _UINT_LOGS		(2048u)
-#define _STR_LOGTIME	"[" _STR_MTIME "]"
-
+#include <stdio.h>
+#include <stdarg.h>
+#include <stdlib.h>
 
 //
 // 急速, 清洁, 可靠配合 lograte的 c多线程单机日志库 clog.h
@@ -24,10 +19,19 @@ inline void
 cl_start(const char * path) {
 	if (NULL == _log) {
 		_log = fopen(path, "ab");
-		if (NULL == _log)
-			CERR_EXIT("fopen ab err path = %s!", path);
+		if (NULL == _log) {
+			fprintf(stderr, "fopen ab err path = %s!\n", path);
+			exit(EXIT_FAILURE);
+		}
 	}
 }
+
+//
+// _INT_LOGSZ	- 每条日志的大小
+// _STR_LOGDIR	- 存放所有日志的目录
+//
+#define _INT_LOGSZ		(2048u)
+#define _STR_LOGTIME	"[" _STR_MTIME "]"
 
 //
 // cl_printf - 具体输出日志内容
@@ -39,7 +43,7 @@ void
 cl_printf(const char * fmt, ...) {
 	va_list ap;
 	size_t len;
-	char str[_UINT_LOGS];
+	char str[_INT_LOGSZ];
 
 	// 串:得到时间串并返回长度 [2016-07-10 22:38:34 999]
 	len = stu_getmstrn(str, sizeof(str), _STR_LOGTIME);

@@ -24,14 +24,13 @@
     <ClCompile Include="module\schead\sciconv.c" />
     <ClCompile Include="module\schead\scjson.c" />
     <ClCompile Include="module\schead\sccsv.c" />
-    <ClCompile Include="module\schead\schead.c" />
     <ClCompile Include="module\schead\scpipe.c" />
     <ClCompile Include="module\schead\scrand.c" />
     <ClCompile Include="module\schead\scrwlock.c" />
     <ClCompile Include="module\schead\scsocket.c" />
     <ClCompile Include="module\schead\sctime.c" />
     <ClCompile Include="module\schead\scurl.c" />
-    <ClCompile Include="module\schead\sh_strerr.c" />
+    <ClCompile Include="module\schead\strerr.c" />
     <ClCompile Include="module\service\scoroutine.c" />
     <ClCompile Include="module\service\scrunloop.c" />
     <ClCompile Include="module\service\scthreads.c" />
@@ -65,7 +64,6 @@
     <ClCompile Include="test\test_sctime.c" />
     <ClCompile Include="test\test_scurl.c" />
     <ClCompile Include="test\test_socket_server.c" />
-    <ClCompile Include="test\test_sh_strerr.c" />
     <ClCompile Include="test\test_tstring.c" />
     <ClCompile Include="test\test_poll.c" />
     <ClCompile Include="test\test_xlsmtojson.c" />
@@ -124,8 +122,6 @@
     <None Include="test\config\destiny.csv" />
     <None Include="test\config\firefighting_rule.json" />
     <None Include="test\config\onetime.csv" />
-    <None Include="test\config\sys_strerror.c.template" />
-    <None Include="test\config\winerror.h.data" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="readme\helper.txt" />
@@ -142,11 +138,11 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">

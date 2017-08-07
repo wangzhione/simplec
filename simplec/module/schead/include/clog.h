@@ -1,7 +1,6 @@
 ﻿#ifndef _H_SIMPLEC_CLOG
 #define _H_SIMPLEC_CLOG
 
-#include <struct.h>
 #include <sctime.h>
 
 //

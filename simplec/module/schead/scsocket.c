@@ -188,7 +188,7 @@ socket_get_error(socket_t s) {
 	int error;
 	socklen_t len = sizeof(error);
 	int code = getsockopt(s, SOL_SOCKET, SO_ERROR, (void *)&error, &len);
-	return code < 0 ? socket_errno : error;
+	return code < 0 ? errno : error;
 }
 
 //
@@ -205,7 +205,7 @@ socket_recv(socket_t s, void * buf, int len) {
 	int r;
 	do {
 		r = recv(s, buf, len, 0);
-	} while (r == SOCKET_ERROR && socket_errno == SOCKET_EINTR);
+	} while (r == SOCKET_ERROR && errno == EINTR);
 	return r;
 }
 
@@ -229,7 +229,7 @@ socket_send(socket_t s, const void * buf, int len) {
 	int r;
 	do {
 		r = send(s, buf, len, 0);
-	} while (r == SOCKET_ERROR && socket_errno == SOCKET_EINTR);
+	} while (r == SOCKET_ERROR && errno == EINTR);
 	return r;
 }
 
@@ -382,7 +382,7 @@ socket_connecto(socket_t s, const sockaddr_t * addr, int ms) {
 	if (r >= SufBase) goto __return;
 
 	// 链接还在进行中, linux这里显示 EINPROGRESS，winds应该是 WASEWOULDBLOCK
-	if (socket_errno == SOCKET_CONNECTED) {
+	if (errno == CONNECTED) {
 		CERR("socket_connect error r = %d!", r);
 		goto __return;
 	}

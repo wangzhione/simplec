@@ -38,8 +38,8 @@
 #define CERR_EXIT(fmt,...) \
 	CERR(fmt, ##__VA_ARGS__), exit(EXIT_FAILURE)
 
-#define CERR_IF(code) \
-	if((code) < 0) \
+#define CERR_IF(code)	\
+	if((code) < 0)		\
 		CERR_EXIT(#code)
 
 //
@@ -82,7 +82,6 @@
 // >= 0 标识 Success状态, < 0 标识 Error状态
 //
 enum flag {
-
 	ErrParse	= -8,  //协议解析错误
 	ErrClose    = -7,  //句柄打开失败, 读取完毕也返回这个
 	ErrEmpty    = -6,  //返回数据为空
