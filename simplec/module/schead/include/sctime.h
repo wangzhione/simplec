@@ -46,8 +46,8 @@
 		Sleep(m)
 
 //
-// usleep - 毫秒级别等待函数
-// usec		: 等待的毫秒
+// usleep - 微秒级别等待函数
+// usec		: 等待的微秒
 // return	: The usleep() function returns 0 on success.  On error, -1 is returned.
 //
 extern int usleep(unsigned usec);

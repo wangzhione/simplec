@@ -23,7 +23,7 @@
 inline int
 sco_status(scomng_t sco, int id) {
 	assert(sco && id >= 0 && id < sco->cap);
-	return sco->cos[id] ? sco->cos[id]->status : _SCO_DEAD;
+	return sco->cos[id] ? sco->cos[id]->status : SCO_DEAD;
 }
 
 //

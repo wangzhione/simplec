@@ -15,7 +15,7 @@ struct sco {
 
 	sco_f func;				// 协程体执行
 	void * arg;				// 用户输入的参数
-	int status;				// 当前协程运行状态 _SCO_*
+	int status;				// 当前协程运行状态 SCO_*
 };
 
 struct scomng {
@@ -79,7 +79,7 @@ static inline struct sco * _sco_new(sco_f func, void * arg) {
 	assert(co && func);
 	co->func = func;
 	co->arg = arg;
-	co->status = _SCO_READY;
+	co->status = SCO_READY;
 
 	co->stack = NULL;
 	co->cap = 0;
@@ -138,7 +138,7 @@ static inline void _sco_main(uint32_t low32, uint32_t hig32) {
 	// 执行协程体
 	co->func(comng, co->arg);
 	co = comng->cos[id];
-	co->status = _SCO_DEAD;
+	co->status = SCO_DEAD;
 	_sco_delete(co);
 	comng->cos[id] = NULL;
 	--comng->cnt;
@@ -159,15 +159,15 @@ sco_resume(scomng_t sco, int id) {
 	int running = sco->running;
 	assert(running == -1 && id >= 0 && id < sco->cap);
 
-	// 下面是协程 _SCO_READY 和 _SCO_SUSPEND 处理
+	// 下面是协程 SCO_READY 和 SCO_SUSPEND 处理
 	co = sco->cos[id];
-	if ((!co) || (status = co->status) == _SCO_DEAD)
+	if ((!co) || (status = co->status) == SCO_DEAD)
 		return;
 
 	sco->running = id;
-	co->status = _SCO_RUNNING;
+	co->status = SCO_RUNNING;
 	switch (status) {
-	case _SCO_READY:
+	case SCO_READY:
 		// 兼容x64指针通过makecontext传入
 		ptr = (uintptr_t)sco;
 		// 构建栈和运行链
@@ -179,7 +179,7 @@ sco_resume(scomng_t sco, int id) {
 		// 保存当前运行状态到sco->main, 然后跳转到 co->ctx运行环境中
 		swapcontext(&sco->main, &co->ctx);
 		break;
-	case _SCO_SUSPEND:
+	case SCO_SUSPEND:
 		// stack add is high -> low
 		memcpy(sco->stack + _INT_STACK - co->cnt, co->stack, co->cnt);
 		swapcontext(&sco->main, &co->ctx);
@@ -215,7 +215,7 @@ sco_yield(scomng_t sco) {
 		return;
 	assert((char *)&co > sco->stack);
 	_sco_savestack(co, sco->stack + _INT_STACK);
-	co->status = _SCO_SUSPEND;
+	co->status = SCO_SUSPEND;
 	sco->running = -1;
 	swapcontext(&co->ctx, &sco->main);
 }

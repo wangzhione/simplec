@@ -2,12 +2,17 @@
 #define _H_SIMPLEC_SCSOCKET
 
 #include <schead.h>
+#include <signal.h>
+
+//
+// IGNORE_SIGPIPE - 管道破裂,忽略SIGPIPE信号
+//
+#define IGNORE_SIGNAL(sig)	signal(sig, SIG_IGN)
 
 #ifdef __GNUC__
 
 #include <fcntl.h>
 #include <netdb.h>
-#include <signal.h>
 #include <arpa/inet.h>
 #include <netinet/tcp.h>
 #include <sys/un.h>
@@ -18,17 +23,15 @@
 //
 // This is used instead of -1, since the. by WinSock
 //
-#define INVALID_SOCKET		(~0)
-#define SOCKET_ERROR		(-1)
+#define INVALID_SOCKET			(~0)
+#define SOCKET_ERROR			(-1)
 
 #if !defined(EWOULDBOCK)
-#define EWOULDBOCK			EAGAIN
+#define EWOULDBOCK				EAGAIN
 #endif
 
 // connect链接还在进行中, linux显示 EINPROGRESS，winds是 WSAEWOULDBLOCK
-#define CONNECTED			EINPROGRESS
-
-#define IGNORE_SIGNAL(sig)	signal(sig, SIG_IGN)
+#define ECONNECTED				EINPROGRESS
 
 #define SET_RLIMIT_NOFILE(num)				\
 	do {									\
@@ -41,34 +44,35 @@ typedef int socket_t;
 #elif _MSC_VER
 
 #undef	FD_SETSIZE
-#define FD_SETSIZE			(1024)
+#define FD_SETSIZE				(1024)
+#undef  MAXIMUM_WAIT_OBJECTS
+#define MAXIMUM_WAIT_OBJECTS	(1024)
 #include <ws2tcpip.h>
 
-#define IGNORE_SIGNAL(sig)
 #define SET_RLIMIT_NOFILE(num)	
 
 #undef	errno
-#define	errno				WSAGetLastError()
+#define	errno					WSAGetLastError()
 #undef	strerror
-#define strerror			strerror
+#define strerror				(char *)strerr
 
 #undef  EINTR
-#define EINTR				WSAEINTR
+#define EINTR					WSAEINTR
 #undef	EAGAIN
-#define EAGAIN				WSAEWOULDBLOCK
+#define EAGAIN					WSAEWOULDBLOCK
 #undef	EINVAL
-#define EINVAL				WSAEINVAL
+#define EINVAL					WSAEINVAL
 #undef	EWOULDBOCK
-#define EWOULDBOCK			WSAEINPROGRESS
+#define EWOULDBOCK				WSAEINPROGRESS
 #undef	EINPROGRESS
-#define EINPROGRESS			WSAEINPROGRESS
+#define EINPROGRESS				WSAEINPROGRESS
 #undef	EMFILE
-#define EMFILE				WSAEMFILE
+#define EMFILE					WSAEMFILE
 #undef	ENFILE
-#define ENFILE				WSAETOOMANYREFS
+#define ENFILE					WSAETOOMANYREFS
 
 // connect链接还在进行中, linux显示 EINPROGRESS，winds是 WSAEWOULDBLOCK
-#define CONNECTED			WSAEWOULDBLOCK
+#define ECONNECTED				WSAEWOULDBLOCK
 
 typedef int socklen_t;
 typedef SOCKET socket_t;
@@ -94,35 +98,13 @@ extern const char * strerr(int error);
 
 // EAGAIN and EWOULDBLOCK may be not the same value.
 #if (EAGAIN != EWOULDBOCK)
-#define EAGAIN_EWOULDBOCK EAGAIN : case EWOULDBOCK
+#define EAGAIN_WOULDBOCK EAGAIN : case EWOULDBOCK
 #else
-#define EAGAIN_EWOULDBOCK EAGAIN
+#define EAGAIN_WOULDBOCK EAGAIN
 #endif
-
-//
-// IGNORE_SIGPIPE - 管道破裂,忽略SIGPIPE信号
-//
-#define IGNORE_SIGPIPE()	IGNORE_SIGNAL(SIGPIPE)
 
 // 目前通用的tcp udp v4地址
 typedef struct sockaddr_in sockaddr_t;
-
-//
-// MAKE_TIMEVAL - 毫秒数转成 timeval 变量
-// tv		: struct timeval 变量
-// msec		: 毫秒数
-//
-#define MAKE_TIMEVAL(tv, msec) \
-	do {\
-		if((msec) > 0) {\
-			(tv).tv_sec = (msec) / _INT_STOMS;\
-			(tv).tv_usec = ((msec) % _INT_STOMS) * _INT_STOMS;\
-		}\
-		else {\
-			(tv).tv_sec = 0;\
-			(tv).tv_usec = 0;\
-		}\
-	} while(0)
 
 //
 // socket_start	- 单例启动socket库的初始化方法

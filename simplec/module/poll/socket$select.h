@@ -9,8 +9,9 @@ struct sevent {
 };
 
 struct select_poll {
-	fd_set rd;
-	fd_set wt;
+	fd_set rsd;
+	fd_set wsd;
+	fd_set esd;
 	uint16_t n;
 	struct sevent evs[FD_SETSIZE];
 };
@@ -99,28 +100,40 @@ sp_write(poll_t sp, socket_t sock, void * ud, bool enable) {
 //
 int 
 sp_wait(poll_t sp, struct event e[], int max) {
-	int i, n, retn;
-	FD_ZERO(&sp->rd);
-	FD_ZERO(&sp->wt);
+	int r, i, n, retn;
+	socklen_t len = sizeof r;
+	FD_ZERO(&sp->rsd);
+	FD_ZERO(&sp->wsd);
+	FD_ZERO(&sp->esd);
 
 	for (i = 0; i < sp->n; ++i) {
 		struct sevent * sev = sp->evs + i;
-		FD_SET(sev->fd, &sp->rd);
+		FD_SET(sev->fd, &sp->rsd);
 		if (sev->write)
-			FD_SET(sev->fd, &sp->wt);
+			FD_SET(sev->fd, &sp->wsd);
+		FD_SET(sev->fd, &sp->esd);
 	}
 
-	n = select(0, &sp->rd, &sp->wt, NULL, NULL);
+	n = select(0, &sp->rsd, &sp->wsd, &sp->esd, NULL);
 	if (n <= 0)
 		RETURN(n, "select n = %d", n);
 
 	for (retn = i = 0; i < sp->n && retn < max && retn < n; ++i) {
 		struct sevent * sev = sp->evs + i;
-		e[retn].read = FD_ISSET(sev->fd, &sp->rd);
-		e[retn].write = sev->write && FD_ISSET(sev->fd, &sp->wt);
-		if (e[retn].read || e[retn].write) {
+		e[retn].read = FD_ISSET(sev->fd, &sp->rsd);
+		e[retn].write = sev->write && FD_ISSET(sev->fd, &sp->wsd);
+		
+		r = 1;
+		if (FD_ISSET(sev->fd, &sp->esd)) {
+			// 只要最后没有 error那就OK | 排除带外数据
+			if (getsockopt(sev->fd, SOL_SOCKET, SO_ERROR, (char *)&r, &len) || r)
+				r = 0;
+		}
+
+		// 保存最终错误信息
+		if (e[retn].read || e[retn].write || !r) {
 			e[retn].s = sev->ud;
-			e[retn].error = false;
+			e[retn].error = !!r;
 			++retn;
 		}
 	}

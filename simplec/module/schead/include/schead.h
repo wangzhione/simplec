@@ -6,10 +6,8 @@
 #include <struct.h>
 
 //
-//  一切的宏都是, 跨平台丑陋的证明~ 宏就是C的金字塔最底层
-//  __clang__ => clang 平台特殊操作
-//  __GNUC__  => gcc 平台特殊操作
-//  __MSC_VER => cl 平台特殊操作
+//  宏就是C的金字塔最底层, 所有丑陋的起源~
+//  [ __clang__ -> clang | __GNUC__ -> gcc | __MSC_VER -> cl ]
 //
 #ifdef __GNUC__
 
@@ -31,7 +29,6 @@
 inline int getch(void) {
 	int cr;
 	struct termios nts, ots;
-
 	if (tcgetattr(0, &ots) < 0) // 得到当前终端(0表示标准输入)的设置
 		return EOF;
 
@@ -43,7 +40,6 @@ inline int getch(void) {
 	cr = getchar();
 	if (tcsetattr(0, TCSANOW, &ots) < 0) // 设置还原成老的模式
 		return EOF;
-
 	return cr;
 }
 
@@ -113,6 +109,7 @@ inline int getch(void) {
 
 // scanf 健壮的多次输入宏
 #define SSCANF(scanf_code, ...)										\
+	do {															\
 		while (printf(##__VA_ARGS__), scanf_code){					\
 			rewind(stdin);											\
 			puts("Input error, please according to the prompt!");	\
@@ -121,14 +118,14 @@ inline int getch(void) {
 	} while (0)
 
 // 简单的time时间记录宏
-#define TIME_PRINT(code)												\
-	do {																\
-		clock_t $st, $et;												\
-		$st = clock();													\
-		code															\
-		$et = clock();													\
-		printf("The current code block running time:%lf seconds.\n",	\
-		 (0.0 + $et - $st) / CLOCKS_PER_SEC);							\
+#define TIME_PRINT(code)											\
+	do {															\
+		clock_t $st, $et;											\
+		$st = clock();												\
+		code														\
+		$et = clock();												\
+		printf("The current code block run time:%lf seconds.\n",	\
+		 (0.0 + $et - $st) / CLOCKS_PER_SEC);						\
 	} while (0)
 
 #define _H_CODEHELP
@@ -152,17 +149,17 @@ inline void sh_pause(void) {
 #endif // !INIT_PAUSE
 
 //
-// sh_isbig - 判断是大端序还是小端序,大端序返回true
+// sh_isbe - 判断是大端序还是小端序,大端序返回true
 // sh_hton - 将本地四字节数据转成'小端'网络字节
 // sh_ntoh - 将'小端'网络四字节数值转成本地数值
 //
-inline bool sh_isbig(void) {
+inline bool sh_isbe(void) {
 	union { uint16_t i; uint8_t c; } u = { 1 };
 	return 0 == u.c;
 }
 
 inline uint32_t sh_hton(uint32_t x) {
-	if (sh_isbig()) {
+	if (sh_isbe()) {
 		uint8_t t;
 		union { uint32_t i; uint8_t s[sizeof(uint32_t)]; } u = { x };
 		t = u.s[0], u.s[0] = u.s[sizeof(u) - 1], u.s[sizeof(u) - 1] = t;

@@ -21,7 +21,7 @@ static void * _poll(void * ud) {
 			printf("open(%"PRIdPTR") [id=%d] %s\n", result.opaque, result.id, result.data);
 			break;
 		case SSERVER_ERR:
-			printf("error(%"PRIdPTR") [id=%d]\n", result.opaque, result.id);
+			printf("error(%"PRIdPTR") [id=%d] %s\n", result.opaque, result.id, result.data);
 			break;
 		case SSERVER_ACCEPT:
 			printf("accept(%"PRIdPTR") [id=%d %s] from [%d]\n", result.opaque, result.ud, result.data, result.id);
@@ -37,27 +37,24 @@ static void * _poll(void * ud) {
 //
 void test_socket_server(void) {
 	int c, l;
-	socket_t s;
-	sserver_t ss;
 	pthread_t pid;
-	IGNORE_SIGPIPE();
-
-	s = socket_stream();
-	ss = sserver_create();
+	socket_t s = socket_dgram();
+	sserver_t ss = sserver_create();
 	pthread_create(&pid, NULL, _poll, ss);
 
-	c = sserver_connect(ss, 100, "127.0.0.1", 80);
-	printf("connecting %d\n", c);
+	c = sserver_connect(ss, 100, "127.0.0.1", 8088);
+	printf("connecting(100) %d\n", c);
+
 	l = sserver_listen(ss, 200, "127.0.0.1", 8888);
-	printf("listening %d\n", l);
+	printf("listening(200) %d\n", l);
 	sserver_start(ss, 201, l);
 	int b = sserver_bind(ss, 300, s);
-	printf("binding new socket %d\n", b);
+	printf("binding(300) new socket %d\n", b);
 
 	for (int i = 0; i < 100; ++i)
 		sserver_connect(ss, 400 + i, "127.0.0.1", 8888);
 
-	sh_msleep(5000);
+	sh_msleep(500000);
 	sserver_exit(ss);
 
 	pthread_join(pid, NULL);

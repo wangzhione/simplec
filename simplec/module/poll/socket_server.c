@@ -400,7 +400,7 @@ open_socket(struct sserver * ss, struct request_open * request, struct smessage 
 	struct addrinfo ai_hints = { 0 };
 	struct addrinfo * ai_ptr, * ai_list = NULL;
 	char port[16];
-	sprintf(port, "%d", request->port);
+	sprintf(port, "%hu", request->port);
 	ai_hints.ai_family = AF_UNSPEC;
 	ai_hints.ai_socktype = SOCK_STREAM;
 	ai_hints.ai_protocol = IPPROTO_TCP;
@@ -419,7 +419,7 @@ open_socket(struct sserver * ss, struct request_open * request, struct smessage 
 		socket_set_keepalive(sock);
 		socket_set_nonblock(sock);
 		status = connect(sock, ai_ptr->ai_addr, ai_ptr->ai_addrlen);
-		if (status != 0 && errno != CONNECTED) {
+		if (status != 0 && errno != ECONNECTED) {
 			socket_close(sock);
 			sock = INVALID_SOCKET;
 			continue;
@@ -469,7 +469,7 @@ send_list_tcp(struct sserver * ss, struct socket * s, struct wb_list * list, str
 				switch (errno) {
 				case EINTR:
 					continue;
-				case EAGAIN_EWOULDBOCK:
+				case EAGAIN_WOULDBOCK:
 					return -1;
 				}
 				force_close(ss, s, l, result);
@@ -526,7 +526,7 @@ send_list_udp(struct sserver * ss, struct socket * s, struct wb_list * list, str
 		if (err < 0) {
 			switch (errno) {
 			case EINTR:
-			case EAGAIN_EWOULDBOCK:
+			case EAGAIN_WOULDBOCK:
 				return -1;
 			}
 			RETURN(-1, "socket-server : udp (%d) sendto error.", s->id);
@@ -640,8 +640,7 @@ send_buffer(struct sserver * ss, struct socket * s, struct socket_lock * l, stru
 		if (s->high.head == NULL) {
 			s->high.head = s->high.tail = buf;
 			buf->next = NULL;
-		}
-		else {
+		} else {
 			buf->next = s->high.head;
 			s->high.head = buf;
 		}
@@ -734,15 +733,13 @@ send_socket(struct sserver * ss, struct request_send * request, struct smessage 
 			}
 		}
 		sp_write(ss->event_fd, s->fd, s, true);
-	}
-	else {
+	} else {
 		if (s->protocol == IPPROTO_TCP) {
 			if (priority == PRIORITY_LOW)
 				append_sendbuffer_low(ss, s, request);
 			else
 				append_sendbuffer(ss, s, request);
-		}
-		else {
+		} else {
 			if (udp_address == NULL)
 				udp_address = s->p.udp_address;
 			append_sendbuffer_udp(ss, s, priority, request, udp_address);
@@ -989,7 +986,7 @@ forward_message_tcp(struct sserver * ss, struct socket * s, struct socket_lock *
 		switch ((error = errno)) {
 		case EINTR:
 			break;
-		case EAGAIN_EWOULDBOCK:
+		case EAGAIN_WOULDBOCK:
 			CERR("socket - server: EAGAIN capture.");
 			break;
 		default:
@@ -1033,8 +1030,7 @@ gen_udp_address(uint8_t protocol, union sockaddr_all * sa, uint8_t * udp_address
 		addrsz += sizeof(sa->v4.sin_port);
 		memcpy(udp_address + addrsz, &sa->v4.sin_addr, sizeof(sa->v4.sin_addr));
 		addrsz += sizeof(sa->v4.sin_addr);
-	}
-	else {
+	} else {
 		memcpy(udp_address + addrsz, &sa->v6.sin6_port, sizeof(sa->v6.sin6_port));
 		addrsz += sizeof(sa->v6.sin6_port);
 		memcpy(udp_address + addrsz, &sa->v6.sin6_addr, sizeof(sa->v6.sin6_addr));
@@ -1052,7 +1048,7 @@ forward_message_udp(struct sserver * ss, struct socket * s, struct socket_lock *
 		int error = errno;
 		switch (error) {
 		case EINTR:
-		case EAGAIN_EWOULDBOCK:
+		case EAGAIN_WOULDBOCK:
 			break;
 		default:
 			// close when error
@@ -1068,8 +1064,7 @@ forward_message_udp(struct sserver * ss, struct socket * s, struct socket_lock *
 			return -1;
 		data = malloc(n + SADDRUDP_SIZE);
 		gen_udp_address(IPPROTO_UDP, &sa, data + n);
-	}
-	else {
+	} else {
 		if (s->protocol != IPPROTO_UDPv6)
 			return -1;
 		data = malloc(n + SADDRUDPv6_SIZE);
@@ -1483,8 +1478,7 @@ sserver_udp(sserver_t ss, uintptr_t opaque, const char * addr, uint16_t port) {
 		fd = socket_bind(addr, port, IPPROTO_UDP, &family);
 		if (fd == INVALID_SOCKET)
 			return -1;
-	}
-	else {
+	} else {
 		family = AF_INET;
 		fd = socket(family, SOCK_DGRAM, 0);
 		if (fd == INVALID_SOCKET)

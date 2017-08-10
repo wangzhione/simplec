@@ -73,6 +73,12 @@
     <Filter Include="extern\mpack\include">
       <UniqueIdentifier>{0adc971c-0ddb-4a74-a1f5-b6fd9a381a86}</UniqueIdentifier>
     </Filter>
+    <Filter Include="module\service\partial">
+      <UniqueIdentifier>{91f2997a-d43c-4ec4-8b70-34210eeb0d38}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="module\poll\partial">
+      <UniqueIdentifier>{dc092886-0fd3-4df9-8fa5-96a2fdc34a2e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="module\struct\list.c">
@@ -84,19 +90,10 @@
     <ClCompile Include="module\service\sctimer.c">
       <Filter>module\service</Filter>
     </ClCompile>
-    <ClCompile Include="test\test_atom_rwlock.c">
-      <Filter>test</Filter>
-    </ClCompile>
-    <ClCompile Include="test\test_csv.c">
-      <Filter>test</Filter>
-    </ClCompile>
     <ClCompile Include="test\test_scconf.c">
       <Filter>test</Filter>
     </ClCompile>
     <ClCompile Include="test\test_sctimer.c">
-      <Filter>test</Filter>
-    </ClCompile>
-    <ClCompile Include="test\test_tstring.c">
       <Filter>test</Filter>
     </ClCompile>
     <ClCompile Include="test\test_xlsmtojson.c">
@@ -135,9 +132,6 @@
     <ClCompile Include="test\test_scoroutine.c">
       <Filter>test</Filter>
     </ClCompile>
-    <ClCompile Include="test\test_pthread_sem.c">
-      <Filter>test</Filter>
-    </ClCompile>
     <ClCompile Include="module\struct\mq.c">
       <Filter>module\struct</Filter>
     </ClCompile>
@@ -171,9 +165,6 @@
     <ClCompile Include="test\test_httputil.c">
       <Filter>test</Filter>
     </ClCompile>
-    <ClCompile Include="test\test_ddos.c">
-      <Filter>test</Filter>
-    </ClCompile>
     <ClCompile Include="test\test_sctime.c">
       <Filter>test</Filter>
     </ClCompile>
@@ -189,9 +180,6 @@
     <ClCompile Include="test\test_scpipe.c">
       <Filter>test</Filter>
     </ClCompile>
-    <ClCompile Include="test\test_poll.c">
-      <Filter>test</Filter>
-    </ClCompile>
     <ClCompile Include="module\poll\socket_poll.c">
       <Filter>module\poll</Filter>
     </ClCompile>
@@ -203,9 +191,6 @@
     </ClCompile>
     <ClCompile Include="module\poll\socket_message.c">
       <Filter>module\poll</Filter>
-    </ClCompile>
-    <ClCompile Include="module\struct\recvmq.c">
-      <Filter>module\struct</Filter>
     </ClCompile>
     <ClCompile Include="test\test_recvmq.c">
       <Filter>test</Filter>
@@ -242,6 +227,27 @@
     </ClCompile>
     <ClCompile Include="module\schead\strerr.c">
       <Filter>module\schead</Filter>
+    </ClCompile>
+    <ClCompile Include="test\test_scrwlock.c">
+      <Filter>test</Filter>
+    </ClCompile>
+    <ClCompile Include="test\test_sccsv.c">
+      <Filter>test</Filter>
+    </ClCompile>
+    <ClCompile Include="test\test_scsocket.c">
+      <Filter>test</Filter>
+    </ClCompile>
+    <ClCompile Include="test\test_socket_poll.c">
+      <Filter>test</Filter>
+    </ClCompile>
+    <ClCompile Include="test\test_semaphore.c">
+      <Filter>test</Filter>
+    </ClCompile>
+    <ClCompile Include="test\test_tstr.c">
+      <Filter>test</Filter>
+    </ClCompile>
+    <ClCompile Include="module\poll\recvmq.c">
+      <Filter>module\poll</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -293,12 +299,6 @@
     <ClInclude Include="module\schead\include\scurl.h">
       <Filter>module\schead\include</Filter>
     </ClInclude>
-    <ClInclude Include="module\service\include\scoroutine$linux.h">
-      <Filter>module\service\include</Filter>
-    </ClInclude>
-    <ClInclude Include="module\service\include\scoroutine$winds.h">
-      <Filter>module\service\include</Filter>
-    </ClInclude>
     <ClInclude Include="module\service\include\scthreads.h">
       <Filter>module\service\include</Filter>
     </ClInclude>
@@ -323,15 +323,6 @@
     <ClInclude Include="module\schead\include\scpipe.h">
       <Filter>module\schead\include</Filter>
     </ClInclude>
-    <ClInclude Include="module\poll\include\socket$epoll.h">
-      <Filter>module\poll\include</Filter>
-    </ClInclude>
-    <ClInclude Include="module\poll\include\socket$kevent.h">
-      <Filter>module\poll\include</Filter>
-    </ClInclude>
-    <ClInclude Include="module\poll\include\socket$select.h">
-      <Filter>module\poll\include</Filter>
-    </ClInclude>
     <ClInclude Include="module\poll\include\socket_poll.h">
       <Filter>module\poll\include</Filter>
     </ClInclude>
@@ -340,9 +331,6 @@
     </ClInclude>
     <ClInclude Include="module\poll\include\socket_message.h">
       <Filter>module\poll\include</Filter>
-    </ClInclude>
-    <ClInclude Include="module\struct\include\recvmq.h">
-      <Filter>module\struct\include</Filter>
     </ClInclude>
     <ClInclude Include="extern\curl\include\curl\curl.h">
       <Filter>extern\curl\include\curl</Filter>
@@ -385,6 +373,24 @@
     </ClInclude>
     <ClInclude Include="extern\mpack\include\mpack.h">
       <Filter>extern\mpack\include</Filter>
+    </ClInclude>
+    <ClInclude Include="module\service\scoroutine$winds.h">
+      <Filter>module\service\partial</Filter>
+    </ClInclude>
+    <ClInclude Include="module\service\scoroutine$linux.h">
+      <Filter>module\service\partial</Filter>
+    </ClInclude>
+    <ClInclude Include="module\poll\socket$epoll.h">
+      <Filter>module\poll\partial</Filter>
+    </ClInclude>
+    <ClInclude Include="module\poll\socket$kevent.h">
+      <Filter>module\poll\partial</Filter>
+    </ClInclude>
+    <ClInclude Include="module\poll\socket$select.h">
+      <Filter>module\poll\partial</Filter>
+    </ClInclude>
+    <ClInclude Include="module\poll\include\recvmq.h">
+      <Filter>module\poll\include</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

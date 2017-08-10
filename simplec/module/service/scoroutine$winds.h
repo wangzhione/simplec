@@ -75,7 +75,7 @@ static inline struct sco * _sco_new(sco_f func, void * arg) {
 	assert(co && func);
 	co->func = func;
 	co->arg = arg;
-	co->status = _SCO_READY;
+	co->status = SCO_READY;
 	return co;
 }
 
@@ -127,7 +127,7 @@ static inline VOID WINAPI _sco_main(LPVOID ptr) {
 	// 执行协程体
 	co->func(comng, co->arg);
 	co = comng->cos[id];
-	co->status = _SCO_DEAD;
+	co->status = SCO_DEAD;
 	// 跳转到主纤程体中销毁
 	SwitchToFiber(comng->main);
 }
@@ -148,7 +148,7 @@ sco_resume(scomng_t sco, int id) {
 	running = sco->running;
 	if (running != -1) {
 		co = sco->cos[running];
-		assert(co && co->status == _SCO_DEAD);
+		assert(co && co->status == SCO_DEAD);
 		sco->cos[running] = NULL;
 		--sco->cnt;
 		sco->idx = running;
@@ -160,14 +160,14 @@ sco_resume(scomng_t sco, int id) {
 
 	// 下面是协程 _SCO_READY 和 _SCO_SUSPEND 处理
 	co = sco->cos[id];
-	if ((!co) || (co->status != _SCO_READY && co->status != _SCO_SUSPEND))
+	if ((!co) || (co->status != SCO_READY && co->status != SCO_SUSPEND))
 		return;
 
 	// Window特性创建纤程, 并保存当前上下文环境, 切换到创建的纤程环境中
-	if (co->status == _SCO_READY)
+	if (co->status == SCO_READY)
 		co->ctx = CreateFiberEx(_INT_STACK, 0, FIBER_FLAG_FLOAT_SWITCH, _sco_main, sco);
 
-	co->status = _SCO_RUNNING;
+	co->status = SCO_RUNNING;
 	sco->running = id;
 	sco->main = GetCurrentFiber();
 	// 正常逻辑切换到创建的子纤程中
@@ -184,7 +184,7 @@ sco_yield(scomng_t sco) {
 	int id = sco->running;
 	if ((id < 0 || id >= sco->cap) || !(co = sco->cos[id]))
 		return;
-	co->status = _SCO_SUSPEND;
+	co->status = SCO_SUSPEND;
 	sco->running = -1;
 	co->ctx = GetCurrentFiber();
 	SwitchToFiber(sco->main);

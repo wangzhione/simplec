@@ -27,7 +27,7 @@ void ddos_run(struct targ * arg);
 //
 // ddos attack entrance
 //
-void test_ddos(void) {
+void test_scsocket(void) {
 	// 记录详细攻击的量, ts and us 是脏数据随便发
 	struct targ arg;
 	arg.udpsend = arg.tcpsend = arg.connect = 0;

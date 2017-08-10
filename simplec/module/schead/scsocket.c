@@ -45,8 +45,9 @@ socket_start(void) {
 	WSADATA wsad;
 	WSAStartup(WINSOCK_VERSION, &wsad);
 	atexit(_socket_start);
+#elif __GUNC__
+	IGNORE_SIGNAL(SIGPIPE)
 #endif
-	IGNORE_SIGPIPE();
 }
 
 int 
@@ -154,30 +155,38 @@ socket_set_nonblock(socket_t s) {
 #endif	
 }
 
+static inline int _socket_set_enable(socket_t s, int optname) {
+	int ov = 1;
+	return setsockopt(s, SOL_SOCKET, optname, (void *)&ov, sizeof ov);
+}
+
 inline int
 socket_set_reuseaddr(socket_t s) {
-	int ov = 1;
-	return setsockopt(s, SOL_SOCKET, SO_REUSEADDR, (const void *)&ov, sizeof ov);
+	return _socket_set_enable(s, SO_REUSEADDR);
 }
 
 inline int 
 socket_set_keepalive(socket_t s) {
-	int ov = 1;
-	return setsockopt(s, SOL_SOCKET, SO_KEEPALIVE, (const void *)&ov, sizeof ov);
+	return _socket_set_enable(s, SO_KEEPALIVE);
+}
+
+static inline int _socket_set_time(socket_t s, int ms, int optname) {
+	struct timeval ov = { 0,0 };
+	if (ms > 0) {
+		ov.tv_sec = ms / _INT_STOMS;
+		ov.tv_usec = (ms % _INT_STOMS) * _INT_STOMS;
+	}
+	return setsockopt(s, SOL_SOCKET, optname, (void *)&ov, sizeof ov);
 }
 
 inline int
 socket_set_recvtimeo(socket_t s, int ms) {
-	struct timeval ov;
-	MAKE_TIMEVAL(ov, ms);
-	return setsockopt(s, SOL_SOCKET, SO_RCVTIMEO, (const void *)&ov, sizeof ov);
+	return _socket_set_time(s, ms, SO_RCVTIMEO);
 }
 
 int
 socket_set_sendtimeo(socket_t s, int ms) {
-	struct timeval ov;
-	MAKE_TIMEVAL(ov, ms);
-	return setsockopt(s, SOL_SOCKET, SO_SNDTIMEO, (const void *)&ov, sizeof ov);;
+	return _socket_set_time(s, ms, SO_SNDTIMEO);
 }
 
 //
@@ -265,13 +274,13 @@ socket_sendto(socket_t s, const void * buf, int len, int flags, const sockaddr_t
 socket_t
 socket_bind(const char * host, uint16_t port, uint8_t protocol, int * family) {
 	socket_t fd;
+	char ports[16];
 	struct addrinfo ai_hints = { 0 };
 	struct addrinfo * ai_list = NULL;
-	char portstr[16];
 	if (host == NULL || host[0] == 0)
-		host = "0.0.0.0";		// INADDR_ANY
+		host = "0.0.0.0"; // INADDR_ANY
 
-	sprintf(portstr, "%d", port);
+	sprintf(ports, "%hu", port);
 	ai_hints.ai_family = AF_UNSPEC;
 	if (protocol == IPPROTO_TCP)
 		ai_hints.ai_socktype = SOCK_STREAM;
@@ -281,7 +290,7 @@ socket_bind(const char * host, uint16_t port, uint8_t protocol, int * family) {
 	}
 	ai_hints.ai_protocol = protocol;
 
-	if (getaddrinfo(host, portstr, &ai_hints, &ai_list))
+	if (getaddrinfo(host, ports, &ai_hints, &ai_list))
 		return INVALID_SOCKET;
 
 	fd = socket(ai_list->ai_family, ai_list->ai_socktype, 0);
@@ -366,7 +375,7 @@ int
 socket_connecto(socket_t s, const sockaddr_t * addr, int ms) {
 	int n, r;
 	struct timeval to;
-	fd_set rset, wset;
+	fd_set rset, wset, eset;
 
 	// 还是阻塞的connect
 	if (ms < 0) return socket_connect(s, addr);
@@ -382,7 +391,7 @@ socket_connecto(socket_t s, const sockaddr_t * addr, int ms) {
 	if (r >= SufBase) goto __return;
 
 	// 链接还在进行中, linux这里显示 EINPROGRESS，winds应该是 WASEWOULDBLOCK
-	if (errno == CONNECTED) {
+	if (errno == ECONNECTED) {
 		CERR("socket_connect error r = %d!", r);
 		goto __return;
 	}
@@ -391,12 +400,12 @@ socket_connecto(socket_t s, const sockaddr_t * addr, int ms) {
 	r = ErrBase;
 	if (ms == 0) goto __return;
 
-	FD_ZERO(&rset);
-	FD_SET(s, &rset);
-	FD_ZERO(&wset);
-	FD_SET(s, &wset);
-	MAKE_TIMEVAL(to, ms);
-	n = select((int)s + 1, &rset, &wset, NULL, &to);
+	FD_ZERO(&rset); FD_SET(s, &rset);
+	FD_ZERO(&wset); FD_SET(s, &wset);
+	FD_ZERO(&eset); FD_SET(s, &eset);
+	to.tv_sec = ms / _INT_STOMS;
+	to.tv_usec = (ms % _INT_STOMS) * _INT_STOMS;
+	n = select((int)s + 1, &rset, &wset, &eset, &to);
 	// 超时直接滚
 	if (n <= 0) goto __return;
 
@@ -407,7 +416,7 @@ socket_connecto(socket_t s, const sockaddr_t * addr, int ms) {
 	}
 
 	// 当连接建立遇到错误时候, 描述符变为即可读又可写
-	if (n == 2) {
+	if (FD_ISSET(s, &eset) || n == 2) {
 		socklen_t len = sizeof n;
 		// 只要最后没有 error那就 链接成功
 		if (!getsockopt(s, SOL_SOCKET, SO_ERROR, (char *)&n, &len) && !n)

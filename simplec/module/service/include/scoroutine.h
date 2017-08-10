@@ -1,10 +1,10 @@
 ﻿#ifndef _H_SIMPLEC_SCOROUTINE
 #define _H_SIMPLEC_SCOROUTINE
 
-#define _SCO_DEAD		(0)		// 协程死亡状态
-#define _SCO_READY		(1)		// 协程已经就绪
-#define _SCO_RUNNING	(2)		// 协程正在运行
-#define _SCO_SUSPEND	(3)		// 协程暂停等待
+#define SCO_DEAD		(0)		// 协程死亡状态
+#define SCO_READY		(1)		// 协程已经就绪
+#define SCO_RUNNING		(2)		// 协程正在运行
+#define SCO_SUSPEND		(3)		// 协程暂停等待
 
 // 协程管理器
 typedef struct scomng * scomng_t;
