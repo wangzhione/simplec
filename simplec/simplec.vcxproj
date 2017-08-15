@@ -15,10 +15,11 @@
     <ClCompile Include="extern\mpack\mpack.c" />
     <ClCompile Include="main\main.c" />
     <ClCompile Include="main\simplec.c" />
-    <ClCompile Include="module\poll\recvmq.c" />
-    <ClCompile Include="module\poll\socket_message.c" />
+    <ClCompile Include="module\poll\rsmq.c" />
+    <ClCompile Include="module\poll\socket_msg.c" />
     <ClCompile Include="module\poll\socket_poll.c" />
     <ClCompile Include="module\poll\socket_server.c" />
+    <ClCompile Include="module\poll\socket_start.c" />
     <ClCompile Include="module\schead\clog.c" />
     <ClCompile Include="module\schead\scmd5.c" />
     <ClCompile Include="module\schead\scconf.c" />
@@ -49,7 +50,7 @@
     <ClCompile Include="test\test_dict.c" />
     <ClCompile Include="test\test_httputil.c" />
     <ClCompile Include="test\test_mpack.c" />
-    <ClCompile Include="test\test_recvmq.c" />
+    <ClCompile Include="test\test_rsmq.c" />
     <ClCompile Include="test\test_semaphore.c" />
     <ClCompile Include="test\test_scconf.c" />
     <ClCompile Include="test\test_sciconv.c" />
@@ -64,6 +65,7 @@
     <ClCompile Include="test\test_sctime.c" />
     <ClCompile Include="test\test_scurl.c" />
     <ClCompile Include="test\test_socket_server.c" />
+    <ClCompile Include="test\test_socket_start.c" />
     <ClCompile Include="test\test_tstr.c" />
     <ClCompile Include="test\test_socket_poll.c" />
     <ClCompile Include="test\test_xlsmtojson.c" />
@@ -82,10 +84,12 @@
     <ClInclude Include="extern\pthread\include\pthread.h" />
     <ClInclude Include="extern\pthread\include\sched.h" />
     <ClInclude Include="extern\pthread\include\semaphore.h" />
-    <ClInclude Include="module\poll\include\recvmq.h" />
-    <ClInclude Include="module\poll\include\socket_message.h" />
+    <ClInclude Include="module\poll\include\hashid.h" />
+    <ClInclude Include="module\poll\include\rsmq.h" />
+    <ClInclude Include="module\poll\include\socket_msg.h" />
     <ClInclude Include="module\poll\include\socket_poll.h" />
     <ClInclude Include="module\poll\include\socket_server.h" />
+    <ClInclude Include="module\poll\include\socket_start.h" />
     <ClInclude Include="module\poll\socket$epoll.h" />
     <ClInclude Include="module\poll\socket$kevent.h" />
     <ClInclude Include="module\poll\socket$select.h" />

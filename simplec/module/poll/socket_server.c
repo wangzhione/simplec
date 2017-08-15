@@ -408,7 +408,7 @@ open_socket(struct sserver * ss, struct request_open * request, struct smessage 
 	status = getaddrinfo(request->host, port, &ai_hints, &ai_list);
 	if (status) {
 		result->data = (void *)gai_strerror(status);
-		goto __failed;
+		goto _failed;
 	}
 	socket_t sock = INVALID_SOCKET;
 	for (ai_ptr = ai_list; ai_ptr != NULL; ai_ptr = ai_ptr->ai_next) {
@@ -429,14 +429,14 @@ open_socket(struct sserver * ss, struct request_open * request, struct smessage 
 
 	if (sock == INVALID_SOCKET) {
 		result->data = strerror(errno);
-		goto __failed;
+		goto _failed;
 	}
 
 	ns = new_fd(ss, id, sock, IPPROTO_TCP, request->opaque, true);
 	if (ns == NULL) {
 		socket_close(sock);
 		result->data = "reach skynet socket number limit";
-		goto __failed;
+		goto _failed;
 	}
 
 	if (status == 0) {
@@ -453,7 +453,7 @@ open_socket(struct sserver * ss, struct request_open * request, struct smessage 
 
 	freeaddrinfo(ai_list);
 	return -1;
-__failed:
+_failed:
 	freeaddrinfo(ai_list);
 	ss->slot[HASH_ID(id)].type = SOCKET_TYPE_INVALID;
 	return SSERVER_ERR;
@@ -1132,7 +1132,7 @@ report_accept(struct sserver * ss, struct socket * s, struct smessage * result) 
 	}
 	socket_set_keepalive(client_fd);
 	socket_set_nonblock(client_fd);
-	struct socket * ns = new_fd(ss, id, client_fd, IPPROTO_TCP, s->opaque, false);
+	struct socket * ns = new_fd(ss, id, client_fd, IPPROTO_TCP, s->opaque, true);
 	if (ns == NULL) {
 		socket_close(client_fd);
 		return 0;

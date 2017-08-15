@@ -144,7 +144,7 @@ void array_swap(array_t a, array_t b) {
  * compare	: 比对规则
  */
 inline void 
-array_sort(array_t a, cmp_f compare) {
+array_sort(array_t a, icmp_f compare) {
 	assert(NULL != a && 0 != a->len && NULL != compare);
 	qsort(a->as, a->len, a->alloc, (int ( *)(const void *, const void *))compare);
 }

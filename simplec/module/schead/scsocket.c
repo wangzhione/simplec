@@ -28,10 +28,6 @@ gettimeofday(struct timeval * tv, void * tz) {
 	return 0;
 }
 
-static inline void _socket_start(void) {
-	WSACleanup();
-}
-
 #endif
 
 //
@@ -44,7 +40,6 @@ socket_start(void) {
 #	pragma comment(lib, "ws2_32.lib")
 	WSADATA wsad;
 	WSAStartup(WINSOCK_VERSION, &wsad);
-	atexit(_socket_start);
 #elif __GUNC__
 	IGNORE_SIGNAL(SIGPIPE)
 #endif
@@ -388,17 +383,17 @@ socket_connecto(socket_t s, const sockaddr_t * addr, int ms) {
 
 	// 尝试连接一下, 非阻塞connect 返回 -1 并且 errno == EINPROGRESS 表示正在建立链接
 	r = socket_connect(s, addr);
-	if (r >= SufBase) goto __return;
+	if (r >= SufBase) goto _return;
 
 	// 链接还在进行中, linux这里显示 EINPROGRESS，winds应该是 WASEWOULDBLOCK
-	if (errno == ECONNECTED) {
+	if (errno != ECONNECTED) {
 		CERR("socket_connect error r = %d!", r);
-		goto __return;
+		goto _return;
 	}
 
 	// 超时 timeout, 直接返回结果 ErrBase = -1 错误
 	r = ErrBase;
-	if (ms == 0) goto __return;
+	if (ms == 0) goto _return;
 
 	FD_ZERO(&rset); FD_SET(s, &rset);
 	FD_ZERO(&wset); FD_SET(s, &wset);
@@ -407,12 +402,12 @@ socket_connecto(socket_t s, const sockaddr_t * addr, int ms) {
 	to.tv_usec = (ms % _INT_STOMS) * _INT_STOMS;
 	n = select((int)s + 1, &rset, &wset, &eset, &to);
 	// 超时直接滚
-	if (n <= 0) goto __return;
+	if (n <= 0) goto _return;
 
 	// 当连接成功时候,描述符会变成可写
 	if (n == 1 && FD_ISSET(s, &wset)) {
 		r = SufBase;
-		goto __return;
+		goto _return;
 	}
 
 	// 当连接建立遇到错误时候, 描述符变为即可读又可写
@@ -423,7 +418,7 @@ socket_connecto(socket_t s, const sockaddr_t * addr, int ms) {
 			r = SufBase;
 	}
 
-__return:
+_return:
 	socket_set_block(s);
 	return r;
 }

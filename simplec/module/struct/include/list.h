@@ -26,7 +26,7 @@ typedef void * list_t;
 // die		: 销毁执行的函数
 // return	: void
 //
-extern void list_destroy_(list_t * ph, die_f die);
+extern void list_destroy_(list_t * ph, node_f die);
 #define list_destroy(ph) list_destroy_((list_t *)ph, free)
 
 //
@@ -42,7 +42,7 @@ extern void list_destroy_(list_t * ph, die_f die);
 // left		: cmp(left, x) 比较返回 <=0 or >0
 // return	: 返回 SufBase 表示成功!
 //
-extern int list_add(list_t * ph, cmp_f cmp, void * left);
+extern int list_add(list_t * ph, icmp_f cmp, void * left);
 
 //
 // list_addhead - 采用头查法插入结点, 第一次用需要 list_t head = NULL;
@@ -74,7 +74,7 @@ extern size_t list_len(list_t h);
 // left		: cmp(left, x) 比较返回 0 >0 <0
 // return	: 找到了退出/返回结点, 否则返回NULL
 //
-extern void * list_findpop(list_t * ph, cmp_f cmp, const void * left);
+extern void * list_findpop(list_t * ph, icmp_f cmp, const void * left);
 
 //
 // list_find - 链表中查找函数,查找失败返回NULL, 查找成功直接返回那个结点.
@@ -83,7 +83,7 @@ extern void * list_findpop(list_t * ph, cmp_f cmp, const void * left);
 // left		: cmp(left, right) 用的左结点
 // return	: 返回查找的结点对象
 //
-extern void * list_find(list_t head, cmp_f cmp, const void * left);
+extern void * list_find(list_t head, icmp_f cmp, const void * left);
 
 //
 // list_getidx - 查找索引位置为idx的结点,找不见返回NULL

@@ -189,12 +189,6 @@
     <ClCompile Include="test\test_socket_server.c">
       <Filter>test</Filter>
     </ClCompile>
-    <ClCompile Include="module\poll\socket_message.c">
-      <Filter>module\poll</Filter>
-    </ClCompile>
-    <ClCompile Include="test\test_recvmq.c">
-      <Filter>test</Filter>
-    </ClCompile>
     <ClCompile Include="module\schead\scconf.c">
       <Filter>module\schead</Filter>
     </ClCompile>
@@ -246,8 +240,20 @@
     <ClCompile Include="test\test_tstr.c">
       <Filter>test</Filter>
     </ClCompile>
-    <ClCompile Include="module\poll\recvmq.c">
+    <ClCompile Include="module\poll\rsmq.c">
       <Filter>module\poll</Filter>
+    </ClCompile>
+    <ClCompile Include="test\test_rsmq.c">
+      <Filter>test</Filter>
+    </ClCompile>
+    <ClCompile Include="module\poll\socket_start.c">
+      <Filter>module\poll</Filter>
+    </ClCompile>
+    <ClCompile Include="module\poll\socket_msg.c">
+      <Filter>module\poll</Filter>
+    </ClCompile>
+    <ClCompile Include="test\test_socket_start.c">
+      <Filter>test</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -329,9 +335,6 @@
     <ClInclude Include="module\poll\include\socket_server.h">
       <Filter>module\poll\include</Filter>
     </ClInclude>
-    <ClInclude Include="module\poll\include\socket_message.h">
-      <Filter>module\poll\include</Filter>
-    </ClInclude>
     <ClInclude Include="extern\curl\include\curl\curl.h">
       <Filter>extern\curl\include\curl</Filter>
     </ClInclude>
@@ -389,7 +392,16 @@
     <ClInclude Include="module\poll\socket$select.h">
       <Filter>module\poll\partial</Filter>
     </ClInclude>
-    <ClInclude Include="module\poll\include\recvmq.h">
+    <ClInclude Include="module\poll\include\rsmq.h">
+      <Filter>module\poll\include</Filter>
+    </ClInclude>
+    <ClInclude Include="module\poll\include\hashid.h">
+      <Filter>module\poll\include</Filter>
+    </ClInclude>
+    <ClInclude Include="module\poll\include\socket_start.h">
+      <Filter>module\poll\include</Filter>
+    </ClInclude>
+    <ClInclude Include="module\poll\include\socket_msg.h">
       <Filter>module\poll\include</Filter>
     </ClInclude>
   </ItemGroup>

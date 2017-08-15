@@ -7,7 +7,7 @@
 // return	: void
 //
 void
-list_destroy_(list_t * ph, die_f die) {
+list_destroy_(list_t * ph, node_f die) {
 	struct $lnode * head;
 	if ((!ph) || !(head = *ph))
 		return;
@@ -32,7 +32,7 @@ list_destroy_(list_t * ph, die_f die) {
 // return	: 返回 SufBase 表示成功!
 //
 int 
-list_add(list_t * ph, cmp_f cmp, void * left) {
+list_add(list_t * ph, icmp_f cmp, void * left) {
 	struct $lnode * head;
 	DEBUG_CODE({
 		if (!ph || !cmp || !left) {
@@ -111,7 +111,7 @@ list_addtail(list_t * ph, void * node) {
 // return	: 找到了退出/返回结点, 否则返回NULL
 //
 void * 
-list_findpop(list_t * ph, cmp_f cmp, const void * left) {
+list_findpop(list_t * ph, icmp_f cmp, const void * left) {
 	struct $lnode * head, * tmp;
 	if((!ph) || (!cmp) || (!left) || !(head = *ph)){
 		RETURN(NULL, "check find {(!ph) || (!cmp) || (!left) || !(head = *ph)}!");
@@ -143,7 +143,7 @@ list_findpop(list_t * ph, cmp_f cmp, const void * left) {
 // return	: 返回查找的结点对象
 //
 void *
-list_find(list_t head, cmp_f cmp, const void * left) {
+list_find(list_t head, icmp_f cmp, const void * left) {
 	if (cmp == NULL || left == NULL) {
 		RETURN(NULL, "list_find check(cmp == NULL || left == NULL)!");
 	}

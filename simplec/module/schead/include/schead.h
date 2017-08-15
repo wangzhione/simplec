@@ -133,6 +133,7 @@ inline int getch(void) {
 
 // 等待的宏 是个单线程没有加锁 | "请按任意键继续. . ."
 inline void sh_pause(void) {
+	fflush(stderr);
 	rewind(stdin);
 	printf("Press any key to continue . . .");
 	getch();

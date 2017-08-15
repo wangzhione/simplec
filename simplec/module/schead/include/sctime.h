@@ -19,9 +19,6 @@
 #define _INT_STOMS			(1000)
 #define _INT_MSTONS			(1000000)
 
-// sleep 中推荐的最小睡眠数
-#define _INT_SLEEPMIN	(1)
-
 #ifdef __GNUC__
 
 #include <unistd.h>

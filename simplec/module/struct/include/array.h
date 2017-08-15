@@ -95,7 +95,7 @@ extern void array_swap(array_t a, array_t b);
  * a		: 数组对象
  * compare	: 比对规则
  */
-extern void array_sort(array_t a, cmp_f compare);
+extern void array_sort(array_t a, icmp_f compare);
 
 /*
  * 数组进行遍历

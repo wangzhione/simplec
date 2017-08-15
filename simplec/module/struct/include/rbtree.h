@@ -11,9 +11,9 @@ struct $rbnode {
 
 typedef struct {
 	struct $rbnode * root;
-	new_f new;
-	cmp_f cmp;
-	die_f die;
+	vnew_f new;
+	node_f die;
+	icmp_f cmp;
 } * rbtree_t;
 
 /*
@@ -29,11 +29,11 @@ typedef struct {
 /*
  * 创建一颗红黑树头结点 
  * new		: 注册创建结点的函数
- * cmp		: 注册比较的函数
  * die		: 注册程序销毁函数
+ * cmp		: 注册比较的函数
  *			: 返回创建好的红黑树结点
  */
-extern rbtree_t rb_create(new_f new, cmp_f cmp, die_f die);
+extern rbtree_t rb_create(vnew_f new, node_f die, icmp_f cmp);
 
 /*
  * 插入一个结点, 会插入 new(pack)

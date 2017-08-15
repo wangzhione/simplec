@@ -10,7 +10,7 @@
 // arg		: 定时器参数指针
 // return	: 返回这个定时器的唯一id
 //
-extern int st_add(int intval, die_f timer, void * arg);
+extern int st_add(int intval, node_f timer, void * arg);
 
 //
 // st_del - 删除指定事件

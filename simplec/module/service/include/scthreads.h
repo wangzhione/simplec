@@ -15,8 +15,8 @@ typedef struct threads * threads_t;
 // arg		: run的参数
 // return	: >= SufBase 表示成功
 //
-int async_run_(die_f run, void * arg);
-#define async_run(run, arg) async_run_((die_f)(run), arg)
+int async_run_(node_f run, void * arg);
+#define async_run(run, arg) async_run_((node_f)(run), arg)
 
 //
 // threads_create - 创建一个线程池处理对象
@@ -38,6 +38,6 @@ extern void threads_delete(threads_t pool);
 // arg		: run的参数
 // return	: void
 //
-extern void threads_add(threads_t pool, die_f run, void * arg);
+extern void threads_add(threads_t pool, node_f run, void * arg);
 
 #endif // !_H_SIMPLEC_SCTHREADS

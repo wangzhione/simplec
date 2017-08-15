@@ -9,7 +9,7 @@ struct stnode {
 
 	int id;						//当前定时器的id
 	struct timespec tv;			//运行的具体时间
-	die_f timer;				//执行的函数事件
+	node_f timer;				//执行的函数事件
 	void * arg;					//执行函数参数
 };
 
@@ -26,7 +26,7 @@ struct stlist {
 static struct stlist _st;
 
 // 先创建链表对象处理函数
-static struct stnode * _stnode_new(int s, die_f timer, void * arg) {
+static struct stnode * _stnode_new(int s, node_f timer, void * arg) {
 	struct stnode * node = malloc(sizeof(struct stnode));
 	if (NULL == node)
 		RETURN(NULL, "malloc struct stnode is error!");
@@ -97,7 +97,7 @@ static inline int _stnode_cmptime(struct stnode * sl, struct stnode * sr) {
 // return	: 返回这个定时器的唯一id
 //
 int 
-st_add(int intval, die_f timer, void * arg) {
+st_add(int intval, node_f timer, void * arg) {
 	struct stnode * now;
 
 	// 各种前戏操作

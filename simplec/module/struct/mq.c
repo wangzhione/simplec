@@ -44,7 +44,7 @@ mq_create(void) {
 // return	: void
 //
 void 
-mq_delete(mq_t mq, die_f die) {
+mq_delete(mq_t mq, node_f die) {
 	if (!mq || mq->fee) return;
 	ATOM_LOCK(mq->lock);
 	mq->fee = true;

@@ -10,7 +10,7 @@ typedef struct dict * dict_t;
 // die		: val 销毁函数
 // return	: void
 //
-extern dict_t dict_create(die_f die);
+extern dict_t dict_create(node_f die);
 extern void dict_delete(dict_t d);
 
 //

@@ -21,34 +21,36 @@ static inline void rb_set_color(struct $rbnode * r, int color) {
      r->parent_color = (r->parent_color & ~1) | (1 & color);
 }
 
-static inline int _rb_cmp(const void * ln, const void * rn) {
-	return (int)((const char *)ln - (const char *)rn);
+static inline void * _rb_dnew(void * node) { return node; }
+static inline void _rb_ddie(void * node) { }
+static inline int _rb_dcmp(const void * ln, const void * rn) { 
+	return (intptr_t)ln - (intptr_t)rn; 
 }
 
- /*
-  * 创建一颗红黑树头结点
-  * new		: 注册创建结点的函数
-  * cmp		: 注册比较的函数
-  * die		: 注册程序销毁函数
-  *			: 返回创建好的红黑树结点
-  */
-rbtree_t 
-rb_create(new_f new, cmp_f cmp, die_f die) {
+/*
+ * 创建一颗红黑树头结点
+ * new		: 注册创建结点的函数
+ * die		: 注册程序销毁函数
+ * cmp		: 注册比较的函数
+ *			: 返回创建好的红黑树结点
+ */
+inline rbtree_t 
+rb_create(vnew_f new, node_f die, icmp_f cmp) {
 	rbtree_t tree = malloc(sizeof(*tree));
 	if(NULL == tree) {
 		RETURN(NULL, "rb_new malloc is error!");
 	}
 	
 	tree->root = NULL;
-	tree->new = new;
-	tree->cmp = cmp ? cmp : _rb_cmp;
-	tree->die = die;
+	tree->new = new ? new : _rb_dnew;
+	tree->die = die ? die : _rb_ddie;
+	tree->cmp = cmp ? cmp : _rb_dcmp;
 
 	return tree;
 }
 
 static inline struct $rbnode * _rb_new(rbtree_t tree, void * pack) {
-	struct $rbnode * node = tree->new ? tree->new(pack) : pack;
+	struct $rbnode * node = tree->new(pack);
 	memset(node, 0, sizeof(struct $rbnode));
 	return node;
 }
@@ -215,7 +217,7 @@ static void _rbtree_insert_fixup(rbtree_t tree, struct $rbnode * node) {
  */
 void 
 rb_insert(rbtree_t tree, void * pack) {
-	cmp_f cmp;
+	icmp_f cmp;
 	struct $rbnode * node, * x, * y;
 	if((!tree) || (!pack) || !(node = _rb_new(tree, pack))) {
 		RETURN(NIL, "rb_insert param is empty! tree = %p, pack = %p.\n", tree, pack);
@@ -401,8 +403,7 @@ rb_remove(rbtree_t tree, void * pack) {
 		if (color) // 黑色结点重新调整关系
 			_rbtree_delete_fixup(tree, child, parent);
 		// 结点销毁操作
-		if(tree->die)
-			tree->die(node);
+		tree->die(node);
 		return ;
 	}
 
@@ -430,8 +431,7 @@ rb_remove(rbtree_t tree, void * pack) {
 
 	if (!color)
 		_rbtree_delete_fixup(tree, child, parent);
-	if(tree->die)
-		tree->die(node);
+	tree->die(node);
 }
 
 /*
@@ -441,7 +441,7 @@ rb_remove(rbtree_t tree, void * pack) {
  */
 void * 
 rb_get(rbtree_t tree, void * pack) {
-	cmp_f cmp;
+	icmp_f cmp;
 	struct $rbnode * node;
 	if((!tree) || !pack) {
 		RETURN(NULL, "rb_get param is empty! tree = %p, pack = %p.\n", tree, pack);	
@@ -460,7 +460,7 @@ rb_get(rbtree_t tree, void * pack) {
 }
 
 // 后序遍历删除操作
-static void _rb_delete(struct $rbnode * root, die_f die) {
+static void _rb_delete(struct $rbnode * root, node_f die) {
 	if(NULL == root)
 		return;
 	_rb_delete(root->left, die);
@@ -472,9 +472,9 @@ static void _rb_delete(struct $rbnode * root, die_f die) {
  * 销毁这颗二叉树
  * root		: 当前红黑树结点
  */
-void
+inline void
 rb_delete(rbtree_t tree) {
-	if(!tree || !tree->root || !tree->die)
+	if(!tree || !tree->root || tree->die == _rb_ddie)
 		return;
 
 	// 后续递归删除

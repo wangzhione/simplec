@@ -11,7 +11,7 @@ struct keypair {
 };
 
 struct dict {
-	die_f die;
+	node_f die;
 	unsigned used; // 用户使用的
 	unsigned size; // table 的 size, 等同于桶数目
 	struct keypair ** table;
@@ -23,7 +23,7 @@ struct dict {
 // return	: void
 //
 dict_t 
-dict_create(die_f die) {
+dict_create(node_f die) {
 	struct dict * d = malloc(sizeof(struct dict));
 	if (NULL == d) {
 		RETURN(NULL, "malloc sizeof struct dict is error!");

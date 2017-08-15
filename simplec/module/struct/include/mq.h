@@ -17,7 +17,7 @@ extern mq_t mq_create(void);
 // die		: 删除push进来的结点
 // return	: void
 //
-extern void mq_delete(mq_t mq, die_f die);
+extern void mq_delete(mq_t mq, node_f die);
 
 //
 // mq_push - 消息队列中压入数据

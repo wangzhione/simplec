@@ -3,7 +3,7 @@
 
 // 运行的主体
 struct func {
-	die_f run;
+	node_f run;
 	void * arg;
 };
 
@@ -21,7 +21,7 @@ static inline void * _run(struct func * func) {
 // return	: >= SufBase 表示成功
 //
 int 
-async_run_(die_f run, void * arg) {
+async_run_(node_f run, void * arg) {
 	pthread_t tid;
 	pthread_attr_t attr;
 	struct func * func = malloc(sizeof(struct func));
@@ -51,7 +51,7 @@ struct job {
 	struct func func;			// 任务结点执行的函数体
 };
 
-static inline struct job * _job_new(die_f run, void * arg) {
+static inline struct job * _job_new(node_f run, void * arg) {
 	struct job * job = malloc(sizeof(struct job));
 	if (NULL == job)
 		CERR_EXIT("malloc sizeof(struct job) is error!");
@@ -216,7 +216,7 @@ static void * _consumer(void * arg) {
 	pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, NULL);
 
 	// 消费者线程加锁, 防止线程被取消锁没有释放
-	pthread_cleanup_push((die_f)pthread_mutex_unlock, mutx);
+	pthread_cleanup_push((node_f)pthread_mutex_unlock, mutx);
 	pthread_mutex_lock(mutx);
 
 	thrd = _threads_get(pool, tid);
@@ -278,7 +278,7 @@ static void * _consumer(void * arg) {
 // return	: void
 //
 void 
-threads_add(threads_t pool, die_f run, void * arg) {
+threads_add(threads_t pool, node_f run, void * arg) {
 	pthread_mutex_t * mutx = &pool->mutx;
 	struct job * job = _job_new(run, arg);
 
