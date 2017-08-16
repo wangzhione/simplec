@@ -1,5 +1,4 @@
-﻿#include <scthreads.h>
-#include <socket_start.h>
+﻿#include <socket_start.h>
 
 static void _run(msgrs_t msg) {
 	// 完整的包直接抛到消息队列中
@@ -32,23 +31,20 @@ static void _run(msgrs_t msg) {
 #define _STR_HOST		"127.0.0.1"
 #define _USHORT_PORT	(8088)
 
-static inline void _ss_run(void * arg) {
+void test_socket_start(void) {
+	cl_start("simplec.log");
+
 	// 开启一个socket双线程服务, 进行监听
 	ss_run(_STR_HOST, _USHORT_PORT, _run);
-}
-
-void test_socket_start(void) {
-	printf("%s:%hu run ...\n", _STR_HOST, _USHORT_PORT);
-
-	// 将服务器主线程采用异步处理
-	async_run(_ss_run, NULL);
 
 	// 这里给上面socket发送消息
+	printf("%s:%hu run ...\n", _STR_HOST, _USHORT_PORT);
 	sh_msleep(1000);
 
 	// 开始发送消息了, 先链接, 后按照协议发送
 	socket_t cs = socket_connectos(_STR_HOST, _USHORT_PORT, 3000);
 	if (cs == INVALID_SOCKET) {
+		ss_end();
 		RETURN(NIL, "socket_connectos %s:%hu is error!", _STR_HOST, _USHORT_PORT);
 	}
 
@@ -59,10 +55,10 @@ void test_socket_start(void) {
 	socket_sendn(cs, msg->data, msg->sz);
 	msgrs_delete(msg);
 
-	sh_msleep(5000);
+	sh_msleep(2000);
 
+	ss_end();
+	
 	// 关闭打开的socket
-	// socket_close(cs);
-
-	sh_msleep(1000);
+	socket_close(cs);
 }

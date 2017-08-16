@@ -74,6 +74,13 @@ typedef int socket_t;
 // connect链接还在进行中, linux显示 EINPROGRESS，winds是 WSAEWOULDBLOCK
 #define ECONNECTED				WSAEWOULDBLOCK
 
+/*
+ * WinSock 2 extension -- manifest constants for shutdown()
+ */
+#define SHUT_RD					SD_RECEIVE
+#define SHUT_WR					SD_SEND
+#define SHUT_RDWR				SD_BOTH
+
 typedef int socklen_t;
 typedef SOCKET socket_t;
 

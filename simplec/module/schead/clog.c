@@ -27,13 +27,6 @@ cl_start(const char * path) {
 }
 
 //
-// _INT_LOGSZ	- 每条日志的大小
-// _STR_LOGDIR	- 存放所有日志的目录
-//
-#define _INT_LOGSZ		(2048u)
-#define _STR_LOGTIME	"[" _STR_MTIME "]"
-
-//
 // cl_printf - 具体输出日志内容
 // fmt		: 必须双引号包裹起来的串
 // ...		: 对映fmt参数
@@ -43,10 +36,11 @@ void
 cl_printf(const char * fmt, ...) {
 	va_list ap;
 	size_t len;
-	char str[_INT_LOGSZ];
+	// 每条日志的大小, 唯一值
+	char str[2048];
 
 	// 串:得到时间串并返回长度 [2016-07-10 22:38:34 999]
-	len = stu_getmstrn(str, sizeof(str), _STR_LOGTIME);
+	len = stu_getmstrn(str, sizeof(str), "[" _STR_MTIME "]");
 
 	// 开始数据填充
 	va_start(ap, fmt);

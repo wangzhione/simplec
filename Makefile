@@ -1,24 +1,24 @@
 ﻿#
 # 前期编译一些目录结构使用宏
 #
-SRC_PATH 		?= ./simplec
+SRC_PATH 	?= ./simplec
 
-MAIN_DIR		?= main
+MAIN_DIR	?= main
 
-CURL_DIR		?= extern/curl
-MPACK_DIR		?= extern/mpack
+CURL_DIR	?= extern/curl
+MPACK_DIR	?= extern/mpack
 
-STRUCT_DIR		?= module/struct
-SCHEAD_DIR 		?= module/schead
-SERVICE_DIR		?= module/service
-POLL_DIR		?= module/poll
+STRUCT_DIR	?= module/struct
+SCHEAD_DIR 	?= module/schead
+SERVICE_DIR	?= module/service
+POLL_DIR	?= module/poll
 
-TEST_DIR		?= test
+TEST_DIR	?= test
 
-TAR_PATH		?= ./Output
-OBJ_DIR			?= obj
+TAR_PATH	?= ./Output
+OBJ_DIR		?= obj
 
-OUT				?= exe
+OUT			?= exe
 
 #
 # DIRS		: 所有可变编译文件目录
@@ -56,14 +56,14 @@ COPT	= objcopy --redefine-sym $(basename $@)=main $(OBJP)$(basename $@).o
 #
 # 具体的产品生产								
 #
-.PHONY:all clean cleanall
+.PHONY : all clean cleanall
 
 all : main.$(OUT) $(TESTE)
 
 #
 # 主运行程序main
 #
-main.$(OUT):main.o simplec.o libsimplec.a
+main.$(OUT) : main.o simplec.o libsimplec.a
 	$(RUN)
 
 #

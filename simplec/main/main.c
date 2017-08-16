@@ -25,8 +25,10 @@ int main(int argc, char * argv[]) {
 	cl_start(mcnf_get("SimplecLog"));
 
 	// stderr 错误信息重定位, 跟随系统长生不死
-	if (!freopen(mcnf_get("SysErrLog"), "ab", stderr))
-		CERR_EXIT("freopen ab %s is error!", mcnf_get("SysErrLog"));
+	if (!freopen(mcnf_get("SysErrLog"), "ab", stderr)) {
+		CL_ERROR("freopen ab %s is error!", mcnf_get("SysErrLog"));
+		exit(EXIT_FAILURE);
+	}
 
 	/*
 	 * simple c -> 具体业务跑起来 , -> ︿(￣︶￣)︿

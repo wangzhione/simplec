@@ -356,9 +356,9 @@ sserver_delete(sserver_t ss) {
 		if (s->type != SOCKET_TYPE_RESERVE)
 			force_close(ss, s, &l, &dummy);
 	}
+	sp_delete(ss->event_fd);
 	socket_close(ss->sendctrl_fd);
 	socket_close(ss->recvctrl_fd);
-	sp_delete(ss->event_fd);
 	free(ss);
 }
 
@@ -1132,7 +1132,7 @@ report_accept(struct sserver * ss, struct socket * s, struct smessage * result) 
 	}
 	socket_set_keepalive(client_fd);
 	socket_set_nonblock(client_fd);
-	struct socket * ns = new_fd(ss, id, client_fd, IPPROTO_TCP, s->opaque, true);
+	struct socket * ns = new_fd(ss, id, client_fd, IPPROTO_TCP, s->opaque, false);
 	if (ns == NULL) {
 		socket_close(client_fd);
 		return 0;

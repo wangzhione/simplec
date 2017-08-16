@@ -71,31 +71,47 @@ static void * _server(void * arg) {
 	return NULL;
 }
 
+static struct {
+	pthread_t tid;
+	struct gate * g;
+} _ss;
+
 //
-// ss_run - 启动socket 服务器
+// ss_run - 启动单例消息服务器
 // host		: 主机名称
 // port		: 端口
 // run		: 消息解析协议
 // return	: void
 //
-extern void ss_run(const char * host, uint16_t port, void (* run)(msgrs_t)) {
-	pthread_t tid;
-	struct gate * g;
+void 
+ss_run(const char * host, uint16_t port, void (* run)(msgrs_t)) {
+	assert(_ss.g == NULL);
 
 	server_init();
-	g = _gate_create(host, port);
-	if (g == NULL)
+	_ss.g = _gate_create(host, port);
+	if (_ss.g == NULL)
 		CERR_EXIT("gate_create err host = %s, port = %hu.", host, port);
 
-	g->mloop = srl_create(run, msgrs_delete);
+	_ss.g->mloop = srl_create(run, msgrs_delete);
 
 	// 这里开始启动线程跑起来
-	if (pthread_create(&tid, NULL, _server, NULL))
+	if (pthread_create(&_ss.tid, NULL, _server, NULL))
 		CERR_EXIT("pthread_create is error!");
+}
 
+//
+// ss_end - 关闭单例的消息服务器
+// return	: void
+//
+void 
+ss_end(void) {
+	assert(_ss.g != NULL);
+	
+	server_exit();
 	// 等待线程结束
-	pthread_join(tid, NULL);
-	_gate_delete(g);
+	pthread_join(_ss.tid, NULL);
+	srl_delete(_ss.g->mloop);
+	_gate_delete(_ss.g);
 	server_free();
 }
 
@@ -172,6 +188,7 @@ extern void ss_push(uintptr_t opaque, struct smsg * sm) {
 			//sm + 1 -> data print
 			assert(c->buffer == NULL);
 			c->buffer = rsmq_create();
+			server_start(opaque, c->id);
 		}
 		break;
 	case SERVER_UDP		:

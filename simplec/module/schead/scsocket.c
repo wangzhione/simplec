@@ -85,6 +85,7 @@ socket_stream(void) {
 
 inline int
 socket_close(socket_t s) {
+	shutdown(s, SHUT_WR);
 #ifdef _MSC_VER
 	return closesocket(s);
 #else

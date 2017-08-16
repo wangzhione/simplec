@@ -255,6 +255,9 @@
     <ClCompile Include="test\test_socket_start.c">
       <Filter>test</Filter>
     </ClCompile>
+    <ClCompile Include="module\schead\schead.c">
+      <Filter>module\schead</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="module\schead\include\schead.h">

@@ -26,22 +26,7 @@
 // getch - 立即得到用户输入的一个字符, linux实现
 // return	: 返回得到字符
 //
-inline int getch(void) {
-	int cr;
-	struct termios nts, ots;
-	if (tcgetattr(0, &ots) < 0) // 得到当前终端(0表示标准输入)的设置
-		return EOF;
-
-	nts = ots;
-	cfmakeraw(&nts); // 设置终端为Raw原始模式，该模式下所有的输入数据以字节为单位被处理
-	if (tcsetattr(0, TCSANOW, &nts) < 0) // 设置上更改之后的设置
-		return EOF;
-
-	cr = getchar();
-	if (tcsetattr(0, TCSANOW, &ots) < 0) // 设置还原成老的模式
-		return EOF;
-	return cr;
-}
+extern int getch(void);
 
 //
 // sh_mkdir - 通用的单层目录创建宏 等同于 shell> mkdir path
@@ -104,13 +89,13 @@ inline int getch(void) {
 #define EXTERN_RUN(test, ...)	\
 	do {						\
 		extern void test();		\
-		test(##__VA_ARGS__);	\
+		test (__VA_ARGS__);		\
 	} while(0)
 
 // scanf 健壮的多次输入宏
 #define SSCANF(scanf_code, ...)										\
 	do {															\
-		while (printf(##__VA_ARGS__), scanf_code){					\
+		while (printf(__VA_ARGS__), scanf_code){					\
 			rewind(stdin);											\
 			puts("Input error, please according to the prompt!");	\
 		}															\
@@ -144,7 +129,7 @@ inline void sh_pause(void) {
 #	ifdef _DEBUG
 #		define SH_PAUSE() atexit(sh_pause)
 #	else
-#		define SH_PAUSE() /* 别说了,都重新开始吧 */
+#		define SH_PAUSE() /* 别说了, 都重新开始吧 */
 #	endif
 
 #endif // !INIT_PAUSE
@@ -154,24 +139,8 @@ inline void sh_pause(void) {
 // sh_hton - 将本地四字节数据转成'小端'网络字节
 // sh_ntoh - 将'小端'网络四字节数值转成本地数值
 //
-inline bool sh_isbe(void) {
-	union { uint16_t i; uint8_t c; } u = { 1 };
-	return 0 == u.c;
-}
-
-inline uint32_t sh_hton(uint32_t x) {
-	if (sh_isbe()) {
-		uint8_t t;
-		union { uint32_t i; uint8_t s[sizeof(uint32_t)]; } u = { x };
-		t = u.s[0], u.s[0] = u.s[sizeof(u) - 1], u.s[sizeof(u) - 1] = t;
-		t = u.s[1], u.s[1] = u.s[sizeof(u) - 1 - 1], u.s[sizeof(u) - 1 - 1] = t;
-		return u.i;
-	}
-	return x;
-}
-
-inline uint32_t sh_ntoh(uint32_t x) {
-	return sh_hton(x);
-}
+extern bool sh_isbe(void);
+extern uint32_t sh_hton(uint32_t x);
+extern uint32_t sh_ntoh(uint32_t x);
 
 #endif//_H_SIMPLEC_SCHEAD

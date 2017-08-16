@@ -21,6 +21,7 @@
     <ClCompile Include="module\poll\socket_server.c" />
     <ClCompile Include="module\poll\socket_start.c" />
     <ClCompile Include="module\schead\clog.c" />
+    <ClCompile Include="module\schead\schead.c" />
     <ClCompile Include="module\schead\scmd5.c" />
     <ClCompile Include="module\schead\scconf.c" />
     <ClCompile Include="module\schead\sciconv.c" />
