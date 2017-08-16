@@ -45,8 +45,6 @@ typedef int socket_t;
 
 #undef	FD_SETSIZE
 #define FD_SETSIZE				(1024)
-#undef  MAXIMUM_WAIT_OBJECTS
-#define MAXIMUM_WAIT_OBJECTS	(1024)
 #include <ws2tcpip.h>
 
 #define SET_RLIMIT_NOFILE(num)	
