@@ -21,19 +21,18 @@ struct $lnode {
 typedef void * list_t;
 
 //
-// list_destroy_ - 链表销毁函数.对于只是栈上数据就不用调这个api
+// list_next - 主要返回结点n的下一个结点. 用法 node->next = list_next(n) or list_next(n) = node;
+// n		: 当前结点
+//
+#define list_next(n) ((struct $lnode *)(n))->next
+
+//
+// list_destroy - 链表销毁函数.对于只是栈上数据就不用调这个api
 // ph 		: 指向当前链表结点的指针
 // die		: 销毁执行的函数
 // return	: void
 //
-extern void list_destroy_(list_t * ph, node_f die);
-#define list_destroy(ph) list_destroy_((list_t *)ph, free)
-
-//
-// list_next - 主要返回结点n的下一个结点. 用法 node->next = list_node(n) or list_node(n) = node;
-// n		: 当前结点
-//
-#define list_next(n) ((struct $lnode *)(n))->next
+extern void list_destroy(list_t * ph, node_f die);
 
 //
 // list_add - 在 cmp(left, x) <= 0 x处前面插入node结点

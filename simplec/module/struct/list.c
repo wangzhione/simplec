@@ -1,19 +1,18 @@
 ﻿#include <list.h>
 
 //
-// list_destroy_ - 链表销毁函数.对于只是栈上数据就不用调这个api
+// list_destroy - 链表销毁函数.对于只是栈上数据就不用调这个api
 // ph 		: 指向当前链表结点的指针
 // die		: 销毁执行的函数
 // return	: void
 //
 void
-list_destroy_(list_t * ph, node_f die) {
+list_destroy(list_t * ph, node_f die) {
 	struct $lnode * head;
 	if ((!ph) || !(head = *ph))
 		return;
 
-	if (die)
-	{
+	if (die) {
 		do {
 			struct $lnode * next = head->next;
 			die(head);
