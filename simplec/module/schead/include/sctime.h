@@ -37,7 +37,7 @@
 // 为Visual Studio导入一些和linux上优质思路
 #ifdef _MSC_VER
 
-#include <Windows.h>
+#include <windows.h>
 
 #define sh_msleep(m) \
 		Sleep(m)

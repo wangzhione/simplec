@@ -38,8 +38,8 @@
 #define CERR_EXIT(fmt, ...) \
 	CERR(fmt, ##__VA_ARGS__), exit(EXIT_FAILURE)
 
-#define CERR_IF(code)	\
-	if((code) < 0)		\
+#define CERR_IF(code) \
+	if((code) < 0) \
 		CERR_EXIT(#code)
 
 //
@@ -51,9 +51,9 @@
 // 
 #define NIL
 #define RETURN(val, fmt, ...) \
-	do {\
-		CERR(fmt, ##__VA_ARGS__);\
-		return val;\
+	do { \
+		CERR(fmt, ##__VA_ARGS__); \
+		return val; \
 	} while(0)
 
 

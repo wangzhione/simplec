@@ -74,8 +74,7 @@ extern int getch(void);
  * b	: 第二个结构体值
  *		: 相等返回true, 否则false
  */
-#define STRUCTCMP(a, b) \
-	(!memcmp(&a, &b, sizeof(a)))
+#define STRUCTCMP(a, b) (!memcmp(&a, &b, sizeof(a)))
 
 #define _H_ARRHELP
 #endif//_H_ARRHELP
@@ -86,31 +85,31 @@ extern int getch(void);
 // EXTERN_RUN - 简单的声明, 并立即使用的宏
 // test		: 需要执行的函数名称
 //
-#define EXTERN_RUN(test, ...)	\
-	do {						\
-		extern void test();		\
-		test (__VA_ARGS__);		\
+#define EXTERN_RUN(test, ...) \
+	do { \
+		extern void test(); \
+		test (__VA_ARGS__); \
 	} while(0)
 
 // scanf 健壮的多次输入宏
-#define SSCANF(scanf_code, ...)										\
-	do {															\
-		while (printf(__VA_ARGS__), scanf_code){					\
-			rewind(stdin);											\
-			puts("Input error, please according to the prompt!");	\
-		}															\
-		rewind(stdin);												\
+#define SSCANF(scanf_code, ...) \
+	do { \
+		while (printf(__VA_ARGS__), scanf_code){ \
+			rewind(stdin); \
+			puts("Input error, please according to the prompt!"); \
+		} \
+		rewind(stdin); \
 	} while (0)
 
 // 简单的time时间记录宏
-#define TIME_PRINT(code)											\
-	do {															\
-		clock_t $st, $et;											\
-		$st = clock();												\
-		code														\
-		$et = clock();												\
-		printf("The current code block run time:%lf seconds.\n",	\
-		 (0.0 + $et - $st) / CLOCKS_PER_SEC);						\
+#define TIME_PRINT(code) \
+	do { \
+		clock_t $st, $et; \
+		$st = clock(); \
+		code \
+		$et = clock(); \
+		printf("The current code block run time:%lf seconds.\n", \
+		 (0.0 + $et - $st) / CLOCKS_PER_SEC); \
 	} while (0)
 
 #define _H_CODEHELP
