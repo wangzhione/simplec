@@ -1415,7 +1415,7 @@ sserver_shutdown(sserver_t ss, uintptr_t opaque, int id) {
 
 int
 sserver_listen(sserver_t ss, uintptr_t opaque, const char * addr, uint16_t port) {
-	socket_t fd = socket_listen(addr, port);
+	socket_t fd = socket_tcp(addr, port);
 	if (fd == INVALID_SOCKET)
 		return -1;
 

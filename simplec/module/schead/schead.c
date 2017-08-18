@@ -1,35 +1,44 @@
-#include <schead.h>
+ï»¿#include <schead.h>
 
 #if defined(__GUNC__)
 
 //
-// getch - Á¢¼´µÃµ½ÓÃ»§ÊäÈëµÄÒ»¸ö×Ö·û, linuxÊµÏÖ
-// return	: ·µ»ØµÃµ½×Ö·û
+// getch - ç«‹å³å¾—åˆ°ç”¨æˆ·è¾“å…¥çš„ä¸€ä¸ªå­—ç¬¦, linuxå®ç°
+// return	: è¿”å›å¾—åˆ°å­—ç¬¦
 //
 inline int 
 getch(void) {
 	int cr;
 	struct termios nts, ots;
-	if (tcgetattr(0, &ots) < 0) // µÃµ½µ±Ç°ÖÕ¶Ë(0±íÊ¾±ê×¼ÊäÈë)µÄÉèÖÃ
+	if (tcgetattr(0, &ots) < 0) // å¾—åˆ°å½“å‰ç»ˆç«¯(0è¡¨ç¤ºæ ‡å‡†è¾“å…¥)çš„è®¾ç½®
 		return EOF;
 
 	nts = ots;
-	cfmakeraw(&nts); // ÉèÖÃÖÕ¶ËÎªRawÔ­Ê¼Ä£Ê½£¬¸ÃÄ£Ê½ÏÂËùÓĞµÄÊäÈëÊı¾İÒÔ×Ö½ÚÎªµ¥Î»±»´¦Àí
-	if (tcsetattr(0, TCSANOW, &nts) < 0) // ÉèÖÃÉÏ¸ü¸ÄÖ®ºóµÄÉèÖÃ
+	cfmakeraw(&nts); // è®¾ç½®ç»ˆç«¯ä¸ºRawåŸå§‹æ¨¡å¼ï¼Œè¯¥æ¨¡å¼ä¸‹æ‰€æœ‰çš„è¾“å…¥æ•°æ®ä»¥å­—èŠ‚ä¸ºå•ä½è¢«å¤„ç†
+	if (tcsetattr(0, TCSANOW, &nts) < 0) // è®¾ç½®ä¸Šæ›´æ”¹ä¹‹åçš„è®¾ç½®
 		return EOF;
 
 	cr = getchar();
-	if (tcsetattr(0, TCSANOW, &ots) < 0) // ÉèÖÃ»¹Ô­³ÉÀÏµÄÄ£Ê½
+	if (tcsetattr(0, TCSANOW, &ots) < 0) // è®¾ç½®è¿˜åŸæˆè€çš„æ¨¡å¼
 		return EOF;
 	return cr;
 }
 
 #endif
 
+// ç­‰å¾…çš„å® æ˜¯ä¸ªå•çº¿ç¨‹æ²¡æœ‰åŠ é” | "è¯·æŒ‰ä»»æ„é”®ç»§ç»­. . ."
+inline void 
+sh_pause(void) {
+	fflush(stderr);
+	rewind(stdin);
+	printf("Press any key to continue . . .");
+	getch();
+}
+
 //
-// sh_isbe - ÅĞ¶ÏÊÇ´ó¶ËĞò»¹ÊÇĞ¡¶ËĞò,´ó¶ËĞò·µ»Øtrue
-// sh_hton - ½«±¾µØËÄ×Ö½ÚÊı¾İ×ª³É'Ğ¡¶Ë'ÍøÂç×Ö½Ú
-// sh_ntoh - ½«'Ğ¡¶Ë'ÍøÂçËÄ×Ö½ÚÊıÖµ×ª³É±¾µØÊıÖµ
+// sh_isbe - åˆ¤æ–­æ˜¯å¤§ç«¯åºè¿˜æ˜¯å°ç«¯åº,å¤§ç«¯åºè¿”å›true
+// sh_hton - å°†æœ¬åœ°å››å­—èŠ‚æ•°æ®è½¬æˆ'å°ç«¯'ç½‘ç»œå­—èŠ‚
+// sh_ntoh - å°†'å°ç«¯'ç½‘ç»œå››å­—èŠ‚æ•°å€¼è½¬æˆæœ¬åœ°æ•°å€¼
 //
 inline bool 
 sh_isbe(void) {
@@ -52,4 +61,27 @@ sh_hton(uint32_t x) {
 inline uint32_t 
 sh_ntoh(uint32_t x) {
 	return sh_hton(x);
+}
+
+//
+// async_run - å¼€å¯ä¸€ä¸ªè‡ªé”€æ¯çš„çº¿ç¨‹ è¿è¡Œ run
+// run		: è¿è¡Œçš„ä¸»ä½“
+// arg		: runçš„å‚æ•°
+// return	: >= SufBase è¡¨ç¤ºæˆåŠŸ
+//
+inline int 
+async_run_(node_f run, void * arg) {
+	pthread_t tid;
+	pthread_attr_t attr;
+
+	// æ„å»ºpthread çº¿ç¨‹å¥”è·‘èµ·æ¥
+	pthread_attr_init(&attr);
+	pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
+	if (pthread_create(&tid, &attr, (start_f)run, arg) < 0) {
+		pthread_attr_destroy(&attr);
+		RETURN(ErrBase, "pthread_create error run, arg = %p | %p.", run, arg);
+	}
+
+	pthread_attr_destroy(&attr);
+	return SufBase;
 }

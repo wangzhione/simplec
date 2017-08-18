@@ -1,5 +1,4 @@
-﻿#include <pthread.h>
-#include <socket_server.h>
+﻿#include <socket_server.h>
 
 static void * _poll(void * ud) {
 	sserver_t ss = ud;

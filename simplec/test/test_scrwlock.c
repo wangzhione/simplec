@@ -1,7 +1,7 @@
 ﻿#include <stdio.h>
 #include <stdlib.h>
-#include <scrwlock.h>
 #include <pthread.h>
+#include <scrwlock.h>
 
 #define _INT_BZ     (13)
 #define _INT_WTH    (2)

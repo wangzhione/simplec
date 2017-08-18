@@ -1,5 +1,4 @@
-#include <hashid.h>
-#include <pthread.h>
+ï»¿#include <hashid.h>
 #include <scrunloop.h>
 #include <socket_start.h>
 
@@ -44,7 +43,7 @@ static struct gate * _gate_create(const char * host, uint16_t port) {
 	}
 
 	hashid_init(&g->hash, LEN(g->conn));
-	// ÏÂÃæ¿ªÊ¼Æô¶¯¼àÌý²Ù×÷
+	// ä¸‹é¢å¼€å§‹å¯åŠ¨ç›‘å¬æ“ä½œ
 	g->lisid = server_listen(g->opaque, host, port);
 	if (g->lisid < 0) {
 		free(g);
@@ -54,7 +53,7 @@ static struct gate * _gate_create(const char * host, uint16_t port) {
 	return g;
 }
 
-// socket poll ´¦ÀíµÄÖ÷Ìå
+// socket poll å¤„ç†çš„ä¸»ä½“
 static void * _server(void * arg) {
 
 	for (;;) {
@@ -77,10 +76,10 @@ static struct {
 } _ss;
 
 //
-// ss_run - Æô¶¯µ¥ÀýÏûÏ¢·þÎñÆ÷
-// host		: Ö÷»úÃû³Æ
-// port		: ¶Ë¿Ú
-// run		: ÏûÏ¢½âÎöÐ­Òé
+// ss_run - å¯åŠ¨å•ä¾‹æ¶ˆæ¯æœåŠ¡å™¨
+// host		: ä¸»æœºåç§°
+// port		: ç«¯å£
+// run		: æ¶ˆæ¯è§£æžåè®®
 // return	: void
 //
 void 
@@ -94,13 +93,13 @@ ss_run(const char * host, uint16_t port, void (* run)(msgrs_t)) {
 
 	_ss.g->mloop = srl_create(run, msgrs_delete);
 
-	// ÕâÀï¿ªÊ¼Æô¶¯Ïß³ÌÅÜÆðÀ´
+	// è¿™é‡Œå¼€å§‹å¯åŠ¨çº¿ç¨‹è·‘èµ·æ¥
 	if (pthread_create(&_ss.tid, NULL, _server, NULL))
 		CERR_EXIT("pthread_create is error!");
 }
 
 //
-// ss_end - ¹Ø±Õµ¥ÀýµÄÏûÏ¢·þÎñÆ÷
+// ss_end - å…³é—­å•ä¾‹çš„æ¶ˆæ¯æœåŠ¡å™¨
 // return	: void
 //
 void 
@@ -108,7 +107,7 @@ ss_end(void) {
 	assert(_ss.g != NULL);
 	
 	server_exit();
-	// µÈ´ýÏß³Ì½áÊø
+	// ç­‰å¾…çº¿ç¨‹ç»“æŸ
 	pthread_join(_ss.tid, NULL);
 	srl_delete(_ss.g->mloop);
 	_gate_delete(_ss.g);
@@ -122,29 +121,29 @@ static void _ss_push_data(uintptr_t opaque, struct smsg * sm) {
 	id = hashid_lookup(&g->hash, sm->id);
 	if (id > 0) {
 		struct connect * c = g->conn + id;
-		// Ìî³äÊý¾Ý
+		// å¡«å……æ•°æ®
 		rsmq_push(c->buffer, sm->data, sm->ud);
-		// ... µ¯³öËùÐèÒªµÄÏûÏ¢Ìå, ÅÜÉÏÈ¥
+		// ... å¼¹å‡ºæ‰€éœ€è¦çš„æ¶ˆæ¯ä½“, è·‘ä¸ŠåŽ»
 		r = rsmq_pop(c->buffer, &msg);
 		if (r == ErrParse) {
 			CL_ERROR("rsmq_pop parse error %d", sm->id);
 			server_close(opaque, sm->id);
 		} else if (r == SufBase) {
-			// Êý¾ÝÑ¹¶ÓÁÐ¿ªÊ¼´¦Àí
+			// æ•°æ®åŽ‹é˜Ÿåˆ—å¼€å§‹å¤„ç†
 			srl_push(g->mloop, msg);
 		}
 
 	} else {
 		CL_ERROR("Drop unknown connection %d message", sm->id);
-		// ËêÔÂ¸øÁËÎÞ¾¡µÄÉË¸Ð, ÒÅÁôÏÂµÄ¶¼ÊÇÄªÃûµÄ¸Ð¶¯~
+		// å²æœˆç»™äº†æ— å°½çš„ä¼¤æ„Ÿ, é—ç•™ä¸‹çš„éƒ½æ˜¯èŽ«åçš„æ„ŸåŠ¨~
 		server_close(opaque, sm->id);
 	}
 }
 
 // 
-// ss_push - Ïòsocket·þÎñÆ÷ÌîÈëÐÅÏ¢
-// opaque	: ×¢ÈëµÄ¶ÔÏó
-// sm		: ÌîÈëµÄÐÅÏ¢
+// ss_push - å‘socketæœåŠ¡å™¨å¡«å…¥ä¿¡æ¯
+// opaque	: æ³¨å…¥çš„å¯¹è±¡
+// sm		: å¡«å…¥çš„ä¿¡æ¯
 // return	: void
 //
 extern void ss_push(uintptr_t opaque, struct smsg * sm) {
@@ -192,7 +191,7 @@ extern void ss_push(uintptr_t opaque, struct smsg * sm) {
 		}
 		break;
 	case SERVER_UDP		:
-		// Ä¿Ç°UDP¹¦ÄÜÃ»ÓÐÆôÓÃ, ÔÝÊ±Ã»ÓÐ¿¼ÂÇ, ÆäÊµ¿¼ÂÇÆðÀ´¸ü¼òµ¥(°²È«µÄUDP¿ÉÒÔÌæ´úTCP)
+		// ç›®å‰UDPåŠŸèƒ½æ²¡æœ‰å¯ç”¨, æš‚æ—¶æ²¡æœ‰è€ƒè™‘, å…¶å®žè€ƒè™‘èµ·æ¥æ›´ç®€å•(å®‰å…¨çš„UDPå¯ä»¥æ›¿ä»£TCP)
 		break;
 	case SERVER_WARNING	:
 		CL_ERROR("fd (%d) send buffer (%d)K", sm->id, sm->ud);

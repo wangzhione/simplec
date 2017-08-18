@@ -171,7 +171,7 @@ extern int socket_sendto(socket_t s, const void * buf, int len, int flags, const
 // socket_listen	- 端口监听返回监听好的 socket fd.
 //
 extern socket_t socket_bind(const char * host, uint16_t port, uint8_t protocol, int * family);
-extern socket_t socket_listen(const char * host, uint16_t port);
+extern socket_t socket_listen(const char * host, uint16_t port, int backlog);
 
 //
 // socket_tcp			- 创建TCP详细的套接字

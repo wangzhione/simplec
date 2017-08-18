@@ -1,6 +1,5 @@
 ﻿#include <mq.h>
 #include <schead.h>
-#include <pthread.h>
 #include <scrunloop.h>
 
 // 具体轮询器

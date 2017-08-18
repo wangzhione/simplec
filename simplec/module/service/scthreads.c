@@ -1,49 +1,10 @@
 ﻿#include <scthreads.h>
-#include <pthread.h>
 
 // 运行的主体
 struct func {
 	node_f run;
 	void * arg;
 };
-
-// thread_run 中 pthread 执行的实体
-static inline void * _run(struct func * func) {
-	func->run(func->arg);
-	free(func);
-	return NULL;
-}
-
-//
-// async_run - 开启一个自销毁的线程 运行 run
-// run		: 运行的主体
-// arg		: run的参数
-// return	: >= SufBase 表示成功
-//
-int 
-async_run_(node_f run, void * arg) {
-	pthread_t tid;
-	pthread_attr_t attr;
-	struct func * func = malloc(sizeof(struct func));
-	if (NULL == func)
-		RETURN(ErrAlloc, "malloc sizeof(struct func) is error");
-
-	func->run = run;
-	func->arg = arg;
-
-	// 构建pthread 线程奔跑起来
-	pthread_attr_init(&attr);
-	pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
-	
-	if (pthread_create(&tid, &attr, (start_f)_run, func) < 0) {
-		free(func);
-		pthread_attr_destroy(&attr);
-		RETURN(ErrBase, "pthread_create error run, arg = %p | %p.", run, arg);
-	}
-
-	pthread_attr_destroy(&attr);
-	return SufBase;
-}
 
 // 任务链表 结构 和 构造
 struct job {

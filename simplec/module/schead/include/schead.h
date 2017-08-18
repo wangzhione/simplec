@@ -4,6 +4,7 @@
 #include <clog.h>
 #include <scrand.h>
 #include <struct.h>
+#include <pthread.h>
 
 //
 //  宏就是C的金字塔最底层, 所有丑陋的起源~
@@ -115,13 +116,11 @@ extern int getch(void);
 #define _H_CODEHELP
 #endif//_H_CODEHELP
 
-// 等待的宏 是个单线程没有加锁 | "请按任意键继续. . ."
-inline void sh_pause(void) {
-	fflush(stderr);
-	rewind(stdin);
-	printf("Press any key to continue . . .");
-	getch();
-}
+//
+// sh_pause - 等待的宏 是个单线程没有加锁 | "请按任意键继续. . ."
+// return	: void
+//
+extern void sh_pause(void);
 
 #ifndef SH_PAUSE
 
@@ -141,5 +140,15 @@ inline void sh_pause(void) {
 extern bool sh_isbe(void);
 extern uint32_t sh_hton(uint32_t x);
 extern uint32_t sh_ntoh(uint32_t x);
+
+//
+// async_run - 开启一个自销毁的线程 运行 run
+// run		: 运行的主体
+// arg		: run的参数
+// return	: >= SufBase 表示成功
+//
+extern int async_run_(node_f run, void * arg);
+#define async_run(run, arg) \
+		async_run_((node_f)(run), arg)
 
 #endif//_H_SIMPLEC_SCHEAD

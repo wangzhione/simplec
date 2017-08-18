@@ -10,15 +10,6 @@
 typedef struct threads * threads_t;
 
 //
-// async_run - 开启一个自销毁的线程 运行 run
-// run		: 运行的主体
-// arg		: run的参数
-// return	: >= SufBase 表示成功
-//
-int async_run_(node_f run, void * arg);
-#define async_run(run, arg) async_run_((node_f)(run), arg)
-
-//
 // threads_create - 创建一个线程池处理对象
 // return	: 返回创建好的线程池对象, NULL表示失败
 //

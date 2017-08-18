@@ -1,25 +1,24 @@
-﻿#include <sctimer.h>
+﻿#include <list.h>
 #include <scatom.h>
-#include <list.h>
-#include <pthread.h>
+#include <sctimer.h>
 
 // 使用到的定时器结点
 struct stnode {
 	_LIST_HEAD;
 
-	int id;						//当前定时器的id
-	struct timespec tv;			//运行的具体时间
-	node_f timer;				//执行的函数事件
-	void * arg;					//执行函数参数
-};
-
-// 当前链表对象管理器
-struct stlist {
-	int lock;					//加锁用的
-	int nowid;					//当前使用的最大timer id
-	bool status;				//false表示停止态, true表示主线程loop运行态
-	pthread_t tid;				//主循环线程id, 0表示没有启动
-	struct stnode * head;		//定时器链表的头结点
+	intptr_t id;				// 当前定时器的id
+	struct timespec tv;			// 运行的具体时间
+	node_f timer;				// 执行的函数事件
+	void * arg;					// 执行函数参数
+};								   
+								   
+// 当前链表对象管理器				  
+struct stlist {					   
+	int lock;					// 加锁用的
+	int nowid;					// 当前使用的最大timer id
+	bool status;				// false表示停止态, true表示主线程loop运行态
+	pthread_t tid;				// 主循环线程id, 0表示没有启动
+	struct stnode * head;		// 定时器链表的头结点
 };
 
 // 定时器对象的单例, 最简就是最复杂
@@ -44,15 +43,15 @@ static struct stnode * _stnode_new(int s, node_f timer, void * arg) {
 }
 
 // 得到等待的微秒时间, <=0的时候头时间就可以执行了
-static inline int _sleepus(struct stlist * st) {
-	struct timespec tv[1], * th = &st->head->tv;
-	timespec_get(tv, TIME_UTC);
-	return (unsigned)((th->tv_sec - tv->tv_sec) * _INT_MSTONS
-		+ (th->tv_nsec - tv->tv_nsec) / _INT_STOMS);
+static inline int _stlist_sus(struct stlist * st) {
+	struct timespec t[1], * v = &st->head->tv;
+	timespec_get(t, TIME_UTC);
+	return (int)((v->tv_sec - t->tv_sec) * _INT_MSTONS
+		+ (v->tv_nsec - t->tv_nsec) / _INT_STOMS);
 }
 
 // 重新调整, 只能在 _stlist_loop 后面调用, 线程安全,只加了一把锁
-static void _slnode_run(struct stlist * st) {
+static void _stlist_run(struct stlist * st) {
 	struct stnode * sn;
 
 	ATOM_LOCK(st->lock); // 加锁防止调整关系覆盖,可用还是比较重要的
@@ -68,13 +67,13 @@ static void _slnode_run(struct stlist * st) {
 static void * _stlist_loop(struct stlist * st) {
 	// 正常轮询,检测时间
 	while (st->head) {
-		int nowt = _sleepus(st);
+		int nowt = _stlist_sus(st);
 		if (nowt > 0) {
 			usleep(nowt);
 			continue;
 		}
 
-		_slnode_run(st);
+		_stlist_run(st);
 	}
 
 	// 已经运行结束
@@ -86,7 +85,7 @@ static void * _stlist_loop(struct stlist * st) {
 static inline int _stnode_cmptime(struct stnode * sl, struct stnode * sr) {
 	if (sl->tv.tv_sec != sr->tv.tv_sec)
 		return (int)(sl->tv.tv_sec - sr->tv.tv_sec);
-	return sl->tv.tv_nsec - sr->tv.tv_nsec;
+	return (int)(sl->tv.tv_nsec - sr->tv.tv_nsec);
 }
 
 //
@@ -117,13 +116,14 @@ st_add(int intval, node_f timer, void * arg) {
 
 	// 这个时候重新开启线程
 	if(!_st.status){
-		int rt = pthread_create(&_st.tid, NULL, (start_f)_stlist_loop, &_st);
-		if (rt < 0) {
-			list_destroy(&_st.head);
+		pthread_attr_t attr;
+		pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
+		if (pthread_create(&_st.tid, &attr, (start_f)_stlist_loop, &_st)) {
+			list_destroy(&_st.head, free);
 			RETURN(ErrFd, "pthread_create is error!");
 		}
 		_st.status = true;
-		pthread_detach(_st.tid);
+		pthread_attr_destroy(&attr);
 	}
 
 	ATOM_UNLOCK(_st.lock);

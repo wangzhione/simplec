@@ -1,5 +1,4 @@
 ﻿#include <schead.h>
-#include <pthread.h>
 #include <scrunloop.h>
 
 #define _INT_SLEEP		(1000)

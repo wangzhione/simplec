@@ -180,7 +180,7 @@ socket_set_recvtimeo(socket_t s, int ms) {
 	return _socket_set_time(s, ms, SO_RCVTIMEO);
 }
 
-int
+inline int
 socket_set_sendtimeo(socket_t s, int ms) {
 	return _socket_set_time(s, ms, SO_SNDTIMEO);
 }
@@ -221,7 +221,7 @@ socket_recvn(socket_t s, void * buf, int len) {
 		r = socket_recv(s, buf, nlen);
 		if (r == 0) break;
 		if (r == SOCKET_ERROR) {
-			RETURN(SOCKET_ERROR, "socket_recv SOCKET_ERROR len = %d, nlen = %d.", len, nlen);
+			RETURN(SOCKET_ERROR, "socket_recv error len = %d, nlen = %d.", len, nlen);
 		}
 		nlen -= r;
 		buf = (char *)buf + r;
@@ -245,7 +245,7 @@ socket_sendn(socket_t s, const void * buf, int len) {
 		r = socket_send(s, buf, nlen);
 		if (r == 0) break;
 		if (r == SOCKET_ERROR) {
-			RETURN(SOCKET_ERROR, "socket_send SOCKET_ERROR len = %d, nlen = %d.", len, nlen);
+			RETURN(SOCKET_ERROR, "socket_send error len = %d, nlen = %d.", len, nlen);
 		}
 		nlen -= r;
 		buf = (const char *)buf + r;
@@ -291,13 +291,13 @@ socket_bind(const char * host, uint16_t port, uint8_t protocol, int * family) {
 
 	fd = socket(ai_list->ai_family, ai_list->ai_socktype, 0);
 	if (fd == INVALID_SOCKET)
-		goto __failed_fd;
+		goto _failed_fd;
 
 	if (socket_set_reuseaddr(fd))
-		goto __failed;
+		goto _failed;
 
 	if (bind(fd, ai_list->ai_addr, ai_list->ai_addrlen))
-		goto __failed;
+		goto _failed;
 	// Success return ip family
 	if (family)
 		*family = ai_list->ai_family;
@@ -305,20 +305,20 @@ socket_bind(const char * host, uint16_t port, uint8_t protocol, int * family) {
 	freeaddrinfo(ai_list);
 	return fd;
 
-__failed:
+_failed:
 	socket_close(fd);
-__failed_fd:
+_failed_fd:
 	freeaddrinfo(ai_list);
 	return INVALID_SOCKET;
 }
 
 socket_t
-socket_listen(const char * host, uint16_t port) {
+socket_listen(const char * host, uint16_t port, int backlog) {
 	socket_t fd = socket_bind(host, port, IPPROTO_TCP, NULL);
 	if (fd == INVALID_SOCKET)
 		return INVALID_SOCKET;
 
-	if (listen(fd, SOMAXCONN)) {
+	if (listen(fd, backlog)) {
 		socket_close(fd);
 		return INVALID_SOCKET;
 	}
@@ -335,16 +335,16 @@ socket_listen(const char * host, uint16_t port) {
 // socket_accept		- accept 链接函数
 //
 
-socket_t
+inline socket_t
 socket_tcp(const char * host, uint16_t port) {
-	socket_t s = socket_listen(host, port);
+	socket_t s = socket_listen(host, port, SOMAXCONN);
 	if (INVALID_SOCKET == s) {
 		RETURN(INVALID_SOCKET, "socket_listen socket error!");
 	}
 	return s;
 }
 
-socket_t
+inline socket_t
 socket_udp(const char * host, uint16_t port) {
 	socket_t s = socket_bind(host, port, IPPROTO_UDP, NULL);
 	if (INVALID_SOCKET == s) {
