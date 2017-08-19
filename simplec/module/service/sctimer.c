@@ -6,19 +6,19 @@
 struct stnode {
 	_LIST_HEAD;
 
-	intptr_t id;				// 当前定时器的id
-	struct timespec tv;			// 运行的具体时间
-	node_f timer;				// 执行的函数事件
-	void * arg;					// 执行函数参数
-};								   
-								   
-// 当前链表对象管理器				  
-struct stlist {					   
-	int lock;					// 加锁用的
-	int nowid;					// 当前使用的最大timer id
-	bool status;				// false表示停止态, true表示主线程loop运行态
-	pthread_t tid;				// 主循环线程id, 0表示没有启动
-	struct stnode * head;		// 定时器链表的头结点
+	int id;					// 当前定时器的id
+	struct timespec tv;		// 运行的具体时间
+	node_f timer;			// 执行的函数事件
+	void * arg;				// 执行函数参数
+};					   
+							   
+// 当前链表对象管理器			  
+struct stlist {				   
+	int lock;				// 加锁用的
+	int nowid;				// 当前使用的最大timer id
+	bool status;			// false表示停止态, true表示主线程loop运行态
+	pthread_t tid;			// 主循环线程id, 0表示没有启动
+	struct stnode * head;	// 定时器链表的头结点
 };
 
 // 定时器对象的单例, 最简就是最复杂
@@ -82,7 +82,7 @@ static void * _stlist_loop(struct stlist * st) {
 }
 
 // st < sr 返回 < 0, == 返回 0, > 返回 > 0
-static inline int _stnode_cmptime(struct stnode * sl, struct stnode * sr) {
+static inline int _stnode_cmptime(const struct stnode * sl, const struct stnode * sr) {
 	if (sl->tv.tv_sec != sr->tv.tv_sec)
 		return (int)(sl->tv.tv_sec - sr->tv.tv_sec);
 	return (int)(sl->tv.tv_nsec - sr->tv.tv_nsec);
@@ -132,7 +132,7 @@ st_add(int intval, node_f timer, void * arg) {
 }
 
 // 通过id开始查找
-static inline int _stnode_cmpid(intptr_t id, struct stnode * sr) {
+static inline int _stnode_cmpid(int id, const struct stnode * sr) {
 	return id - sr->id;
 }
 
@@ -147,7 +147,7 @@ st_del(int id) {
 	if (!_st.head) return;
 
 	ATOM_LOCK(_st.lock);
-	node = list_findpop((list_t *)&_st.head, _stnode_cmpid, (const void *)(intptr_t)id);
+	node = list_findpop((list_t *)&_st.head, _stnode_cmpid, (const void *)id);
 	ATOM_UNLOCK(_st.lock);
 	
 	free(node);
