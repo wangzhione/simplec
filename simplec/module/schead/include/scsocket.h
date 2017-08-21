@@ -33,10 +33,10 @@
 // connect链接还在进行中, linux显示 EINPROGRESS，winds是 WSAEWOULDBLOCK
 #define ECONNECTED				EINPROGRESS
 
-#define SET_RLIMIT_NOFILE(num)				\
-	do {									\
-		struct rlimit $r = { num, num };	\
-		setrlimit(RLIMIT_NOFILE, &$r);		\
+#define SET_RLIMIT_NOFILE(num) \
+	do { \
+		struct rlimit $r = { num, num }; \
+		setrlimit(RLIMIT_NOFILE, &$r); \
 	} while(0)
 
 typedef int socket_t;

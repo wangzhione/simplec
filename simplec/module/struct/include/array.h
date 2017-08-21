@@ -14,14 +14,14 @@ struct array {
 typedef struct array * array_t;
 
 /*
- * 在栈上创建对象 ##var
+ * 在栈上创建对象var
  * var		: 创建对象名称
  * size		: 创建对象总长度
  * alloc	: 每个元素分配空间大小
  */
 #define ARRAY_NEW(var, size, alloc) \
-	struct array $__##var = { NULL, 0, 0, alloc }, * var = &$__##var;\
-	array_newinit(var, size)
+	struct array var[1] = { { NULL, 0, 0, alloc } }; \
+	array_init(var, size)
 #define ARRAY_DIE(var) \
 	free(var->as)
 
@@ -44,15 +44,7 @@ extern void array_die(array_t a);
  * a		: 可变数组对象
  * size		: 新可变数组总长度
  */
-extern void array_newinit(array_t a, unsigned size);
-
-/*
- * 得到节点elem在数组中索引
- * a		: 可变数组对象
- * elem		: 查询元素
- *			: 返回查询到位置
- */
-extern unsigned array_idx(array_t a, void * elem);
+extern void array_init(array_t a, unsigned size);
 
 /*
  * 为可变数组插入一个元素, 并返回这个元素的首地址
@@ -75,6 +67,14 @@ extern void * array_pop(array_t a);
  *			: 返回查询到数据
  */
 extern void * array_get(array_t a, unsigned idx);
+
+/*
+ * 得到节点elem在数组中索引
+ * a		: 可变数组对象
+ * elem		: 查询元素
+ *			: 返回查询到位置
+ */
+extern unsigned array_idx(array_t a, void * elem);
 
 /*
  * 得到数组顶的元素
@@ -106,4 +106,4 @@ extern void array_sort(array_t a, icmp_f compare);
  */
 int array_each(array_t a, each_f func, void * arg);
 
-#endif // !_H_SIMPLEC_ARRAY
+#endif//_H_SIMPLEC_ARRAY

@@ -27,8 +27,8 @@ array_new(unsigned size, size_t alloc) {
  * 销毁这个创建的数组对象
  * a		: 创建的数组对象
  */
-inline 
-void array_die(array_t a) {
+inline void 
+array_die(array_t a) {
 	if (a) {
 		free(a->as);
 		free(a);
@@ -41,7 +41,7 @@ void array_die(array_t a) {
  * size		: 新可变数组总长度
  */
 inline void
-array_newinit(array_t a, unsigned size) {
+array_init(array_t a, unsigned size) {
 	assert(NULL != a);
 	a->as = realloc(a->as, size * a->alloc);
 	assert(NULL != a->as);
@@ -51,33 +51,11 @@ array_newinit(array_t a, unsigned size) {
 }
 
 /*
- * 得到节点elem在数组中索引
- * a		: 可变数组对象
- * elem		: 查询元素
- *			: 返回查询到位置
- */
-inline unsigned 
-array_idx(array_t a, void * elem) {
-	unsigned char * p, * q;
-	unsigned off;
-
-	assert(NULL != a && elem >= a->as);
-
-	p = a->as;
-	q = elem;
-	off = (unsigned)(q - p);
-
-	assert(off % (unsigned)a->alloc == 0);
-
-	return off / (unsigned)a->alloc;
-}
-
-/*
  * 为可变数组插入一个元素, 并返回这个元素的首地址
  * a		: 可变数组对象
  *			: 返回创建对象位置
  */
-void * 
+inline void * 
 array_push(array_t a) {
 	assert(NULL != a);
 
@@ -116,10 +94,32 @@ array_get(array_t a, unsigned idx) {
 }
 
 /*
-* 得到数组顶的元素
-* a		: 可变数组对象
-*			: 返回得到元素
-*/
+ * 得到节点elem在数组中索引
+ * a		: 可变数组对象
+ * elem		: 查询元素
+ *			: 返回查询到位置
+ */
+inline unsigned 
+array_idx(array_t a, void * elem) {
+	unsigned char * p, * q;
+	unsigned off;
+
+	assert(NULL != a && elem >= a->as);
+
+	p = a->as;
+	q = elem;
+	off = (unsigned)(q - p);
+
+	assert(off % (unsigned)a->alloc == 0);
+
+	return off / (unsigned)a->alloc;
+}
+
+/*
+ * 得到数组顶的元素
+ * a		: 可变数组对象
+ *			: 返回得到元素
+ */
 inline void * 
 array_top(array_t a) {
 	assert(NULL != a && 0 != a->len);
@@ -146,16 +146,16 @@ void array_swap(array_t a, array_t b) {
 inline void 
 array_sort(array_t a, icmp_f compare) {
 	assert(NULL != a && 0 != a->len && NULL != compare);
-	qsort(a->as, a->len, a->alloc, (int ( *)(const void *, const void *))compare);
+	qsort(a->as, a->len, a->alloc, (int (*)(const void *, const void *))compare);
 }
 
 /*
-* 数组进行遍历
-* a		: 可变数组对象
-* func		: 执行每个结点函数, typedef int	(* each_f)(void * node, void * arg);
-* arg		: 附加参数
-*			: 返回操作结果状态码
-*/
+ * 数组进行遍历
+ * a		: 可变数组对象
+ * func		: 执行每个结点函数, typedef int	(* each_f)(void * node, void * arg);
+ * arg		: 附加参数
+ *			: 返回操作结果状态码
+ */
 int 
 array_each(array_t a, each_f func, void * arg) {
 	int rt;
