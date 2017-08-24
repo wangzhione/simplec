@@ -30,6 +30,7 @@ getch(void) {
 inline void 
 sh_pause(void) {
 	fflush(stderr);
+	fflush(stdout);
 	rewind(stdin);
 	printf("Press any key to continue . . .");
 	getch();

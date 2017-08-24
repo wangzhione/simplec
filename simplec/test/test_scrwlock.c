@@ -1,6 +1,4 @@
-﻿#include <stdio.h>
-#include <stdlib.h>
-#include <pthread.h>
+﻿#include <schead.h>
 #include <scrwlock.h>
 
 #define _INT_BZ     (13)
@@ -9,10 +7,9 @@
 
 struct rwarg {
 	pthread_t id;
-
+	struct rwlock lock;		// 加锁用的  
 	int idx;				// 指示buf中写道那了
 	char buf[BUFSIZ];		// 存储临时数据
-	struct rwlock lock;		// 加锁用的  
 };
 
 // 写线程, 主要随机写字符进去
@@ -35,6 +32,8 @@ void test_scrwlock(void) {
 	// 写线程再跑起来
 	for (i = 0; i<_INT_WTH; ++i)
 		pthread_create((pthread_t *)&arg, NULL, (void * (*)(void *))twrite, &arg);
+
+	sh_msleep(100);
 }
 
 // 写线程, 主要随机写字符进去
@@ -46,7 +45,7 @@ twrite(struct rwarg * arg) {
 		rwlock_wlock(&arg->lock);
 		arg->buf[arg->idx] = 'a' + arg->idx;
 		++arg->idx;
-		rwlock_wunlock(&arg->lock);
+		rwlock_unwlock(&arg->lock);
 	}
 	puts("twrite is exit...");
 }
@@ -59,7 +58,7 @@ treads(struct rwarg * arg) {
 	while (arg->idx < _INT_BZ) {
 		rwlock_rlock(&arg->lock);
 		puts(arg->buf);
-		rwlock_runlock(&arg->lock);
+		rwlock_unrlock(&arg->lock);
 	}
 	puts("treads is exit...");
 }

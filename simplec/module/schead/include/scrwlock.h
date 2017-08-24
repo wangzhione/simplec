@@ -4,7 +4,7 @@
 #include <scatom.h>
 
 /*
- * 这里构建 simple write and read lock
+ * create simple write and read lock
  * struct rwlock need zero.
  * is scatom ext
  */
@@ -21,8 +21,8 @@ extern void rwlock_rlock(struct rwlock * lock);
 extern void rwlock_wlock(struct rwlock * lock);
 
 // add write lock
-extern void rwlock_runlock(struct rwlock * lock);
+extern void rwlock_unrlock(struct rwlock * lock);
 // unlock write
-extern void rwlock_wunlock(struct rwlock * lock);
+extern void rwlock_unwlock(struct rwlock * lock);
 
 #endif // !_H_SIMPLEC_SCRWLOCK
