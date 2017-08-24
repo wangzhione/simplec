@@ -1,7 +1,7 @@
 ﻿#if !defined(_H_SIMPLEC_SCOROUTINE$LINUX) && defined(__GNUC__)
 #define _H_SIMPLEC_SCOROUTINE$LINUX
 
-#include "scoroutine.h"
+#include <scoroutine.h>
 #include <ucontext.h>
 #include <stddef.h>
 #include <stdint.h>

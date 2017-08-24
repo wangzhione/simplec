@@ -119,7 +119,7 @@ st_add(int intval, node_f timer, void * arg) {
 		pthread_attr_t attr;
 		pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
 		if (pthread_create(&_st.tid, &attr, (start_f)_stlist_loop, &_st)) {
-			list_destroy(&_st.head, free);
+			list_destroy((list_t *)&_st.head, free);
 			RETURN(ErrFd, "pthread_create is error!");
 		}
 		_st.status = true;
@@ -147,7 +147,7 @@ st_del(int id) {
 	if (!_st.head) return;
 
 	ATOM_LOCK(_st.lock);
-	node = list_findpop((list_t *)&_st.head, _stnode_cmpid, (const void *)id);
+	node = list_findpop((list_t *)&_st.head, _stnode_cmpid, (const void *)(intptr_t)id);
 	ATOM_UNLOCK(_st.lock);
 	
 	free(node);

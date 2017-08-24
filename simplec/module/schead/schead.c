@@ -1,6 +1,6 @@
 ﻿#include <schead.h>
 
-#if defined(__GUNC__)
+#if defined(__GNUC__)
 
 //
 // getch - 立即得到用户输入的一个字符, linux实现

@@ -1,15 +1,10 @@
 ﻿#include <scthreads.h>
 
-// 运行的主体
-struct func {
-	node_f run;
-	void * arg;
-};
-
 // 任务链表 结构 和 构造
 struct job {
 	struct job * next;			// 指向下一个任务结点
-	struct func func;			// 任务结点执行的函数体
+	node_f run;					// 任务结点执行的函数体
+	void * arg;	
 };
 
 static inline struct job * _job_new(node_f run, void * arg) {
@@ -17,8 +12,8 @@ static inline struct job * _job_new(node_f run, void * arg) {
 	if (NULL == job)
 		CERR_EXIT("malloc sizeof(struct job) is error!");
 	job->next = NULL;
-	job->func.run = run;
-	job->func.arg = arg;
+	job->run = run;
+	job->arg = arg;
 	return job;
 }
 
@@ -41,10 +36,6 @@ struct threads {
 	struct job * tail;			// 线程任务队列的表尾, 后插入后执行
 };
 
-// 初始化使用 _cond 和 _mutx 二者其实不占用任何资源, *_destroy 没有作用
-static pthread_cond_t _cond = PTHREAD_COND_INITIALIZER;
-static pthread_mutex_t _mutx = PTHREAD_MUTEX_INITIALIZER;
-
 // 线程池中添加线程集
 static void _threads_add(struct threads * pool, pthread_t tid) {
 	struct thread * thrd = malloc(sizeof(struct thread));
@@ -53,7 +44,8 @@ static void _threads_add(struct threads * pool, pthread_t tid) {
 	
 	thrd->wait = false;
 	thrd->tid = tid;
-	thrd->cond = _cond;
+	pthread_cond_init(&thrd->cond, NULL);
+
 	thrd->next = pool->thrs;
 	pool->thrs = thrd;
 
@@ -62,24 +54,25 @@ static void _threads_add(struct threads * pool, pthread_t tid) {
 
 // 根据cond 内存地址熟悉, 删除pool->thrs 中指定数据
 static void _threads_del(struct threads * pool, pthread_cond_t * cond) {
-	struct thread * head = pool->thrs;
+	struct thread * head = pool->thrs, * front = NULL;
 	
-	// 判断是否为头部分
-	if (cond == &head->cond) {
-		pool->thrs = head->next;
-		free(head);
-		return;
+	while (head) {
+		// 找见了, 否则开始记录前置位置
+		if (cond == &head->cond)
+			break;
+		front = head;
+		head = head->next;
 	}
 
-	// 删除非头结点
-	while (head->next) {
-		struct thread * next = head->next;
-		if (cond == &head->cond) {
-			head->next = next->next;
-			free(next);
-			return;
-		}
-		head = next;
+	if (head) {
+		if (front)
+			front->next = head->next;
+		else
+			pool->thrs = head->next;
+
+		// head 结点就是我们要找的
+		pthread_cond_destroy(&head->cond);
+		free(head);
 	}
 }
 
@@ -122,7 +115,8 @@ threads_create(void) {
 	}
 
 	pool->size = _UINT_THREADS;
-	pool->mutx = _mutx;
+	// 存在简单风险, 推荐线程池是单例
+	pool->mutx = (pthread_mutex_t)PTHREAD_MUTEX_INITIALIZER;
 
 	return pool;
 }
@@ -141,11 +135,12 @@ threads_delete(threads_t pool) {
 
 	pthread_mutex_lock(&pool->mutx);
 
-	// 先释放线程
+	// 先释放线程, 下一个版本修改线程池销毁策略
 	thrs = pool->thrs;
 	while (thrs) {
 		struct thread * next = thrs->next;
 		pthread_cancel(thrs->tid);
+		pthread_cond_destroy(&thrs->cond);
 		free(thrs);
 		thrs = next;
 	}
@@ -159,7 +154,6 @@ threads_delete(threads_t pool) {
 	}
 
 	pthread_mutex_unlock(&pool->mutx);
-
 	// 销毁自己
 	free(pool);
 }
@@ -197,7 +191,7 @@ static void * _consumer(void * arg) {
 			pthread_mutex_unlock(mutx);
 
 			// 回调函数, 后面再去删除任务
-			job->func.run(job->func.arg);
+			job->run(job->arg);
 			free(job);
 
 			// 新的一轮开始, 需要重新加锁

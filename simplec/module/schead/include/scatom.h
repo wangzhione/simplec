@@ -3,15 +3,13 @@
 
 /*
  * 作者 : wz
- *
- * 描述 : 简单的原子操作,目前只考虑 VS(CL) 小端机 和 gcc
- *		 推荐用 posix 线程库
+ * 描述 : 简单的原子操作,目前只考虑 VS(CL) 和 gcc
  */
 
 // 如果 是 VS 编译器
 #if defined(_MSC_VER)
 
-#include <Windows.h>
+#include <windows.h>
 
 #pragma warning(push)
 //忽略 warning C4047: “==”:“void *”与“LONG”的间接级别不同

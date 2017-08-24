@@ -1,8 +1,8 @@
 ﻿#if !defined(_H_SIMPLEC_SCOROUTINE$WINDS) && defined(_MSC_VER)
 #define _H_SIMPLEC_SCOROUTINE$WINDS
 
-#include "scoroutine.h"
-#include <Windows.h>
+#include <scoroutine.h>
+#include <windows.h>
 
 // 声明协程结构 和 协程管理器结构
 struct sco {
