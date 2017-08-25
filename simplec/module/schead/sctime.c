@@ -53,7 +53,7 @@ static bool _stu_gettm(stime_t tstr, struct tm * otm) {
 		sum = 0;
 
 		// 去掉特殊字符, 一直找到下一个数字
-		while ((c = *++tstr) && (c<'0' || c>'9'))
+		while ((c = *++tstr) && (c < '0' || c > '9'))
 			;
 	}
 	// 非法, 最后解析出错
@@ -69,7 +69,7 @@ static bool _stu_gettm(stime_t tstr, struct tm * otm) {
  * tstr	: 时间串分隔符只能是单字节的.
  * pt	: 返回得到的时间戳
  * otm	: 返回得到的时间结构体
- *		: 返回这个字符串转成的时间戳, -1表示构造失败
+ *		: 返回false表示构造失败
  */
 bool
 stu_gettime(stime_t tstr, time_t * pt, struct tm * otm) {
@@ -94,6 +94,14 @@ stu_gettime(stime_t tstr, time_t * pt, struct tm * otm) {
 
 	return true;
 }
+
+// 定义每天是开始为 0时0分0秒
+#define _INT_MINSECOND		(60)
+#define _INT_HOURSECOND		(3600)
+// 定义每天新的开始时间 | GMT [World] + 8 * 3600 = CST [China]
+#define _INT_DAYSTART		( 8UL * _INT_HOURSECOND)
+#define _INT_DAYSECOND		(24UL * _INT_HOURSECOND)
+#define _INT_DAYNEWSTART	( 0UL * _INT_HOURSECOND + 0 * _INT_MINSECOND + 0)
 
 /*
  * 判断当前时间戳是否是同一天的.
@@ -179,6 +187,7 @@ stu_sisweek(stime_t ls, stime_t rs) {
  * tstr	: 保存的转后时间戳位置
  *		: 返回传入tstr的首地址
  */
+#define _STR_TIME			"%04d-%02d-%02d %02d:%02d:%02d"
 inline char * 
 stu_gettstr(time_t nt, stime_t tstr) {
 	struct tm st;
@@ -204,6 +213,7 @@ stu_getntstr(stime_t tstr) {
 // tstr		: 保存最终结果的串
 // return	: 返回当前串长度
 //
+#define _STR_MTIME			"%04d-%02d-%02d %02d:%02d:%02d %03ld"
 size_t 
 stu_getmstr(stime_t tstr) {
 	time_t t;

@@ -8,8 +8,7 @@ struct args {
 	int n;
 };
 
-static void _foo(scomng_t sco, void * arg) {
-	struct args * as = arg;
+static void _foo(scomng_t sco, struct args * as) {
 	int start = as->n;
 	int i = -1;
 
@@ -23,8 +22,8 @@ static void _test(void * sco) {
 	struct args argo = { 000 };
 	struct args argt = { 100 };
 
-	int coo = sco_create(sco, _foo, &argo);
-	int cot = sco_create(sco, _foo, &argt);
+	int coo = sco_create(sco, (sco_f)_foo, &argo);
+	int cot = sco_create(sco, (sco_f)_foo, &argt);
 
 	puts("********************_test start********************");
 	while (sco_status(sco, coo) && sco_status(sco, cot)) {
@@ -49,7 +48,7 @@ void test_scoroutine(void) {
 
 	// 再来测试一下, 纤程切换问题
 	struct args arg = { 222 };
-	int co = sco_create(sco, _foo, &arg);
+	int co = sco_create(sco, (sco_f)_foo, &arg);
 	for (int i = -1; i < _INT_TEST; ++i)
 		sco_resume(sco, co);
 

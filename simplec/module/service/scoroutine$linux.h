@@ -18,6 +18,27 @@ struct sco {
 	int status;				// 当前协程运行状态 SCO_*
 };
 
+// 构建 struct sco 协程对象
+static inline struct sco * _sco_new(sco_f func, void * arg) {
+	struct sco * co = malloc(sizeof(struct sco));
+	assert(co && func);
+	co->func = func;
+	co->arg = arg;
+	co->status = SCO_READY;
+
+	co->stack = NULL;
+	co->cap = 0;
+	co->cnt = 0;
+
+	return co;
+}
+
+// 销毁一个协程对象
+static inline void _sco_delete(struct sco * co) {
+	free(co->stack);
+	free(co);
+}
+
 struct scomng {
 	char stack[_INT_STACK];	// 当前协程中开辟的栈对象
 	ucontext_t main;		// 当前协程上下文对象
@@ -47,12 +68,6 @@ sco_open(void) {
 	return comng;
 }
 
-// 销毁一个协程对象
-static inline void _sco_delete(struct sco * co) {
-	free(co->stack);
-	free(co);
-}
-
 //
 // sco_close - 关闭已经开启的协程系统函数
 // sco		: sco_oepn 返回的当前协程中协程管理器
@@ -71,21 +86,6 @@ sco_close(scomng_t sco) {
 	free(sco->cos);
 	sco->cos = NULL;
 	free(sco);
-}
-
-// 构建 struct sco 协程对象
-static inline struct sco * _sco_new(sco_f func, void * arg) {
-	struct sco * co = malloc(sizeof(struct sco));
-	assert(co && func);
-	co->func = func;
-	co->arg = arg;
-	co->status = SCO_READY;
-
-	co->stack = NULL;
-	co->cap = 0;
-	co->cnt = 0;
-
-	return co;
 }
 
 //

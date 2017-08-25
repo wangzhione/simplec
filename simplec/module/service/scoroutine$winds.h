@@ -9,8 +9,24 @@ struct sco {
 	PVOID ctx;			// 当前协程运行的环境
 	sco_f func;			// 协程体执行
 	void * arg;			// 用户输入的参数
-	int status;			// 当前协程运行状态 _SCO_*
+	int status;			// 当前协程运行状态 SCO_*
 };
+
+// 构建 struct sco 协程对象
+static inline struct sco * _sco_new(sco_f func, void * arg) {
+	struct sco * co = malloc(sizeof(struct sco));
+	assert(co && func);
+	co->func = func;
+	co->arg = arg;
+	co->status = SCO_READY;
+	return co;
+}
+
+// 销毁一个协程对象
+static inline void _sco_delete(struct sco * co) {
+	DeleteFiber(co->ctx);
+	free(co);
+}
 
 struct scomng {
 	PVOID main;			// 当前主协程记录运行环境
@@ -41,12 +57,6 @@ sco_open(void) {
 	return comng;
 }
 
-// 销毁一个协程对象
-static inline void _sco_delete(struct sco * co) {
-	DeleteFiber(co->ctx);
-	free(co);
-}
-
 //
 // sco_close - 关闭已经开启的协程系统函数
 // sco		: sco_oepn 返回的当前协程中协程管理器
@@ -67,16 +77,6 @@ sco_close(scomng_t sco) {
 	free(sco);
 	// 切换当前协程系统变回默认的主线程, 关闭协程系统
 	ConvertFiberToThread();
-}
-
-// 构建 struct sco 协程对象
-static inline struct sco * _sco_new(sco_f func, void * arg) {
-	struct sco * co = malloc(sizeof(struct sco));
-	assert(co && func);
-	co->func = func;
-	co->arg = arg;
-	co->status = SCO_READY;
-	return co;
 }
 
 //
@@ -120,8 +120,7 @@ sco_create(scomng_t sco, sco_f func, void * arg) {
 	return sco->idx++;
 }
 
-static inline VOID WINAPI _sco_main(LPVOID ptr) {
-	struct scomng * comng = ptr;
+static inline VOID WINAPI _sco_main(struct scomng * comng) {
 	int id = comng->running;
 	struct sco * co = comng->cos[id];
 	// 执行协程体
@@ -144,7 +143,7 @@ sco_resume(scomng_t sco, int id) {
 
 	assert(sco && id >= 0 && id < sco->cap);
 
-	// _SCO_DEAD 状态协程, 完全销毁其它协程操作
+	// SCO_DEAD 状态协程, 完全销毁其它协程操作
 	running = sco->running;
 	if (running != -1) {
 		co = sco->cos[running];
@@ -158,14 +157,16 @@ sco_resume(scomng_t sco, int id) {
 			return;
 	}
 
-	// 下面是协程 _SCO_READY 和 _SCO_SUSPEND 处理
+	// 下面是协程 SCO_READY 和 SCO_SUSPEND 处理
 	co = sco->cos[id];
 	if ((!co) || (co->status != SCO_READY && co->status != SCO_SUSPEND))
 		return;
 
 	// Window特性创建纤程, 并保存当前上下文环境, 切换到创建的纤程环境中
 	if (co->status == SCO_READY)
-		co->ctx = CreateFiberEx(_INT_STACK, 0, FIBER_FLAG_FLOAT_SWITCH, _sco_main, sco);
+		co->ctx = CreateFiberEx(_INT_STACK, 0, 
+								FIBER_FLAG_FLOAT_SWITCH, 
+								(LPFIBER_START_ROUTINE)_sco_main, sco);
 
 	co->status = SCO_RUNNING;
 	sco->running = id;
