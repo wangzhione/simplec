@@ -213,7 +213,6 @@ stu_getntstr(stime_t tstr) {
 // tstr		: 保存最终结果的串
 // return	: 返回当前串长度
 //
-#define _STR_MTIME			"%04d-%02d-%02d %02d:%02d:%02d %03ld"
 size_t 
 stu_getmstr(stime_t tstr) {
 	time_t t;
