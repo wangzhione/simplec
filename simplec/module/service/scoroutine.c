@@ -18,7 +18,7 @@
 // sco_status - 得到当前协程状态
 // sco		: 协程系统管理器
 // id		: 协程id
-//			: 返回 _SCO_* 相关的协程状态信息
+//			: 返回 SCO_* 相关的协程状态信息
 //
 inline int
 sco_status(scomng_t sco, int id) {

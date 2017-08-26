@@ -40,7 +40,6 @@ static void _test(void * sco) {
 //	1. void [文件名]()(void) { ... }
 //
 void test_scoroutine(void) {
-
 	scomng_t sco = sco_open();
 
 	puts("--------------------突然想起了什么,--------------------\n");
