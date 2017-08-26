@@ -30,6 +30,7 @@ struct threads {
 	size_t size;				// 线程池大小, 最大线程结构体数量
 	size_t curr;				// 当前线程池中总的线程数
 	size_t idle;				// 当前线程池中空闲的线程数
+	volatile bool cancel;		// true表示当前线程池正在 delete
 	pthread_mutex_t mutx;		// 线程互斥量
 	struct thread * thrs;		// 线程结构体对象集
 	struct job * head;			// 线程任务链表的链头, 队列结构
@@ -131,47 +132,46 @@ threads_delete(threads_t pool) {
 	struct job * head;
 	struct thread * thrs;
 
-	if (!pool) return;
+	if (!pool || pool->cancel) 
+		return;
+	// 标识当前线程池正在销毁过程中
+	pool->cancel = true;
 
 	pthread_mutex_lock(&pool->mutx);
 
-	// 先释放线程, 下一个版本修改线程池销毁策略
-	thrs = pool->thrs;
-	while (thrs) {
-		struct thread * next = thrs->next;
-		pthread_cancel(thrs->tid);
-		pthread_cond_destroy(&thrs->cond);
-		free(thrs);
-		thrs = next;
-	}
-
-	// 再来释放任务列表
+	// 先来释放任务列表
 	head = pool->head;
 	while (head) {
 		struct job * next = head->next;
 		free(head);
 		head = next;
 	}
+	pool->head = pool->tail = NULL;
 
 	pthread_mutex_unlock(&pool->mutx);
+
+	// 再来销毁每个线程
+	thrs = pool->thrs;
+	while (thrs) {
+		struct thread * next = thrs->next;
+		// 激活每个线程让其主动退出
+		pthread_cond_signal(&thrs->cond);
+		pthread_join(thrs->tid, NULL);
+		thrs = next;
+	}
+
 	// 销毁自己
 	free(pool);
 }
 
 // 线程运行的时候执行函数, 消费者线程
-static void * _consumer(void * arg) {
+static void _consumer(struct threads * pool) {
 	int status;
 	struct thread * thrd;
 	pthread_cond_t * cond;
-	struct threads * pool = arg;
 	pthread_t tid = pthread_self();
 	pthread_mutex_t * mutx = &pool->mutx;
 
-	// 设置线程属性, 设置线程 允许退出线程
-	pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, NULL);
-
-	// 消费者线程加锁, 防止线程被取消锁没有释放
-	pthread_cleanup_push((node_f)pthread_mutex_unlock, mutx);
 	pthread_mutex_lock(mutx);
 
 	thrd = _threads_get(pool, tid);
@@ -179,7 +179,7 @@ static void * _consumer(void * arg) {
 	cond = &thrd->cond;
 
 	// 使劲循环的主体, 开始消费 or 沉睡
-	for (;;) {
+	while (!pool->cancel) {
 		if (pool->head) {
 			struct job * job = pool->head;
 			pool->head = job->next;
@@ -206,6 +206,7 @@ static void * _consumer(void * arg) {
 		// 开启等待, 直到线程被激活
 		status = pthread_cond_wait(cond, mutx);
 		if (status < 0) {
+			pthread_detach(tid);
 			CERR("pthread_cond_wait error status = %d.", status);
 			break;
 		}
@@ -220,22 +221,24 @@ static void * _consumer(void * arg) {
 
 	// 一个线程一把锁, 退出中
 	pthread_mutex_unlock(mutx);
-	pthread_cleanup_pop(0);
-
-	return arg;
 }
 
 //
-// threads_add - 线程池中添加要处理的任务
+// threads_insert_ - 线程池中添加要处理的任务
 // pool		: 线程池对象
 // run		: 运行的执行题
 // arg		: run的参数
 // return	: void
 //
 void 
-threads_add(threads_t pool, node_f run, void * arg) {
-	pthread_mutex_t * mutx = &pool->mutx;
-	struct job * job = _job_new(run, arg);
+threads_insert_(threads_t pool, node_f run, void * arg) {
+	struct job * job;
+	pthread_mutex_t * mutx;
+	// 无意义的添加直接滚蛋
+	if (!run || !pool || pool->cancel)
+		return;
+	mutx = &pool->mutx;
+	job = _job_new(run, arg);
 
 	pthread_mutex_lock(mutx);
 
@@ -258,16 +261,10 @@ threads_add(threads_t pool, node_f run, void * arg) {
 
 	if (pool->curr < pool->size) { // 没有那就新建线程去处理
 		pthread_t tid;
-		pthread_attr_t attr;
-		pthread_attr_init(&attr);
-		// 设置线程退出分离属性
-		pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
-		if (pthread_create(&tid, &attr, _consumer, pool) < 0)
-			CERR("pthread_create attr PTHREAD_CREATE_DETACHED error pool = %p.", pool);
+		if (pthread_create(&tid, NULL, (start_f)_consumer, pool))
+			CERR("pthread_create error curr = %d.", pool->curr);
 		else // 添加开启线程的信息
 			_threads_add(pool, tid);
-
-		pthread_attr_destroy(&attr);
 	}
 
 	pthread_mutex_unlock(mutx);

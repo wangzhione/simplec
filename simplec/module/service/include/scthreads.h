@@ -23,12 +23,13 @@ extern threads_t threads_create(void);
 extern void threads_delete(threads_t pool);
 
 //
-// threads_add - 线程池中添加要处理的任务
+// threads_insert - 线程池中添加要处理的任务
 // pool		: 线程池对象
 // run		: 运行的执行题
 // arg		: run的参数
 // return	: void
 //
-extern void threads_add(threads_t pool, node_f run, void * arg);
+extern void threads_insert_(threads_t pool, node_f run, void * arg);
+#define threads_insert(pool, run, arg) threads_insert_(pool, (node_f)run, arg)
 
 #endif // !_H_SIMPLEC_SCTHREADS
