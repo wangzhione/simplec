@@ -108,16 +108,13 @@ static pthread_cond_t * _threads_getcont(struct threads * pool) {
 //
 threads_t 
 threads_create(void) {
-	struct threads * pool;
-
-	pool = calloc(1, sizeof(struct threads));
+	struct threads * pool = calloc(1, sizeof(struct threads));
 	if (NULL == pool) {
 		RETURN(NULL, "calloc sizeof(struct threads) is error!");
 	}
 
 	pool->size = _UINT_THREADS;
-	// 存在简单风险, 推荐线程池是单例
-	pool->mutx = (pthread_mutex_t)PTHREAD_MUTEX_INITIALIZER;
+	pthread_mutex_init(&pool->mutx, NULL);
 
 	return pool;
 }
@@ -161,6 +158,7 @@ threads_delete(threads_t pool) {
 	}
 
 	// 销毁自己
+	pthread_mutex_destroy(&pool->mutx);
 	free(pool);
 }
 
