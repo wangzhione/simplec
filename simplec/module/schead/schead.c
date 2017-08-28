@@ -27,11 +27,12 @@ getch(void) {
 #endif
 
 // 等待的宏 是个单线程没有加锁 | "请按任意键继续. . ."
+
 inline void 
 sh_pause(void) {
+	rewind(stdin);
 	fflush(stderr);
 	fflush(stdout);
-	rewind(stdin);
 	printf("Press any key to continue . . .");
 	getch();
 }
@@ -43,7 +44,7 @@ sh_pause(void) {
 //
 inline bool 
 sh_isbe(void) {
-	union { uint16_t i; uint8_t c; } _u = { 1 };
+	static union { uint16_t i; uint8_t c; } _u = { 1 };
 	return 0 == _u.c;
 }
 

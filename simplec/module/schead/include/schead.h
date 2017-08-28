@@ -52,9 +52,6 @@ extern int getch(void);
 #	error "error : Currently only supports the Best New CL and GCC!"
 #endif
 
-/* 栈上辅助操作宏 */
-#if !defined(_H_ARRHELP)
-
 // 添加双引号的宏 
 #define _STR(v) #v
 #define CSTR(v)	_STR(v)
@@ -66,9 +63,6 @@ extern int getch(void);
 #define BZERO(v) \
 	memset(&(v), 0, sizeof(v))
 
-// 得到bit位数
-#define BITN(type) (sizeof(type) * 8)
-
 /*
  * 比较两个结构体栈上内容是否相等,相等返回true,不等返回false
  * a	: 第一个结构体值
@@ -76,11 +70,6 @@ extern int getch(void);
  *		: 相等返回true, 否则false
  */
 #define STRUCTCMP(a, b) (!memcmp(&a, &b, sizeof(a)))
-
-#define _H_ARRHELP
-#endif//_H_ARRHELP
-
-#ifndef _H_CODEHELP
 
 //
 // EXTERN_RUN - 简单的声明, 并立即使用的宏
@@ -92,29 +81,15 @@ extern int getch(void);
 		test (__VA_ARGS__); \
 	} while(0)
 
-// scanf 健壮的多次输入宏
-#define SSCANF(scanf_code, ...) \
-	do { \
-		while (printf(__VA_ARGS__), scanf_code){ \
-			rewind(stdin); \
-			puts("Input error, please according to the prompt!"); \
-		} \
-		rewind(stdin); \
-	} while (0)
-
 // 简单的time时间记录宏
 #define TIME_PRINT(code) \
 	do { \
-		clock_t $st, $et; \
-		$st = clock(); \
+		clock_t $s, $e; \
+		$s = clock(); \
 		code \
-		$et = clock(); \
-		printf("The current code block run time:%lf seconds.\n", \
-		 (0.0 + $et - $st) / CLOCKS_PER_SEC); \
+		$e = clock(); \
+		printf("Now code run time:%lfs.\n", ((double)$e - $s) / CLOCKS_PER_SEC); \
 	} while (0)
-
-#define _H_CODEHELP
-#endif//_H_CODEHELP
 
 //
 // sh_pause - 等待的宏 是个单线程没有加锁 | "请按任意键继续. . ."

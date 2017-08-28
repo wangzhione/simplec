@@ -4,7 +4,7 @@
 #include <stdlib.h>
 
 //
-// 急速, 清洁, 可靠配合 lograte的 c多线程单机日志库 clog.h
+// 急速, 清洁, 可靠配合 logrorate的 c多线程单机日志库 clog.h
 //					by simplec wz 2017年4月26日
 //
 
