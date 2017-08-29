@@ -5,9 +5,8 @@
 static bool _csv_parse(tstr_t tstr, int * prl, int * pcl) {
 	int c = -1, n = -1;
 	int cl = 0, rl = 0;
-	char * sur, * tar;
+	char * sur = tstr->str, * tar = tstr->str;
 
-	sur = tar = tstr->str;
 	while (!!(c = *tar++)) {
 		// 小型状态机切换, 相对于csv文件内容解析
 		switch (c) {
@@ -15,7 +14,7 @@ static bool _csv_parse(tstr_t tstr, int * prl, int * pcl) {
 			while (!!(c = *tar++)) {
 				if ('"' == c) {
 					if ((n = *tar) == '\0') // 判断下一个字符
-						goto __faild;
+						goto _faild;
 					if (n != '"') // 有效字符再次压入栈, 顺带去掉多余 " 字符
 						break;
 					++tar;
@@ -26,7 +25,7 @@ static bool _csv_parse(tstr_t tstr, int * prl, int * pcl) {
 			}
 			// 继续判断,只有是c == '"' 才会下来,否则都是错的
 			if ('"' != c)
-				goto __faild;
+				goto _faild;
 			break;
 		case ',':
 			*sur++ = '\0';
@@ -45,8 +44,8 @@ static bool _csv_parse(tstr_t tstr, int * prl, int * pcl) {
 	}
 	
 	if (cl % rl) { // 检测 , 号是个数是否正常
-	__faild:
-		RETURN(false, "now csv file is illegal! c = %d, n = %d, cl = %d, rl = %d.", c, n, cl, rl);
+	_faild:
+		RETURN(false, "now csv error c = %d, n = %d, cl = %d, rl = %d.", c, n, cl, rl);
 	}
 	
 	// 返回最终内容
@@ -71,7 +70,7 @@ static sccsv_t _csv_create(tstr_t tstr) {
 	pdff = sizeof(struct sccsv) + sizeof(char *) * cl;
 	csv = malloc(pdff + tstr->len);
 	if (NULL == csv) {
-		RETURN(NULL, "malloc is error cstr->len = %zu, rl = %d, cl = %d.", tstr->len, rl, cl);
+		RETURN(NULL, "malloc error cstr->len = %zu, rl = %d, cl = %d.", tstr->len, rl, cl);
 	}
 
 	// 这里开始拷贝内存, 构建内容了

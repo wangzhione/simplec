@@ -58,19 +58,25 @@ static const char * _parse_string(cjson_t item, const char * str) {
 	static unsigned char _marks[] = { 0x00, 0x00, 0xC0, 0xE0, 0xF0, 0xF8, 0xFC };
 	const char * ptr;
 	char c, * nptr, * out;
-	unsigned len, uc, nuc;
+	unsigned len = 1, uc, nuc;
 
-	if (*str != '\"') { // 检查是否是字符串内容
+	// 检查是否是字符串内容, 并记录字符串大小
+	if (*str != '\"')
 		RETURN(NULL, "need \\\" str => %s error!", str);
-	}
-
-	for (ptr = str + 1, len = 0; (c = *ptr++) != '\"' && c; ++len)
-		if (c == '\\') //跳过转义字符
+	for (ptr = str + 1; (c = *ptr++) != '\"' && c; ++len)
+		if (c == '\\') {
+			//跳过转义字符
+			if (*ptr == '\0')
+				RETURN(NULL, "ptr is end len = %d.", len);
 			++ptr;
-	if (!(out = calloc(len + 1, sizeof(len + 1))))
-		CERR_EXIT("calloc size = %d is error!", len + 1);
-	// 这里复制拷贝内容
-	for (ptr = str + 1, nptr = out; (c = *ptr) != '\"' && c; ++ptr) {
+		}
+	if (c != '\"')
+		RETURN(NULL, "need string \\\" end there c = %d, %c!", c, c);
+
+	// 这里开始复制拷贝内容
+	if (!(nptr = out = malloc(len)))
+		CERR_EXIT("calloc size = %d is error!", len);
+	for (ptr = str + 1; (c = *ptr) != '\"' && c; ++ptr) {
 		if (c != '\\') {
 			*nptr++ = c;
 			continue;
@@ -84,7 +90,7 @@ static const char * _parse_string(cjson_t item, const char * str) {
 		case 't': *nptr++ = '\t'; break;
 		case 'u': // 将utf16 => utf8, 专门的utf处理代码
 			uc = _parse_hex4(ptr + 1);
-			ptr += 4;//跳过后面四个字符, unicode
+			ptr += 4; //跳过后面四个字符, unicode
 			if (0 == uc || (uc >= 0xDC00 && uc <= 0xDFFF))
 				break;	/* check for invalid. */
 
@@ -119,18 +125,15 @@ static const char * _parse_string(cjson_t item, const char * str) {
 		default: *nptr++ = c;
 		}
 	}
-
 	*nptr = '\0';
-	if (c == '\"')
-		++ptr;
 	item->vs = out;
 	item->type = CJSON_STRING;
-	return ptr;
+	return ++ptr;
 }
 
 // 分析数值的子函数,写的可以
 static const char * _parse_number(cjson_t item, const char * str) {
-	double n = .0, ns = 1.0, nd = .0; // n把偶才能值, ns表示开始正负, 负为-1, nd表示小数后面位数
+	double n = .0, ns = 1.0, nd = .0; // ns表示开始正负, 负为-1, nd表示小数后面位数
 	int e = 0, es = 1; // e表示后面指数, es表示 指数的正负, 负为-1
 	char c;
 
@@ -347,7 +350,6 @@ static cjson_t _cjson_parse(const char * jstr) {
 inline cjson_t 
 cjson_newstr(const char * str) {
 	cjson_t json;
-
 	TSTR_CREATE(tstr);
 	tstr_appends(tstr, str);
 

@@ -20,7 +20,7 @@ extern sccsv_t sccsv_create(const char * path);
 
 //
 // 释放由sccsv_create构建的对象
-// csv		: sccsv_new 返回对象
+// csv		: sccsv_create 返回对象
 //
 extern void sccsv_delete(sccsv_t csv);
 
