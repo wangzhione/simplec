@@ -170,7 +170,8 @@ static const char * _parse_array(cjson_t item, const char * str);
 static const char * _parse_object(cjson_t item, const char * str);
 
 // 分析数组的子函数, 采用递归下降分析
-static const char * _parse_array(cjson_t item, const char * str) {
+static const char * 
+_parse_array(cjson_t item, const char * str) {
 	cjson_t child;
 
 	if (*str != '[') {
@@ -208,7 +209,8 @@ static const char * _parse_array(cjson_t item, const char * str) {
 }
 
 // 分析对象的子函数
-static const char * _parse_object(cjson_t item, const char * str) {
+static const char * 
+_parse_object(cjson_t item, const char * str) {
 	cjson_t child;
 
 	if (*str != '{') {
@@ -261,7 +263,8 @@ static const char * _parse_object(cjson_t item, const char * str) {
 }
 
 // 将 value 转换塞入 item json 值中一部分
-static const char * _parse_value(cjson_t item, const char * str) {
+static const char * 
+_parse_value(cjson_t item, const char * str) {
 	char c = '\0'; 
 	if ((str) && (c = *str)) {
 		switch (c) {
