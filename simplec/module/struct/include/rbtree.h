@@ -1,5 +1,5 @@
-﻿#ifndef _H_RBTREE
-#define _H_RBTREE
+﻿#ifndef _H_SIMPLEC_RBTREE
+#define _H_SIMPLEC_RBTREE
 
 #include <struct.h>
 
@@ -31,7 +31,7 @@ typedef struct {
  * new		: 注册创建结点的函数
  * die		: 注册程序销毁函数
  * cmp		: 注册比较的函数
- *			: 返回创建好的红黑树结点
+ * return	: 返回创建好的红黑树结点
  */
 extern rbtree_t rb_create(vnew_f new, node_f die, icmp_f cmp);
 
@@ -54,7 +54,7 @@ extern void rb_remove(rbtree_t tree, void * pack);
  * root		: 匹配的结点信息
  * pack		: 当前待匹配结点, cmp(x, pack)当右结点处理
  */
-extern void * rb_get(rbtree_t tree, void * pack);
+extern void * rb_find(rbtree_t tree, void * pack);
 
 /*
  * 销毁这颗二叉树
@@ -62,4 +62,4 @@ extern void * rb_get(rbtree_t tree, void * pack);
  */
 extern void rb_delete(rbtree_t tree);
 
-#endif /* _H_RBTREE */
+#endif /* _H_SIMPLEC_RBTREE */

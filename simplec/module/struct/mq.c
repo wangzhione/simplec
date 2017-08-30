@@ -108,7 +108,8 @@ mq_push(mq_t mq, void * msg) {
 // mq		: 消息队列对象
 // return	: 返回队列尾巴, 队列为empty返回NULL
 //
-void * mq_pop(mq_t mq) {
+void * 
+mq_pop(mq_t mq) {
 	void * msg = NULL;
 	if (!mq || mq->fee) return NULL;
 

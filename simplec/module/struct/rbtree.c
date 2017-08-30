@@ -10,8 +10,8 @@
 #define rb_color(r)			((r)->parent_color & 1)
 #define rb_is_red(r)		(!rb_color(r))
 #define rb_is_black(r)		rb_color(r)
-#define rb_set_black(r)		(r)->parent_color |= 1
 #define rb_set_red(r)		(r)->parent_color &= ~1
+#define rb_set_black(r)		(r)->parent_color |= 1
 
 static inline void rb_set_parent(struct $rbnode * r, struct $rbnode * p) {
      r->parent_color = (r->parent_color & 3) | (uintptr_t)p;
@@ -24,15 +24,15 @@ static inline void rb_set_color(struct $rbnode * r, int color) {
 static inline void * _rb_dnew(void * node) { return node; }
 static inline void _rb_ddie(void * node) { }
 static inline int _rb_dcmp(const void * ln, const void * rn) { 
-	return (intptr_t)ln - (intptr_t)rn; 
+	return (int)((intptr_t)ln - (intptr_t)rn); 
 }
 
 /*
- * 创建一颗红黑树头结点
+ * 创建一颗红黑树头结点 
  * new		: 注册创建结点的函数
  * die		: 注册程序销毁函数
  * cmp		: 注册比较的函数
- *			: 返回创建好的红黑树结点
+ * return	: 返回创建好的红黑树结点
  */
 inline rbtree_t 
 rb_create(vnew_f new, node_f die, icmp_f cmp) {
@@ -106,7 +106,7 @@ static void _rbtree_left_rotate(rbtree_t tree, struct $rbnode * x) {
  *          y                                x                  
  *         /  \      --(右旋)-->            /  \                     #
  *        x   ry                           lx   y  
- *       / \                                   / \                   #
+ *       / \                                   / \                  #
  *      lx  rx                                rx  ry
  * 
  */
@@ -440,7 +440,7 @@ rb_remove(rbtree_t tree, void * pack) {
  * pack		: 当前待匹配结点, cmp(x, pack)当右结点处理
  */
 void * 
-rb_get(rbtree_t tree, void * pack) {
+rb_find(rbtree_t tree, void * pack) {
 	icmp_f cmp;
 	struct $rbnode * node;
 	if((!tree) || !pack) {
@@ -452,17 +452,16 @@ rb_get(rbtree_t tree, void * pack) {
 	while(node) {
 		int ct = cmp(node, pack);
 		if(ct == 0)
-			return node;
+			break;
 		node = ct > 0 ? node->left : node->right;
 	}
 
-	return NULL;
+	return node;
 }
 
 // 后序遍历删除操作
 static void _rb_delete(struct $rbnode * root, node_f die) {
-	if(NULL == root)
-		return;
+	if(NULL == root) return;
 	_rb_delete(root->left, die);
 	_rb_delete(root->right, die);
 	die(root);
