@@ -179,8 +179,7 @@ static void _rbtree_insert_fixup(rbtree_t tree, struct $rbnode * node) {
             rb_set_black(parent);
             rb_set_red(gparent);
             _rbtree_right_rotate(tree, gparent);
-        } 
-        else { //若“z的父节点”是“z的祖父节点的右孩子”
+        } else { //若“z的父节点”是“z的祖父节点的右孩子”
             // Case 1条件：叔叔节点是红色
             uncle = gparent->left;
             if (uncle && rb_is_red(uncle)) {
@@ -238,14 +237,14 @@ rb_insert(rbtree_t tree, void * pack) {
 	}
 	rb_set_parent(node, y);
 
-	if (y != NULL) {
+	if (y)
+		tree->root = node;              // 情况1：若y是空节点，则将node设为根
+	else {
 		if (cmp(y, node) > 0)
 			y->left = node;             // 情况2：若“node所包含的值” < “y所包含的值”，则将node设为“y的左孩子”
 		else
 			y->right = node;            // 情况3：(“node所包含的值” >= “y所包含的值”)将node设为“y的右孩子” 
 	}
-	else
-		tree->root = node;              // 情况1：若y是空节点，则将node设为根
 
 	// 2. 设置节点的颜色为红色
 	rb_set_red(node);
@@ -283,8 +282,7 @@ static void _rbtree_delete_fixup(rbtree_t tree, struct $rbnode * node, struct $r
                 rb_set_red(other);
                 node = parent;
                 parent = rb_parent(node);
-            }
-            else {
+            } else {
                 if (!other->right || rb_is_black(other->right)) {
                     // Case 3: x的兄弟w是黑色的，并且w的左孩子是红色，右孩子为黑色。  
                     rb_set_black(other->left);
@@ -300,8 +298,7 @@ static void _rbtree_delete_fixup(rbtree_t tree, struct $rbnode * node, struct $r
                 node = tree->root;
                 break;
             }
-        }
-        else {
+        } else {
             other = parent->left;
             if (rb_is_red(other)) {
                 // Case 1: x的兄弟w是红色的  
@@ -316,8 +313,7 @@ static void _rbtree_delete_fixup(rbtree_t tree, struct $rbnode * node, struct $r
                 rb_set_red(other);
                 node = parent;
                 parent = rb_parent(node);
-            }
-            else {
+            } else {
                 if (!other->left || rb_is_black(other->left)) {
                     // Case 3: x的兄弟w是黑色的，并且w的左孩子是红色，右孩子为黑色。  
                     rb_set_black(other->right);
@@ -370,8 +366,7 @@ rb_remove(rbtree_t tree, void * pack) {
 				parent->left = replace;
 			else
 				parent->right = replace;
-		} 
-		else 
+		} else 
 			// "node节点"是根节点，更新根节点。
 			tree->root = replace;
 
@@ -420,14 +415,14 @@ rb_remove(rbtree_t tree, void * pack) {
 		rb_set_parent(child, parent);
 
 	// "node节点"不是根节点
-	if (parent) {
+	if (!parent)
+		tree->root = child;
+	else {
 		if (parent->left == node)
 			parent->left = child;
 		else
 			parent->right = child;
 	}
-	else
-		tree->root = child;
 
 	if (!color)
 		_rbtree_delete_fixup(tree, child, parent);

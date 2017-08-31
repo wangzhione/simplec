@@ -106,6 +106,8 @@ $(TAR_PATH):
 
 # 清除操作
 clean :
+	-rm -rf $(TAR_PATH)/$(TEST_DIR)/$(TEST_DIR)/config
+	-rm -rf $(TAR_PATH)/$(TEST_DIR)/logs
 	-rm -rf $(TAR_PATH)/main.$(OUT)
 	-rm -rf $(OBJP)*
 

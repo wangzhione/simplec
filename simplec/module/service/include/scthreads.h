@@ -4,7 +4,7 @@
 #include <schead.h>
 
 //
-// 这是个线程池的库. 支持异步取消 也加过一些线程帮助库
+// 这是个简易的线程池的库.
 //
 
 typedef struct threads * threads_t;

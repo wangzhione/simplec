@@ -12,7 +12,7 @@ static inline void _http_end(void) {
 // http_start - http 库启动
 // return	: void
 //
-void 
+inline void 
 http_start(void) {
 	//
 	// CURLcode curl_global_init(long flags);

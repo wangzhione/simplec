@@ -260,7 +260,7 @@ threads_insert_(threads_t pool, node_f run, void * arg) {
 	if (pool->curr < pool->size) { // 没有那就新建线程去处理
 		pthread_t tid;
 		if (pthread_create(&tid, NULL, (start_f)_consumer, pool))
-			CERR("pthread_create error curr = %d.", pool->curr);
+			CERR("pthread_create error curr = %zu.", pool->curr);
 		else // 添加开启线程的信息
 			_threads_add(pool, tid);
 	}

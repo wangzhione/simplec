@@ -5,8 +5,8 @@
 #define _INT_MQ				(1 << 6)
 
 //
-// 队列empty	<=> tail == -1 ( head = 0 )
-// 队列full	<=> head == cap
+// pop empty	<=> tail == -1 ( head = 0 )
+// push full	<=> head + 1 == tail
 //
 struct mq {
 	int lock;			// 消息队列锁
@@ -63,8 +63,7 @@ mq_delete(mq_t mq, node_f die) {
 }
 
 // add two cap memory, memory is do not have assert
-static void
-_expand_queue(struct mq * mq) {
+static void _mq_expand(struct mq * mq) {
 	int i, cap = mq->cap << 1;
 	void ** nqueue = malloc(sizeof(void *) * cap);
 	assert(nqueue);
@@ -94,7 +93,7 @@ mq_push(mq_t mq, void * msg) {
 	tail = (mq->tail + 1) & (mq->cap - 1);
 	// 队列为full的时候申请内存
 	if (tail == mq->head && mq->tail >= 0)
-		_expand_queue(mq);
+		_mq_expand(mq);
 	else
 		mq->tail = tail;
 

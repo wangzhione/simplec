@@ -18,7 +18,7 @@
 	 $end = "coding future 123 runing, ";
  
  * 
- * 后面可以通过, 配置文件读取出来. conf_get("heoo") => "你好!"
+ * 后面可以通过, 配置文件读取出来. conf_get("heoo") => "Hello World\n"
  */
 
 //

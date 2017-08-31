@@ -17,7 +17,6 @@ struct stlist {
 	int lock;				// 加锁用的
 	int nowid;				// 当前使用的最大timer id
 	bool status;			// false表示停止态, true表示主线程loop运行态
-	pthread_t tid;			// 主循环线程id, 0表示没有启动
 	struct stnode * head;	// 定时器链表的头结点
 };
 
@@ -98,7 +97,6 @@ static inline int _stnode_cmptime(const struct stnode * sl, const struct stnode 
 int 
 st_add(int intval, node_f timer, void * arg) {
 	struct stnode * now;
-
 	// 各种前戏操作
 	if (intval <= 0) {
 		timer(arg);
@@ -112,18 +110,15 @@ st_add(int intval, node_f timer, void * arg) {
 
 	ATOM_LOCK(_st.lock); //核心添加模块 要等, 添加到链表, 看线程能否取消等
 
-	list_add((list_t *)&_st.head, _stnode_cmptime, now);
+	list_add(&_st.head, _stnode_cmptime, now);
 
 	// 这个时候重新开启线程
-	if(!_st.status){
-		pthread_attr_t attr;
-		pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
-		if (pthread_create(&_st.tid, &attr, (start_f)_stlist_loop, &_st)) {
-			list_destroy((list_t *)&_st.head, free);
+	if(!_st.status) {
+		if (async_run(_stlist_loop, &_st)) {
+			list_destroy(&_st.head, free);
 			RETURN(ErrFd, "pthread_create is error!");
 		}
 		_st.status = true;
-		pthread_attr_destroy(&attr);
 	}
 
 	ATOM_UNLOCK(_st.lock);
@@ -147,8 +142,8 @@ st_del(int id) {
 	if (!_st.head) return;
 
 	ATOM_LOCK(_st.lock);
-	node = list_findpop((list_t *)&_st.head, _stnode_cmpid, (const void *)(intptr_t)id);
+	node = list_findpop(&_st.head, _stnode_cmpid, id);
 	ATOM_UNLOCK(_st.lock);
-	
+
 	free(node);
 }

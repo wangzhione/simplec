@@ -32,7 +32,8 @@ typedef void * list_t;
 // die		: 销毁执行的函数
 // return	: void
 //
-extern void list_destroy(list_t * ph, node_f die);
+extern void list_destroy_(list_t * ph, node_f die);
+#define list_destroy(ph, die) list_destroy_((list_t *)ph, (node_f)die)
 
 //
 // list_add - 在 cmp(left, x) <= 0 x处前面插入node结点
@@ -41,7 +42,27 @@ extern void list_destroy(list_t * ph, node_f die);
 // left		: cmp(left, x) 比较返回 <=0 or >0
 // return	: 返回 SufBase 表示成功!
 //
-extern int list_add(list_t * ph, icmp_f cmp, void * left);
+extern int list_add_(list_t * ph, icmp_f cmp, void * left);
+#define list_add(ph, cmp, left) list_add_((list_t *)ph, (icmp_f)cmp, left)
+
+//
+// list_findpop - 查找到要的结点,并弹出,需要你自己回收
+// ph		: 指向头结点的指针
+// cmp		: 比较函数,将left同 *ph中对象按个比较
+// left		: cmp(left, x) 比较返回 0 >0 <0
+// return	: 找到了退出/返回结点, 否则返回NULL
+//
+extern void * list_findpop_(list_t * ph, icmp_f cmp, const void * left);
+#define list_findpop(ph, cmp, left) list_findpop_((list_t *)ph, (icmp_f)cmp, (const void *)(intptr_t)left)
+
+//
+// list_find - 链表中查找函数,查找失败返回NULL, 查找成功直接返回那个结点.
+// head		: 链表头结点
+// cmp		: 查找的比较函数
+// left		: cmp(left, right) 用的左结点
+// return	: 返回查找的结点对象
+//
+extern void * list_find(list_t head, icmp_f cmp, const void * left);
 
 //
 // list_addhead - 采用头查法插入结点, 第一次用需要 list_t head = NULL;
@@ -67,46 +88,11 @@ extern int list_addtail(list_t * ph, void * node);
 extern size_t list_len(list_t h);
 
 //
-// list_findpop - 查找到要的结点,并弹出,需要你自己回收
-// ph		: 指向头结点的指针
-// cmp		: 比较函数,将left同 *ph中对象按个比较
-// left		: cmp(left, x) 比较返回 0 >0 <0
-// return	: 找到了退出/返回结点, 否则返回NULL
-//
-extern void * list_findpop(list_t * ph, icmp_f cmp, const void * left);
-
-//
-// list_find - 链表中查找函数,查找失败返回NULL, 查找成功直接返回那个结点.
-// head		: 链表头结点
-// cmp		: 查找的比较函数
-// left		: cmp(left, right) 用的左结点
-// return	: 返回查找的结点对象
-//
-extern void * list_find(list_t head, icmp_f cmp, const void * left);
-
-//
 // list_getidx - 查找索引位置为idx的结点,找不见返回NULL
 // head		: 当前结点
 // idx		: 查找的索引值[0,len)
 // return	: 返回查到的结点
 //
 extern void * list_getidx(list_t head, int idx);
-
-//
-// list_popidx - 按照索引弹出并返回结点, 需要自己free
-// ph		: 指向链表结点的指针
-// idx		: 弹出的索引
-// return	: 无效的弹出,返回NULL
-//
-extern void * list_popidx(list_t * ph, int idx);
-
-//
-// list_addidx - 在链表idx处插入节点, 结点过大插入到尾巴处 
-// ph		: 指向头结点的指针
-// idx		: 结点的索引处
-// node		: 待插入的结点
-// return	: 成功了返回 SufBase
-//
-extern int list_addidx(list_t * ph, int idx, void * node);
 
 #endif // !_H_SIMPLEC_LIST
