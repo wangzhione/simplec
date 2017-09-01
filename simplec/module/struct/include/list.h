@@ -5,7 +5,7 @@
 
 //
 //	这个万能单链表库, 设计比较老了但可以一用
-//	1.使用的时候,需要加上 _LIST_HEAD; 宏
+//	1.使用的时候,需要加上 $LIST_HEAD; 宏
 //	2.创建的第一句话就是 list_t head = NULL; 开始从空链表开始list的生涯
 //
 struct $lnode {
@@ -13,7 +13,7 @@ struct $lnode {
 };
 
 // 不多说了一定放在想使用链表结构的结构体头部
-#define _LIST_HEAD struct $lnode $node
+#define $LIST_HEAD struct $lnode $node
 
 //
 // 简单链表结构, 当你使用这个链表的时候 需要 list_t head = NULL; 开始使用之旅

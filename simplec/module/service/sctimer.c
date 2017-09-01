@@ -4,7 +4,7 @@
 
 // 使用到的定时器结点
 struct stnode {
-	_LIST_HEAD;
+	$LIST_HEAD;
 
 	int id;					// 当前定时器的id
 	struct timespec tv;		// 运行的具体时间
@@ -36,7 +36,6 @@ static struct stnode * _stnode_new(int s, node_f timer, void * arg) {
 	node->tv.tv_nsec += (s % _INT_STOMS) * _INT_MSTONS;
 	node->timer = timer;
 	node->arg = arg;
-	node->$node.next = NULL;
 
 	return node;
 }
@@ -71,7 +70,6 @@ static void * _stlist_loop(struct stlist * st) {
 			usleep(nowt);
 			continue;
 		}
-
 		_stlist_run(st);
 	}
 
@@ -95,7 +93,7 @@ static inline int _stnode_cmptime(const struct stnode * sl, const struct stnode 
 // return	: 返回这个定时器的唯一id
 //
 int 
-st_add(int intval, node_f timer, void * arg) {
+st_add_(int intval, node_f timer, void * arg) {
 	struct stnode * now;
 	// 各种前戏操作
 	if (intval <= 0) {

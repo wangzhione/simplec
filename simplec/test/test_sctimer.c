@@ -18,17 +18,17 @@ static void _timertwo(void * arg) {
 void test_sctimer(void) {
 	int tid;
 	
-	st_add(0, _timer, (void *)1);
-	st_add(3000, _timer, (void *)2);
-	st_add(4000, _timer, (void *)3);
+	st_add(0, _timer, 1);
+	st_add(3000, _timer, 2);
+	st_add(4000, _timer, 3);
 
 	// 开启一个多线程的永久异步方法
-	tid = st_add(1000, _timer, (void *)4);
+	tid = st_add(1000, _timer, 4);
 
 	// 等待5秒后关闭 上面永久的定时器事件
 	sh_msleep(5000);
 	st_del(tid);
 
 	// 测试一个连环施法
-	st_add(1000, _timertwo, (void *)5);
+	st_add(1000, _timertwo, 5);
 }
