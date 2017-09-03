@@ -96,9 +96,6 @@
     <ClCompile Include="test\test_sctimer.c">
       <Filter>test</Filter>
     </ClCompile>
-    <ClCompile Include="test\test_xlsmtojson.c">
-      <Filter>test</Filter>
-    </ClCompile>
     <ClCompile Include="main\main.c">
       <Filter>main</Filter>
     </ClCompile>
@@ -409,9 +406,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="test\config\destiny.csv">
-      <Filter>test\config</Filter>
-    </None>
     <None Include="test\config\firefighting_rule.json">
       <Filter>test\config</Filter>
     </None>

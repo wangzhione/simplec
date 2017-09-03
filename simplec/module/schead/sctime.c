@@ -80,8 +80,8 @@ stu_gettime(stime_t tstr, time_t * pt, struct tm * otm) {
 	if (!_stu_gettm(tstr, &st))
 		return false;
 
-	st.tm_year -= _INT_YEAROFFSET;
-	st.tm_mon -= _INT_MONOFFSET;
+	st.tm_year -= 1900;
+	st.tm_mon -= 1;
 	// 得到时间戳, 失败返回false
 	if ((t = mktime(&st)) == -1)
 		return false;
@@ -95,14 +95,6 @@ stu_gettime(stime_t tstr, time_t * pt, struct tm * otm) {
 	return true;
 }
 
-// 定义每天是开始为 0时0分0秒
-#define _INT_MINSECOND		(60)
-#define _INT_HOURSECOND		(3600)
-// 定义每天新的开始时间 | GMT [World] + 8 * 3600 = CST [China]
-#define _INT_DAYSTART		( 8UL * _INT_HOURSECOND)
-#define _INT_DAYSECOND		(24UL * _INT_HOURSECOND)
-#define _INT_DAYNEWSTART	( 0UL * _INT_HOURSECOND + 0 * _INT_MINSECOND + 0)
-
 /*
  * 判断当前时间戳是否是同一天的.
  * lt : 判断时间一
@@ -111,9 +103,9 @@ stu_gettime(stime_t tstr, time_t * pt, struct tm * otm) {
  */
 inline bool
 stu_tisday(time_t lt, time_t rt) {
-	// 得到是各自第几天的
-	lt = (lt + _INT_DAYSTART - _INT_DAYNEWSTART) / _INT_DAYSECOND;
-	rt = (rt + _INT_DAYSTART - _INT_DAYNEWSTART) / _INT_DAYSECOND;
+	// GMT [World] + 8 * 3600 = CST [China], 得到各自当前天数
+	lt = (lt + 8UL * 3600) / (24 * 3600);
+	rt = (rt + 8UL * 3600) / (24 * 3600);
 	return lt == rt;
 }
 
@@ -128,9 +120,6 @@ stu_tisweek(time_t lt, time_t rt) {
 	time_t mt;
 	struct tm st;
 
-	lt -= _INT_DAYNEWSTART;
-	rt -= _INT_DAYNEWSTART;
-
 	if (lt < rt) { //得到最大时间, 保存在lt中
 		mt = lt;
 		lt = rt;
@@ -141,9 +130,9 @@ stu_tisweek(time_t lt, time_t rt) {
 	localtime_r(&lt, &st);
 
 	// 得到当前时间到周一起点的时间差
-	st.tm_wday = 0 == st.tm_wday ? 7 : st.tm_wday;
-	mt = (st.tm_wday - 1) * _INT_DAYSECOND + st.tm_hour * _INT_HOURSECOND
-		+ st.tm_min * _INT_MINSECOND + st.tm_sec;
+	st.tm_wday = st.tm_wday ? st.tm_wday - 1 : 6;
+	mt = st.tm_wday * 24 * 3600 + st.tm_hour * 3600 
+        + st.tm_min * 60 + st.tm_sec;
 
 	// [min, lt], lt = max(lt, rt) 就表示在同一周内
 	return rt >= lt - mt;
@@ -193,7 +182,7 @@ stu_gettstr(time_t nt, stime_t tstr) {
 	struct tm st;
 	localtime_r(&nt, &st);
 	snprintf(tstr, sizeof(stime_t), _STR_TIME,
-			st.tm_year + _INT_YEAROFFSET, st.tm_mon + _INT_MONOFFSET, st.tm_mday,
+			st.tm_year + 1900, st.tm_mon + 1, st.tm_mday,
 			st.tm_hour, st.tm_min, st.tm_sec);
 	return tstr;
 }
@@ -215,21 +204,21 @@ stu_getntstr(stime_t tstr) {
 //
 size_t 
 stu_getmstr(stime_t tstr) {
-	time_t t;
-	struct tm st;
-	struct timespec tv;
+    time_t t;
+    struct tm st;
+    struct timespec tv;
 
-	timespec_get(&tv, TIME_UTC);
-	t = tv.tv_sec;
-	localtime_r(&t, &st);
-	return snprintf(tstr, sizeof(stime_t), _STR_MTIME,
-					st.tm_year + _INT_YEAROFFSET, st.tm_mon + _INT_MONOFFSET, st.tm_mday,
-					st.tm_hour, st.tm_min, st.tm_sec,
-					tv.tv_nsec / _INT_MSTONS);
+    timespec_get(&tv, TIME_UTC);
+    t = tv.tv_sec;
+    localtime_r(&t, &st);
+    return snprintf(tstr, sizeof(stime_t), _STR_MTIME,
+                    st.tm_year + 1900, st.tm_mon + 1, st.tm_mday,
+                    st.tm_hour, st.tm_min, st.tm_sec,
+                    tv.tv_nsec / 1000000);
 }
 
 //
-// stu_getmstrn - 得到毫秒的串, 每个中间分隔符都是fmt[idx]
+// stu_getmstrn - 得到特定包含时间串, fmt 依赖 _STR_MTIME
 // buf		: 保存最终结果的串
 // len		: 当前buf串长度
 // fmt		: 输出格式串例如 -> "simplec-%04d%02d%02d-%02d%02d%02d-%03ld.log"
@@ -237,15 +226,15 @@ stu_getmstr(stime_t tstr) {
 //
 size_t 
 stu_getmstrn(char buf[], size_t len, const char * const fmt) {
-	time_t t;
-	struct tm st;
-	struct timespec tv;
+    time_t t;
+    struct tm st;
+    struct timespec tv;
 
-	timespec_get(&tv, TIME_UTC);
-	t = tv.tv_sec;
-	localtime_r(&t, &st);
-	return snprintf(buf, len, fmt,
-					st.tm_year + _INT_YEAROFFSET, st.tm_mon + _INT_MONOFFSET, st.tm_mday,
-					st.tm_hour, st.tm_min, st.tm_sec,
-					tv.tv_nsec / _INT_MSTONS);
+    timespec_get(&tv, TIME_UTC);
+    t = tv.tv_sec;
+    localtime_r(&t, &st);
+    return snprintf(buf, len, fmt,
+                    st.tm_year + 1900, st.tm_mon + 1, st.tm_mday,
+                    st.tm_hour, st.tm_min, st.tm_sec,
+                    tv.tv_nsec / 1000000);
 }

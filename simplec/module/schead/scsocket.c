@@ -14,8 +14,8 @@ gettimeofday(struct timeval * tv, void * tz) {
 	SYSTEMTIME wtm;
 
 	GetLocalTime(&wtm);
-	st.tm_year = wtm.wYear - _INT_YEAROFFSET;
-	st.tm_mon = wtm.wMonth - _INT_MONOFFSET; // window的计数更好些
+	st.tm_year = wtm.wYear - 1900;
+	st.tm_mon = wtm.wMonth - 1; // window的计数更好些
 	st.tm_mday = wtm.wDay;
 	st.tm_hour = wtm.wHour;
 	st.tm_min = wtm.wMinute;
@@ -23,7 +23,7 @@ gettimeofday(struct timeval * tv, void * tz) {
 	st.tm_isdst = -1; // 不考虑夏令时
 
 	tv->tv_sec = (long)mktime(&st); // 32位使用数据强转
-	tv->tv_usec = wtm.wMilliseconds * _INT_STOMS; // 毫秒转成微秒
+	tv->tv_usec = wtm.wMilliseconds * 1000; // 毫秒转成微秒
 
 	return 0;
 }
@@ -37,11 +37,11 @@ gettimeofday(struct timeval * tv, void * tz) {
 inline void 
 socket_start(void) {
 #ifdef _MSC_VER
-#	pragma comment(lib, "ws2_32.lib")
-	WSADATA wsad;
-	WSAStartup(WINSOCK_VERSION, &wsad);
+#   pragma comment(lib, "ws2_32.lib")
+    WSADATA wsad;
+    WSAStartup(WINSOCK_VERSION, &wsad);
 #elif __GUNC__
-	IGNORE_SIGNAL(SIGPIPE)
+    IGNORE_SIGNAL(SIGPIPE)
 #endif
 }
 
@@ -169,8 +169,8 @@ socket_set_keepalive(socket_t s) {
 static inline int _socket_set_time(socket_t s, int ms, int optname) {
 	struct timeval ov = { 0,0 };
 	if (ms > 0) {
-		ov.tv_sec = ms / _INT_STOMS;
-		ov.tv_usec = (ms % _INT_STOMS) * _INT_STOMS;
+		ov.tv_sec = ms / 1000;
+		ov.tv_usec = (ms % 1000) * 1000;
 	}
 	return setsockopt(s, SOL_SOCKET, optname, (void *)&ov, sizeof ov);
 }
@@ -399,8 +399,8 @@ socket_connecto(socket_t s, const sockaddr_t * addr, int ms) {
 	FD_ZERO(&rset); FD_SET(s, &rset);
 	FD_ZERO(&wset); FD_SET(s, &wset);
 	FD_ZERO(&eset); FD_SET(s, &eset);
-	to.tv_sec = ms / _INT_STOMS;
-	to.tv_usec = (ms % _INT_STOMS) * _INT_STOMS;
+	to.tv_sec = ms / 1000;
+	to.tv_usec = (ms % 1000) * 1000;
 	n = select((int)s + 1, &rset, &wset, &eset, &to);
 	// 超时直接滚
 	if (n <= 0) goto _return;

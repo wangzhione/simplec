@@ -32,8 +32,8 @@ static struct stnode * _stnode_new(int s, node_f timer, void * arg) {
 	// 初始化, 首先初始化当前id
 	node->id = ATOM_INC(_st.nowid);
 	timespec_get(&node->tv, TIME_UTC);
-	node->tv.tv_sec += s / _INT_STOMS;
-	node->tv.tv_nsec += (s % _INT_STOMS) * _INT_MSTONS;
+	node->tv.tv_sec += s / 1000;
+	node->tv.tv_nsec += (s % 1000) * 1000000;
 	node->timer = timer;
 	node->arg = arg;
 
@@ -44,8 +44,8 @@ static struct stnode * _stnode_new(int s, node_f timer, void * arg) {
 static inline int _stlist_sus(struct stlist * st) {
 	struct timespec t[1], * v = &st->head->tv;
 	timespec_get(t, TIME_UTC);
-	return (int)((v->tv_sec - t->tv_sec) * _INT_MSTONS
-		+ (v->tv_nsec - t->tv_nsec) / _INT_STOMS);
+	return (int)((v->tv_sec - t->tv_sec) * 1000000
+		+ (v->tv_nsec - t->tv_nsec) / 1000);
 }
 
 // 重新调整, 只能在 _stlist_loop 后面调用, 线程安全,只加了一把锁

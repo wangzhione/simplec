@@ -4,13 +4,11 @@
 #include <time.h>
 #include <stdbool.h>
 
-// struct tm 中 tm_year, tm_mon 用的偏移量
-#define _INT_YEAROFFSET		(1900)
-#define _INT_MONOFFSET		(1)
-
-// 秒到毫秒|毫秒到微秒, 毫秒到纳秒|秒到微秒 
-#define _INT_STOMS			(1000)
-#define _INT_MSTONS			(1000000)
+//
+// 1s = 1000ms = 1000000us = 1000000000ns
+// 1秒  1000毫秒  1000000微秒  1000000000纳秒
+// ~ 力求最小时间业务单元 ~ 
+//
 
 #ifdef __GNUC__
 
@@ -23,7 +21,7 @@
 // return	: void
 //
 #define sh_msleep(m) \
-		usleep(m * _INT_STOMS)
+		usleep(m * 1000)
 
 #endif
 
@@ -121,7 +119,7 @@ extern char * stu_getntstr(stime_t tstr);
 extern size_t stu_getmstr(stime_t tstr);
 
 //
-// stu_getmstrn - 得到毫秒的串, 每个中间分隔符都是fmt[idx]
+// stu_getmstrn - 得到特定包含时间串, fmt 依赖 _STR_MTIME
 // buf		: 保存最终结果的串
 // len		: 当前buf串长度
 // fmt		: 输出格式串例如 -> "simplec-%04d%02d%02d-%02d%02d%02d-%03ld.log"

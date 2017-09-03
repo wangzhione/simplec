@@ -14,7 +14,7 @@ void test_clog(void) {
 	// 测试一下等待时间函数
 	printf("sec = %"PRId64".\n", time(NULL));
 	puts("等待几秒试试");
-	usleep(3 * _INT_MSTONS);
+	usleep(1000000);
 	printf("sec = %"PRId64".\n", time(NULL));
 
 	timespec_get(&tc, TIME_UTC);

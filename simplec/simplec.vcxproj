@@ -69,7 +69,6 @@
     <ClCompile Include="test\test_socket_start.c" />
     <ClCompile Include="test\test_tstr.c" />
     <ClCompile Include="test\test_socket_poll.c" />
-    <ClCompile Include="test\test_xlsmtojson.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="extern\curl\include\curl\curl.h" />
@@ -124,7 +123,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="config\config.ini" />
-    <None Include="test\config\destiny.csv" />
     <None Include="test\config\firefighting_rule.json" />
     <None Include="test\config\onetime.csv" />
   </ItemGroup>
