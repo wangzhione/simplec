@@ -9,13 +9,13 @@
 // push full	<=> head + 1 == tail
 //
 struct mq {
-	int lock;			// 消息队列锁
-	int cap;			// 消息队列容量, 必须是2的幂
-	int head;			// 消息队列头索引
-	int tail;			// 消息队列尾索引
-	void ** queue;		// 具体的使用消息
+    int lock;           // 消息队列锁
+    int cap;            // 消息队列容量, 必须是2的幂
+    int head;           // 消息队列头索引
+    int tail;           // 消息队列尾索引
+    void ** queue;      // 具体的使用消息
 
-	volatile bool fee;	// true表示销毁退出
+    volatile bool fee;  // true表示销毁退出
 };
 
 //

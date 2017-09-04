@@ -6,9 +6,9 @@
 #ifndef _STRUCT_TSTR
 
 struct tstr {
-	char * str;			// 字符串实际保存的内容
-	size_t len;			// 当前字符串长度
-	size_t cap;			// 字符池大小
+    char * str;     // 字符串实际保存的内容
+    size_t len;     // 当前字符串长度
+    size_t cap;     // 字符池大小
 };
 
 // 定义的字符串类型

@@ -10,11 +10,11 @@
 //
 bool
 si_isutf8(const char * in) {
-	uint8_t bytes = 0, c;		// bytes 表示编码字节数, utf-8 [1, 6] 字节编码
+	uint8_t bytes = 0, c;   // bytes 表示编码字节数, utf-8 [1, 6] 字节编码
 	bool isascii = true;
 
 	while ((c = *in++)) {
-		if ((c & 0x80)) // ascii 码最高位为0, 0xxx xxxx
+		if ((c & 0x80))     // ascii 码最高位为0, 0xxx xxxx
 			isascii = false;
 
 		// 下面计算字节数, 计算字节首部

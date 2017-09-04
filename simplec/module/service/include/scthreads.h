@@ -30,6 +30,7 @@ extern void threads_delete(threads_t pool);
 // return	: void
 //
 extern void threads_insert_(threads_t pool, node_f run, void * arg);
-#define threads_insert(pool, run, arg) threads_insert_(pool, (node_f)run, (void *)(intptr_t)arg)
+#define threads_insert(pool, run, arg) \
+        threads_insert_(pool, (node_f)run, (void *)(intptr_t)arg)
 
 #endif // !_H_SIMPLEC_SCTHREADS

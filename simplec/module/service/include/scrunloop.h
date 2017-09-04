@@ -12,7 +12,8 @@ typedef struct srl * srl_t;
 // return	: void 
 //
 srl_t srl_create_(node_f run, node_f die);
-#define srl_create(run, die) srl_create_((node_f)(run), (node_f)(die))
+#define srl_create(run, die) \
+        srl_create_((node_f)(run), (node_f)(die))
 
 //
 // srl_delete - 销毁轮询对象,回收资源

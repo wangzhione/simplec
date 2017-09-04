@@ -8,14 +8,14 @@
 
 // 声明协程结构 和 协程管理器结构
 struct sco {
-	char * stack;			// 当前协程栈指针
-	ucontext_t ctx;			// 当前协程运行的上下文环境
-	ptrdiff_t cap;			// 当前栈的容量
-	ptrdiff_t cnt;			// 当前栈的大小
+    char * stack;           // 当前协程栈指针
+    ucontext_t ctx;         // 当前协程运行的上下文环境
+    ptrdiff_t cap;          // 当前栈的容量
+    ptrdiff_t cnt;          // 当前栈的大小
 
-	sco_f func;				// 协程体执行
-	void * arg;				// 用户输入的参数
-	int status;				// 当前协程运行状态 SCO_*
+    sco_f func;             // 协程体执行
+    void * arg;             // 用户输入的参数
+    int status;             // 当前协程运行状态 SCO_*
 };
 
 // 构建 struct sco 协程对象
@@ -40,15 +40,15 @@ static inline void _sco_delete(struct sco * co) {
 }
 
 struct scomng {
-	char stack[_INT_STACK];	// 当前协程中开辟的栈对象
-	ucontext_t main;		// 当前协程上下文对象
+	char stack[_INT_STACK]; // 当前协程中开辟的栈对象
+	ucontext_t main;        // 当前协程上下文对象
 
-	int running;			// 当前协程中运行的协程id
+	int running;            // 当前协程中运行的协程id
 
-	struct sco ** cos;		// 协程对象集, 循环队列
-	int cap;				// 协程对象集容量
-	int idx;				// 当前协程集中轮询到的索引
-	int cnt;				// 当前存在的协程个数
+	struct sco ** cos;      // 协程对象集, 循环队列
+	int cap;                // 协程对象集容量
+	int idx;                // 当前协程集中轮询到的索引
+	int cnt;                // 当前存在的协程个数
 };
 
 //

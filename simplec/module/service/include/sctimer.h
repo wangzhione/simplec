@@ -11,7 +11,8 @@
 // return	: 返回这个定时器的唯一id
 //
 extern int st_add_(int intval, node_f timer, void * arg);
-#define st_add(intval, timer, arg) st_add_(intval, (node_f)timer, (void *)(intptr_t)arg)
+#define st_add(intval, timer, arg) \
+        st_add_(intval, (node_f)timer, (void *)(intptr_t)arg)
 
 //
 // st_del - 删除指定事件

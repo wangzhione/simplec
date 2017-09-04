@@ -5,10 +5,10 @@
 // 这里是一个解析 csv 文件的 简单解析器.
 // 它能够帮助我们切分文件内容, 保存在字符串数组中.
 //
-typedef struct sccsv {		//内存只能在堆上
-	int rlen;				//数据行数,索引[0, rlen)
-	int clen;				//数据列数,索引[0, clen)
-	const char * data[];	//保存数据一维数组,希望他是二维的 rlen*clen
+typedef struct sccsv {      //内存只能在堆上
+    int rlen;               //数据行数,索引[0, rlen)
+    int clen;               //数据列数,索引[0, clen)
+    const char * data[];    //保存数据一维数组,希望他是二维的 rlen*clen
 } * sccsv_t;
 
 //

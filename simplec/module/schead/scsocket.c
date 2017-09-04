@@ -31,9 +31,9 @@ gettimeofday(struct timeval * tv, void * tz) {
 #endif
 
 //
-// socket_start	- 单例启动socket库的初始化方法
-// socket_addr	- 通过ip, port 得到 ipv4 地址信息
-// 
+// socket_start - 单例启动socket库的初始化方法
+// socket_addr  - 通过ip, port 得到 ipv4 地址信息
+//  
 inline void 
 socket_start(void) {
 #ifdef _MSC_VER
@@ -66,11 +66,11 @@ socket_addr(const char * ip, uint16_t port, sockaddr_t * addr) {
 }
 
 //
-// socket_dgram		- 创建UDP socket
-// socket_stream	- 创建TCP socket
-// socket_close		- 关闭上面创建后的句柄
-// socket_read		- 读取数据
-// socket_write		- 写入数据
+// socket_dgram     - 创建UDP socket
+// socket_stream    - 创建TCP socket
+// socket_close     - 关闭上面创建后的句柄
+// socket_read      - 读取数据
+// socket_write     - 写入数据
 //
 
 inline socket_t
@@ -113,12 +113,12 @@ socket_write(socket_t s, const void * data, int sz) {
 }
 
 //
-// socket_set_block		- 设置套接字是阻塞
-// socket_set_nonblock	- 设置套接字是非阻塞
-// socket_set_reuseaddr	- 开启地址复用
+// socket_set_block     - 设置套接字是阻塞
+// socket_set_nonblock  - 设置套接字是非阻塞
+// socket_set_reuseaddr - 开启地址复用
 // socket_set_keepalive - 开启心跳包检测, 默认2h 5次
-// socket_set_recvtimeo	- 设置接收数据毫秒超时时间
-// socket_set_sendtimeo	- 设置发送数据毫秒超时时间
+// socket_set_recvtimeo - 设置接收数据毫秒超时时间
+// socket_set_sendtimeo - 设置发送数据毫秒超时时间
 //
 
 inline int
@@ -197,12 +197,12 @@ socket_get_error(socket_t s) {
 }
 
 //
-// socket_recv		- socket接受信息
-// socket_recvn		- socket接受len个字节进来
-// socket_send		- socket发送消息
-// socket_sendn		- socket发送len个字节出去
-// socket_recvfrom	- recvfrom接受函数
-// socket_sendto	- udp发送函数, 通过socket_udp 搞的完全可以 socket_send发送
+// socket_recv      - socket接受信息
+// socket_recvn     - socket接受len个字节进来
+// socket_send      - socket发送消息
+// socket_sendn     - socket发送len个字节出去
+// socket_recvfrom  - recvfrom接受函数
+// socket_sendto    - udp发送函数, 通过socket_udp 搞的完全可以 socket_send发送
 //
 
 int
@@ -264,8 +264,8 @@ socket_sendto(socket_t s, const void * buf, int len, int flags, const sockaddr_t
 }
 
 //
-// socket_bind		- 端口绑定返回绑定好的 socket fd, 失败返回 INVALID_SOCKET or PF_INET PF_INET6
-// socket_listen	- 端口监听返回监听好的 socket fd.
+// socket_bind      - 端口绑定返回绑定好的 socket fd, 失败返回 INVALID_SOCKET or PF_INET PF_INET6
+// socket_listen    - 端口监听返回监听好的 socket fd.
 //
 socket_t
 socket_bind(const char * host, uint16_t port, uint8_t protocol, int * family) {
@@ -326,13 +326,13 @@ socket_listen(const char * host, uint16_t port, int backlog) {
 }
 
 //
-// socket_tcp			- 创建TCP详细的套接字
-// socket_udp			- 创建UDP详细套接字
-// socket_connect		- connect操作
-// socket_connects		- 通过socket地址连接
-// socket_connecto		- connect连接超时判断
-// socket_connectos		- connect连接客户端然后返回socket_t句柄
-// socket_accept		- accept 链接函数
+// socket_tcp           - 创建TCP详细的套接字
+// socket_udp           - 创建UDP详细套接字
+// socket_connect       - connect操作
+// socket_connects      - 通过socket地址连接
+// socket_connecto      - connect连接超时判断
+// socket_connectos     - connect连接客户端然后返回socket_t句柄
+// socket_accept        - accept 链接函数
 //
 
 inline socket_t

@@ -4,20 +4,20 @@
 
 // 使用到的定时器结点
 struct stnode {
-	$LIST_HEAD;
+    $LIST_HEAD;
 
-	int id;					// 当前定时器的id
-	struct timespec tv;		// 运行的具体时间
-	node_f timer;			// 执行的函数事件
-	void * arg;				// 执行函数参数
+    int id;                 // 当前定时器的id
+    struct timespec tv;     // 运行的具体时间
+    node_f timer;           // 执行的函数事件
+    void * arg;             // 执行函数参数
 };					   
 							   
 // 当前链表对象管理器			  
 struct stlist {				   
-	int lock;				// 加锁用的
-	int nowid;				// 当前使用的最大timer id
-	bool status;			// false表示停止态, true表示主线程loop运行态
-	struct stnode * head;	// 定时器链表的头结点
+    int lock;               // 加锁用的
+    int nowid;              // 当前使用的最大timer id
+    bool status;            // false表示停止态, true表示主线程loop运行态
+    struct stnode * head;   // 定时器链表的头结点
 };
 
 // 定时器对象的单例, 最简就是最复杂

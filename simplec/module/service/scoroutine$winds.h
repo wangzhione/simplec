@@ -6,10 +6,10 @@
 
 // 声明协程结构 和 协程管理器结构
 struct sco {
-	PVOID ctx;			// 当前协程运行的环境
-	sco_f func;			// 协程体执行
-	void * arg;			// 用户输入的参数
-	int status;			// 当前协程运行状态 SCO_*
+    PVOID ctx;          // 当前协程运行的环境
+    sco_f func;         // 协程体执行
+    void * arg;         // 用户输入的参数
+    int status;         // 当前协程运行状态 SCO_*
 };
 
 // 构建 struct sco 协程对象
@@ -29,13 +29,13 @@ static inline void _sco_delete(struct sco * co) {
 }
 
 struct scomng {
-	PVOID main;			// 当前主协程记录运行环境
-	int running;		// 当前协程中运行的协程id
+    PVOID main;         // 当前主协程记录运行环境
+    int running;        // 当前协程中运行的协程id
 
-	struct sco ** cos;	// 协程对象集, 循环队列
-	int cap;			// 协程对象集容量
-	int idx;			// 当前协程集中轮询到的索引
-	int cnt;			// 当前存在的协程个数
+    struct sco ** cos;  // 协程对象集, 循环队列
+    int cap;            // 协程对象集容量
+    int idx;            // 当前协程集中轮询到的索引
+    int cnt;            // 当前存在的协程个数
 };
 
 //

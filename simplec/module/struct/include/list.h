@@ -33,7 +33,8 @@ typedef void * list_t;
 // return	: void
 //
 extern void list_destroy_(list_t * ph, node_f die);
-#define list_destroy(ph, die) list_destroy_((list_t *)ph, (node_f)die)
+#define list_destroy(ph, die) \
+        list_destroy_((list_t *)ph, (node_f)die)
 
 //
 // list_add - 在 cmp(left, x) <= 0 x处前面插入node结点
@@ -43,7 +44,8 @@ extern void list_destroy_(list_t * ph, node_f die);
 // return	: 返回 SufBase 表示成功!
 //
 extern int list_add_(list_t * ph, icmp_f cmp, void * left);
-#define list_add(ph, cmp, left) list_add_((list_t *)ph, (icmp_f)cmp, left)
+#define list_add(ph, cmp, left) \
+        list_add_((list_t *)ph, (icmp_f)cmp, left)
 
 //
 // list_findpop - 查找到要的结点,并弹出,需要你自己回收
@@ -53,7 +55,8 @@ extern int list_add_(list_t * ph, icmp_f cmp, void * left);
 // return	: 找到了退出/返回结点, 否则返回NULL
 //
 extern void * list_findpop_(list_t * ph, icmp_f cmp, const void * left);
-#define list_findpop(ph, cmp, left) list_findpop_((list_t *)ph, (icmp_f)cmp, (const void *)(intptr_t)left)
+#define list_findpop(ph, cmp, left) \
+        list_findpop_((list_t *)ph, (icmp_f)cmp, (const void *)(intptr_t)left)
 
 //
 // list_find - 链表中查找函数,查找失败返回NULL, 查找成功直接返回那个结点.

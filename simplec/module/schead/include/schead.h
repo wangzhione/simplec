@@ -21,7 +21,7 @@
  *  return	: void
  */
 #define sh_cls() \
-		printf("\ec")
+        printf("\ec")
 
 //
 // getch - 立即得到用户输入的一个字符, linux实现
@@ -35,7 +35,7 @@ extern int getch(void);
 // return	: 0表示成功, -1表示失败, 失败原因都在 errno
 // 
 #define sh_mkdir(path) \
-	mkdir(path, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH)
+        mkdir(path, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH)
 
 #elif _MSC_VER
 
@@ -43,10 +43,10 @@ extern int getch(void);
 #include <conio.h>
 
 #define sh_cls() \
-		system("cls")
+        system("cls")
 
 #define sh_mkdir(path) \
-	mkdir(path)
+        mkdir(path)
 
 #else
 #	error "error : Currently only supports the Best New CL and GCC!"
@@ -61,7 +61,7 @@ extern int getch(void);
 
 // 置空操作, v必须是个变量
 #define BZERO(v) \
-	memset(&(v), 0, sizeof(v))
+        memset(&(v), 0, sizeof(v))
 
 /*
  * 比较两个结构体栈上内容是否相等,相等返回true,不等返回false
@@ -76,20 +76,20 @@ extern int getch(void);
 // test		: 需要执行的函数名称
 //
 #define EXTERN_RUN(test, ...) \
-	do { \
-		extern void test(); \
-		test (__VA_ARGS__); \
-	} while(0)
+    do { \
+	    extern void test(); \
+	    test (__VA_ARGS__); \
+    } while(0)
 
 // 简单的time时间记录宏
 #define TIME_PRINT(code) \
-	do { \
-		clock_t $s, $e; \
-		$s = clock(); \
-		code \
-		$e = clock(); \
-		printf("Now code run time:%lfs.\n", ((double)$e - $s) / CLOCKS_PER_SEC); \
-	} while (0)
+    do { \
+	    clock_t $s, $e; \
+	    $s = clock(); \
+	    code \
+	    $e = clock(); \
+	    printf("Now code run time:%lfs.\n", ((double)$e - $s) / CLOCKS_PER_SEC); \
+    } while (0)
 
 //
 // sh_pause - 等待的宏 是个单线程没有加锁 | "请按任意键继续. . ."
@@ -99,11 +99,11 @@ extern void sh_pause(void);
 
 #ifndef SH_PAUSE
 
-#	ifdef _DEBUG
-#		define SH_PAUSE() atexit(sh_pause)
-#	else
-#		define SH_PAUSE() /* 别说了, 都重新开始吧 */
-#	endif
+#   ifdef _DEBUG
+#       define SH_PAUSE() atexit(sh_pause)
+#   else
+#       define SH_PAUSE() /* 别说了, 都重新开始吧 */
+#   endif
 
 #endif // !INIT_PAUSE
 
@@ -124,6 +124,6 @@ extern uint32_t sh_ntoh(uint32_t x);
 //
 extern int async_run_(node_f run, void * arg);
 #define async_run(run, arg) \
-		async_run_((node_f)(run), arg)
+        async_run_((node_f)(run), (void *)(intptr_t)arg)
 
 #endif//_H_SIMPLEC_SCHEAD

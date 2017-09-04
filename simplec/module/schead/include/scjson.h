@@ -4,24 +4,24 @@
 #include <tstr.h>
 
 // json中几种数据结构和方式定义, 对于程序开发而言最难的还是理解思路(思想 or 业务)
-#define CJSON_NULL		(0u << 0)
-#define CJSON_FALSE		(1u << 0)
-#define CJSON_TRUE		(1u << 1)
-#define CJSON_NUMBER	(1u << 2)
-#define CJSON_STRING	(1u << 3)
-#define CJSON_ARRAY		(1u << 4)
-#define CJSON_OBJECT	(1u << 5)
+#define CJSON_NULL          (0u << 0)
+#define CJSON_FALSE         (1u << 0)
+#define CJSON_TRUE          (1u << 1)
+#define CJSON_NUMBER        (1u << 2)
+#define CJSON_STRING        (1u << 3)
+#define CJSON_ARRAY         (1u << 4)
+#define CJSON_OBJECT        (1u << 5)
 
 struct cjson {
-	struct cjson * next;	// 采用链表结构处理, 放弃二叉树结构, 优化内存
-	struct cjson * child;	// type == ( CJSON_ARRAY or CJSON_OBJECT ) 那么 child 就不为空
+    struct cjson * next;    // 采用链表结构处理, 放弃二叉树结构, 优化内存
+    struct cjson * child;   // type == ( CJSON_ARRAY or CJSON_OBJECT ) 那么 child 就不为空
 
-	unsigned char type;		// 数据类型 CJSON_XXXX, 一个美好的意愿
-	char * key;				// json内容那块的 key名称 	
-	union {
-		char * vs;			// type == CJSON_STRING, 是一个字符串 	
-		double vd;			// type == CJSON_NUMBER, 是一个num值, ((int)c->vd) 转成int 或 bool
-	};
+    unsigned char type;     // 数据类型 CJSON_XXXX, 一个美好的意愿
+    char * key;             // json内容那块的 key名称 	
+    union {
+        char * vs;          // type == CJSON_STRING, 是一个字符串 	
+        double vd;          // type == CJSON_NUMBER, 是一个num值, ((int)c->vd) 转成int 或 bool
+    };
 };
 
 //定义cjson_t json类型

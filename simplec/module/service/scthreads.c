@@ -2,9 +2,9 @@
 
 // 任务链表 结构 和 构造
 struct job {
-	struct job * next;			// 指向下一个任务结点
-	node_f run;					// 任务结点执行的函数体
-	void * arg;	
+    struct job * next;          // 指向下一个任务结点
+    node_f run;                 // 任务结点执行的函数体
+    void * arg;	
 };
 
 static inline struct job * _job_new(node_f run, void * arg) {
@@ -19,22 +19,22 @@ static inline struct job * _job_new(node_f run, void * arg) {
 
 // 线程结构体, 每个线程一个信号量, 定点触发
 struct thread {
-	struct thread * next;		// 下一个线程对象
-	bool wait;					// true 表示当前线程被挂起
-	pthread_t tid;				// 当前线程id
-	pthread_cond_t cond;		// 线程条件变量
+    struct thread * next;       // 下一个线程对象
+    bool wait;                  // true 表示当前线程被挂起
+    pthread_t tid;              // 当前线程id
+    pthread_cond_t cond;        // 线程条件变量
 };
 
 // 定义线程池(线程集)定义
 struct threads {
-	size_t size;				// 线程池大小, 最大线程结构体数量
-	size_t curr;				// 当前线程池中总的线程数
-	size_t idle;				// 当前线程池中空闲的线程数
-	volatile bool cancel;		// true表示当前线程池正在 delete
-	pthread_mutex_t mutx;		// 线程互斥量
-	struct thread * thrs;		// 线程结构体对象集
-	struct job * head;			// 线程任务链表的链头, 队列结构
-	struct job * tail;			// 线程任务队列的表尾, 后插入后执行
+    size_t size;                // 线程池大小, 最大线程结构体数量
+    size_t curr;                // 当前线程池中总的线程数
+    size_t idle;                // 当前线程池中空闲的线程数
+    volatile bool cancel;       // true表示当前线程池正在 delete
+    pthread_mutex_t mutx;       // 线程互斥量
+    struct thread * thrs;       // 线程结构体对象集
+    struct job * head;          // 线程任务链表的链头, 队列结构
+    struct job * tail;          // 线程任务队列的表尾, 后插入后执行
 };
 
 // 线程池中添加线程集

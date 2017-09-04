@@ -7,13 +7,13 @@
 
 1.设置 VS的 项目右键属性 -> VC++ 目录
 1.1. 添加 包含目录
-	$(ProjectDir)main/body/include					--	框架入口外部业务处理头文件文件夹
-	$(ProjectDir)extern/pthread/include				--	框架内置的线程库头文件文件夹
-	$(ProjectDir)extern/curl/include				--	框架libcurl库头文件文件夹
-	$(ProjectDir)module/schead/include				--	框架帮助库头文件文件夹
-	$(ProjectDir)module/struct/include				--	框架数据结构头文件文件夹
-	$(ProjectDir)module/service/include				--	框架提供的辅助服务头文件文件夹
-	$(ProjectDir)module/poll/include				--	框架网络IO文件文件夹, 采用结构模式
+	$(ProjectDir)main/body/include                  --  框架入口外部业务处理头文件文件夹
+	$(ProjectDir)extern/pthread/include             --  框架内置的线程库头文件文件夹
+	$(ProjectDir)extern/curl/include                --  框架libcurl库头文件文件夹
+	$(ProjectDir)module/schead/include              --  框架帮助库头文件文件夹
+	$(ProjectDir)module/struct/include              --  框架数据结构头文件文件夹
+	$(ProjectDir)module/service/include             --  框架提供的辅助服务头文件文件夹
+	$(ProjectDir)module/poll/include                --  框架网络IO文件文件夹, 采用结构模式
 
 2. lib 库添加
 2.1 添加 pthread 模块lib 引用, 看 引用目录

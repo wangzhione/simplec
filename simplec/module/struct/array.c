@@ -151,10 +151,10 @@ array_sort(array_t a, icmp_f compare) {
 
 /*
  * 数组进行遍历
- * a		: 可变数组对象
- * func		: 执行每个结点函数, typedef int	(* each_f)(void * node, void * arg);
- * arg		: 附加参数
- *			: 返回操作结果状态码
+ * a        : 可变数组对象
+ * func     : 执行每个结点函数, typedef int (* each_f)(void * node, void * arg);
+ * arg      : 附加参数
+ * return   : 返回操作结果状态码
  */
 int 
 array_each(array_t a, each_f func, void * arg) {

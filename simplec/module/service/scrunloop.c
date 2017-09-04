@@ -5,14 +5,14 @@
 
 // 具体轮询器
 struct srl {
-	pthread_t id;			// 具体奔跑的线程
-	sem_t blocks;			// 线程阻塞
+    pthread_t id;           // 具体奔跑的线程
+    sem_t blocks;           // 线程阻塞
 
-	mq_t mq;				// 消息队列
-	node_f run;				// 每个消息都会调用 run(pop())
-	node_f die;				// 每个消息体的善后工作
-	volatile bool loop;		// true表示还在继续 
-	volatile bool wait;		// true表示当前轮序器正在等待
+    mq_t mq;                // 消息队列
+    node_f run;             // 每个消息都会调用 run(pop())
+    node_f die;             // 每个消息体的善后工作
+    volatile bool loop;     // true表示还在继续 
+    volatile bool wait;     // true表示当前轮序器正在等待
 };
 
 static void * _srl_loop(struct srl * s) {

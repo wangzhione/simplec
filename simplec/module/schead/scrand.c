@@ -1,22 +1,22 @@
 ﻿#include <scrand.h>
 #include <assert.h>
 
-#define N				(16)
-#define MASK			((1 << N) - 1)
-#define LOW(x)			((x) & MASK)
-#define HIGH(x)			LOW((x) >> N)
-#define CARRY(x, y)		((x + y) > MASK) // 二者相加是否进位, 基于16位
-#define ADDEQU(x, y, z)	z = CARRY(x, y); x = LOW(x + y)
+#define N               (16)
+#define MASK            ((1 << N) - 1)
+#define LOW(x)          ((x) & MASK)
+#define HIGH(x)         LOW((x) >> N)
+#define CARRY(x, y)     ((x + y) > MASK) // 二者相加是否进位, 基于16位
+#define ADDEQU(x, y, z) z = CARRY(x, y); x = LOW(x + y)
 
 #define MUL(x, y, z)	l = (x) * (y); (z)[0] = LOW(l); (z)[1] = HIGH(l)
 
-#define X0				(0x330E)
-#define X1				(0xABCD)
-#define X2				(0x1234)
-#define A0				(0xE66D)
-#define A1				(0xDEEC)
-#define A2				(0x0005)
-#define C				(0x000B)
+#define X0              (0x330E)
+#define X1              (0xABCD)
+#define X2              (0x1234)
+#define A0              (0xE66D)
+#define A1              (0xDEEC)
+#define A2              (0x0005)
+#define C               (0x000B)
 
 static uint32_t _x[] = { X0, X1, X2 }, _a[] = { A0, A1, A2 }, _c = C;
 

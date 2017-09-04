@@ -6,12 +6,12 @@
  * p	: 父结点新值
  * c	: 当前颜色
  */
-#define rb_parent(r)		((struct $rbnode *)((r)->parent_color & ~3))
-#define rb_color(r)			((r)->parent_color & 1)
-#define rb_is_red(r)		(!rb_color(r))
-#define rb_is_black(r)		rb_color(r)
-#define rb_set_red(r)		(r)->parent_color &= ~1
-#define rb_set_black(r)		(r)->parent_color |= 1
+#define rb_parent(r)        ((struct $rbnode *)((r)->parent_color & ~3))
+#define rb_color(r)         ((r)->parent_color & 1)
+#define rb_is_red(r)        (!rb_color(r))
+#define rb_is_black(r)      rb_color(r)
+#define rb_set_red(r)       (r)->parent_color &= ~1
+#define rb_set_black(r)     (r)->parent_color |= 1
 
 static inline void rb_set_parent(struct $rbnode * r, struct $rbnode * p) {
      r->parent_color = (r->parent_color & 3) | (uintptr_t)p;
