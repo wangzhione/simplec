@@ -54,7 +54,7 @@ static void _stlist_run(struct stlist * st) {
 
 	ATOM_LOCK(st->lock); // 加锁防止调整关系覆盖,可用还是比较重要的
 	sn = st->head;
-	st->head = (struct stnode *)list_next(sn);
+	st->head = list_next(sn);
 	ATOM_UNLOCK(st->lock);
 
 	sn->timer(sn->arg);

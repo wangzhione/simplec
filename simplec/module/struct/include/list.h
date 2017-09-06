@@ -24,7 +24,7 @@ typedef void * list_t;
 // list_next - 主要返回结点n的下一个结点. 用法 node->next = list_next(n) or list_next(n) = node;
 // n		: 当前结点
 //
-#define list_next(n) ((struct $lnode *)(n))->next
+#define list_next(n) ((void *)((struct $lnode *)(n))->next)
 
 //
 // list_destroy - 链表销毁函数.对于只是栈上数据就不用调这个api
@@ -68,6 +68,13 @@ extern void * list_findpop_(list_t * ph, icmp_f cmp, const void * left);
 extern void * list_find(list_t head, icmp_f cmp, const void * left);
 
 //
+// list_len - 这里获取当前链表长度, 推荐调用一次就记住len
+// h		: 当前链表的头结点
+// return	: 返回 链表长度 >=0
+//
+extern size_t list_len(list_t h);
+
+//
 // list_addhead - 采用头查法插入结点, 第一次用需要 list_t head = NULL;
 // ph		: 指向头结点的指针
 // node		: 待插入的结点对象
@@ -82,13 +89,6 @@ extern int list_addhead(list_t * ph, void * node);
 // return	: 返回 SufBase 表示成功!
 //
 extern int list_addtail(list_t * ph, void * node);
-
-//
-// list_len - 这里获取当前链表长度, 推荐调用一次就记住len
-// h		: 当前链表的头结点
-// return	: 返回 链表长度 >=0
-//
-extern size_t list_len(list_t h);
 
 //
 // list_getidx - 查找索引位置为idx的结点,找不见返回NULL

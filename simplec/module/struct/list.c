@@ -1,5 +1,8 @@
 ﻿#include <list.h>
 
+#undef  list_next
+#define list_next(n) ((struct $lnode *)(n))->next
+
 //
 // list_destroy - 链表销毁函数.对于只是栈上数据就不用调这个api
 // ph 		: 指向当前链表结点的指针
@@ -35,14 +38,14 @@ list_add_(list_t * ph, icmp_f cmp, void * left) {
 	struct $lnode * head;
 	DEBUG_CODE({
 		if (!ph || !cmp || !left) {
-			RETURN(ErrParam, "list_add check ph=%p, cmp=%p, left=%p.", ph, cmp, left);
+			RETURN(ErrParam, "check ph=%p, cmp=%p, left=%p.", ph, cmp, left);
 		}
 	});
 
 	head = *ph;
 	// 插入为头结点直接返回
 	if (!head || cmp(left, head) <= 0) {
-		list_next(left) = head;
+        list_next(left) = head;
 		*ph = left;
 		return SufBase;
 	}
@@ -100,7 +103,7 @@ list_findpop_(list_t * ph, icmp_f cmp, const void * left) {
 void *
 list_find(list_t head, icmp_f cmp, const void * left) {
 	if (cmp == NULL || left == NULL) {
-		RETURN(NULL, "list_find check(cmp == NULL || left == NULL)!");
+		RETURN(NULL, "check(cmp == NULL || left == NULL)!");
 	}
 
 	//找到结果直接结束
@@ -111,50 +114,6 @@ list_find(list_t head, icmp_f cmp, const void * left) {
 	}
 
 	return head;
-}
-
-//
-// list_addhead - 采用头查法插入结点, 第一次用需要 list_t head = NULL;
-// ph		: 指向头结点的指针
-// node		: 待插入的结点对象
-// return	: 返回 SufBase 表示成功!
-//
-inline int 
-list_addhead(list_t * ph, void * node) {
-	if (!ph || !node){
-		RETURN(ErrParam, "list_add check (pal == %p || node == %p)!", ph, node);
-	}
-
-	list_next(node) = *ph;
-	*ph = node;
-
-	return SufBase;
-}
-
-//
-// list_addtail - 和 list_add 功能相似,但是插入位置在尾巴那
-// ph		: 待插入结点的指针
-// node		: 待插入的当前结点
-// return	: 返回 SufBase 表示成功!
-//
-int
-list_addtail(list_t * ph, void * node) {
-	struct $lnode * head;
-	if (!ph || !node) {
-		RETURN(ErrParam, "list_addlast check (pal == %p || node == %p)!", ph, node);
-	}
-
-	list_next(node) = NULL;//将这个结点的置空
-	if (!(head = *ph)) { //插入的是头结点直接返回
-		*ph = node;
-		return SufBase;
-	}
-
-	while (!!(head->next))
-		head = head->next;
-	head->next = node;
-
-	return SufBase;
 }
 
 //
@@ -170,6 +129,50 @@ list_len(list_t h) {
 		h = list_next(h);
 	}
 	return len;
+}
+
+//
+// list_addhead - 采用头查法插入结点, 第一次用需要 list_t head = NULL;
+// ph		: 指向头结点的指针
+// node		: 待插入的结点对象
+// return	: 返回 SufBase 表示成功!
+//
+inline int 
+list_addhead(list_t * ph, void * node) {
+	if (!ph || !node){
+		RETURN(ErrParam, "check (pal == %p || node == %p)!", ph, node);
+	}
+
+    list_next(node) = *ph;
+	*ph = node;
+
+	return SufBase;
+}
+
+//
+// list_addtail - 和 list_add 功能相似,但是插入位置在尾巴那
+// ph		: 待插入结点的指针
+// node		: 待插入的当前结点
+// return	: 返回 SufBase 表示成功!
+//
+int
+list_addtail(list_t * ph, void * node) {
+	struct $lnode * head;
+	if (!ph || !node) {
+		RETURN(ErrParam, "check (pal == %p || node == %p)!", ph, node);
+	}
+
+	list_next(node) = NULL;//将这个结点的置空
+	if (!(head = *ph)) { //插入的是头结点直接返回
+		*ph = node;
+		return SufBase;
+	}
+
+	while (!!(head->next))
+		head = head->next;
+	head->next = node;
+
+	return SufBase;
 }
 
 //
