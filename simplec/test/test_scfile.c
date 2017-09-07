@@ -1,4 +1,4 @@
-#include <scfile.h>
+ï»¿#include <scfile.h>
 
 #define _STR_CNF    "test/config/scfile.ini"
 
@@ -12,13 +12,19 @@ static void _scfile(void * arg, FILE * cnf) {
 // test config file update
 //
 void test_scfile(void) {
-    // ¿ªÊ¼×¢²áÒ»¸ö
+    int cnt = -1;
+
+    printf("sizeof \"65535\" = %zu.\n", sizeof "65535");
+
+    // å¼€å§‹æ³¨å†Œä¸€ä¸ª
     file_set(_STR_CNF, NULL, _scfile);
 
-    // ¶¨Ê½Ë¢ÐÂ
-    for (;;) {
+    // å®šæ—¶åˆ·æ–°
+    while (++cnt < 100) {
         file_update();
-        // 1s Ò»²âÊÔ
+        // 1s ä¸€æµ‹è¯•
         sh_msleep(1000);
     }
+
+    file_delete();
 }

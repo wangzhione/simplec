@@ -1,8 +1,9 @@
 ﻿#ifndef _H_SIMPLEC_SCSOCKET
 #define _H_SIMPLEC_SCSOCKET
 
-#include <schead.h>
+#include <fcntl.h>
 #include <signal.h>
+#include <schead.h>
 
 //
 // IGNORE_SIGPIPE - 管道破裂,忽略SIGPIPE信号
@@ -11,7 +12,6 @@
 
 #ifdef __GNUC__
 
-#include <fcntl.h>
 #include <netdb.h>
 #include <arpa/inet.h>
 #include <netinet/tcp.h>
@@ -113,10 +113,8 @@ typedef struct sockaddr_in sockaddr_t;
 
 //
 // socket_start - 单例启动socket库的初始化方法
-// socket_addr  - 通过ip, port 得到 ipv4 地址信息
 // 
 extern void socket_start(void);
-extern int socket_addr(const char * ip, uint16_t port, sockaddr_t * addr);
 
 //
 // socket_dgram     - 创建UDP socket
@@ -124,12 +122,14 @@ extern int socket_addr(const char * ip, uint16_t port, sockaddr_t * addr);
 // socket_close     - 关闭上面创建后的句柄
 // socket_read      - 读取数据
 // socket_write     - 写入数据
+// socket_addr      - 通过ip, port 得到 ipv4 地址信息
 //
 extern socket_t socket_dgram(void);
 extern socket_t socket_stream(void);
 extern int socket_close(socket_t s);
 extern int socket_read(socket_t s, void * data, int sz);
 extern int socket_write(socket_t s, const void * data, int sz);
+extern int socket_addr(const char * ip, uint16_t port, sockaddr_t * addr);
 
 //
 // socket_set_block     - 设置套接字是阻塞
@@ -176,18 +176,18 @@ extern socket_t socket_listen(const char * host, uint16_t port, int backlog);
 //
 // socket_tcp           - 创建TCP详细的套接字
 // socket_udp           - 创建UDP详细套接字
+// socket_accept        - accept 链接函数
 // socket_connect       - connect操作
 // socket_connects      - 通过socket地址连接
 // socket_connecto      - connect连接超时判断
 // socket_connectos     - connect连接客户端然后返回socket_t句柄
-// socket_accept        - accept 链接函数
 //
 extern socket_t socket_tcp(const char * host, uint16_t port);
 extern socket_t socket_udp(const char * host, uint16_t port);
+extern socket_t socket_accept(socket_t s, sockaddr_t * addr);
 extern int socket_connect(socket_t s, const sockaddr_t * addr);
 extern int socket_connects(socket_t s, const char * ip, uint16_t port);
 extern int socket_connecto(socket_t s, const sockaddr_t * addr, int ms);
 extern socket_t socket_connectos(const char * host, uint16_t port, int ms);
-extern socket_t socket_accept(socket_t s, sockaddr_t * addr, socklen_t * len);
 
 #endif // !_H_SIMPLEC_SCSOCKET

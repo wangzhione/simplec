@@ -92,7 +92,7 @@ pipe(socket_t pipefd[2]) {
 		RETURN(ErrBase, "socket_connect pipefd[0] is error!");
 	}
 	// 可以继续添加, 通信协议来避免一些意外
-	if ((pipefd[1] = socket_accept(s, &name, &nlen)) == INVALID_SOCKET) {
+	if ((pipefd[1] = socket_accept(s, &name)) == INVALID_SOCKET) {
 		socket_close(s);
 		socket_close(pipefd[0]);
 		RETURN(ErrBase, "socket_accept sendfd is error!");
