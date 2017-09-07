@@ -34,6 +34,7 @@
     <ClCompile Include="module\schead\sctime.c" />
     <ClCompile Include="module\schead\scurl.c" />
     <ClCompile Include="module\schead\strerr.c" />
+    <ClCompile Include="module\service\scfile.c" />
     <ClCompile Include="module\service\scoroutine.c" />
     <ClCompile Include="module\service\scrunloop.c" />
     <ClCompile Include="module\service\scthreads.c" />
@@ -47,6 +48,7 @@
     <ClCompile Include="test\test_array.c" />
     <ClCompile Include="test\test_clog.c" />
     <ClCompile Include="test\test_sccsv.c" />
+    <ClCompile Include="test\test_scfile.c" />
     <ClCompile Include="test\test_scsocket.c" />
     <ClCompile Include="test\test_dict.c" />
     <ClCompile Include="test\test_httputil.c" />
@@ -107,6 +109,7 @@
     <ClInclude Include="module\schead\include\scsocket.h" />
     <ClInclude Include="module\schead\include\sctime.h" />
     <ClInclude Include="module\schead\include\scurl.h" />
+    <ClInclude Include="module\service\include\scfile.h" />
     <ClInclude Include="module\service\include\scoroutine.h" />
     <ClInclude Include="module\service\include\scrunloop.h" />
     <ClInclude Include="module\service\include\scthreads.h" />
@@ -125,6 +128,7 @@
     <None Include="config\config.ini" />
     <None Include="test\config\firefighting_rule.json" />
     <None Include="test\config\onetime.csv" />
+    <None Include="test\config\scfile.ini" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="readme\helper.txt" />

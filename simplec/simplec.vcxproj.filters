@@ -255,6 +255,12 @@
     <ClCompile Include="module\schead\schead.c">
       <Filter>module\schead</Filter>
     </ClCompile>
+    <ClCompile Include="module\service\scfile.c">
+      <Filter>module\service</Filter>
+    </ClCompile>
+    <ClCompile Include="test\test_scfile.c">
+      <Filter>test</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="module\schead\include\schead.h">
@@ -404,6 +410,9 @@
     <ClInclude Include="module\poll\include\socket_msg.h">
       <Filter>module\poll\include</Filter>
     </ClInclude>
+    <ClInclude Include="module\service\include\scfile.h">
+      <Filter>module\service\include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="test\config\firefighting_rule.json">
@@ -414,6 +423,9 @@
     </None>
     <None Include="config\config.ini">
       <Filter>config</Filter>
+    </None>
+    <None Include="test\config\scfile.ini">
+      <Filter>test\config</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
