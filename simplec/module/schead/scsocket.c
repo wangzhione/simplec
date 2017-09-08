@@ -296,7 +296,7 @@ socket_bind(const char * host, uint16_t port, uint8_t protocol, int * family) {
 	if (socket_set_reuseaddr(fd))
 		goto _failed;
 
-	if (bind(fd, ailist->ai_addr, ailist->ai_addrlen))
+	if (bind(fd, ailist->ai_addr, (int)ailist->ai_addrlen))
 		goto _failed;
 	// Success return ip family
 	if (family)

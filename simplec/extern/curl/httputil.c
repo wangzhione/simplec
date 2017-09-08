@@ -1,8 +1,5 @@
 ﻿#include <httputil.h>
 
-// 超时时间10s
-#define _INT_TIMEOUT		(4)
-
 // libcurl 库退出操作
 static inline void _http_end(void) {
 	curl_global_cleanup();
@@ -17,11 +14,11 @@ http_start(void) {
 	//
 	// CURLcode curl_global_init(long flags);
 	// @ 初始化libcurl, 全局只需调一次
-	// @ flags : CURL_GLOBAL_DEFAULT		// 等同于 CURL_GLOBAL_ALL
-	//			 CURL_GLOBAL_ALL			// 初始化所有的可能的调用
-	//			 CURL_GLOBAL_SSL			// 初始化支持安全套接字层
-	//			 CURL_GLOBAL_WIN32			// 初始化WIN32套接字库
-	//			 CURL_GLOBAL_NOTHING		// 没有额外的初始化
+	// @ flags : CURL_GLOBAL_DEFAULT    // 等同于 CURL_GLOBAL_ALL
+	//           CURL_GLOBAL_ALL        // 初始化所有的可能的调用
+	//           CURL_GLOBAL_SSL        // 初始化支持安全套接字层
+	//           CURL_GLOBAL_WIN32      // 初始化WIN32套接字库
+	//           CURL_GLOBAL_NOTHING    // 没有额外的初始化
 	//
 	CURLcode code = curl_global_init(CURL_GLOBAL_DEFAULT);
 	if (code != CURLE_OK) {
@@ -34,13 +31,15 @@ http_start(void) {
 // 具体看 curl_write_callback , 这里使用libcurl 内部强转
 static inline size_t _http_write(char * buf, size_t s, size_t n, tstr_t str) {
 	size_t sn = s * n;
-	
 	tstr_appendn(str, buf, sn);
 	// 返回sn必须这么写
 	return sn;
 }
 
-// 请求共有头部
+//
+// 请求共有头部, 请求超时时间
+//
+#define _INT_TOUT		(4)
 static CURL * _http_head(const char * url, tstr_t str) {
 	CURL * crl = curl_easy_init();
 	if (NULL == crl) {
@@ -48,13 +47,13 @@ static CURL * _http_head(const char * url, tstr_t str) {
 	}
 
 	// 设置下载属性和常用参数
-	curl_easy_setopt(crl, CURLOPT_URL, url);					// 访问的URL
-	curl_easy_setopt(crl, CURLOPT_TIMEOUT, _INT_TIMEOUT);		// 设置超时时间 单位s
-	curl_easy_setopt(crl, CURLOPT_HEADER, true);				// 下载数据包括HTTP头部
-	curl_easy_setopt(crl, CURLOPT_NOSIGNAL, true);				// 屏蔽其它信号
-
-	curl_easy_setopt(crl, CURLOPT_WRITEFUNCTION, (curl_write_callback)_http_write);	// 输入函数类型
-	curl_easy_setopt(crl, CURLOPT_WRITEDATA, str);				// 输入参数
+	curl_easy_setopt(crl, CURLOPT_URL, url);            // 访问的URL
+	curl_easy_setopt(crl, CURLOPT_TIMEOUT, _INT_TOUT);  // 设置超时时间 单位s
+	curl_easy_setopt(crl, CURLOPT_HEADER, true);        // 下载数据包括HTTP头部
+	curl_easy_setopt(crl, CURLOPT_NOSIGNAL, true);      // 屏蔽其它信号
+                                                        // 输入函数类型
+	curl_easy_setopt(crl, CURLOPT_WRITEFUNCTION, (curl_write_callback)_http_write);	
+	curl_easy_setopt(crl, CURLOPT_WRITEDATA, str);      // 输入参数
 
 	return crl;
 }

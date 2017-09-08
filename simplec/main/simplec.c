@@ -39,7 +39,7 @@ simplec_go(void) {
  */
 void 
 simplec_test(void) {
-	EXTERN_RUN(test_scfile);
+	EXTERN_RUN(test_scsocket);
 }
 
 #endif
