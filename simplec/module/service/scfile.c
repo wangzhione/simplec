@@ -26,10 +26,10 @@ file_mtime(const char * path) {
 struct files {
     char * path;            // 文件全路径
     void * arg;             // 额外的参数
-    void (* func)(void * arg, FILE * cnf);
+    void (* func)(FILE * cnf, void * arg);
     
     unsigned hash;          // 文件路径 hash 值
-    time_t lastt;           // 文件结点最后修改时间点
+    time_t mtime;           // 文件结点最后修改时间点
 
     struct files * next;    // 文件下一个结点
 };
@@ -54,8 +54,8 @@ static struct files * _files_get(const char * p, unsigned * hh) {
 static void _files_add(const char * p, unsigned h, 
                        void * arg, void (* func)(void *, FILE *)) {
     struct files * fu;
-    time_t last = file_mtime(p);
-    if (last == -1)
+    time_t mtime = file_mtime(p);
+    if (mtime == -1)
         RETURN(NIL, "file_mtime path error = %s.", p);
 
     // 开始构建数据
@@ -66,7 +66,7 @@ static void _files_add(const char * p, unsigned h,
     fu->hash = h;
     fu->func = func;
     fu->arg = arg;
-    fu->lastt = -1;
+    fu->mtime = -1;
 
     fu->next = _fu;
     _fu = fu;
@@ -75,12 +75,13 @@ static void _files_add(const char * p, unsigned h,
 //
 // file_set - 设置需要更新的文件内容
 // path     : 文件路径
-// func     : 注册执行的行为 func(path, arg), NULL 表示清除
+// func     : 注册执行的行为 func(path, arg)
 // arg      : 注入的额外参数
 // return   : void
 //
 void 
-file_set_(const char * path, void * arg, void (* func)(void *, FILE *)) {
+file_set_(const char * path, 
+    void (* func)(FILE * cnf, void * arg), void * arg) {
     unsigned hash;
     assert(path || func);
     struct files * fu = _files_get(path, &hash);
@@ -90,7 +91,7 @@ file_set_(const char * path, void * arg, void (* func)(void *, FILE *)) {
     else {
         fu->func = func;
         fu->arg = arg;
-        fu->lastt = -1;   
+        fu->mtime = -1;   
     }
 }
 
@@ -101,15 +102,16 @@ file_set_(const char * path, void * arg, void (* func)(void *, FILE *)) {
 void 
 file_update(void) {
     for (struct files * fu = _fu; fu ; fu = fu->next) {
-        time_t last = file_mtime(fu->path);
-        if (last != fu->lastt && last != -1) {
-            FILE * cnf = fopen(fu->path, "rb");
+        time_t mtime = file_mtime(fu->path);
+        if (mtime != fu->mtime && mtime != -1) {
+            // 单独线程中跑, 阻塞操作, 业务上支持读写
+            FILE * cnf = fopen(fu->path, "rb+");
             if (NULL == cnf) {
                 CERR("fopen path wb error = %s.", fu->path);
                 continue;
             }
-            fu->lastt = last;
-            fu->func(fu->arg, cnf);
+            fu->mtime = mtime;
+            fu->func(cnf, fu->arg);
             fclose(cnf);
         }
     }
