@@ -109,8 +109,8 @@ extern void sh_pause(void);
 
 //
 // sh_isbe - 判断是大端序还是小端序,大端序返回true
-// sh_hton - 将本地四字节数据转成'小端'网络字节
-// sh_ntoh - 将'小端'网络四字节数值转成本地数值
+// sh_hton - 将本地四字节数据转成'大端'网络字节
+// sh_ntoh - 将'大端'网络四字节数值转成本地数值
 //
 extern bool sh_isbe(void);
 extern uint32_t sh_hton(uint32_t x);

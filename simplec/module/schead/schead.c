@@ -38,8 +38,8 @@ sh_pause(void) {
 
 //
 // sh_isbe - 判断是大端序还是小端序,大端序返回true
-// sh_hton - 将本地四字节数据转成'小端'网络字节
-// sh_ntoh - 将'小端'网络四字节数值转成本地数值
+// sh_hton - 将本地四字节数据转成'大端'网络字节
+// sh_ntoh - 将'大端'网络四字节数值转成本地数值
 //
 inline bool 
 sh_isbe(void) {
@@ -49,11 +49,11 @@ sh_isbe(void) {
 
 inline uint32_t 
 sh_hton(uint32_t x) {
-	if (sh_isbe()) {
+	if (!sh_isbe()) {
 		uint8_t t;
 		union { uint32_t i; uint8_t s[sizeof(uint32_t)]; } u = { x };
 		t = u.s[0], u.s[0] = u.s[sizeof(u) - 1], u.s[sizeof(u) - 1] = t;
-		t = u.s[1], u.s[1] = u.s[sizeof(u) - 1 - 1], u.s[sizeof(u) - 1 - 1] = t;
+		t = u.s[1], u.s[1] = u.s[sizeof(u) - 2], u.s[sizeof(u) - 2] = t;
 		return u.i;
 	}
 	return x;

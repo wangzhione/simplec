@@ -5,7 +5,7 @@
 
 //
 // recv msg : 
-//  这仅仅是一个是处理网络序列接收端的解析库. 通过 len [统一小端网络字节, sizeof uint32] -> data
+//  这仅仅是一个是处理网络序列接收端的解析库. 通过 len [网络字节序, sizeof uint32] -> data
 //
 // need send msg :
 //	one send sizeof uint32_t + data

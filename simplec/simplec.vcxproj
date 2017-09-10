@@ -42,7 +42,7 @@
     <ClCompile Include="module\struct\array.c" />
     <ClCompile Include="module\struct\dict.c" />
     <ClCompile Include="module\struct\list.c" />
-    <ClCompile Include="module\struct\rbtree.c" />
+    <ClCompile Include="module\struct\rtree.c" />
     <ClCompile Include="module\struct\mq.c" />
     <ClCompile Include="module\struct\tstr.c" />
     <ClCompile Include="test\test_array.c" />
@@ -119,7 +119,7 @@
     <ClInclude Include="module\struct\include\array.h" />
     <ClInclude Include="module\struct\include\dict.h" />
     <ClInclude Include="module\struct\include\list.h" />
-    <ClInclude Include="module\struct\include\rbtree.h" />
+    <ClInclude Include="module\struct\include\rtree.h" />
     <ClInclude Include="module\struct\include\mq.h" />
     <ClInclude Include="module\struct\include\struct.h" />
     <ClInclude Include="module\struct\include\tstr.h" />

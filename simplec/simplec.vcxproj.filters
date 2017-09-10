@@ -120,9 +120,6 @@
     <ClCompile Include="module\schead\sctime.c">
       <Filter>module\schead</Filter>
     </ClCompile>
-    <ClCompile Include="module\struct\rbtree.c">
-      <Filter>module\struct</Filter>
-    </ClCompile>
     <ClCompile Include="module\service\scoroutine.c">
       <Filter>module\service</Filter>
     </ClCompile>
@@ -261,6 +258,9 @@
     <ClCompile Include="test\test_scfile.c">
       <Filter>test</Filter>
     </ClCompile>
+    <ClCompile Include="module\struct\rtree.c">
+      <Filter>module\struct</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="module\schead\include\schead.h">
@@ -292,9 +292,6 @@
     </ClInclude>
     <ClInclude Include="module\schead\include\sctime.h">
       <Filter>module\schead\include</Filter>
-    </ClInclude>
-    <ClInclude Include="module\struct\include\rbtree.h">
-      <Filter>module\struct\include</Filter>
     </ClInclude>
     <ClInclude Include="module\service\include\scoroutine.h">
       <Filter>module\service\include</Filter>
@@ -412,6 +409,9 @@
     </ClInclude>
     <ClInclude Include="module\service\include\scfile.h">
       <Filter>module\service\include</Filter>
+    </ClInclude>
+    <ClInclude Include="module\struct\include\rtree.h">
+      <Filter>module\struct\include</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
