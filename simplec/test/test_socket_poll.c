@@ -1,6 +1,6 @@
 ﻿#include <socket_poll.h>
 
-#define _USHORT_PORT	(8088)
+#define _USHORT_PORT	(8088u)
 
 //
 // 参照云风的思路自己设计了 window 部分代码
@@ -24,11 +24,11 @@ void test_socket_poll(void) {
 		CERR("sp_add sock = is error!");
 	else {
 		// 开始等待数据
-		printf("sp_wait [0.0.0.0:%hu] connect ... \n", _USHORT_PORT);
+		printf("sp_wait [127.0.0.1:%hu] listen ... \n", _USHORT_PORT);
 		n = sp_wait(poll, evs, LEN(evs));
 		printf("sp_wait n = %d. 一切都是那么意外!\n", n);
 	}
 
+    sp_delete(poll);
 	socket_close(sock);
-	sp_delete(poll);
 }

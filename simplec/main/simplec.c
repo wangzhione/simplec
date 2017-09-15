@@ -39,7 +39,7 @@ simplec_go(void) {
  */
 void 
 simplec_test(void) {
-	EXTERN_RUN(test_rsmq);
+	EXTERN_RUN(test_socket_poll);
 }
 
 #endif
