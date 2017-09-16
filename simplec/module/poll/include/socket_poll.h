@@ -10,10 +10,10 @@ typedef int poll_t;		// * 也就大师背后, 拾人牙慧
 #endif
 
 struct event {
-	void * s;
-	bool read;
-	bool write;
-	bool error;
+    void * s;
+    bool read;
+    bool write;
+    bool error;
 };
 
 //

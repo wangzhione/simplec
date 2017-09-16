@@ -3,7 +3,7 @@
 #include <string.h>
 
 extern inline const char * strerr(int error) {
-	return strerror(error);
+    return strerror(error);
 }
 
 #endif
@@ -16,7 +16,7 @@ extern inline const char * strerr(int error) {
 #define DWORD int
 
 extern const char * strerr(int error) {
-	switch (error) {
+    switch (error) {
     case ERROR_SUCCESS                                                          : return "The operation completed successfully";
     case ERROR_INVALID_FUNCTION                                                 : return "Incorrect function";
     case ERROR_FILE_NOT_FOUND                                                   : return "The system cannot find the file specified";
@@ -6221,10 +6221,10 @@ extern const char * strerr(int error) {
     case UTC_E_EXCLUSIVITY_NOT_AVAILABLE                                        : return "The trace profile could not be started because it requires exclusivity and another higher priority trace is already running";
     case UTC_E_GETFILE_FILE_PATH_NOT_APPROVED                                   : return "The file path is not approved for the GetFile escalation action";
     case UTC_E_ESCALATION_DIRECTORY_ALREADY_EXISTS                              : return "The escalation working directory for the requested escalation could not be created because it already exists";
-	}
+    }
 
-	fprintf(stderr, "strerr invaild error = %d.\n", error);
-	return "The aliens are coming. Go tell your favorite people";
+    fprintf(stderr, "strerr invaild error = %d.\n", error);
+    return "The aliens are coming. Go tell your favorite people";
 }
 
 #undef DWORD

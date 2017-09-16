@@ -10,17 +10,17 @@
 //
 inline poll_t
 sp_create(void) {
-	return kqueue();
+    return kqueue();
 }
 
 inline bool
 sp_invalid(poll_t sp) {
-	return 0 > sp;
+    return 0 > sp;
 }
 
 inline void
 sp_delete(poll_t sp) {
-	close(sp);
+    close(sp);
 }
 
 //
@@ -30,23 +30,23 @@ sp_delete(poll_t sp) {
 //
 bool
 sp_add(poll_t sp, socket_t sock, void * ud) {
-	struct kevent ke;
-	EV_SET(&ke, sock, EVFILT_READ, EV_ADD, 0, 0, ud);
-	if (kevent(sp, &ke, 1, NULL, 0, NULL) < 0 || ke.flags & EV_ERROR)
-		return true;
+    struct kevent ke;
+    EV_SET(&ke, sock, EVFILT_READ, EV_ADD, 0, 0, ud);
+    if (kevent(sp, &ke, 1, NULL, 0, NULL) < 0 || ke.flags & EV_ERROR)
+	    return true;
 
-	EV_SET(&ke, sock, EVFILT_WRITE, EV_ADD, 0, 0, ud);
-	if (kevent(sp, &ke, 1, NULL, 0, NULL) < 0 || ke.flags & EV_ERROR) {
-		EV_SET(&ke, sock, EVFILT_READ, EV_DELETE, 0, 0, NULL);
-		kevent(sp, &ke, 1, NULL, 0, NULL);
-		return true;
-	}
-	EV_SET(&ke, sock, EVFILT_WRITE, EV_DISABLE, 0, 0, ud);
-	if (kevent(sp, &ke, 1, NULL, 0, NULL) < 0 || ke.flags & EV_ERROR) {
-		sp_del(sp, sock);
-		return true;
-	}
-	return false;
+    EV_SET(&ke, sock, EVFILT_WRITE, EV_ADD, 0, 0, ud);
+    if (kevent(sp, &ke, 1, NULL, 0, NULL) < 0 || ke.flags & EV_ERROR) {
+	    EV_SET(&ke, sock, EVFILT_READ, EV_DELETE, 0, 0, NULL);
+	    kevent(sp, &ke, 1, NULL, 0, NULL);
+	    return true;
+    }
+    EV_SET(&ke, sock, EVFILT_WRITE, EV_DISABLE, 0, 0, ud);
+    if (kevent(sp, &ke, 1, NULL, 0, NULL) < 0 || ke.flags & EV_ERROR) {
+	    sp_del(sp, sock);
+	    return true;
+    }
+    return false;
 }
 
 inline void
@@ -60,11 +60,11 @@ sp_del(poll_t sp, socket_t sock) {
 
 void
 sp_write(poll_t sp, socket_t sock, void * ud, bool enable) {
-	struct kevent ke;
-	EV_SET(&ke, sock, EVFILT_WRITE, enable ? EV_ENABLE : EV_DISABLE, 0, 0, ud);
-	if (kevent(sp, &ke, 1, NULL, 0, NULL) < 0 || ke.flags & EV_ERROR) {
-		// todo: check error
-	}
+    struct kevent ke;
+    EV_SET(&ke, sock, EVFILT_WRITE, enable ? EV_ENABLE : EV_DISABLE, 0, 0, ud);
+    if (kevent(sp, &ke, 1, NULL, 0, NULL) < 0 || ke.flags & EV_ERROR) {
+	    // todo: check error
+    }
 }
 
 //
@@ -76,17 +76,17 @@ sp_write(poll_t sp, socket_t sock, void * ud, bool enable) {
 //
 int
 sp_wait(poll_t sp, struct event e[], int max) {
-	struct kevent ev[max];
-	int i, n = kevent(sp, NULL, 0, ev, max, NULL);
+    struct kevent ev[max];
+    int i, n = kevent(sp, NULL, 0, ev, max, NULL);
 
-	for (i = 0; i < n; ++i) {
-		e[i].s = ev[i].udata;
-		e[i].write = ev[i].filter == EVFILT_WRITE;
-		e[i].read = ev[i].filter == EVFILT_READ;
-		e[i].error = false;	// kevent has not error event
-	}
+    for (i = 0; i < n; ++i) {
+	    e[i].s = ev[i].udata;
+	    e[i].write = ev[i].filter == EVFILT_WRITE;
+	    e[i].read = ev[i].filter == EVFILT_READ;
+	    e[i].error = false;	// kevent has not error event
+    }
 
-	return n;
+    return n;
 }
 
 #endif

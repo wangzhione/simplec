@@ -10,17 +10,17 @@
 //
 inline poll_t 
 sp_create(void) {
-	return epoll_create1(0);
+    return epoll_create1(0);
 }
 
 inline bool 
 sp_invalid(poll_t sp) {
-	return 0 > sp;
+    return 0 > sp;
 }
 
 inline void 
 sp_delete(poll_t sp) {
-	close(sp);
+    close(sp);
 }
 
 //
@@ -30,22 +30,22 @@ sp_delete(poll_t sp) {
 //
 inline bool 
 sp_add(poll_t sp, socket_t sock, void * ud) {
-	struct epoll_event ev = { EPOLLIN };
-	ev.data.ptr = ud;
-	return epoll_ctl(sp, EPOLL_CTL_ADD, sock, &ev) < 0;
+    struct epoll_event ev = { EPOLLIN };
+    ev.data.ptr = ud;
+    return epoll_ctl(sp, EPOLL_CTL_ADD, sock, &ev) < 0;
 }
 
 inline void 
 sp_del(poll_t sp, socket_t sock) {
-	epoll_ctl(sp, EPOLL_CTL_DEL, sock, NULL);
+    epoll_ctl(sp, EPOLL_CTL_DEL, sock, NULL);
 }
 
 inline void 
 sp_write(poll_t sp, socket_t sock, void * ud, bool enable) {
-	struct epoll_event ev;
-	ev.events = EPOLLIN | (enable ? EPOLLOUT : 0);
-	ev.data.ptr = ud;
-	epoll_ctl(sp, EPOLL_CTL_MOD, sock, &ev);
+    struct epoll_event ev;
+    ev.events = EPOLLIN | (enable ? EPOLLOUT : 0);
+    ev.data.ptr = ud;
+    epoll_ctl(sp, EPOLL_CTL_MOD, sock, &ev);
 }
 
 //
@@ -57,18 +57,18 @@ sp_write(poll_t sp, socket_t sock, void * ud, bool enable) {
 //
 int 
 sp_wait(poll_t sp, struct event e[], int max) {
-	struct epoll_event ev[max];
-	int i, n = epoll_wait(sp, ev, max, -1);
+    struct epoll_event ev[max];
+    int i, n = epoll_wait(sp, ev, max, -1);
 
-	for (i = 0; i < n; ++i) {
-		uint32_t flag = ev[i].events;
-		e[i].s = ev[i].data.ptr;
-		e[i].write = flag & EPOLLOUT;
-		e[i].read = flag & (EPOLLIN | EPOLLHUP);
-		e[i].error = flag & EPOLLERR;
-	}
+    for (i = 0; i < n; ++i) {
+	    uint32_t flag = ev[i].events;
+	    e[i].s = ev[i].data.ptr;
+	    e[i].write = flag & EPOLLOUT;
+	    e[i].read = flag & (EPOLLIN | EPOLLHUP);
+	    e[i].error = flag & EPOLLERR;
+    }
 
-	return n;
+    return n;
 }
 
 #endif

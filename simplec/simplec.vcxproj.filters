@@ -386,15 +386,6 @@
     <ClInclude Include="module\service\scoroutine$linux.h">
       <Filter>module\service\partial</Filter>
     </ClInclude>
-    <ClInclude Include="module\poll\socket$epoll.h">
-      <Filter>module\poll\partial</Filter>
-    </ClInclude>
-    <ClInclude Include="module\poll\socket$kevent.h">
-      <Filter>module\poll\partial</Filter>
-    </ClInclude>
-    <ClInclude Include="module\poll\socket$select.h">
-      <Filter>module\poll\partial</Filter>
-    </ClInclude>
     <ClInclude Include="module\poll\include\rsmq.h">
       <Filter>module\poll\include</Filter>
     </ClInclude>
@@ -412,6 +403,15 @@
     </ClInclude>
     <ClInclude Include="module\struct\include\rtree.h">
       <Filter>module\struct\include</Filter>
+    </ClInclude>
+    <ClInclude Include="module\poll\socket_poll%24epoll.h">
+      <Filter>module\poll\partial</Filter>
+    </ClInclude>
+    <ClInclude Include="module\poll\socket_poll%24kevent.h">
+      <Filter>module\poll\partial</Filter>
+    </ClInclude>
+    <ClInclude Include="module\poll\socket_poll%24select.h">
+      <Filter>module\poll\partial</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
