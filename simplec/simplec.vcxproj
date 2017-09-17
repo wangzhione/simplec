@@ -93,7 +93,7 @@
     <ClInclude Include="module\poll\include\socket_server.h" />
     <ClInclude Include="module\poll\include\socket_start.h" />
     <ClInclude Include="module\poll\socket_poll%24epoll.h" />
-    <ClInclude Include="module\poll\socket_poll%24kevent.h" />
+    <ClInclude Include="module\poll\socket_poll%24kqueue.h" />
     <ClInclude Include="module\poll\socket_poll%24select.h" />
     <ClInclude Include="module\schead\include\clog.h" />
     <ClInclude Include="module\schead\include\scmd5.h" />

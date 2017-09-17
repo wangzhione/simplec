@@ -407,10 +407,10 @@
     <ClInclude Include="module\poll\socket_poll%24epoll.h">
       <Filter>module\poll\partial</Filter>
     </ClInclude>
-    <ClInclude Include="module\poll\socket_poll%24kevent.h">
+    <ClInclude Include="module\poll\socket_poll%24select.h">
       <Filter>module\poll\partial</Filter>
     </ClInclude>
-    <ClInclude Include="module\poll\socket_poll%24select.h">
+    <ClInclude Include="module\poll\socket_poll%24kqueue.h">
       <Filter>module\poll\partial</Filter>
     </ClInclude>
   </ItemGroup>

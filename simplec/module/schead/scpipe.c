@@ -31,7 +31,7 @@ scpipe_delete(scpipe_t spie) {
 }
 
 int 
-scpipe_recv(scpipe_t spie, char * data, int len) {
+scpipe_recv(scpipe_t spie, void * data, size_t len) {
 	ssize_t lrecv = read(spie->recv, data, len);
 	if (lrecv < 0) {
 		// 不考虑信号中断
@@ -41,7 +41,7 @@ scpipe_recv(scpipe_t spie, char * data, int len) {
 }
 
 int 
-scpipe_send(scpipe_t spie, const char * data, int len) {
+scpipe_send(scpipe_t spie, const void * data, size_t len) {
 	ssize_t lsend = write(spie->send, data, len);
 	if (lsend < 0) {
 		RETURN(ErrBase, "write is error = %ld", lsend);
@@ -108,10 +108,10 @@ struct scpipe {
 };
 
 //
-// scpipe_create	- 得到一个父子进程间通信的管道
-// scpipe_delete	- 关闭打开的管道
-// scpipe_recv		- 管道接收数据
-// scpipe_send		- 管道发送数据 
+// scpipe_create    - 得到一个父子进程间通信的管道
+// scpipe_delete    - 关闭打开的管道
+// scpipe_recv      - 管道接收数据, 128K
+// scpipe_send      - 管道发送数据, 推荐 BUFSIZ 
 //
 scpipe_t 
 scpipe_create(void) {
@@ -135,7 +135,7 @@ scpipe_delete(scpipe_t spie) {
 }
 
 int 
-scpipe_recv(struct scpipe * spie, char * data, int len) {
+scpipe_recv(struct scpipe * spie, void * data, size_t len) {
 	DWORD lrecv = 0;
 	BOOL ret = PeekNamedPipe(spie->recv, NULL, 0, NULL, &lrecv, NULL);
 	if (!ret || lrecv <= 0) {
@@ -152,7 +152,7 @@ scpipe_recv(struct scpipe * spie, char * data, int len) {
 }
 
 int 
-scpipe_send(struct scpipe * spie, const char * data, int len) {
+scpipe_send(struct scpipe * spie, const void * data, size_t len) {
 	DWORD lsend = 0;
 	if (WriteFile(spie->send, data, len, &lsend, NULL)) {
 		RETURN(ErrBase, "WriteFile is error!");
