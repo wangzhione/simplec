@@ -24,11 +24,11 @@ void simplec_main(void) {
 // 第一次见面的函数
 void 
 simplec_go(void) {
-	// 得到配置的版本信息
-	const char * image = mcnf_get("Image");
+	// 通过配置版本信息, 简单打印
+	puts(mcnf_get("Image"));
 
-	// 打印简单信息
-	puts(image);
+    // 测试发布版本时间测试
+    EXTERN_RUN(test_filet);
 }
 
 #if defined(_MSC_VER) && defined(_DEBUG)

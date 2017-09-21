@@ -47,6 +47,7 @@
     <ClCompile Include="module\struct\tstr.c" />
     <ClCompile Include="test\test_array.c" />
     <ClCompile Include="test\test_clog.c" />
+    <ClCompile Include="test\test_filet.c" />
     <ClCompile Include="test\test_sccsv.c" />
     <ClCompile Include="test\test_scfile.c" />
     <ClCompile Include="test\test_scsocket.c" />

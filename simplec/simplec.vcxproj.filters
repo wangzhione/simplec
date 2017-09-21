@@ -261,6 +261,9 @@
     <ClCompile Include="module\struct\rtree.c">
       <Filter>module\struct</Filter>
     </ClCompile>
+    <ClCompile Include="test\test_filet.c">
+      <Filter>test</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="module\schead\include\schead.h">
