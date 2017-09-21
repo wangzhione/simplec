@@ -26,9 +26,6 @@ void
 simplec_go(void) {
 	// 通过配置版本信息, 简单打印
 	puts(mcnf_get("Image"));
-
-    // 测试发布版本时间测试
-    EXTERN_RUN(test_filet);
 }
 
 #if defined(_MSC_VER) && defined(_DEBUG)
