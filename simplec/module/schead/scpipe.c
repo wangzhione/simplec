@@ -64,42 +64,30 @@ pipe(socket_t pipefd[2]) {
 	name.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
 
 	// 开启一个固定 socket
-	if ((s = socket_stream()) == INVALID_SOCKET) {
-		RETURN(ErrBase, "socket_stream s is error!");
-	}
-	if (bind(s, (struct sockaddr *)&name, nlen) < 0) {
-		socket_close(s);
-		RETURN(ErrBase, "bind s is error!");
-	}
-	if (listen(s, SOMAXCONN) < 0) {
-		socket_close(s);
-		RETURN(ErrBase, "listen s is error!");
-	}
+	if ((s = socket_stream()) == INVALID_SOCKET) 
+        return ErrBase;
+
+	if (bind(s, (struct sockaddr *)&name, nlen) < 0)
+        return socket_close(s), ErrBase;
+	if (listen(s, SOMAXCONN) < 0) 
+        return socket_close(s), ErrBase;
+
 	// 得到绑定的数据
-	if (getsockname(s, (struct sockaddr *)&name, &nlen) < 0) {
-		socket_close(s);
-		RETURN(ErrBase, "getsockname s is error!");
-	}
+	if (getsockname(s, (struct sockaddr *)&name, &nlen) < 0)
+        return socket_close(s), ErrBase;
 
 	// 开始构建互相通信的socket
-	if ((pipefd[0] = socket_stream()) == INVALID_SOCKET) {
-		socket_close(s);
-		RETURN(ErrBase, "socket_stream pipefd[0] is error!");
-	}
+	if ((pipefd[0] = socket_stream()) == INVALID_SOCKET)
+        return socket_close(s), ErrBase;
 
-	if (socket_connect(pipefd[0], &name) < 0) {
-		socket_close(s);
-		RETURN(ErrBase, "socket_connect pipefd[0] is error!");
-	}
+	if (socket_connect(pipefd[0], &name) < 0)
+        return socket_close(s), ErrBase;
+
 	// 可以继续添加, 通信协议来避免一些意外
-	if ((pipefd[1] = socket_accept(s, &name)) == INVALID_SOCKET) {
-		socket_close(s);
-		socket_close(pipefd[0]);
-		RETURN(ErrBase, "socket_accept sendfd is error!");
-	}
+	if ((pipefd[1] = socket_accept(s, &name)) == INVALID_SOCKET)
+        return socket_close(pipefd[0]), socket_close(s), ErrBase;
 
-	socket_close(s);
-	return SufBase;
+    return socket_close(s), SufBase;
 }
 
 struct scpipe {
