@@ -1,7 +1,7 @@
 ﻿#include <dict.h>
 #include <tstr.h>
 
-#define _UINT_INITSZ	(2 << 7)
+#define _UINT_INITSZ	(1 << 8)
 
 struct keypair {
 	struct keypair * next;
@@ -182,13 +182,14 @@ dict_die(dict_t d, const char * k) {
 			// 删除数据
 			_keypair_delete(d, pair);
 			--d->used;
+			break;
 		}
 		front = pair;
 		pair = pair->next;
 	}
 }
 
-inline void * 
+void * 
 dict_get(dict_t d, const char * k) {
 	unsigned hash, idx;
 	struct keypair * pair;
@@ -198,5 +199,12 @@ dict_get(dict_t d, const char * k) {
 	idx = hash & (d->size - 1);
 	pair = d->table[idx];
 
-	return pair ? pair->val : NULL;
+	while (pair) {
+		// 开始查找, 找到之后直接返回
+		if (!strcmp(pair->key, k))
+			return pair->val;
+		pair = pair->next;
+	}
+
+	return NULL;
 }
