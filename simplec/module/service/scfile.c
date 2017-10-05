@@ -26,7 +26,7 @@ file_mtime(const char * path) {
 struct files {
     char * path;            // 文件全路径
     void * arg;             // 额外的参数
-    void (* func)(FILE * cnf, void * arg);
+    void (* func)(void * arg, FILE * cnf);
     
     unsigned hash;          // 文件路径 hash 值
     time_t mtime;           // 文件结点最后修改时间点
@@ -75,13 +75,13 @@ static void _files_add(const char * p, unsigned h,
 //
 // file_set - 设置需要更新的文件内容
 // path     : 文件路径
-// func     : 注册执行的行为 func(path, arg)
+// func     : 注册执行的行为 func(arg, path -> cnf)
 // arg      : 注入的额外参数
 // return   : void
 //
 void 
 file_set_(const char * path, 
-    void (* func)(FILE * cnf, void * arg), void * arg) {
+    void (* func)(void * arg, FILE * cnf), void * arg) {
     unsigned hash;
     assert(path || func);
     struct files * fu = _files_get(path, &hash);

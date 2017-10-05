@@ -163,8 +163,8 @@ extern int socket_recv(socket_t s, void * buf, int len);
 extern int socket_recvn(socket_t s, void * buf, int len);
 extern int socket_send(socket_t s, const void * buf, int len);
 extern int socket_sendn(socket_t s, const void * buf, int len);
-extern int socket_recvfrom(socket_t s, void * buf, int len, int flags, sockaddr_t * in, socklen_t * inlen);
-extern int socket_sendto(socket_t s, const void * buf, int len, int flags, const sockaddr_t * to, socklen_t tolen);
+extern int socket_recvfrom(socket_t s, void * buf, int len, int flags, sockaddr_t * in);
+extern int socket_sendto(socket_t s, const void * buf, int len, int flags, const sockaddr_t * to);
 
 //
 // socket_bind      - 端口绑定返回绑定好的 socket fd, 失败返回 INVALID_SOCKET or PF_INET PF_INET6

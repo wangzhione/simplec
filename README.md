@@ -1,6 +1,6 @@
 ## simplec 简介
 
-    Now version 2.0.0 release
+    Now version 2.0.2 release
     Best new gcc and cl compile successfully, Zero warnning!
 
 ![simplec title image hello ya!](http://images.cnblogs.com/cnblogs_com/life2refuel/1022495/o_simplec.jpg)
@@ -50,7 +50,7 @@ sudo apt-get install libcurl4-openssl-dev
     
     更加详细的编译流程参照 Makefile and /simplec/readme/helper.txt
 
-#### 后记
+### 后记
 
     希望遇到同好这口的人, 哈哈. 欢迎 push.
     simplec ヾ(⌐ ■_■)
@@ -73,3 +73,31 @@ sudo apt-get install libcurl4-openssl-dev
     饱经沧桑的心
     和满脸风霜
 ```
+
+#### 展望
+
+    simplec 框架基本都搭建完毕了, 关于 C 基础开发部分. 但对于自己目前而言
+    (2017年10月5日22:14:42) 非常的不满意! 我们解决问题的宗旨, 是最简单, 但是
+    发现封装之后, 变得更加杂合!(静态库和动态库的纠缠 ~)
+
+    当然, 可以通过更好代码结构. 清理不常用的模块, 框架布局的调整. 重构很多写的很糙库, 
+    壮实单元测试 ....... 设计理念 ......
+
+    但, 说真的, 真的有必要吗 哈哈, (但我会回来, 造个满意的扳手.) 至少 C 语言之父, 
+    有的走了, 有的在 go 路上 o(╥﹏╥)o
+
+    希望下次能写个更好的 base c, 而不是这个槽糕的乱炖.
+
+    最后扯一点, C 特别的灵活, 喜欢的人喜欢的不得了. 但, 如果你是个新手, 并且不是三好
+    学生. 只是很感兴趣, 推荐不要入坑(有那时间倒不如看看算法, 或者跑跑步). 
+
+    下个目标, 充分熟练运用 go, 再回来为下一个 base c 开路, 当然还需要极大提升三大
+    神功, 数据结构, 操作系统, 算法 
+
+***
+    胜   在   轮   回
+
+    人生如戏，妆颜上戏台，一颦一笑由己更由命；
+
+    世事如棋，提子入棋局，一纵一横由人更由天。
+

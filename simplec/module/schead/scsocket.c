@@ -254,13 +254,14 @@ socket_sendn(socket_t s, const void * buf, int len) {
 }
 
 inline int
-socket_recvfrom(socket_t s, void * buf, int len, int flags, sockaddr_t * in, socklen_t * inlen) {
-    return recvfrom(s, buf, len, flags, (struct sockaddr *)in, inlen);
+socket_recvfrom(socket_t s, void * buf, int len, int flags, sockaddr_t * in) {
+	socklen_t inlen = sizeof (sockaddr_t);
+    return recvfrom(s, buf, len, flags, (struct sockaddr *)in, &inlen);
 }
 
 inline int
-socket_sendto(socket_t s, const void * buf, int len, int flags, const sockaddr_t * to, socklen_t tolen) {
-    return sendto(s, buf, len, flags, (const struct sockaddr *)to, tolen);
+socket_sendto(socket_t s, const void * buf, int len, int flags, const sockaddr_t * to) {
+    return sendto(s, buf, len, flags, (const struct sockaddr *)to, sizeof (sockaddr_t));
 }
 
 //

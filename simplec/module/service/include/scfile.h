@@ -13,14 +13,14 @@ extern time_t file_mtime(const char * path);
 //
 // file_set - 设置需要更新的文件内容
 // path     : 文件路径
-// func     : func(path -> FILE, arg)
+// func     : 注册执行的行为 func(arg, path -> cnf)
 // arg      : 注入的额外参数
 // return   : void
 //
-extern void file_set_(const char * path, 
-                      void (* func)(FILE * cnf, void * arg), void * arg);
+void 
+file_set_(const char * path, void (* func)(void * arg, FILE * cnf), void * arg);
 #define file_set(path, func, arg) \
-        file_set_(path, (void (*)(FILE *, void *))func, (void *)(intptr_t)arg)
+        file_set_(path, (void (*)(void *, FILE *))func, (void *)(intptr_t)arg)
 
 //
 // file_update - 更新注册配置解析事件

@@ -153,7 +153,7 @@ static void _udpsend(struct targ * targ) {
 	    }
 
 	    // 疯狂发送数据包
-	    while (socket_sendto(s, targ->us, BUFSIZ, 0, &targ->addr, sizeof(targ->addr)) >= SufBase)
+	    while (socket_sendto(s, targ->us, BUFSIZ, 0, &targ->addr) >= SufBase)
 		    ++targ->udpsend;
 
 	    socket_close(s);
