@@ -191,7 +191,7 @@ tstr_delete(tstr_t tstr) {
 char *
 tstr_expand(tstr_t tstr, size_t len) {
 	size_t cap = tstr->cap;
-	if ((len += tstr->len) >= cap) {
+	if ((len += tstr->len) > cap) {
 		char * nstr;
 		for (cap = cap < _UINT_TSTR ? _UINT_TSTR : cap; cap < len; cap <<= 1)
 			;

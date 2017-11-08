@@ -140,7 +140,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{1F91FC48-7534-4CA9-9140-F2839158DA16}</ProjectGuid>
     <RootNamespace>simplec</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
