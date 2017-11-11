@@ -125,7 +125,8 @@ simplec_go(void) {
  */
 void 
 simplec_test(void) {
-	EXTERN_RUN(test_scfile);
+	EXTERN_RUN(test_socket_server);
+    exit(EXIT_SUCCESS);
 }
 
 #endif

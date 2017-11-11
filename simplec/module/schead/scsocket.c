@@ -4,8 +4,8 @@
 
 //
 // gettimeofday - Linux sys/time.h 中得到微秒的一种实现
-// tv		:	返回结果包含秒数和微秒数
-// tz		:	包含的时区,在window上这个变量没有用不返回
+// tv		:   返回结果包含秒数和微秒数
+// tz		:   包含的时区,在winds上这个变量没有用不返回
 // return	:   默认返回0
 //
 inline int
@@ -15,7 +15,7 @@ gettimeofday(struct timeval * tv, void * tz) {
 
     GetLocalTime(&wtm);
     st.tm_year = wtm.wYear - 1900;
-    st.tm_mon = wtm.wMonth - 1; // window的计数更好些
+    st.tm_mon = wtm.wMonth - 1; // winds的计数更好些
     st.tm_mday = wtm.wDay;
     st.tm_hour = wtm.wHour;
     st.tm_min = wtm.wMinute;
@@ -40,7 +40,8 @@ socket_start(void) {
     WSADATA wsad;
     WSAStartup(WINSOCK_VERSION, &wsad);
 #elif __GUNC__
-    IGNORE_SIGNAL(SIGPIPE)
+    // 管道破裂,忽略SIGPIPE信号
+    signal(SIGPIPE, SIG_IGN)
 #endif
 }
 

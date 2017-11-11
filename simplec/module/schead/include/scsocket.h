@@ -5,11 +5,6 @@
 #include <signal.h>
 #include <schead.h>
 
-//
-// IGNORE_SIGPIPE - 管道破裂,忽略SIGPIPE信号
-//
-#define IGNORE_SIGNAL(sig)	signal(sig, SIG_IGN)
-
 #ifdef __GNUC__
 
 #include <netdb.h>
