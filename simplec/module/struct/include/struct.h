@@ -39,7 +39,7 @@
     CERR(fmt, ##__VA_ARGS__), exit(EXIT_FAILURE)
 
 #define CERR_IF(code) \
-    if((code) < 0) \
+    if((code)) \
         CERR_EXIT(#code)
 
 //

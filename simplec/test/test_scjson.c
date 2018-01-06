@@ -3,7 +3,7 @@
 // test scjson write
 static void _scjson_write(void) {
 	// 测试json 串
-	char jstr[] = "{\n\"name\": \"Jack (\\\"Bee\\\") Nimble\", \n\"format\": {\"type\":[1, 3, 4, 5.66], \n\"height\":     1080, \n\"interlace\":  false}\n}";
+	char jstr[] = "{\n\"name\": \"Jack (\\\"Bee\\\") 你好\", \n\"format\": {\"type\":[1, 3, 4, 5.66], \n\"height\":     1080, \n\"interlace\":  false}\n}";
 	printf("源码串 :\n %s\n", jstr);
 
 	// 先生成 json 对象
@@ -30,7 +30,7 @@ static void _scjson_write(void) {
 	cjson_delete(root);
 
 	//另一个测试 输出内存值
-	printf("d = %zu\n", strlen("{\"name\":\"Jack (\\\"Bee\\\") Nimble\",\"format\":{\"type\":[1,3,4,5.660000],\"height\":1080,\"interlace\":false}}"));
+	printf("d = %zu\n", strlen(jstr));
 }
 
 #define _STR_FILE "test/config/firefighting_rule.json"
@@ -88,9 +88,7 @@ static void _scjson_parse(void) {
 // test use scjson
 //
 void test_scjson(void) {
-
 	_scjson_parse();
 	_scjson_read();
 	_scjson_write();
-
 }

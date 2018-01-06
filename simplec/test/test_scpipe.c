@@ -17,7 +17,7 @@ void test_scpipe(void) {
 	scpipe_delete(spie);
 
 	// 这里继续测试 pipe 管道移植版本的兼容性
-	CERR_IF(pipe(fd));
+	CERR_IF(pipe(fd) < 0);
 
 	socket_send(fd[0], data, sizeof data);
 	socket_recv(fd[1], data, sizeof data);

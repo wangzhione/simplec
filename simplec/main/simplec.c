@@ -76,7 +76,6 @@ static void _client(const char * host, uint16_t port) {
  * simple c 框架业务层启动的代码
  */
 void simplec_main(void) {
-
 #if defined(_MSC_VER) && defined(_DEBUG)
 	// 开始简单的测试
 	EXTERN_RUN(simplec_test);
@@ -112,7 +111,6 @@ void simplec_main(void) {
 // 第一次见面的函数
 void 
 simplec_go(void) {
-
 	// 通过配置版本信息, 简单打印
 	puts(mcnf_get("Image"));
 }
@@ -125,7 +123,11 @@ simplec_go(void) {
  */
 void 
 simplec_test(void) {
-	EXTERN_RUN(test_socket_server);
+    //
+    // run test ... ... 
+    //
+	EXTERN_RUN(test_scjson_gbk);
+
     exit(EXIT_SUCCESS);
 }
 

@@ -273,7 +273,6 @@ extern const char * strerr(int error) {
     case ERROR_DEVICE_HINT_NAME_BUFFER_TOO_SMALL                                : return "The device hint name buffer is too small to receive the remaining name";
     case ERROR_EDP_POLICY_DENIES_OPERATION                                      : return "The requested operation was blocked by Enterprise Data Protection policy. For more information, contact your system administrator";
     case ERROR_EDP_DPL_POLICY_CANT_BE_SATISFIED                                 : return "The requested operation cannot be performed because hardware or software configuration of the device does not comply with Enterprise Data Protection under Lock policy. Please, verify that user PIN has been created. For more information, contact your system administrator";
-    case ERROR_CLOUD_FILE_PROVIDER_UNKNOWN                                      : return "The Cloud File provider is unknown";
     case ERROR_DEVICE_IN_MAINTENANCE                                            : return "The device is in maintenance mode";
     case ERROR_NOT_SUPPORTED_ON_DAX                                             : return "This operation is not supported on a DAX volume";
     case ERROR_DAX_MAPPING_EXISTS                                               : return "The volume has active DAX mappings";
@@ -5316,8 +5315,6 @@ extern const char * strerr(int error) {
     case ERROR_VHD_CHANGE_TRACKING_DISABLED                                     : return "Change tracking is disabled for the specified virtual hard disk, so no change tracking information is available";
     case ERROR_VHD_MISSING_CHANGE_TRACKING_INFORMATION                          : return "There is no change tracking data available associated with the specified change tracking identifier";
     case ERROR_QUERY_STORAGE_ERROR                                              : return "The virtualization storage subsystem has generated an error";
-    case ERROR_HNS_PORT_ALLOCATED                                               : return "The port is already allocated";
-    case ERROR_HNS_MAPPING_NOT_SUPPORTED                                        : return "Port mapping is not supported on the given network";
     case SDIAG_E_CANCELLED                                                      : return "The operation was cancelled";
     case SDIAG_E_SCRIPT                                                         : return "An error occurred when running a PowerShell script";
     case SDIAG_E_POWERSHELL                                                     : return "An error occurred when interacting with PowerShell runtime";
