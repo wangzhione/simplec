@@ -468,11 +468,12 @@ static void _rb_delete(struct $rnode * root, node_f die) {
  */
 inline void
 rb_delete(rtree_t tree) {
-	if(!tree || !tree->root || tree->die == _rb_ddie)
+	if(!tree || !tree->root)
 		return;
 
-	// 后续递归删除
-	_rb_delete(tree->root, tree->die);
+    // 后续递归删除
+    if (tree->die == _rb_ddie)
+	    _rb_delete(tree->root, tree->die);
 
 	// 销毁树本身内存
 	tree->root = NULL;
