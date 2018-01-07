@@ -237,7 +237,7 @@ rb_insert(rtree_t tree, void * pack) {
 	}
 	rb_set_parent(node, y);
 
-	if (y)
+	if (NULL == y)
 		tree->root = node;              // 情况1：若y是空节点，则将node设为根
 	else {
 		if (cmp(y, node) > 0)
