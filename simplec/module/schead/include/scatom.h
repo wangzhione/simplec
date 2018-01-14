@@ -77,7 +77,7 @@
  * 返回1表示已经有人加锁了, 竞争锁失败.
  * 返回0表示得到锁资源, 竞争锁成功
  */
-#define ATOM_TRYLOCK(v)     ATOM_SET(v, 1)
+#define ATOM_TRYLOCK(v)     (!ATOM_SET(v, 1))
 
 //
 // 使用方式:

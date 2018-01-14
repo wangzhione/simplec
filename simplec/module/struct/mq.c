@@ -31,7 +31,7 @@ mq_create(void) {
 	q->cap = _INT_MQ;
 	q->head = 0;
 	q->tail = -1;
-	q->queue = malloc(sizeof(void *) * _INT_MQ);
+	q->queue = malloc(sizeof(void *) * _INT_MQ);`   
 	assert(q->queue);
 	q->fee = false;
 	return q;
