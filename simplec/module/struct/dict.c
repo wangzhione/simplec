@@ -89,16 +89,9 @@ static void _dict_resize(dict_t d) {
 		while (pair) {
 			struct keypair * next = pair->next;
 			unsigned idx = pair->hash & (size - 1);
-			struct keypair * npair = table[idx];
-			if (npair) {
-				pair = npair->next;
-				npair->next = pair;
-			}
-			else {
-				table[idx] = pair;
-				pair->next = NULL;
-			}
 
+            pair->next = table[idx];
+            table[idx] = pair;
 			pair = next;
 		}
 	}
