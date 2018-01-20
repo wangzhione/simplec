@@ -135,6 +135,8 @@ dict_set(dict_t d, const char * k, void * v) {
 	// 数据 modify
 	while (pair) {
 		if (pair->hash == hash && !strcmp(pair->key, k)) {
+            if (pair->val == v)
+                return;
 			if (d->die)
 				d->die(pair->val);
 			pair->val = v;
