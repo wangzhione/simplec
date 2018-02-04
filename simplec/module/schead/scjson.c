@@ -191,7 +191,7 @@ _parse_array(cjson_t item, const char * str) {
 	while (*str == ',') {
 		// 支持行尾处理多余 ','
 		if (str[1] == ']')
-			return str + 1;
+			return str + 2;
 
 		// 写代码是一件很爽的事
 		child->next = _cjson_new();
@@ -239,7 +239,7 @@ _parse_object(cjson_t item, const char * str) {
 	while (*str == ',') {
 		// 支持行尾处理多余 ','
 		if (str[1] == '}')
-			return str + 1;
+			return str + 2;
 
 		child->next = _cjson_new();
 		child = child->next;
