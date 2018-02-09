@@ -455,7 +455,7 @@ static char * _print_number(cjson_t item, tstr_t p) {
 		else if (nd < 1.0e-6 || nd > 1.0e9) // 科学计数法
 			sprintf(str, "%e", d);
 		else
-			sprintf(str, "% f", d);
+			sprintf(str, "%f", d);
 	}
 
 	return str;
