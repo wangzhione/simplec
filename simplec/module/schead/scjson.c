@@ -720,20 +720,24 @@ extern cjson_t cjson_newtypearray(unsigned char type, const void * array, size_t
 //
 cjson_t 
 cjson_detacharray(cjson_t array, size_t idx) {
-	cjson_t c;
-	if ((!array) || !(c = array->child))
-		RETURN(NULL, "check param is array:%p, idx:%zu is error!", array, idx);
+    cjson_t c, p;
+    if ((!array) || !(c = array->child))
+        RETURN(NULL, "check param is array:%p, idx:%zu is error!", array, idx);
 
-	while (idx > 0 && c) {
-		--idx;
-		c = c->next;
-	}
-	if(!c) {
-		RETURN(NULL, "check param is too dig idx:sub %zu.", idx);
-	}
-	if(c == array->child)
-		array->child = c->next;
-	c->next = NULL;
+    // 查找我们要数据
+    for (p = NULL; idx > 0 && c; c = c->next) {
+        --idx;
+        p = c;
+    }
+    if (NULL == c) {
+        RETURN(NULL, "check param is too dig idx:sub %zu.", idx);
+    }
+
+    if (NULL == p) 
+        array->child = c->next;
+    else
+        p->next = c->next;
+    c->next = NULL;
 	return c;
 }
 
@@ -745,18 +749,24 @@ cjson_detacharray(cjson_t array, size_t idx) {
 //
 cjson_t 
 cjson_detachobject(cjson_t object, const char * key) {
-	cjson_t c;
-	if ((!object) || !(c = object->child) || !key || !*key) {
-		RETURN(NULL, "check param is object:%p, key:%s.", object, key);
-	}
+    cjson_t c, p;
+    if ((!object) || !(c = object->child) || !key || !*key) {
+        RETURN(NULL, "check param is object:%p, key:%s.", object, key);
+    }
 	
-	while(c && tstr_icmp(c->key, key))
-		c = c->next;
-	if(!c) {
-		RETURN(NULL, "check param key:%s to empty!", key);
-	}
-	if(c == object->child)
-		object->child = c->next;
-	c->next = NULL;
-	return c;
+    // 开始找到数据
+    for (p = NULL; c && tstr_icmp(c->key, key); c = c->next) {
+        p = c;
+    }
+    if(NULL == c) {
+        RETURN(NULL, "check param key:%s to empty!", key);
+    }
+
+    // 返回最终结果
+    if (NULL == p)
+        object->child = c->next;
+    else
+        p->next = c->next;
+    c->next = NULL;
+    return c;
 }
