@@ -464,8 +464,9 @@ static char * _print_number(cjson_t item, tstr_t p) {
 // 输出字符串内容
 static char * _print_string(char * str, tstr_t p) {
 	size_t len = 0;
+    unsigned char c;
 	const char * ptr;
-	char c, * nptr, *out;
+	char * nptr, *out;
 
 	if (!str || !*str) { //最特殊情况,什么都没有 返回NULL
 		out = tstr_expand(p, 3);

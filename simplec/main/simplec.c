@@ -126,7 +126,7 @@ simplec_test(void) {
     //
     // run test ... ... 
     //
-	EXTERN_RUN(test_scjson_gbk);
+	EXTERN_RUN(test_scjson);
 
     exit(EXIT_SUCCESS);
 }
