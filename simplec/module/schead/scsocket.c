@@ -145,11 +145,11 @@ socket_set_nonblock(socket_t s) {
 #else
     int mode = fcntl(s, F_GETFL, 0);
     if (mode == SOCKET_ERROR)
-	    return SOCKET_ERROR;
+        return SOCKET_ERROR;
     if (mode & O_NONBLOCK)
-	    return SufBase;
+        return SufBase;
     return fcntl(s, F_SETFL, mode | O_NONBLOCK);
-#endif	
+#endif
 }
 
 static inline int _socket_set_enable(socket_t s, int optname) {
