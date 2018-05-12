@@ -19,8 +19,8 @@ void test_scpipe(void) {
 	// 这里继续测试 pipe 管道移植版本的兼容性
 	CERR_IF(pipe(fd) < 0);
 
-	socket_send(fd[0], data, sizeof data);
-	socket_recv(fd[1], data, sizeof data);
+	socket_send(fd[1], data, sizeof data);
+	socket_recv(fd[0], data, sizeof data);
 	puts(data);
 
 	socket_close(fd[0]);

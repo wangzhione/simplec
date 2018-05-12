@@ -126,7 +126,7 @@ simplec_test(void) {
     //
     // run test ... ... 
     //
-	EXTERN_RUN(test_scconf);
+	EXTERN_RUN(test_scpipe);
 
     exit(EXIT_SUCCESS);
 }
