@@ -67,20 +67,20 @@ pipe(socket_t pipefd[2]) {
 	if ((s = socket_stream()) == INVALID_SOCKET) 
         return ErrBase;
 
-	if (bind(s, (struct sockaddr *)&name, nlen) < 0)
+	if (bind(s, (struct sockaddr *)&name, nlen))
         return socket_close(s), ErrBase;
-	if (listen(s, SOMAXCONN) < 0) 
+	if (listen(s, SOMAXCONN)) 
         return socket_close(s), ErrBase;
 
 	// 得到绑定的数据
-	if (getsockname(s, (struct sockaddr *)&name, &nlen) < 0)
+	if (getsockname(s, (struct sockaddr *)&name, &nlen))
         return socket_close(s), ErrBase;
 
 	// 开始构建互相通信的socket
 	if ((pipefd[0] = socket_stream()) == INVALID_SOCKET)
         return socket_close(s), ErrBase;
 
-	if (socket_connect(pipefd[0], &name) < 0)
+	if (socket_connect(pipefd[0], &name))
         return socket_close(s), ErrBase;
 
 	// 可以继续添加, 通信协议来避免一些意外
