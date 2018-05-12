@@ -142,7 +142,7 @@ scpipe_recv(struct scpipe * spie, void * data, size_t len) {
 int 
 scpipe_send(struct scpipe * spie, const void * data, size_t len) {
 	DWORD lsend = 0;
-	if (WriteFile(spie->send, data, len, &lsend, NULL)) {
+	if (!WriteFile(spie->send, data, len, &lsend, NULL)) {
 		RETURN(ErrBase, "WriteFile is error!");
 	}
 	return (int)lsend;
