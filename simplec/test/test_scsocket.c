@@ -35,7 +35,7 @@ void test_scsocket(void) {
     addr_input(&arg.addr);
 
     if (!addr_check(&arg.addr))
-	    CERR_EXIT("ip or port check is error!!!");
+	    EXIT("ip or port check is error!!!");
 
     // 开始要启动线程了
     ddos_run(&arg);
@@ -75,13 +75,13 @@ addr_input(sockaddr_t * addr) {
 
     rt = scanf("%hu", &port);
     if (rt != 1)
-	    CERR_EXIT("scanf_s addr->host = %s, port = %hu.", ip, port);
+	    EXIT("scanf_s addr->host = %s, port = %hu.", ip, port);
 
     printf("connect check input addr ip:port = %s:%hu.\n", ip, port);
 
     // 下面就是待验证的地址信息
     if (socket_addr(ip, port, addr) < SufBase)
-	    CERR_EXIT("socket_addr ip , port is error = %s, %hu.", ip, port);
+	    EXIT("socket_addr ip , port is error = %s, %hu.", ip, port);
 }
 
 // 检查IP是否合法
@@ -164,14 +164,14 @@ static void _udpsend(struct targ * targ) {
 void
 ddos_run(struct targ * arg) {
     // 创建两个 connect 线程
-    CERR_IF(async_run(_connect, arg) < 0);
-    CERR_IF(async_run(_connect, arg) < 0);
+    IF(async_run(_connect, arg) < 0);
+    IF(async_run(_connect, arg) < 0);
 
     // 创建两个 connect + send 线程
-    CERR_IF(async_run(_tcpsend, arg) < 0);
-    CERR_IF(async_run(_tcpsend, arg) < 0);
+    IF(async_run(_tcpsend, arg) < 0);
+    IF(async_run(_tcpsend, arg) < 0);
 
     // 创建两个 udp send 线程
-    CERR_IF(async_run(_udpsend, arg) < 0);
-    CERR_IF(async_run(_udpsend, arg) < 0);
+    IF(async_run(_udpsend, arg) < 0);
+    IF(async_run(_udpsend, arg) < 0);
 }

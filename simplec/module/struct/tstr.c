@@ -59,7 +59,7 @@ tstr_dup(const char * str) {
 	// 这里采用 日志 + exit, 这种未定义行为. 方便收集错误日志和监测大内存申请失败情况.
 	//
 	if (NULL == nstr)
-		CERR_EXIT("malloc len = %zu is empty!", len);
+		EXIT("malloc len = %zu is empty!", len);
 
 	return memcpy(nstr, str, len);
 }
@@ -153,7 +153,7 @@ tstr_t
 tstr_create(const char * str, size_t len) {
 	tstr_t tstr = calloc(1, sizeof(struct tstr));
 	if (NULL == tstr)
-		CERR_EXIT("malloc sizeof struct tstr is error!");
+		EXIT("malloc sizeof struct tstr is error!");
 	if (str && len > 0)
 		tstr_appendn(tstr, str, len);
 	return tstr;
@@ -163,7 +163,7 @@ tstr_t
 tstr_creates(const char * str) {
 	tstr_t tstr = calloc(1, sizeof(struct tstr));
 	if (NULL == tstr)
-		CERR_EXIT("malloc sizeof struct tstr is error!");
+		EXIT("malloc sizeof struct tstr is error!");
 	if(str)
 		tstr_appends(tstr, str);
 	return tstr;
@@ -198,7 +198,7 @@ tstr_expand(tstr_t tstr, size_t len) {
 		// 开始分配内存
 		if ((nstr = realloc(tstr->str, cap)) == NULL) {
 			tstr_delete(tstr);
-			CERR_EXIT("realloc cap = %zu empty!!!", cap);
+			EXIT("realloc cap = %zu empty!!!", cap);
 		}
 
 		// 重新内联内存
@@ -274,7 +274,7 @@ tstr_dupstr(tstr_t tstr) {
 	len = tstr->len + !!tstr->str[tstr->len - 1];
 	str = malloc(len * sizeof(char));
 	if (NULL == str)
-		CERR_EXIT("malloc len = %zu is error!", len);
+		EXIT("malloc len = %zu is error!", len);
 	
 	memcpy(str, tstr->str, len - 1);
 	str[len - 1] = '\0';

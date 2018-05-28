@@ -111,22 +111,22 @@ void simplec_main(void) {
 // 第一次见面的函数
 void 
 simplec_go(void) {
-	// 通过配置版本信息, 简单打印
-	puts(mcnf_get("Image"));
+    // 通过配置版本信息, 简单打印
+    puts(mcnf_get("Image"));
 }
 
 #if defined(_MSC_VER) && defined(_DEBUG)
 
 /*
  * simple c 单元测试主函数
- * return	: void
+ * return   : void
  */
 void 
 simplec_test(void) {
     //
     // run test ... ... 
     //
-	EXTERN_RUN(test_scpipe);
+    EXTERN_RUN(test_scthreads);
 
     exit(EXIT_SUCCESS);
 }

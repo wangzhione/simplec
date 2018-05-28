@@ -30,7 +30,7 @@ static void _server_msg(int type, bool padding, struct smessage * result) {
 	}
 
 	if ((sm = malloc(sz)) == NULL)
-		CERR_EXIT("malloc error sz = %zu.", sz);
+		EXIT("malloc error sz = %zu.", sz);
 
 	sm->type = type;
 	sm->id = result->id;

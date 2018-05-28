@@ -25,7 +25,7 @@ cjson_delete(cjson_t c) {
 static inline cjson_t _cjson_new(void) {
 	cjson_t node = malloc(sizeof(struct cjson));
 	if (NULL == node)
-		CERR_EXIT("malloc struct cjson is null!");
+		EXIT("malloc struct cjson is null!");
 	return memset(node, 0, sizeof(struct cjson));
 }
 
@@ -75,7 +75,7 @@ static const char * _parse_string(cjson_t item, const char * str) {
 
 	// 这里开始复制拷贝内容
 	if (!(nptr = out = malloc(len)))
-		CERR_EXIT("calloc size = %d is error!", len);
+		EXIT("calloc size = %d is error!", len);
 	for (ptr = str + 1; (c = *ptr) != '\"' && c; ++ptr) {
 		if (c != '\\') {
 			*nptr++ = c;

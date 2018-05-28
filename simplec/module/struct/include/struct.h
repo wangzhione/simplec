@@ -2,8 +2,8 @@
 #define _H_SIMPLEC_STRUCT
 
 //
-// 数据结构从这个头文件集成开始
-// 构建统一的标识文件, 构建统一的注册函数, 构建统一基础头文件
+// 数据结构从此头文件开始
+// 构建统一的标识, 注册函数, 基础头文件
 //
 // author : wz
 //
@@ -22,59 +22,63 @@
 #include <stdbool.h>
 #include <inttypes.h>
 
-// 
-// 控制台输出完整的消息提示信息, 其中fmt必须是 "" 包裹的字符串
-// CERR         -> 简单的消息打印
-// CERR_EXIT    -> 输出错误信息, 并推出当前进程
-// CERR_IF      -> if语句检查, 如果符合标准错误直接退出
-// 
-#ifndef _H_CERR
-#define _H_CERR
+//
+// CERR - 打印错误信息
+// EXIT - 打印错误信息, 并 exit
+// IF   - 条件判断异常退出的辅助宏
+//
+#ifndef CERR
+#define CERR(fmt, ...)                                                   \
+fprintf(stderr, "[%s:%s:%d][%d:%s]" fmt "\n",                            \
+    __FILE__, __func__, __LINE__, errno, strerror(errno), ##__VA_ARGS__)
 
-#undef	CERR
-#define CERR(fmt, ...) \
-    fprintf(stderr, "[%s:%s:%d][%d:%s]" fmt "\n", __FILE__, __func__, __LINE__, errno, strerror(errno), ##__VA_ARGS__)
+#endif//CERR
 
-#define CERR_EXIT(fmt, ...) \
-    CERR(fmt, ##__VA_ARGS__), exit(EXIT_FAILURE)
+#define EXIT(fmt, ...)                                                   \
+do {                                                                     \
+    CERR(fmt, ##__VA_ARGS__);                                            \
+    exit(EXIT_FAILURE);                                                  \
+} while(0)
 
-#define CERR_IF(code) \
-    if((code)) \
-        CERR_EXIT(#code)
+#define IF(cond)                                                         \
+if ((cond)) EXIT(#cond)
 
 //
-// RETURN - 打印错误信息, 并return 返回指定结果
-// val		: return的东西, 当需要 return void; 时候填 ',' 就过 or NIL
-// fmt		: 双引号包裹的格式化字符串
-// ...		: fmt中对应的参数
-// return	: val
+// RETURN - 打印错误信息, 并 return 返回指定结果
+// val      : return的东西, 当需要 return void; 时候填 ',' 就过 or NIL
+// fmt      : 双引号包裹的格式化字符串
+// ...      : fmt中对应的参数
+// return   : val
 // 
+#define RETURN(val, fmt, ...)       \
+do {                                \
+    CERR(fmt, ##__VA_ARGS__);       \
+    return val;                     \
+} while(0)
+
 #define NIL
-#define RETURN(val, fmt, ...) \
-    do { \
-        CERR(fmt, ##__VA_ARGS__); \
-        return val; \
-    } while(0)
+#define RETNIL(fmt, ...)            \
+RETURN(NIL, fmt, ##__VA_ARGS__)
 
-
-#endif
+#define RETNUL(fmt, ...)            \
+RETURN(NULL, fmt, ##__VA_ARGS__)
 
 /*
  * 这里是一个 在 DEBUG 模式下的测试宏
  *
  * 用法 :
  * DEBUG_CODE({
- *		puts("debug start...");
+ *      puts("debug start...");
  * });
  */
 #ifndef DEBUG_CODE
 # ifdef _DEBUG
-#	define DEBUG_CODE(code) \
-		do code while(0)
+#   define DEBUG_CODE(code) \
+        do code while(0)
 # else
-#	define DEBUG_CODE(code) 
-# endif	//	! _DEBUG
-#endif	//	! DEBUG_CODE
+#   define DEBUG_CODE(code) 
+# endif //  ! _DEBUG
+#endif  //  ! DEBUG_CODE
 
 #ifndef _ENUM_FLAG
 //

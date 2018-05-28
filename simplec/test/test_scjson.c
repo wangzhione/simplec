@@ -9,7 +9,7 @@ static void _scjson_write(void) {
 	// 先生成 json 对象
 	cjson_t root = cjson_newstr(jstr);
 	if (root == NULL) {
-		CERR_EXIT("jstr 解析失败! 程序退出中....");
+		EXIT("jstr 解析失败! 程序退出中....");
 	}
 
 	//这里简单测试输出内容
@@ -17,7 +17,7 @@ static void _scjson_write(void) {
 
 	if (njstr == NULL) {
 		cjson_delete(root);
-		CERR_EXIT("输出内容失败,程序退出中!");
+		EXIT("输出内容失败,程序退出中!");
 	}
 
 	//合法范围直接输出 内容
@@ -39,7 +39,7 @@ static void _scjson_write(void) {
 static void _scjson_read(void) {
 	cjson_t rule = cjson_newfile(_STR_FILE);
 	if (NULL == rule)
-		CERR_EXIT("cjson_dofile " _STR_FILE " is error!");
+		EXIT("cjson_dofile " _STR_FILE " is error!");
 
 	// 数据合法 这里开始得到一部分
 	cjson_t firefighting_rule = cjson_detachobject(rule, "firefighting_rule");
@@ -51,7 +51,7 @@ static void _scjson_read(void) {
 	//这里得到 key1 输出内容
 	char * nkey = cjson_getstr(key1);
 	if (NULL == nkey)
-		CERR_EXIT("cjson_print key1 is error!");
+		EXIT("cjson_print key1 is error!");
 	
 	// 这里打印数据测试 
 	puts(nkey);

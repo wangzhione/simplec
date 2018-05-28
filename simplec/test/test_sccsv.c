@@ -12,7 +12,7 @@ void test_sccsv(void) {
 	// 这里得到 csv 对象
 	csv = sccsv_create(_STR_PATH);
 	if (NULL == csv)
-		CERR_EXIT("open " _STR_PATH " is error!");
+		EXIT("open " _STR_PATH " is error!");
 
 	//这里打印数据
 	rlen = csv->rlen;

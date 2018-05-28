@@ -89,13 +89,13 @@ ss_run(const char * host, uint16_t port, void (* run)(msgrs_t)) {
 	server_init();
 	_ss.g = _gate_create(host, port);
 	if (_ss.g == NULL)
-		CERR_EXIT("gate_create err host = %s, port = %hu.", host, port);
+		EXIT("gate_create err host = %s, port = %hu.", host, port);
 
 	_ss.g->mloop = srl_create(run, msgrs_delete);
 
 	// 这里开始启动线程跑起来
 	if (pthread_create(&_ss.tid, NULL, _server, NULL))
-		CERR_EXIT("pthread_create is error!");
+		EXIT("pthread_create is error!");
 }
 
 //

@@ -47,7 +47,7 @@ void test_scrunloop(void) {
 	// 开启线程, 跑起来测试
 	if (pthread_create(&th, NULL, (start_f)_write, s) < 0) {
 		srl_delete(s);
-		CERR_EXIT("pthread_create is _run s = %p error!", s);
+		EXIT("pthread_create is _run s = %p error!", s);
 	}
 
 	// 开始奔跑等待了

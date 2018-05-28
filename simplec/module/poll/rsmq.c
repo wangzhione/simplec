@@ -13,12 +13,12 @@ inline msgrs_t
 msgrs_create(const void * data, uint32_t sz) {
 	DEBUG_CODE({
 		if (!data || sz <= 0 || sz > USHRT_MAX)
-			CERR_EXIT("msgrs_create params data = %p, sz = %u", data, sz);
+			EXIT("msgrs_create params data = %p, sz = %u", data, sz);
 	});
 	uint32_t szn = sz + sizeof(uint32_t); 
 	msgrs_t msg = malloc(sizeof(*msg) + szn);
 	if (NULL == msg)
-		CERR_EXIT("malloc sizeof uint32_t + %u err!", sz);
+		EXIT("malloc sizeof uint32_t + %u err!", sz);
 	msg->sz = szn;
 
 	// type + sz -> 协议值 -> 网络传输约定值

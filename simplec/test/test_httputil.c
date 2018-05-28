@@ -13,7 +13,7 @@ void test_httputil(void) {
 	http_sget(_STR_BAIDU, music);
 	printf("music = %p : %zd.\n", music->str, music->len);
 	if (NULL == music->str) {
-		CERR_EXIT("music->str gets is empty = %s.\n", _STR_BAIDU);
+		EXIT("music->str gets is empty = %s.\n", _STR_BAIDU);
 	}
 
 	if (si_isutf8(music->str)) {

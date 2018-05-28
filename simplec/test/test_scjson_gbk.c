@@ -1,30 +1,30 @@
-#include <scjson.h>
+ï»¿#include <scjson.h>
 
 //
 // test scjson gbk 
 //
 void test_scjson_gbk(void) {
-    char * json = u8"{ \"name\" : \"nºÃhÂğ8\" }";
+    char * json = u8"{ \"name\" : \"nå¥½hå—8\" }";
 
     printf("json :\n %s\n", json);
 
-    // ÏÈÉú³É json ¶ÔÏó
+    // å…ˆç”Ÿæˆ json å¯¹è±¡
     cjson_t root = cjson_newstr(json);
-    CERR_IF(NULL == root);
+    IF(NULL == root);
 
     cjson_t name = cjson_getobject(root, "name");
     printf("name -> %s\n", name->vs);
-    // Êä³ö UTF-8 µ½ÎÄ¼şÖĞ
+    // è¾“å‡º UTF-8 åˆ°æ–‡ä»¶ä¸­
     tstr_fwrites("logs/jstr.log", name->vs);
 
-    // Í¨¹ı json ¶ÔÏó¹¹½¨ json ´®ÄÚÈİ
+    // é€šè¿‡ json å¯¹è±¡æ„å»º json ä¸²å†…å®¹
     char * jstr = cjson_getstr(root);
-    CERR_IF(NULL == jstr);
+    IF(NULL == jstr);
 
-    //ºÏ·¨·¶Î§Ö±½ÓÊä³ö ÄÚÈİ
+    //åˆæ³•èŒƒå›´ç›´æ¥è¾“å‡º å†…å®¹
     printf("jstr :\n %s\n", jstr);
 
-    // ÊÍ·ÅÄÚ´æ
+    // é‡Šæ”¾å†…å­˜
     free(jstr);
     cjson_delete(root);
 }

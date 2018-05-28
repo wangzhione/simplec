@@ -119,7 +119,7 @@ mcnf_instance(void) {
     if (NULL == _m) {
         _m = conf_create(STR_MCNFPATH);
         if (NULL == _m) {
-            CERR_EXIT("conf_create is open error = "STR_MCNFPATH);
+            EXIT("conf_create is open error = "STR_MCNFPATH);
         }
         // 最终销毁主程序对象数据, 交给操作系统
     }
