@@ -130,8 +130,10 @@ threads_delete(threads_t pool) {
         return;
 
     pthread_mutex_lock(&pool->mutx);
-    if (pool->cancel) 
-        return;
+    if (pool->cancel) {
+        pthread_mutex_unlock(&pool->mutx);
+        return;   
+    }
     // 标识当前线程池正在销毁过程中
     pool->cancel = true;
     // 先来释放任务列表
