@@ -114,6 +114,7 @@ st_add_(int intval, node_f timer, void * arg) {
 	if(!_st.status) {
 		if (async_run(_stlist_loop, &_st)) {
 			list_destroy(&_st.head, free);
+            ATOM_UNLOCK(_st.lock);
 			RETURN(ErrFd, "pthread_create is error!");
 		}
 		_st.status = true;
