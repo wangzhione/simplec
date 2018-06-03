@@ -1,5 +1,5 @@
-﻿#ifndef _H_SIMPLEC_SCCONF
-#define _H_SIMPLEC_SCCONF
+﻿#ifndef _H_SCCONF_SIMPLEC
+#define _H_SCCONF_SIMPLEC
 
 #include <dict.h>
 
@@ -51,4 +51,4 @@ inline const char * mcnf_get(const char * key) {
     return conf_get(mcnf_instance(), key);
 }
 
-#endif // !_H_SIMPLEC_SCCONF
+#endif//_H_SCCONF_SIMPLEC

@@ -5,6 +5,7 @@
 #include <scrand.h>
 #include <struct.h>
 #include <pthread.h>
+#include <semaphore.h>
 
 //
 //  宏就是C的金字塔最底层, 所有丑陋的起源~
