@@ -1,19 +1,9 @@
 ﻿#ifndef _H_SCRUNLOOP_SIMPLEC
 #define _H_SCRUNLOOP_SIMPLEC
 
-#include <schead.h>
+#include "schead.h"
 
 typedef struct srl * srl_t;
-
-//
-// srl_create - 创建轮询服务对象
-// frun     : 轮序处理每条消息体, 弹出消息体的时候执行
-// fdie     : srl_push msg 销毁函数
-// return   : srl_t 轮询器对象 
-//
-#define srl_create(frun, fdie)                \
-srl_create_((node_f)(frun), (node_f)(fdie))
-extern srl_t srl_create_(node_f frun, node_f fdie);
 
 //
 // srl_delete - 销毁轮询对象,回收资源
@@ -29,5 +19,15 @@ extern void srl_delete(srl_t srl);
 // return   : void
 // 
 extern void srl_push(srl_t s, void * msg);
+
+//
+// srl_create - 创建轮询服务对象
+// frun     : 轮序处理每条消息体, 弹出消息体的时候执行
+// fdie     : srl_push msg 销毁函数
+// return   : srl_t 轮询器对象 
+//
+#define srl_create(frun, fdie)                      \
+srl_create_((node_f)(frun), (node_f)(fdie))
+extern srl_t srl_create_(node_f frun, node_f fdie);
 
 #endif//_H_SCRUNLOOP_SIMPLEC

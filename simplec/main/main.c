@@ -16,14 +16,14 @@ int main(int argc, char * argv[]) {
     SH_PAUSE();
 
     // 简单创建 _STR_LOGDIR 日志目录
-    sh_mkdir(mcnf_get("LogDir"));
+    sh_mkdir(cnf_get("LogDir"));
 
     // 目前系统是默认启动 clog 日志
-    cl_start(mcnf_get("SimplecLog"));
+    cl_start(cnf_get("SimplecLog"));
 
     // stderr 错误信息重定位, 跟随系统长生不死
-    if (!freopen(mcnf_get("SysErrLog"), "ab", stderr)) {
-        CL_ERROR("freopen ab %s is error!", mcnf_get("SysErrLog"));
+    if (!freopen(cnf_get("SysErrLog"), "ab", stderr)) {
+        CL_ERROR("freopen ab %s is error!", cnf_get("SysErrLog"));
         exit(EXIT_FAILURE);
     }
 

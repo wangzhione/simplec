@@ -339,7 +339,7 @@ int mpack_tag_cmp(mpack_tag_t left, mpack_tag_t right) {
         // with memcmp() to silence compiler warnings, but this will return
         // equal if both are NaNs with the same representation (though we may
         // want this, for instance if you are for some bizarre reason using
-        // floats as map keys.) i'm not sure what the right thing to
+        // floats as map keys.) i'cnf not sure what the right thing to
         // do is here. check for NaN first? always return false if the type
         // is float? use operator== and pragmas to silence compiler warning?
         // please send me your suggestions.

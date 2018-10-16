@@ -6,10 +6,10 @@ void test_scconf(void) {
     const char * value;
 
     // 简单测试 配置读取内容
-    value = mcnf_get("heoo");
+    value = cnf_get("heoo");
     printf("%s\n", value);
 
-    value = mcnf_get("Description");
+    value = cnf_get("Description");
     if (!value)
         puts("Description is empty!");
     else {

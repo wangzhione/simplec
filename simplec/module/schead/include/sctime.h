@@ -17,7 +17,7 @@
 
 //
 // sh_msleep - 睡眠函数, 时间颗粒度是毫秒.
-// m		: 待睡眠的毫秒数
+// cnf		: 待睡眠的毫秒数
 // return	: void
 //
 #define sh_msleep(m) \

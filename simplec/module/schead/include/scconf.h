@@ -1,7 +1,8 @@
 ﻿#ifndef _H_SCCONF_SIMPLEC
 #define _H_SCCONF_SIMPLEC
 
-#include <dict.h>
+#include "tstr.h"
+#include "dict.h"
 
 /*
  * 配置文件读取接口
@@ -22,33 +23,25 @@
  */
 
 //
-// conf_xxx 得到配置写对象, 失败都返回 NULL
-// conf     : conf_create 创建的对象
+// conf_create - 得到配置写对象
 // path     : 配置所在路径
-// key      : 查找的key
-// return   : 返回要得到的对象, 失败为 NULL
+// return   : 返回配置对象, NULL is error
 //
 extern dict_t conf_create(const char * path);
-
-inline void conf_delete(dict_t conf) {
-    dict_delete(conf);
-}
 
 inline const char * conf_get(dict_t conf, const char * key) {
     return dict_get(conf, key);
 }
 
-#define STR_MCNFPATH    "config/config.ini"
-
 //
-// mcnf_xxx 启动系统主配置, 得到配置中值
-// key      : 待查询的key
+// cnf_instance 启动系统主配置, 得到配置中值
+// key      : 待查询的 key
 // return   : 返回要的对象, 创建的或查询的
 //
-extern dict_t mcnf_instance(void);
+extern dict_t cnf_instance(void);
 
-inline const char * mcnf_get(const char * key) {
-    return conf_get(mcnf_instance(), key);
+inline const char * cnf_get(const char * key) {
+    return conf_get(cnf_instance(), key);
 }
 
 #endif//_H_SCCONF_SIMPLEC

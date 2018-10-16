@@ -1,5 +1,5 @@
-﻿#include <mq.h>
-#include <scrunloop.h>
+﻿#include "mq.h"
+#include "scrunloop.h"
 
 // 具体轮询器
 struct srl {
@@ -11,46 +11,6 @@ struct srl {
     volatile bool loop;     // true表示还在继续 
     volatile bool wait;     // true表示当前轮序器正在等待
 };
-
-static void _srl_loop(struct srl * s) {
-    while (s->loop) {
-        void * pop = mq_pop(s->q);
-        if (NULL == pop) {
-            s->wait = true;
-            sem_wait(&s->block);
-        } else {
-            // 开始处理消息
-            s->frun(pop);
-            s->fdie(pop);
-        }
-    }
-}
-
-//
-// srl_create - 创建轮询服务对象
-// frun     : 轮序处理每条消息体, 弹出消息体的时候执行
-// fdie     : srl_push msg 销毁函数
-// return   : srl_t 轮询器对象 
-//
-inline srl_t
-srl_create_(node_f frun, node_f fdie) {
-    struct srl * s = malloc(sizeof(struct srl));
-    assert(s && frun);
-    s->q = mq_create();
-    s->frun = frun;
-    s->fdie = fdie;
-    s->loop = true;
-    s->wait = true;
-    // 初始化 POSIX 信号量, 进程内线程共享, 初始值 0
-    sem_init(&s->block, 0, 0);
-    // 创建线程,并启动
-    if (pthread_create(&s->id, NULL, (start_f)_srl_loop, s)) {
-        mq_delete(s->q, fdie);
-        free(s);
-        RETNUL("pthread_create create error !!!");
-    }
-    return s;
-}
 
 //
 // srl_delete - 销毁轮询对象,回收资源
@@ -84,4 +44,44 @@ srl_push(srl_t s, void * msg) {
         s->wait = false;
         sem_post(&s->block);
     }
+}
+
+static void srl_run(struct srl * s) {
+    while (s->loop) {
+        void * pop = mq_pop(s->q);
+        if (NULL == pop) {
+            s->wait = true;
+            sem_wait(&s->block);
+        } else {
+            // 开始处理消息
+            s->frun(pop);
+            s->fdie(pop);
+        }
+    }
+}
+
+//
+// srl_create - 创建轮询服务对象
+// frun     : 轮序处理每条消息体, 弹出消息体的时候执行
+// fdie     : srl_push msg 销毁函数
+// return   : srl_t 轮询器对象 
+//
+inline srl_t
+srl_create_(node_f frun, node_f fdie) {
+    struct srl * s = malloc(sizeof(struct srl));
+    assert(s && frun);
+    s->q = mq_create();
+    s->frun = frun;
+    s->fdie = fdie;
+    s->loop = true;
+    s->wait = true;
+    // 初始化 POSIX 信号量, 进程内线程共享, 初始值 0
+    sem_init(&s->block, 0, 0);
+    // 创建线程,并启动
+    if (pthread_create(&s->id, NULL, (start_f)srl_run, s)) {
+        mq_delete(s->q, fdie);
+        free(s);
+        RETNUL("pthread_create create error !!!");
+    }
+    return s;
 }

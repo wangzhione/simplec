@@ -1,8 +1,7 @@
-﻿#include <scconf.h>
-#include <tstr.h>
+﻿#include "scconf.h"
 
 // conf_set - 创建设置函数, kv 是 [ abc\012345 ]这样的结构
-inline void conf_set(dict_t conf, char * key) {
+static void conf_set(dict_t conf, char * key) {
     char * val = key;
     while (*val++)
         ;
@@ -24,7 +23,7 @@ while (c != EOF && ch != c) {               \
 if (ch != c) /* 无效的解析直接结束 */ break
 
 // 开始解析串
-void conf_parse(dict_t root, FILE * txt) {
+static void conf_parse(dict_t root, FILE * txt) {
     char c, n;
     TSTR_CREATE(str);
 
@@ -92,10 +91,10 @@ conf_create(const char * path) {
     dict_t conf;
     FILE * txt = fopen(path, "rb");
     if (NULL == txt) {
-        RETURN(NULL, "fopen rb is error path = %s.", path);
+        RETNUL("fopen rb is error path = %s.", path);
     }
 
-    // 创建具体配置二叉树对象
+    // 创建具体配置字典对象
     conf = dict_create(free);
     if (conf) {
         // 解析添加具体内容
@@ -106,22 +105,25 @@ conf_create(const char * path) {
     return conf;
 }
 
-// 主配置单例对象
-static dict_t _m;
+#define STR_CNF    "config/config.ini"
 
 //
-// mcnf_xxx 启动系统主配置, 得到配置中值
-// key      : 待查询的key
+// cnf_instance 启动系统主配置, 得到配置中值
+// key      : 待查询的 key
 // return   : 返回要的对象, 创建的或查询的
 //
 inline dict_t
-mcnf_instance(void) {
-    if (NULL == _m) {
-        _m = conf_create(STR_MCNFPATH);
-        if (NULL == _m) {
-            EXIT("conf_create is open error = "STR_MCNFPATH);
+cnf_instance(void) {
+    // 主配置单例对象
+    static dict_t cnf;
+
+    if (NULL == cnf) {
+        cnf = conf_create(STR_CNF);
+        if (NULL == cnf) {
+            EXIT("conf_create error = "STR_CNF);
         }
         // 最终销毁主程序对象数据, 交给操作系统
     }
-    return _m;
+
+    return cnf;
 }

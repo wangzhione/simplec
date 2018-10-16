@@ -27,12 +27,9 @@
 // EXIT - 打印错误信息, 并 exit
 // IF   - 条件判断异常退出的辅助宏
 //
-#ifndef CERR
 #define CERR(fmt, ...)                                                   \
 fprintf(stderr, "[%s:%s:%d][%d:%s]" fmt "\n",                            \
     __FILE__, __func__, __LINE__, errno, strerror(errno), ##__VA_ARGS__)
-
-#endif//CERR
 
 #define EXIT(fmt, ...)                                                   \
 do {                                                                     \
@@ -50,19 +47,18 @@ if ((cond)) EXIT(#cond)
 // ...      : fmt中对应的参数
 // return   : val
 // 
-#define RETURN(val, fmt, ...)       \
-do {                                \
-    CERR(fmt, ##__VA_ARGS__);       \
-    return val;                     \
+#define RETURN(val, fmt, ...)                                           \
+do {                                                                    \
+    CERR(fmt, ##__VA_ARGS__);                                           \
+    return val;                                                         \
 } while(0)
 
 #define NIL
-#define RETNIL(fmt, ...)            \
-RETURN(NIL, fmt, ##__VA_ARGS__)
+#define RETNIL(fmt, ...)                                                \
+RETURN(NIL , fmt, ##__VA_ARGS__)
 
-#define RETNUL(fmt, ...)            \
+#define RETNUL(fmt, ...)                                                \
 RETURN(NULL, fmt, ##__VA_ARGS__)
-
 /*
  * 这里是一个 在 DEBUG 模式下的测试宏
  *

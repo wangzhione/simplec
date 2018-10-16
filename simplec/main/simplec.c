@@ -91,15 +91,15 @@ void simplec_main(void) {
 
 	puts("simplec thinks you ...");
 
-	const char * host = mcnf_get("ServerHost");
-	const char * pors = mcnf_get("ServerPort");
+	const char * host = cnf_get("ServerHost");
+	const char * pors = cnf_get("ServerPort");
 	if (!host || !pors) {
 		CL_ERROR("config mcnf_get ServerHost ServerPort is empty!");
 		return;
 	}
 	uint16_t port = (uint16_t)atoi(pors);
 
-	const char * types = mcnf_get("ServerType");
+	const char * types = cnf_get("ServerType");
 	bool isser = types && !strcmp(types, "Server");
 	if (isser) 
 		_server(host, port);
@@ -112,7 +112,7 @@ void simplec_main(void) {
 void 
 simplec_go(void) {
     // 通过配置版本信息, 简单打印
-    puts(mcnf_get("Image"));
+    puts(cnf_get("Image"));
 }
 
 #if defined(_MSC_VER) && defined(_DEBUG)
