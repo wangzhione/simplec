@@ -87,7 +87,7 @@
     <ClInclude Include="extern\pthread\include\pthread.h" />
     <ClInclude Include="extern\pthread\include\sched.h" />
     <ClInclude Include="extern\pthread\include\semaphore.h" />
-    <ClInclude Include="module\poll\include\hashid.h" />
+    <ClInclude Include="module\poll\include\haid.h" />
     <ClInclude Include="module\poll\include\rsmq.h" />
     <ClInclude Include="module\poll\include\socket_msg.h" />
     <ClInclude Include="module\poll\include\socket_poll.h" />

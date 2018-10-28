@@ -1,4 +1,4 @@
-﻿#include <hashid.h>
+﻿#include "haid.h"
 #include <scrunloop.h>
 #include <socket_start.h>
 
@@ -12,7 +12,7 @@ struct connect {
 struct gate {
 	intptr_t opaque;
 	int lisid;
-	struct hashid hash;
+	struct haid hash;
 	struct connect conn[_INT_CNMAX];
 	srl_t mloop;
 };
@@ -28,7 +28,7 @@ static void _gate_delete(struct gate * g) {
 	}
 	if (g->lisid >= 0) 
 		server_close(ctx, g->lisid);
-	hashid_clear(&g->hash);
+	haid_clear(&g->hash);
 	free(g);
 }
 
@@ -42,7 +42,7 @@ static struct gate * _gate_create(const char * host, uint16_t port) {
 		g->conn[i].buffer = NULL;
 	}
 
-	hashid_init(&g->hash, LEN(g->conn));
+	haid_init(&g->hash, LEN(g->conn));
 	// 下面开始启动监听操作
 	g->lisid = server_listen(g->opaque, host, port);
 	if (g->lisid < 0) {
@@ -118,7 +118,7 @@ static void _ss_push_data(uintptr_t opaque, struct smsg * sm) {
 	int id, r;
 	msgrs_t msg;
 	struct gate * g = (struct gate *)opaque;
-	id = hashid_lookup(&g->hash, sm->id);
+	id = haid_lookup(&g->hash, sm->id);
 	if (id > 0) {
 		struct connect * c = g->conn + id;
 		// 填充数据
@@ -159,7 +159,7 @@ extern void ss_push(uintptr_t opaque, struct smsg * sm) {
 		// start listening
 		if (sm->id == g->lisid)
 			break;
-		id = hashid_lookup(&g->hash, sm->id);
+		id = haid_lookup(&g->hash, sm->id);
 		if (id < 0) {
 			CL_ERROR("Close unknown connection %d", sm->id);
 			server_close(opaque, sm->id);
@@ -167,7 +167,7 @@ extern void ss_push(uintptr_t opaque, struct smsg * sm) {
 		break;
 	case SERVER_CLOSE	:
 	case SERVER_ERROR	:
-		id = hashid_remove(&g->hash, sm->id);
+		id = haid_remove(&g->hash, sm->id);
 		if (id >= 0) {
 			c = g->conn + id;
 			rsmq_delete(c->buffer);
@@ -177,11 +177,11 @@ extern void ss_push(uintptr_t opaque, struct smsg * sm) {
 		break;
 	case SERVER_ACCEPT	:
 		assert(g->lisid == sm->id);
-		if(hashid_full(&g->hash)) {
+		if(haid_full(&g->hash)) {
 			CL_INFOS("full(%d) hash %d.", sm->id, sm->ud);
 			server_close(opaque, sm->id);
 		} else {
-			id = hashid_insert(&g->hash, sm->ud);
+			id = haid_insert(&g->hash, sm->ud);
 			c = g->conn + id;
 			c->id = sm->ud;
 			//sm + 1 -> data print

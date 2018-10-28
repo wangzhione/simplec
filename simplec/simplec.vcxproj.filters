@@ -392,9 +392,6 @@
     <ClInclude Include="module\poll\include\rsmq.h">
       <Filter>module\poll\include</Filter>
     </ClInclude>
-    <ClInclude Include="module\poll\include\hashid.h">
-      <Filter>module\poll\include</Filter>
-    </ClInclude>
     <ClInclude Include="module\poll\include\socket_start.h">
       <Filter>module\poll\include</Filter>
     </ClInclude>
@@ -415,6 +412,9 @@
     </ClInclude>
     <ClInclude Include="module\poll\socket_poll%24kqueue.h">
       <Filter>module\poll\partial</Filter>
+    </ClInclude>
+    <ClInclude Include="module\poll\include\haid.h">
+      <Filter>module\poll\include</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
