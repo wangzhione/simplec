@@ -18,7 +18,7 @@
 // v 和 a 都是 long 这样数据
 #define ATOM_ADD(v, a)      InterlockedAdd((LONG volatile *)&(v), (LONG)(a))
 #define ATOM_SET(v, a)      InterlockedExchange((LONG volatile *)&(v), (LONG)(a))
-#define ATOM_AND(v, a)      InterlockedAnd((LONG volatile *)&(v), (LONG)(a))
+#define ATOM_AND(v, a)      (InterlockedAnd((volatile LONG *)&(v), (LONG)(a)), (LONG)(v))
 #define ATOM_INC(v)         InterlockedIncrement((LONG volatile *)&(v))
 #define ATOM_DEC(v)         InterlockedDecrement((LONG volatile *)&(v))
 //
