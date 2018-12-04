@@ -1,24 +1,25 @@
-﻿#ifndef _H_SIMPLEC_SCTIMER
-#define _H_SIMPLEC_SCTIMER
+﻿#ifndef _H_TIMER_SIMPLC
+#define _H_TIMER_SIMPLC
 
-#include <schead.h>
-
-//
-// st_add - 添加定时器事件,虽然设置的属性有点多但是都是必要的
-// intval	: 执行的时间间隔, <=0 表示立即执行, 单位是毫秒
-// timer	: 定时器执行函数
-// arg		: 定时器参数指针
-// return	: 返回这个定时器的唯一id
-//
-extern int st_add_(int intval, node_f timer, void * arg);
-#define st_add(intval, timer, arg) \
-        st_add_(intval, (node_f)timer, (void *)(intptr_t)arg)
+#include "list.h"
+#include "sctime.h"
 
 //
-// st_del - 删除指定事件
-// id		: st_add 返回的定时器id
-// return	: void
+// timer_del - 删除定时器事件
+// id       : 定时器 id
+// return   : void
 //
-extern void st_del(int id);
+extern void timer_del(int id);
 
-#endif // !_H_SIMPLEC_SCTIMER
+//
+// timer_add - 添加定时器事件
+// tvl      : 执行间隔(毫秒), <= 0 表示立即执行
+// ftimer   : 定时器行为
+// arg      : 定时器参数
+// return   : 返回定时器 id
+//
+#define timer_add(tvl, ftimer, arg)                         \
+timer_add_(tvl, (node_f)ftimer, (void *)(intptr_t)arg)
+extern int timer_add_(int tvl, node_f ftimer, void * arg);
+
+#endif//_H_TIMER_SIMPLC

@@ -1,198 +1,131 @@
-﻿#include <list.h>
+﻿#include "list.h"
 
+//
+// list_delete - 链表数据销毁操作
+// pist     : 指向基础的链表结构
+// fdie     : 链表中删除数据执行的方法
+// return   : void
+//
+void 
+list_delete_(void ** pist, node_f fdie) {
+    if (pist && fdie) {
+        // 详细处理链表数据变化
+        struct $list * head = *pist;
+        while (head) {
+            struct $list * next = head->next;
+            fdie(head);
+            head = next;
+        }
+        *pist = NULL;
+    }
+}
+
+//
+// list_get - 匹配得到链表中指定值
+// list     : 基础的链表结构
+// fget     : 链表中查找数据执行的方法
+// left     : 待查找的结点内容 
+// return   : 查找到的节点, NULL 表示没有查到
+//
+void * 
+list_get_(void * list, cmp_f fget, const void * left) {
+    if (fget) {
+        struct $list * head = list;
+        while (head) {
+            if (fget(left, head) == 0)
+                return head;
+            head = head->next;
+        }
+    }
+    return NULL;
+}
+
+//
+// list_pop - 匹配弹出链表中指定值
+// pist     : 指向基础的链表结构
+// fget     : 链表中查找数据执行的方法
+// left     : 待查找的结点内容 
+// return   : 查找到的节点, NULL 表示没有查到 
+//
+void * 
+list_pop_(void ** pist, cmp_f fget, const void * left) {
+    struct $list * head, * next;
+    if (!pist || fget)
+        return NULL;
+
+    // 看是否是头节点
+    head = *pist;
+    if (fget(left, head) == 0) {
+        *pist = head->next;
+        return head;
+    }
+
+    // 不是头节点挨个处理
+    while (!!(next = head->next)) {
+        if (fget(left, next) == 0) {
+            head->next = next->next;
+            return next;
+        }
+        head = next;
+    }
+
+    return NULL;
+}
+
+//
+// list_next - 获取结点n的下一个结点.
+// n        : 当前结点
+//
 #undef  list_next
-#define list_next(n) ((struct $lnode *)(n))->next
+#define list_next(n) ((struct $list *)(n))->next
 
 //
-// list_destroy - 链表销毁函数.对于只是栈上数据就不用调这个api
-// ph 		: 指向当前链表结点的指针
-// die		: 销毁执行的函数
-// return	: void
+// list_add - 链表中添加数据, 从小到大 fadd(left, ) <= 0
+// pist     : 指向基础的链表结构
+// fadd     : 插入数据方法
+// left     : 待插入的链表结点
+// return   : void
 //
-void
-list_destroy_(list_t * ph, node_f die) {
-	struct $lnode * head;
-	if ((!ph) || !(head = *ph))
-		return;
+void 
+list_add_(void ** pist, cmp_f fadd, void * left) {
+    struct $list * head;
+    if (!pist || !fadd || !left)
+        return;
 
-	if (die) {
-		do {
-			struct $lnode * next = head->next;
-			die(head);
-			head = next;
-		} while (head);
-	}
-
-	*ph = NULL;
-}
-
-//
-// list_add - 在 cmp(left, x) <= 0 x处前面插入node结点
-// ph		: 指向头结点的指针
-// cmp		: 比较函数,将left同 *ph中对象按个比较
-// left		: cmp(left, x) 比较返回 <=0 or >0
-// return	: 返回 SufBase 表示成功!
-//
-int 
-list_add_(list_t * ph, icmp_f cmp, void * left) {
-	struct $lnode * head;
-	DEBUG_CODE({
-		if (!ph || !cmp || !left) {
-			RETURN(ErrParam, "check ph=%p, cmp=%p, left=%p.", ph, cmp, left);
-		}
-	});
-
-	head = *ph;
-	// 插入为头结点直接返回
-	if (!head || cmp(left, head) <= 0) {
+    // 看是否是头结点
+    head = *pist;
+    if (!head || fadd(left, head) <= 0) {
         list_next(left) = head;
-		*ph = left;
-		return SufBase;
-	}
+        *pist = left;
+        return;
+    }
 
-	// 中间插入了
-	while (head->next) {
-		if (cmp(left, head->next) <= 0)
-			break;
-		head = head->next;
-	}
-	list_next(left) = head->next;
-	head->next = left;
-	return SufBase;
+    // 不是头节点, 挨个比对
+    while (head->next) {
+        if (fadd(left, head->next) <= 0)
+            break;
+        head = head->next;
+    }
+
+    // 添加最终的连接关系
+    list_next(left) = head->next;
+    head->next = left;
 }
 
 //
-// list_findpop - 查找到要的结点,并弹出,需要你自己回收
-// ph		: 指向头结点的指针
-// cmp		: 比较函数,将left同 *ph中对象按个比较
-// left		: cmp(left, x) 比较返回 0 >0 <0
-// return	: 找到了退出/返回结点, 否则返回NULL
+// list_each - 链表循环处理函数, 仅仅测试而已
+// list     : 基础的链表结构
+// feach    : 处理每个结点行为函数
+// return   : void
 //
-void * 
-list_findpop_(list_t * ph, icmp_f cmp, const void * left) {
-	struct $lnode * head, * tmp;
-	if((!ph) || (!cmp) || (!left) || !(head = *ph)){
-		RETURN(NULL, "check find {(!ph) || (!cmp) || (!left) || !(head = *ph)}!");
-	}
-
-	// 头部检测
-	if(cmp(left, head) == 0){
-		*ph = head->next;
-		return head;
-	}
-
-	// 后面就是普通的查找
-	while((tmp = head->next)){
-		if(cmp(left, tmp) == 0){
-			head->next = tmp->next;
-			break;
-		}
-		head = tmp;
-	}
-	
-	return tmp;
-}
-
-//
-// list_find - 链表中查找函数,查找失败返回NULL, 查找成功直接返回那个结点.
-// head		: 链表头结点
-// cmp		: 查找的比较函数
-// left		: cmp(left, right) 用的左结点
-// return	: 返回查找的结点对象
-//
-void *
-list_find(list_t head, icmp_f cmp, const void * left) {
-	if (cmp == NULL || left == NULL) {
-		RETURN(NULL, "check(cmp == NULL || left == NULL)!");
-	}
-
-	//找到结果直接结束
-	while (!!(head)) {
-		if (cmp(left, head) == 0)
-			break;
-		head = list_next(head);
-	}
-
-	return head;
-}
-
-//
-// list_len - 这里获取当前链表长度, 推荐调用一次就记住len
-// h		: 当前链表的头结点
-// return	: 返回 链表长度 >=0
-//
-size_t
-list_len(list_t h) {
-	size_t len = 0;
-	while(h){
-		++len;
-		h = list_next(h);
-	}
-	return len;
-}
-
-//
-// list_addhead - 采用头查法插入结点, 第一次用需要 list_t head = NULL;
-// ph		: 指向头结点的指针
-// node		: 待插入的结点对象
-// return	: 返回 SufBase 表示成功!
-//
-inline int 
-list_addhead(list_t * ph, void * node) {
-	if (!ph || !node){
-		RETURN(ErrParam, "check (pal == %p || node == %p)!", ph, node);
-	}
-
-    list_next(node) = *ph;
-	*ph = node;
-
-	return SufBase;
-}
-
-//
-// list_addtail - 和 list_add 功能相似,但是插入位置在尾巴那
-// ph		: 待插入结点的指针
-// node		: 待插入的当前结点
-// return	: 返回 SufBase 表示成功!
-//
-int
-list_addtail(list_t * ph, void * node) {
-	struct $lnode * head;
-	if (!ph || !node) {
-		RETURN(ErrParam, "check (pal == %p || node == %p)!", ph, node);
-	}
-
-	list_next(node) = NULL;//将这个结点的置空
-	if (!(head = *ph)) { //插入的是头结点直接返回
-		*ph = node;
-		return SufBase;
-	}
-
-	while (!!(head->next))
-		head = head->next;
-	head->next = node;
-
-	return SufBase;
-}
-
-//
-// list_getidx - 查找索引位置为idx的结点,找不见返回NULL
-// head		: 当前结点
-// idx		: 查找的索引值[0,len)
-// return	: 返回查到的结点
-//
-void * 
-list_getidx(list_t head, int idx) {
-	if(head == NULL || idx < 0) {
-		RETURN(NULL, "check is h == %p || idx = %d.", head, idx);
-	}
-
-	// 主要查找函数,代码还是比较精简的还是值得学习的
-	while(head){
-		if (idx-- == 0)
-			break;
-		head = list_next(head);
-	}
-	
-	return head;
+void 
+list_each_(void * list, node_f feach) {    
+    if (list && feach) {
+        struct $list * head = list;
+        while (head) {
+            struct $list * next = head->next;
+            feach(head);
+            head = next;
+        }
+    }
 }

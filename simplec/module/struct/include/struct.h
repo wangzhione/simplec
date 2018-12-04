@@ -97,11 +97,11 @@ enum flag {
 //
 // 定义一些通用的函数指针帮助, 主要用于基库的封装.
 // 有构造函数, 析构函数, 比较函数, 轮询函数 ... 
-// icmp_f   - int icmp(const void * ln, const void * rn); 标准结构
+// cmp_f   - int icmp(const void * ln, const void * rn); 标准结构
 // each_f   - int <-> int, each循环操作, arg 外部参数, node 内部节点
 // start_f  - pthread 线程启动的辅助函数宏, 方便优化
 //
-typedef int     (* icmp_f )( );
+typedef int     (* cmp_f )( );
 typedef void *  (* vnew_f )( );
 typedef void    (* node_f )(void * node);
 typedef int     (* each_f )(void * node, void * arg);

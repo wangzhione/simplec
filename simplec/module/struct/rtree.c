@@ -35,7 +35,7 @@ static inline int _rb_dcmp(const void * ln, const void * rn) {
  * return	: 返回创建好的红黑树结点
  */
 inline rtree_t 
-rb_create(vnew_f new, node_f die, icmp_f cmp) {
+rb_create(vnew_f new, node_f die, cmp_f cmp) {
 	rtree_t tree = malloc(sizeof(*tree));
 	if(NULL == tree) {
 		RETURN(NULL, "rb_new malloc is error!");
@@ -216,7 +216,7 @@ static void _rtree_insert_fixup(rtree_t tree, struct $rnode * node) {
  */
 void 
 rb_insert(rtree_t tree, void * pack) {
-	icmp_f cmp;
+	cmp_f cmp;
 	struct $rnode * node, * x, * y;
 	if((!tree) || (!pack) || !(node = _rb_new(tree, pack))) {
 		RETURN(NIL, "rb_insert param is empty! tree = %p, pack = %p.\n", tree, pack);
@@ -436,7 +436,7 @@ rb_remove(rtree_t tree, void * pack) {
  */
 void * 
 rb_find(rtree_t tree, void * pack) {
-	icmp_f cmp;
+	cmp_f cmp;
 	struct $rnode * node;
 	if((!tree) || !pack) {
 		RETURN(NULL, "rb_get param is empty! tree = %p, pack = %p.\n", tree, pack);	

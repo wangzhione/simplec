@@ -1,34 +1,32 @@
 ﻿#include <sctimer.h>
 
-static void _timer(void * arg) {
-	static int _sm;
+static void timer(void * arg) {
+    static int sm;
 
-	stime_t tstr;
-	stu_getntstr(tstr);
-	printf("%p + %d => %s\n", arg, ++_sm, tstr);
+    stime_t str; stu_getntstr(str);
+    printf("%p + %d => %s\n", arg, ++sm, str);
 }
 
 // 连环施法
-static void _timertwo(void * arg) {
-	printf("2s after _timer arg = %p.\n", arg);
-
-	st_add(2000, _timer, arg);
+static void timertwo(void * arg) {
+    printf("2s after _timer arg = %p.\n", arg);
+    timer_add(2000, timer, arg);
 }
 
 void test_sctimer(void) {
-	int tid;
-	
-	st_add(0, _timer, 1);
-	st_add(3000, _timer, 2);
-	st_add(4000, _timer, 3);
+    int id;
 
-	// 开启一个多线程的永久异步方法
-	tid = st_add(1000, _timer, 4);
+    timer_add(0, timer, 1);
+    timer_add(3000, timer, 2);
+    timer_add(4000, timer, 3);
 
-	// 等待5秒后关闭 上面永久的定时器事件
-	sh_msleep(5000);
-	st_del(tid);
+    // 开启一个多线程的永久异步方法
+    id = timer_add(1000, timer, 4);
 
-	// 测试一个连环施法
-	st_add(1000, _timertwo, 5);
+    // 等待5秒后关闭 上面永久的定时器事件
+    sh_msleep(5000);
+    timer_del(id);
+
+    // 测试一个连环施法
+    timer_add(1000, timertwo, 5);
 }

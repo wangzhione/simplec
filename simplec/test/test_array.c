@@ -95,7 +95,7 @@ void test_array_stack(void) {
 	array_each(a, (each_f)_dict_echo, NULL);
 
 	// 排序一下
-	array_sort(a, (icmp_f)_dict_cmp);
+	array_sort(a, (cmp_f)_dict_cmp);
 
 	// 打印数据测试
 	puts("----------- sort data look at the following:");

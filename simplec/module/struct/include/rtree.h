@@ -13,7 +13,7 @@ typedef struct {
 	struct $rnode * root;
 	vnew_f new;
 	node_f die;
-	icmp_f cmp;
+	cmp_f cmp;
 } * rtree_t;
 
 /*
@@ -33,7 +33,7 @@ typedef struct {
  * cmp		: 注册比较的函数
  * return	: 返回创建好的红黑树结点
  */
-extern rtree_t rb_create(vnew_f new, node_f die, icmp_f cmp);
+extern rtree_t rb_create(vnew_f new, node_f die, cmp_f cmp);
 
 /*
  * 插入一个结点, 会插入 new(pack)

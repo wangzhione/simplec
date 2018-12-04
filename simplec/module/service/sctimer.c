@@ -1,148 +1,156 @@
-﻿#include <list.h>
-#include <scatom.h>
-#include <sctimer.h>
+﻿#include "scatom.h"
+#include "sctimer.h"
+#include <pthread.h>
 
-// 使用到的定时器结点
-struct stnode {
-    $LIST_HEAD;
+//
+// pthread_async - 异步启动分离线程
+// frun     : 运行的主体
+// arg      : 运行参数
+// return   : return 0 is success
+// 
+#define pthread_async(frun, arg)                                    \
+pthread_async_((node_f)(frun), (void *)(intptr_t)(arg))
+inline int pthread_async_(node_f frun, void * arg) {
+    pthread_t id;
+    pthread_attr_t attr;
+    pthread_attr_init(&attr);
+    pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
+    int ret = pthread_create(&id, &attr, (start_f)frun, arg);
+    pthread_attr_destroy(&attr);
+    return ret;
+}
 
-    int id;                 // 当前定时器的id
-    struct timespec tv;     // 运行的具体时间
-    node_f timer;           // 执行的函数事件
-    void * arg;             // 执行函数参数
-};					   
-							   
-// 当前链表对象管理器			  
-struct stlist {				   
-    int lock;               // 加锁用的
-    int nowid;              // 当前使用的最大timer id
-    bool status;            // false表示停止态, true表示主线程loop运行态
-    struct stnode * head;   // 定时器链表的头结点
+// timer_node 定时器结点
+struct timer_node {
+    $LIST
+
+    int id;            // 定时器 id
+    void * arg;        // 执行函数参数
+    node_f ftimer;     // 执行的函数事件
+    struct timespec t; // 运行的具体时间
 };
 
-// 定时器对象的单例, 最简就是最复杂
-static struct stlist _st;
-
-// 先创建链表对象处理函数
-static struct stnode * _stnode_new(int s, node_f timer, void * arg) {
-	struct stnode * node = malloc(sizeof(struct stnode));
-	if (NULL == node)
-		RETURN(NULL, "malloc struct stnode is error!");
-
-	// 初始化, 首先初始化当前id
-	node->id = ATOM_INC(_st.nowid);
-	timespec_get(&node->tv, TIME_UTC);
-	node->tv.tv_sec += s / 1000;
-	node->tv.tv_nsec += (s % 1000) * 1000000;
-	node->timer = timer;
-	node->arg = arg;
-
-	return node;
+// timer_node id compare
+inline static int timer_node_cmp_id(int id, 
+                                    const struct timer_node * r) {
+    return id - r->id;
 }
 
-// 得到等待的微秒时间, <=0的时候头时间就可以执行了
-static inline int _stlist_sus(struct stlist * st) {
-	struct timespec t[1], * v = &st->head->tv;
-	timespec_get(t, TIME_UTC);
-	return (int)((v->tv_sec - t->tv_sec) * 1000000
-		+ (v->tv_nsec - t->tv_nsec) / 1000);
+// timer_node time compare 比较
+inline static int timer_node_cmp_time(const struct timer_node * l, 
+                                      const struct timer_node * r) {
+    if (l->t.tv_sec != r->t.tv_sec)
+        return (int)(l->t.tv_sec - r->t.tv_sec);
+    return (int)(l->t.tv_nsec - r->t.tv_nsec);
 }
 
-// 重新调整, 只能在 _stlist_loop 后面调用, 线程安全,只加了一把锁
-static void _stlist_run(struct stlist * st) {
-	struct stnode * sn;
+// timer_list 链表对象管理器
+struct timer_list {
+    int id;                     // 当前 timer node id
+    int lock;                   // 自旋锁
+    bool status;                // true is thread loop, false is stop
+    struct timer_node * list;   // timer list list
+};
 
-	ATOM_LOCK(st->lock); // 加锁防止调整关系覆盖,可用还是比较重要的
-	sn = st->head;
-	st->head = list_next(sn);
-	ATOM_UNLOCK(st->lock);
-
-	sn->timer(sn->arg);
-	free(sn);
+// timer_list_sus - 得到等待的微秒事件, <= 0 表示可以执行
+inline int timer_list_sus(struct timer_list * list) {
+    struct timespec * v = &list->list->t, t[1];
+    timespec_get(t, TIME_UTC);
+    return (int)((v->tv_sec - t->tv_sec) * 1000000 + 
+        (v->tv_nsec - t->tv_nsec) / 1000);
 }
 
-// 运行的主loop,基于timer管理器
-static void * _stlist_loop(struct stlist * st) {
-	// 正常轮询,检测时间
-	while (st->head) {
-		int nowt = _stlist_sus(st);
-		if (nowt > 0) {
-			usleep(nowt);
-			continue;
-		}
-		_stlist_run(st);
-	}
+// timer_list_run - 线程安全, 需要再 loop 之后调用
+inline void timer_list_run(struct timer_list * list) {
+    struct timer_node * node;
+    ATOM_LOCK(list->lock);
+    node = list->list;
+    list->list = list_next(node);
+    ATOM_UNLOCK(list->lock);
 
-	// 已经运行结束
-	st->status = false;
-	return NULL;
+    node->ftimer(node->arg);
+    free(node);
 }
 
-// st < sr 返回 < 0, == 返回 0, > 返回 > 0
-static inline int _stnode_cmptime(const struct stnode * sl, const struct stnode * sr) {
-	if (sl->tv.tv_sec != sr->tv.tv_sec)
-		return (int)(sl->tv.tv_sec - sr->tv.tv_sec);
-	return (int)(sl->tv.tv_nsec - sr->tv.tv_nsec);
+// 定时器管理单例对象
+static struct timer_list timer;
+
+//
+// timer_del - 删除定时器事件
+// id       : 定时器 id
+// return   : void
+//
+inline void 
+timer_del(int id) {
+    if (timer.list) {
+        ATOM_LOCK(timer.lock);
+        free(list_pop(timer.list, timer_node_cmp_id, id));
+        ATOM_UNLOCK(timer.lock);
+    }
+}
+
+// timer_node_new - timer_node 定时器结点构建
+inline static struct timer_node * timer_node_new(int s, node_f ftimer, void * arg) {
+    struct timer_node * node = malloc(sizeof(struct timer_node));
+    node->id = ATOM_INC(timer.id);
+    node->arg = arg;
+    node->ftimer = ftimer;
+    timespec_get(&node->t, TIME_UTC);
+    node->t.tv_sec += s / 1000;
+    // nano second
+    node->t.tv_nsec += (s % 1000) * 1000000;
+    return node;
+}
+
+// 运行的主 loop, 基于 timer 管理器 
+static void timer_run(struct timer_list * list) {
+    // 正常轮循, 检查时间
+    while (list->list) {
+        int sus = timer_list_sus(list);
+        if (sus > 0) {
+            usleep(sus);
+            continue;
+        }
+
+        timer_list_run(list);
+    }
+
+    // 已经运行结束
+    list->status = false;
 }
 
 //
-// st_add - 添加定时器事件,虽然设置的属性有点多但是都是必要的
-// intval	: 执行的时间间隔, <=0 表示立即执行, 单位是毫秒
-// timer	: 定时器执行函数
-// arg		: 定时器参数指针
-// return	: 返回这个定时器的唯一id
+// timer_add - 添加定时器事件
+// tvl      : 执行间隔(毫秒), <= 0 表示立即执行
+// ftimer   : 定时器行为
+// arg      : 定时器参数
+// return   : 返回定时器 id
 //
 int 
-st_add_(int intval, node_f timer, void * arg) {
-	struct stnode * now;
-	// 各种前戏操作
-	if (intval <= 0) {
-		timer(arg);
-		return SufBase;
-	}
+timer_add_(int tvl, node_f ftimer, void * arg) {
+    int id;
+    struct timer_node * node;
+    if (tvl <= 0) {
+        ftimer(arg);
+        return 0;
+    }
 
-	now = _stnode_new(intval, timer, arg);
-	if (NULL == now) {
-		RETURN(ErrAlloc, "_new_stnode is error intval = %d.", intval);
-	}
+    node = timer_node_new(tvl, ftimer, arg);
+    id = node->id;
+    ATOM_LOCK(timer.lock);
 
-	ATOM_LOCK(_st.lock); //核心添加模块 要等, 添加到链表, 看线程能否取消等
+    list_add(timer.list, timer_node_cmp_time, node);
 
-	list_add(&_st.head, _stnode_cmptime, now);
+    // 判断是否需要开启新的线程
+    if (!timer.status) {
+        if (!pthread_async(timer_run, &timer))
+            timer.status = true;
+        else {
+            free(node);
+            id = -1;
+        } 
+    }
 
-	// 这个时候重新开启线程
-	if(!_st.status) {
-		if (async_run(_stlist_loop, &_st)) {
-			list_destroy(&_st.head, free);
-            ATOM_UNLOCK(_st.lock);
-			RETURN(ErrFd, "pthread_create is error!");
-		}
-		_st.status = true;
-	}
-
-	ATOM_UNLOCK(_st.lock);
-	
-	return now->id;
-}
-
-// 通过id开始查找
-static inline int _stnode_cmpid(int id, const struct stnode * sr) {
-	return id - sr->id;
-}
-
-//
-// st_del - 删除指定事件
-// id		: st_add 返回的定时器id
-// return	: void
-//
-void 
-st_del(int id) {
-	struct stnode * node;
-	if (!_st.head) return;
-
-	ATOM_LOCK(_st.lock);
-	node = list_findpop(&_st.head, _stnode_cmpid, id);
-	ATOM_UNLOCK(_st.lock);
-
-	free(node);
+    ATOM_UNLOCK(timer.lock);
+    return id;
 }
