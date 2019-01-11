@@ -11,10 +11,10 @@ struct noid {
 
 struct haid {
     struct noid ** hash;
-    struct noid * ids;
+    struct noid * set;
     int mod;
     int cap;
-    int cnt;
+    int len;
 };
 
 static void haid_init(struct haid * h, int max) {
@@ -24,30 +24,30 @@ static void haid_init(struct haid * h, int max) {
         cap <<= 1;
 
     for (int i = 0; i < max; ++i)
-        h->ids[i] = (struct noid) { NULL, -1 };
+        h->set[i] = (struct noid) { NULL, -1 };
     h->hash = calloc(cap, sizeof(struct haid *));
     assert(h->hash && cap);
 
-    h->ids = malloc(max * sizeof(struct noid));
-    assert(h->ids && max);
+    h->set = malloc(max * sizeof(struct noid));
+    assert(h->set && max);
 
     h->mod = cap - 1;
     h->cap = max;
-    h->cnt = 0;
+    h->len = 0;
 }
 
 static inline void haid_clear(struct haid * h) {
     free(h->hash); h->hash = NULL;
-    free(h->ids); h->ids = NULL;
+    free(h->set); h->set = NULL;
     h->mod = 1;
-    h->cnt = h->cap = 0;
+    h->len = h->cap = 0;
 }
 
 static int haid_lookup(struct haid * h, int id) {
     struct noid * c = h->hash[id & h->mod];
     while (c) {
         if (c->id == id)
-            return c - h->ids;
+            return c - h->set;
         c = c->next;
     }
     return -1;
@@ -61,7 +61,7 @@ static int haid_remove(struct haid * h, int id) {
 
     if (c->id == id) {
         h->hash[i] = c->next;
-        goto out_clr;
+        goto ret_clr;
     }
 
     while (c->next) {
@@ -69,16 +69,16 @@ static int haid_remove(struct haid * h, int id) {
             struct noid * tmp = c->next;
             c->next = tmp->next;
             c = tmp;
-            goto out_clr;
+            goto ret_clr;
         }
         c = c->next;
     }
 
-out_clr:
+ret_clr:
     c->id = -1;
     c->next = NULL;
-    --h->cnt;
-    return c - h->ids;
+    --h->len;
+    return c - h->set;
 }
 
 static int haid_insert(struct haid * h, int id) {
@@ -86,24 +86,24 @@ static int haid_insert(struct haid * h, int id) {
     struct noid * c = NULL;
     for (i = 0; i < h->cap; ++i) {
         int j = (i + id) % h->cap;
-        if (h->ids[j].id == -1) {
-            c = h->ids + j;
+        if (h->set[j].id == -1) {
+            c = h->set + j;
             break;
         }
     }
     assert(c && c->next == NULL);
 
-    ++h->cnt;
+    ++h->len;
     c->id = id;
     i = id & h->mod;
     if (h->hash[i])
         c->next = h->hash[i];
     h->hash[i] = c;
-    return c - h->ids;
+    return c - h->set;
 }
 
 static inline int haid_full(struct haid * h) {
-    return h->cnt >= h->cap;
+    return h->len >= h->cap;
 }
 
 #endif//_H_HAID
