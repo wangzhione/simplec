@@ -126,7 +126,7 @@ simplec_test(void) {
     //
     // run test ... ... 
     //
-    EXTERN_RUN(test_sctimer);
+    EXTERN_RUN(test_scthreads);
 
     exit(EXIT_SUCCESS);
 }

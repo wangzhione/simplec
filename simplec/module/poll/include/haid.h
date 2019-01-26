@@ -1,5 +1,5 @@
-#ifndef _H_HAID
-#define _H_HAID
+#ifndef _HAID_H
+#define _HAID_H
 
 #include <assert.h>
 #include <stdlib.h>
@@ -106,4 +106,4 @@ static inline int haid_full(struct haid * h) {
     return h->len >= h->cap;
 }
 
-#endif//_H_HAID
+#endif//_HAID_H

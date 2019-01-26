@@ -1,5 +1,5 @@
-﻿#ifndef _H_SIMPLEC_SCTHREADS
-#define _H_SIMPLEC_SCTHREADS
+﻿#ifndef _SIMPLEC_SCTHREADS_H
+#define _SIMPLEC_SCTHREADS_H
 
 #include <schead.h>
 
@@ -9,27 +9,25 @@
 typedef struct threads * threads_t;
 
 //
-// threads_create - 创建一个线程池处理对象
-// return   : 返回创建好的线程池对象, NULL表示失败
+// threads_create - 创建线程池对象
+// return   : 创建的线程池对象, NULL 表示失败
 //
 extern threads_t threads_create(void);
 
 //
-// threads_delete - 异步销毁一个线程池对象
+// threads_delete - 异步销毁线程池对象
 // pool     : 线程池对象
 // return   : void
 //
 extern void threads_delete(threads_t pool);
 
 //
-// threads_insert - 线程池中添加要处理的任务
+// threads_insert - 线程池中添加待处理的任务
 // pool     : 线程池对象
-// frun     : 运行的执行体
+// frun     : node_f 运行的执行体
 // arg      : frun 的参数
 // return   : void
 //
-extern void threads_insert_(threads_t pool, node_f frun, void * arg);
-#define threads_insert(pool, frun, arg)                                 \
-threads_insert_(pool, (node_f)frun, (void *)(intptr_t)arg)
+extern void threads_insert(threads_t pool, void * frun, void * arg);
 
-#endif // !_H_SIMPLEC_SCTHREADS
+#endif // !_SIMPLEC_SCTHREADS_H
