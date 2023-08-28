@@ -15,7 +15,7 @@ typedef struct threads * threads_t;
 extern threads_t threads_create(void);
 
 //
-// threads_delete - 异步销毁线程池对象
+// threads_delete - 尝试异步销毁线程池对象, 有些行为是未定义的
 // pool     : 线程池对象
 // return   : void
 //

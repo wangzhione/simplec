@@ -97,12 +97,12 @@ inline threads_t
 threads_create(void) {
     struct threads * pool = calloc(1, sizeof(struct threads));
     pool->size = THREADS_INT;
-    pool->mutx = PTHREAD_MUTEX_INITIALIZER;
+    pthread_mutex_lock(&pool->mutx, NULL);
     return pool;
 }
 
 //
-// threads_delete - 异步销毁线程池对象
+// threads_delete - 尝试异步销毁线程池对象, 有些行为是未定义的
 // pool     : 线程池对象
 // return   : void
 //
@@ -139,6 +139,7 @@ threads_delete(threads_t pool) {
         thrs = next;
     }
 
+    pthread_mutex_destroy(&pool->mutx);
     // 销毁自己
     free(pool);
 }
